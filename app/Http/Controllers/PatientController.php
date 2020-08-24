@@ -40,7 +40,9 @@ class PatientController extends Controller
         $province_id = $request->get('province_id');
         $cities = City::where('province_id', $province_id)->get()->sortBy('name')->values();
 
-        return response()->json($cities, 200);
+        $city_id = $cities[0]->city_id;
+        $barangays = Barangay::where('city_id', $city_id)->get()->sortBy('name')->values();
+        return response()->json(['cities' => $cities, 'barangays' => $barangays], 200);
         
     }
 
