@@ -15,6 +15,8 @@
         "laravel/framework": "^7.24",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
+        "realrashid/sweet-alert": "^3.1",
+        "uxweb/sweet-alert": "^2.0",
         "yajra/laravel-address": "^0.3.0"
     },
     "require-dev": {

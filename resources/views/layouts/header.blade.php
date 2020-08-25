@@ -37,6 +37,11 @@
   <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
   <!-- Moment Plugin -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+  <!-- Sweet Alert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.1/dist/sweetalert2.all.min.js"></script>
+  <!-- Include a polyfill for ES6 Promises (optional) for IE11 -->
+  <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
+  
   
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

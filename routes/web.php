@@ -13,13 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('pages.patient.create');
 });
 
+
 Auth::routes();
 
+
 Route::get('patient/create', 'PatientController@create')->name('createpatient');
+Route::post('patient/store', 'PatientController@store')->name('storepatient');
 Route::get('provinces', 'PatientController@getprovinces')->name('getprovinces');
 Route::post('cities', 'PatientController@getcities')->name('getcities');
 Route::post('barangays', 'PatientController@getbarangays')->name('getbarangays');

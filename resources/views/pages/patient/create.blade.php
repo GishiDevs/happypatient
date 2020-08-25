@@ -332,6 +332,30 @@ $(document).ready(function () {
     },
     submitHandler: function(e){
 
+      var data = $('#patientform').serializeArray();
+      data.push({name: "_token", value: "{{ csrf_token() }}"});
+      
+      $.ajax({
+        url: "{{ route('storepatient') }}",
+        method: "POST",
+        data: data,
+        success: function(response){
+          console.log(response);
+
+          // Sweet Alert
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Record has successfully added',
+            showConfirmButton: false,
+            timer: 2500
+          });
+        },
+        error: function(response){
+          console.log(response);
+        }
+      });
+
     }
   });
 
