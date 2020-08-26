@@ -23,7 +23,9 @@ Auth::routes();
 
 
 Route::get('patient/create', 'PatientController@create')->name('createpatient');
+Route::get('patient/record', 'PatientController@index')->name('patientrecord');
 Route::post('patient/store', 'PatientController@store')->name('storepatient');
+Route::get('patients', 'PatientController@getpatientrecord')->name('getpatientrecord');
 Route::get('provinces', 'PatientController@getprovinces')->name('getprovinces');
 Route::post('cities', 'PatientController@getcities')->name('getcities');
 Route::post('barangays', 'PatientController@getbarangays')->name('getbarangays');

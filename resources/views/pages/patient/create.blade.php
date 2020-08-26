@@ -77,11 +77,11 @@
                     <div class="form-group col-md-2">
                       <label for="gender">Gender</label>
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="radio-male" checked>
+                        <input class="form-check-input" type="radio" name="gender" id="radio-male" value="male" checked>
                         <label class="form-check-label" for="gender-male">Male</label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="radio-female">
+                        <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female">
                         <label class="form-check-label" for="gender-female">Female</label>
                       </div>
                     </div>
