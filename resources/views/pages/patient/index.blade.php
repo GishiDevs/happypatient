@@ -41,7 +41,7 @@
                     <th>Birthdate</th>
                     <th>Weight</th>
                     <th>Gender</th>
-                    <th>Action</th>
+                    <th width="250px">Action</th>
                   </tr>
                   </thead>
                   
@@ -75,29 +75,70 @@
 </div>
 <!-- /.content-wrapper -->
 <script>
-  $(function () {
-    $(document).ready(function() {
+
+  $(document).ready(function() {
+     
 			// $('#tax-table').DataTable();
-		    $('#patient-table').DataTable({
-                "responsive": true,
-                "autoWidth": false,
-		    	"processing": true,
-		    	"serverSide": true,
-		    	"ajax": "{{ route('getpatientrecord') }}",
-		    	"bDestroy": true,
-		    	"columns": [
-                    { "data": "id"},
+	  $('#patient-table').DataTable({
+        "responsive": true,
+        "autoWidth": false,
+		    "processing": true,
+		    "serverSide": true,
+		    "ajax": "{{ route('getpatientrecord') }}",
+		    "bDestroy": true,
+		    "columns": [
+            { "data": "id"},
 		    		{ "data": "lastname"},
 		    		{ "data": "firstname"},
 		    		{ "data": "middlename"},
-                    { "data": "birthdate"},
-                    { "data": "weight"},
-                    { "data": "gender"},
+            { "data": "birthdate"},
+            { "data": "weight"},
+            { "data": "gender"},
 		    		{ "data": "action", orderable: false, searchable: false}
-		    	]
-		    });
+		    ]
 		});
-  });
+
+    $('#patient-table').on('click', 'tbody td #btn-delete-patient', function(e){
+
+      var patientid = $(this).data('patientid');
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Delete record!'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: "{{ route('deletepatient') }}",
+            method: "POST",
+            data: {_token: "{{ csrf_token() }}", patientid: patientid},
+            success: function(response){
+              console.log(response);
+              if(response.success)
+              {
+                Swal.fire(
+                  'Deleted!',
+                  'Record has been deleted.',
+                  'success'
+                );
+                $('#patient-table').DataTable().ajax.reload();
+              }
+            },
+            error: function(response){
+              console.log(response);
+            }
+          });
+
+        }
+      });
+    });
+    
+	});
+
 </script>
 @endsection
 

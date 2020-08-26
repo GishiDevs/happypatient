@@ -163,8 +163,11 @@ class PatientController extends Controller
         //
     }
 
-    public function destroy(Patient $patient)
-    {
-        //
+    public function delete(Request $request)
+    {   
+        $patient = Patient::findOrFail($request->get('patientid'));
+        $patient->delete();
+
+        return response()->json(['success' => 'Record has been deleted'], 200);
     }
 }

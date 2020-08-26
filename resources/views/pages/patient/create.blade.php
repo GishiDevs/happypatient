@@ -191,24 +191,30 @@ $(document).ready(function () {
   // });
 
   $('.select2').select2();
+  
+  getprovinces();
 
-  $.ajax({
-    url: "{{ route('getprovinces') }}",
-    method: "GET",
-    success: function(response){
+  function getprovinces()
+  {
+    $.ajax({
+      url: "{{ route('getprovinces') }}",
+      method: "GET",
+      success: function(response){
 
-      console.log(response);
+        console.log(response);
 
-      $('#province').empty().append('<option value="" selected disabled>Select a Province</option>');
-      
-      $.each(response, function(index, value){
-        $('#province').append('<option value="'+ value.province_id +'">'+ value.name +'</option>');
-      });
-    },
-    error: function(response){
-      console.log(response);
-    }
-  });
+        $('#province').empty().append('<option value="" selected disabled>Select a Province</option>');
+        
+        $.each(response, function(index, value){
+          $('#province').append('<option value="'+ value.province_id +'">'+ value.name +'</option>');
+        });
+      },
+      error: function(response){
+        console.log(response);
+      }
+    });
+  }
+  
 
   $('#province').on('change', function(e){
 
@@ -342,6 +348,15 @@ $(document).ready(function () {
         success: function(response){
           console.log(response);
 
+          if(response.success)
+          {
+            $('#patientform')[0].reset();
+            getprovinces();
+            // $('#province option:eq(0)').prop('selected', true);
+            $('#city').empty().attr('disabled',true);
+            $('#barangay').empty().attr('disabled',true);
+          }
+
           // Sweet Alert
           Swal.fire({
             position: 'center',
@@ -350,6 +365,8 @@ $(document).ready(function () {
             showConfirmButton: false,
             timer: 2500
           });
+
+
         },
         error: function(response){
           console.log(response);
@@ -358,7 +375,6 @@ $(document).ready(function () {
 
     }
   });
-
 });
 </script>
 @endsection
