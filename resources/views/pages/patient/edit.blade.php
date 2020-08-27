@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Add Patient')
+@section('title', 'Update Patient')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -13,7 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
-              <li class="breadcrumb-item active">Add Patient</li>
+              <li class="breadcrumb-item active">Update Patient</li>
             </ol>
           </div>
         </div>
@@ -29,7 +29,7 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Patient</h3>
+                <h3 class="card-title">Update Patient</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -38,15 +38,15 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="lastname">Lastname</label> <span class="text-danger">*</span>
-                      <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Enter lastname">
+                      <input type="text" name="lastname" class="form-control" id="lastname" value="{{ $patient->lastname }}" placeholder="Enter lastname">
                     </div>
                     <div class="form-group col-md-4">
                       <label for="firstname">Firstname</label> <span class="text-danger">*</span>
-                      <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter firstname">
+                      <input type="text" class="form-control" name="firstname" id="firstname" value="{{ $patient->firstname }}" placeholder="Enter firstname">
                     </div>
                     <div class="form-group col-md-4">
                       <label for="middlename">Middlename</label>
-                      <input type="text" class="form-control" name="middlename" id="middlename" placeholder="Enter middlename">
+                      <input type="text" class="form-control" name="middlename" id="middlename" value="{{ $patient->middlename }}" placeholder="Enter middlename">
                     </div>
                   </div>
                   <div class="row">
@@ -58,7 +58,7 @@
                             <i class="fa fa-calendar"></i>
                           </div>
                         </div>
-                        <input type="text" class="form-control datetimepicker-input" name="birthdate" id="birthdate" data-target="#datetimepicker-birthdate" placeholder="MM/DD/YYYY" readonly>
+                        <input type="text" class="form-control datetimepicker-input" name="birthdate" id="birthdate" value="{{ $birthdate }}" data-target="#datetimepicker-birthdate"  placeholder="MM/DD/YYYY" readonly>
                       </div>
                     </div> 
                     <!-- <div class="form-group col-md-3">
@@ -68,7 +68,7 @@
                     <div class="form-group col-md-3">
                       <label for="weight">Weight</label> <span class="text-danger">*</span>
                       <div class="input-group">
-                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">
+                        <input class="form-control" type="text" name="weight" id="weight" value="{{ $patient->weight }}" placeholder="0.00">
                         <div class="input-group-append">
                           <span class="input-group-text">Kg</span>
                         </div>
@@ -77,11 +77,13 @@
                     <div class="form-group col-md-2">
                       <label for="gender">Gender</label>
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="radio-male" value="male" checked>
+                        <input class="form-check-input" type="radio" name="gender" id="radio-male" value="male" 
+                        @if($patient->gender == 'male') checked @endif>
                         <label class="form-check-label" for="gender-male">Male</label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female">
+                        <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female"
+                        @if($patient->gender == 'female') checked @endif>
                         <label class="form-check-label" for="gender-female">Female</label>
                       </div>
                     </div>
@@ -96,7 +98,7 @@
                             <i class="fa fa-phone"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="landline" id="lanline">
+                        <input class="form-control" type="text" name="landline" id="lanline" value="{{ $patient->landline }}">
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -107,19 +109,19 @@
                             <i class="fa fa-mobile"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="mobile" id="mobile">
+                        <input class="form-control" type="text" name="mobile" id="mobile" value="{{ $patient->mobile }}" data-inputmask='"mask": "(999) 999-9999"' data-mask>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="email">Email address</label>
-                      <input class="form-control" type="email" name="email" id="email" placeholder="Enter email">
+                      <input class="form-control" type="email" name="email" id="email" placeholder="Enter email" value="{{ $patient->email }}">
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="form-group col-md-6">
                       <label for="address">House/Unit/Flr #, Bldg Name, Blk/Lot #, Street Name</label>
-                      <input class="form-control" type="text" name="address" id="address">
+                      <input class="form-control" type="text" name="address" id="address" value="{{ $patient->address }}">
                     </div>
                   </div>
                   <div class="row">
@@ -142,7 +144,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="submit" class="btn btn-primary">Update</button>
                 </div>
               </form>
             </div>

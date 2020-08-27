@@ -39,14 +39,18 @@ class PatientController extends Controller
                             <button class="btn btn-sm btn-secondary dropdown-toggle dropdown-icon" type="button" data-toggle="dropdown">
                                 <span class="sr-only">Toggle Dropdown</span>
                                 <div class="dropdown-menu" role="menu">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Action1</a>
-                                    <a class="dropdown-item" href="#">Action2</a>
+                                    <a class="dropdown-item" href="#">X-Ray</a>
+                                    <a class="dropdown-item" href="#">Ultrasound</a>
+                                    <a class="dropdown-item" href="#">Laboratory</a>
+                                    <a class="dropdown-item" href="#">Check-up</a>
+                                    <a class="dropdown-item" href="#">Physical Therapy</a>
+                                    <a class="dropdown-item" href="#">E.C.G</a>
                                 </div>
                             </button>
                         </div>
-                        <button class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</button> 
-                        <button class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</button>';
+                        <button class="btn btn-sm btn-primary" data-patientid="'.$patient->id.'" data-action="view" id="btn-view-patient"><i class="fa fa-eye"></i></button> 
+                        <button class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></button> 
+                        <button class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i></button>';
             })
             ->make();
     }
@@ -82,7 +86,7 @@ class PatientController extends Controller
  
     public function store(Request $request)
     {   
-
+        return $request->all();
         $rules = [
             'lastname.required' => 'Please enter lastname',
             'firstname.required' => 'Please enter firstname',
@@ -147,15 +151,17 @@ class PatientController extends Controller
     }
 
 
-    public function show(Patient $patient)
+    public function view(Request $request)
     {
-        //
+        return $request->all();
     }
 
 
-    public function edit(Patient $patient)
-    {
-        //
+    public function edit(Request $request)
+    {       
+        $patient = Patient::findOrFail($request->get('patientid'));
+        $birthdate = Carbon::parse($patient->birthdate)->format('m-d-y');
+        return view('pages.patient.edit', compact('patient', 'birthdate'));
     }
 
     public function update(Request $request, Patient $patient)

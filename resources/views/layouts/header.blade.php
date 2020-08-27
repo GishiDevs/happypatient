@@ -50,6 +50,13 @@
   <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
   
+  <!-- Datatables Paginate button -->
+  <style>
+    .paginate_button{
+      z-index:0;
+    }
+  </style>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -232,8 +239,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/record')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/record')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/record') || request()->is('patient/edit')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/record') || request()->is('patient/edit')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-wheelchair"></i>
               <p>
                 Patient
@@ -248,7 +255,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link {{ (request()->is('patient/record')) ? 'active' : '' }}">
+                <a href="{{ route('patientrecord') }}" class="nav-link {{ (request()->is('patient/record')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patients Record</p>
                 </a> 

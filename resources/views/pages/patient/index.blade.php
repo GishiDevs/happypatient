@@ -12,7 +12,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
               <li class="breadcrumb-item active">Patient Record</li>
             </ol>
           </div>
@@ -28,6 +28,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Patient Record Lists</h3>
+                <a href="{{ route('createpatient') }}" class="btn btn-primary float-right">Add New</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -39,12 +40,11 @@
                     <th>Firstname</th>
                     <th>Middlename</th>
                     <th>Birthdate</th>
-                    <th>Weight</th>
+                    <th>Weight (Kg)</th>
                     <th>Gender</th>
-                    <th width="250px">Action</th>
+                    <th width="220px">Action</th>
                   </tr>
                   </thead>
-                  
                   <tfoot>
                   <tr>
                     <th>ID</th>
@@ -52,12 +52,20 @@
                     <th>Firstname</th>
                     <th>Middlename</th>
                     <th>Birthdate</th>
-                    <th>Weight</th>
+                    <th>Weight (Kg)</th>
                     <th>Gender</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
                 </table>
+                <form id="form-viewpatient" method="POST" action="{{ route('viewpatient') }}">
+                  @csrf
+                  <input type="text" name="patientid" id="view-text-patientid" hidden>
+                </form>
+                <form id="form-editpatient" method="POST" action="{{ route('editpatient') }}">
+                  @csrf
+                  <input type="text" name="patientid" id="edit-text-patientid" hidden>
+                </form>
               </div>
               <!-- /.card-body -->
             </div>
@@ -96,8 +104,27 @@
             { "data": "gender"},
 		    		{ "data": "action", orderable: false, searchable: false}
 		    ]
-		});
+    });
+    
+    //View Patient
+    $('#patient-table').on('click', 'tbody td #btn-view-patient', function(e){
+      
+      var patientid = $(this).data('patientid');
+      $('#view-text-patientid').val(patientid);
+      $('#form-viewpatient').submit();
 
+    });
+
+    //Edit Patient
+    $('#patient-table').on('click', 'tbody td #btn-edit-patient', function(e){
+      
+      var patientid = $(this).data('patientid');
+      $('#edit-text-patientid').val(patientid);
+      $('#form-editpatient').submit();
+
+    });
+
+    //Delete Patient
     $('#patient-table').on('click', 'tbody td #btn-delete-patient', function(e){
 
       var patientid = $(this).data('patientid');
