@@ -166,7 +166,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-
+  
   $('#city').empty().attr('disabled',true);
   $('#barangay').empty().attr('disabled',true);
   
@@ -205,11 +205,76 @@ $(document).ready(function () {
 
         console.log(response);
 
-        $('#province').empty().append('<option value="" selected disabled>Select a Province</option>');
+        $('#province').empty().append('<option value="" disabled>Select a Province</option>');
         
         $.each(response, function(index, value){
-          $('#province').append('<option value="'+ value.province_id +'">'+ value.name +'</option>');
+          
+          if("{{ $patient->province }}" == value.province_id)
+          {
+            $('#province').append('<option value="'+ value.province_id +'" selected>'+ value.name +'</option>');
+          }
+          else
+          {
+            $('#province').append('<option value="'+ value.province_id +'">'+ value.name +'</option>');
+          }
+          
         });
+
+        //ajax get cities by province
+        $.ajax({
+          url: "{{ route('getcities') }}",
+          method: "POST",
+          data: { _token: '{{ csrf_token() }}', province_id: "{{ $patient->province }}" },
+          success:function(response){
+            console.log(response);
+
+            $('#city').empty().attr('disabled',false);
+
+            $.each(response.cities, function( index, value ) {
+              if("{{ $patient->city }}" == value.city_id)
+              {
+                $('#city').append('<option value="'+ value.city_id +'" selected>'+ value.name +'</option>');
+              }
+              else
+              {
+                $('#city').append('<option value="'+ value.city_id +'">'+ value.name +'</option>');
+              }
+
+            });
+          },
+          error:function(response){
+            console.log(response);
+          }
+        });
+
+        $.ajax({
+          url: "{{ route('getbarangays') }}",
+          method: "POST",
+          data: { _token: "{{ csrf_token() }}", city_id: "{{ $patient->city }}" },
+          success: function(response){
+
+            console.log(response);
+
+            $('#barangay').empty().attr('disabled',false);
+
+            $.each(response, function( index, value ) {
+              if("{{ $patient->barangay }}" == value.id)
+              {
+                $('#barangay').append('<option value="'+ value.id +'" selected>'+ value.name +'</option>');
+              }
+              else
+              {
+                $('#barangay').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+              }
+
+            });
+
+          },
+          error:function(response){
+            console.log(response);
+          }
+        });
+
       },
       error: function(response){
         console.log(response);
@@ -248,7 +313,6 @@ $(document).ready(function () {
         console.log(response);
       }
     });
-
   });
 
   $('#city').on('change', function(e){
@@ -341,10 +405,11 @@ $(document).ready(function () {
     submitHandler: function(e){
 
       var data = $('#patientform').serializeArray();
+      data.push({name: "patientid", value: "{{ $patient->id }}"});
       data.push({name: "_token", value: "{{ csrf_token() }}"});
       
       $.ajax({
-        url: "{{ route('storepatient') }}",
+        url: "{{ route('updatepatient') }}",
         method: "POST",
         data: data,
         success: function(response){
@@ -363,7 +428,7 @@ $(document).ready(function () {
           Swal.fire({
             position: 'center',
             icon: 'success',
-            title: 'Record has successfully added',
+            title: 'Record has been updated',
             showConfirmButton: false,
             timer: 2500
           });

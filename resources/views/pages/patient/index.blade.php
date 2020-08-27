@@ -58,14 +58,7 @@
                   </tr>
                   </tfoot>
                 </table>
-                <form id="form-viewpatient" method="POST" action="{{ route('viewpatient') }}">
-                  @csrf
-                  <input type="text" name="patientid" id="view-text-patientid" hidden>
-                </form>
-                <form id="form-editpatient" method="POST" action="{{ route('editpatient') }}">
-                  @csrf
-                  <input type="text" name="patientid" id="edit-text-patientid" hidden>
-                </form>
+    
               </div>
               <!-- /.card-body -->
             </div>
@@ -126,6 +119,8 @@
 
     //Delete Patient
     $('#patient-table').on('click', 'tbody td #btn-delete-patient', function(e){
+
+      e.preventDefault();
 
       var patientid = $(this).data('patientid');
 

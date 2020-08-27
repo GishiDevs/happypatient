@@ -26,8 +26,9 @@ Route::get('patient/create', 'PatientController@create')->name('createpatient');
 Route::post('patient/store', 'PatientController@store')->name('storepatient');
 Route::get('patient/record', 'PatientController@index')->name('patientrecord');
 Route::get('patients', 'PatientController@getpatientrecord')->name('getpatientrecord');
-Route::post('patient/view', 'PatientController@view')->name('viewpatient');
-Route::post('patient/edit', 'PatientController@edit')->name('editpatient');
+Route::get('patient/view', 'PatientController@view')->name('viewpatient');
+Route::get('patient/edit/{id}', 'PatientController@edit')->name('editpatient');
+Route::post('patient/update', 'PatientController@update')->name('updatepatient');
 Route::post('patient/delete', 'PatientController@delete')->name('deletepatient');
 
 Route::get('provinces', 'PatientController@getprovinces')->name('getprovinces');
