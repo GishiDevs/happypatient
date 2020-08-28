@@ -40,9 +40,10 @@
                     <th>Firstname</th>
                     <th>Middlename</th>
                     <th>Birthdate</th>
-                    <th>Weight (Kg)</th>
                     <th>Gender</th>
-                    <th width="220px">Action</th>
+                    <th>Weight (Kg)</th>
+                    <th>Mobile</th>
+                    <th width="180px">Action</th>
                   </tr>
                   </thead>
                   <tfoot>
@@ -52,8 +53,9 @@
                     <th>Firstname</th>
                     <th>Middlename</th>
                     <th>Birthdate</th>
-                    <th>Weight (Kg)</th>
                     <th>Gender</th>
+                    <th>Weight (Kg)</th>
+                    <th>Mobile</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
@@ -93,8 +95,9 @@
 		    		{ "data": "firstname"},
 		    		{ "data": "middlename"},
             { "data": "birthdate"},
-            { "data": "weight"},
             { "data": "gender"},
+            { "data": "weight"},
+            { "data": "mobile"},
 		    		{ "data": "action", orderable: false, searchable: false}
 		    ]
     });

@@ -48,7 +48,7 @@ class PatientController extends Controller
                                 </div>
                             </button>
                         </div>
-                        <a href="'.route("viewpatient",$patient->id).'" class="btn btn-sm btn-primary" data-patientid="'.$patient->id.'" data-action="edit" id="btn-view-patient"><i class="fa fa-eye"></i></a>
+                        
                         <a href="'.route("editpatient",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>
                         <a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="edit" id="btn-delete-patient"><i class="fa fa-trash"></i></a>';
             })
@@ -87,6 +87,8 @@ class PatientController extends Controller
     public function store(Request $request)
     {   
         
+        return $request->all();
+
         $rules = [
             'lastname.required' => 'Please enter lastname',
             'firstname.required' => 'Please enter firstname',
@@ -94,8 +96,8 @@ class PatientController extends Controller
             'weight.required' => 'Please enter weight',
             'weight.numeric' => 'Please enter a valid value',
             'weight.between' => 'Please enter a valid value',
-            'landline.numeric' => 'Please enter a valid value',
-            'mobile.numeric' => 'Please enter a valid value',
+            // 'landline.numeric' => 'Please enter a valid value',
+            // 'mobile.numeric' => 'Please enter a valid value',
             'province.required' => 'Please select province',
             'city.required' => 'Please select city',
             'barangay.required' => 'Please select barangay',
@@ -111,14 +113,14 @@ class PatientController extends Controller
             'barangay' => 'required',
         ];
 
-        if($request->get('landline'))
-        {
-            $valid_fields['landline'] = 'numeric';
-        }
-        if($request->get('mobile'))
-        {
-            $valid_fields['mobile'] = 'numeric';
-        }
+        // if($request->get('landline'))
+        // {
+        //     $valid_fields['landline'] = 'numeric';
+        // }
+        // if($request->get('mobile'))
+        // {
+        //     $valid_fields['mobile'] = 'numeric';
+        // }
         if($request->get('email'))
         {
             $valid_fields['email'] = 'email';
@@ -151,9 +153,11 @@ class PatientController extends Controller
     }
 
 
-    public function view(Request $request)
-    {
-        return view('pages.patient.view');
+    public function view($patientid)
+    {   
+        $patient = Patient::find($patientid);
+
+        return view('pages.patient.view', compact('patient'));
     }
 
 
@@ -164,7 +168,7 @@ class PatientController extends Controller
         return view('pages.patient.edit', compact('patient', 'birthdate'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $patientid)
     {
         $rules = [
             'lastname.required' => 'Please enter lastname',
@@ -173,8 +177,8 @@ class PatientController extends Controller
             'weight.required' => 'Please enter weight',
             'weight.numeric' => 'Please enter a valid value',
             'weight.between' => 'Please enter a valid value',
-            'landline.numeric' => 'Please enter a valid value',
-            'mobile.numeric' => 'Please enter a valid value',
+            // 'landline.numeric' => 'Please enter a valid value',
+            // 'mobile.numeric' => 'Please enter a valid value',
             'province.required' => 'Please select province',
             'city.required' => 'Please select city',
             'barangay.required' => 'Please select barangay',
@@ -190,14 +194,14 @@ class PatientController extends Controller
             'barangay' => 'required',
         ];
 
-        if($request->get('landline'))
-        {
-            $valid_fields['landline'] = 'numeric';
-        }
-        if($request->get('mobile'))
-        {
-            $valid_fields['mobile'] = 'numeric';
-        }
+        // if($request->get('landline'))
+        // {
+        //     $valid_fields['landline'] = 'numeric';
+        // }
+        // if($request->get('mobile'))
+        // {
+        //     $valid_fields['mobile'] = 'numeric';
+        // }
         if($request->get('email'))
         {
             $valid_fields['email'] = 'email';
@@ -210,7 +214,7 @@ class PatientController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
-        $patient = Patient::findOrFail($request->get('patientid'));
+        $patient = Patient::findOrFail($patientid);
         $patient->lastname = $request->get('lastname');
         $patient->firstname = $request->get('firstname');
         $patient->middlename = $request->get('middlename');
@@ -226,7 +230,7 @@ class PatientController extends Controller
         $patient->barangay = $request->get('barangay');
         $patient->save();
 
-        return response()->json(['success' => 'Record has successfully added'], 200);
+        return redirect('patient/record');
     }
 
     public function delete(Request $request)

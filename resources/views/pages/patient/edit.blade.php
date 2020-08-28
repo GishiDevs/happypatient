@@ -33,7 +33,8 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" id="patientform">
+              <form role="form" id="patientform" method="POST" action="{{ route('updatepatient', $patient->id) }}">
+                @csrf
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-4">
@@ -98,7 +99,7 @@
                             <i class="fa fa-phone"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="landline" id="lanline" value="{{ $patient->landline }}">
+                        <input class="form-control" type="text" name="landline" id="landline" value="{{ $patient->landline }}" data-inputmask='"mask": "(999)999-9999"' data-mask>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -109,7 +110,7 @@
                             <i class="fa fa-mobile"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="mobile" id="mobile" value="{{ $patient->mobile }}" data-inputmask='"mask": "(999) 999-9999"' data-mask>
+                        <input class="form-control" type="text" name="mobile" id="mobile" value="{{ $patient->mobile }}" data-inputmask='"mask": "(+63)999-9999-999"' data-mask>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -144,7 +145,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Update</button>
+                  <button type="submit" id="btn-submit" class="btn btn-primary" disabled>Update</button>
                 </div>
               </form>
             </div>
@@ -167,6 +168,8 @@
 
 $(document).ready(function () {
   
+  $('[data-mask]').inputmask();
+
   $('#city').empty().attr('disabled',true);
   $('#barangay').empty().attr('disabled',true);
   
@@ -353,12 +356,12 @@ $(document).ready(function () {
         number: true,
         required: true,
       },
-      landline: {
-        number: true,
-      },
-      mobile: {
-        number: true,
-      },
+      // landline: {
+      //   number: true,
+      // },
+      // mobile: {
+      //   number: true,
+      // },
       email: {
         email: true
       },
@@ -402,46 +405,28 @@ $(document).ready(function () {
     unhighlight: function (element, errorClass, validClass) {
       $(element).removeClass('is-invalid');
     },
-    submitHandler: function(e){
-
-      var data = $('#patientform').serializeArray();
-      data.push({name: "patientid", value: "{{ $patient->id }}"});
-      data.push({name: "_token", value: "{{ csrf_token() }}"});
-      
-      $.ajax({
-        url: "{{ route('updatepatient') }}",
-        method: "POST",
-        data: data,
-        success: function(response){
-          console.log(response);
-
-          if(response.success)
-          {
-            $('#patientform')[0].reset();
-            getprovinces();
-            // $('#province option:eq(0)').prop('selected', true);
-            $('#city').empty().attr('disabled',true);
-            $('#barangay').empty().attr('disabled',true);
-          }
-
-          // Sweet Alert
-          Swal.fire({
+    submitHandler: function(e){   
+      // e.preventDefault();
+      Swal.fire({
             position: 'center',
             icon: 'success',
             title: 'Record has been updated',
             showConfirmButton: false,
             timer: 2500
           });
-
-
-        },
-        error: function(response){
-          console.log(response);
-        }
-      });
-
+          
+      return true;
     }
   });
+  
+  
+
+  $('#patientform').on('change input',function(e){
+    
+    $('#btn-submit').attr('disabled', false);
+   
+  });
+
 });
 </script>
 @endsection

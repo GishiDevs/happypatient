@@ -96,7 +96,7 @@
                             <i class="fa fa-phone"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="landline" id="lanline">
+                        <input class="form-control" type="text" name="landline" id="landline" data-inputmask='"mask": "(999)999-9999"' data-mask>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -107,7 +107,7 @@
                             <i class="fa fa-mobile"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="mobile" id="mobile">
+                        <input class="form-control" type="text" name="mobile" id="mobile" data-inputmask='"mask": "(+63)999-9999-999"' data-mask>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -164,6 +164,8 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+
+  $('[data-mask]').inputmask();
 
   $('#city').empty().attr('disabled',true);
   $('#barangay').empty().attr('disabled',true);
@@ -287,12 +289,12 @@ $(document).ready(function () {
         number: true,
         required: true,
       },
-      landline: {
-        number: true,
-      },
-      mobile: {
-        number: true,
-      },
+      // landline: {
+      //   minlength: 2,
+      // },
+      // mobile: {
+      //   number: true,
+      // },
       email: {
         email: true
       },
@@ -375,6 +377,7 @@ $(document).ready(function () {
 
     }
   });
+
 });
 </script>
 @endsection
