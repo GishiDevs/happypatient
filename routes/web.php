@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
+//Patient Route
 Route::get('patient/create', 'PatientController@create')->name('createpatient');
 Route::post('patient/store', 'PatientController@store')->name('storepatient');
 Route::get('patient/record', 'PatientController@index')->name('patientrecord');
@@ -30,6 +31,12 @@ Route::get('patient/edit/{id}', 'PatientController@edit')->name('editpatient');
 Route::post('patient/update/{id}', 'PatientController@update')->name('updatepatient');
 Route::post('patient/delete', 'PatientController@delete')->name('deletepatient');
 
+//Addresses Route
 Route::get('provinces', 'PatientController@getprovinces')->name('getprovinces');
 Route::post('cities', 'PatientController@getcities')->name('getcities');
 Route::post('barangays', 'PatientController@getbarangays')->name('getbarangays');
+
+//Services Route
+Route::get('service/record', 'ServiceController@index')->name('servicerecord');
+Route::get('service/create', 'ServiceController@create')->name('createservice');
+Route::post('service/store', 'ServiceController@store')->name('storeservice');

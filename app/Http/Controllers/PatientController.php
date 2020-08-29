@@ -86,8 +86,6 @@ class PatientController extends Controller
  
     public function store(Request $request)
     {   
-        
-        return $request->all();
 
         $rules = [
             'lastname.required' => 'Please enter lastname',

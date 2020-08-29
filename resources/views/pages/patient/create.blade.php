@@ -357,18 +357,15 @@ $(document).ready(function () {
             // $('#province option:eq(0)').prop('selected', true);
             $('#city').empty().attr('disabled',true);
             $('#barangay').empty().attr('disabled',true);
+            // Sweet Alert
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Record has successfully added',
+              showConfirmButton: false,
+              timer: 2500
+            });
           }
-
-          // Sweet Alert
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Record has successfully added',
-            showConfirmButton: false,
-            timer: 2500
-          });
-
-
         },
         error: function(response){
           console.log(response);
