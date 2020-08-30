@@ -130,9 +130,8 @@ $(document).ready(function () {
           }
           else
           {
-            alert(response.service);
             $('#service').addClass('is-invalid');
-            $('.form-group').append(response.service);
+            $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
           }
 
         },
