@@ -43,7 +43,7 @@
                     <th>Gender</th>
                     <th>Weight (Kg)</th>
                     <th>Mobile</th>
-                    <th width="180px">Action</th>
+                    <th width="150px">Actions</th>
                   </tr>
                   </thead>
                   <tfoot>
@@ -56,7 +56,7 @@
                     <th>Gender</th>
                     <th>Weight (Kg)</th>
                     <th>Mobile</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                   </tr>
                   </tfoot>
                 </table>

@@ -41,6 +41,6 @@ Route::get('service/record', 'ServiceController@index')->name('servicerecord');
 Route::get('service/create', 'ServiceController@create')->name('createservice');
 Route::post('service/store', 'ServiceController@store')->name('storeservice');
 Route::get('services', 'ServiceController@getservicerecord')->name('getservicerecord');
-Route::get('service/edit/{id}', 'ServiceController@edit')->name('editservice');
-Route::post('service/update/{id}', 'ServiceController@update')->name('updateservice');
+Route::post('service/edit', 'ServiceController@edit')->name('editservice');
+Route::post('service/update', 'ServiceController@update')->name('updateservice');
 Route::post('service/delete', 'ServiceController@delete')->name('deleteservice');

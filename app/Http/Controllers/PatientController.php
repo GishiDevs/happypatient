@@ -31,26 +31,8 @@ class PatientController extends Controller
         $patient = Patient::all();
         return DataTables::of($patient)
             ->addColumn('action',function($patient){
-                return '<div class="btn-group">
-                            <button class="btn btn-sm btn-secondary type="button">
-                                <i class="fa fa-user-md" aria-hidden="true"></i> 
-                                Services
-                            </button>
-                            <button class="btn btn-sm btn-secondary dropdown-toggle dropdown-icon" type="button" data-toggle="dropdown">
-                                <span class="sr-only">Toggle Dropdown</span>
-                                <div class="dropdown-menu" role="menu">
-                                    <a class="dropdown-item" href="#">X-Ray</a>
-                                    <a class="dropdown-item" href="#">Ultrasound</a>
-                                    <a class="dropdown-item" href="#">Laboratory</a>
-                                    <a class="dropdown-item" href="#">Check-up</a>
-                                    <a class="dropdown-item" href="#">Physical Therapy</a>
-                                    <a class="dropdown-item" href="#">E.C.G</a>
-                                </div>
-                            </button>
-                        </div>
-                        
-                        <a href="'.route("editpatient",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>
-                        <a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="edit" id="btn-delete-patient"><i class="fa fa-trash"></i></a>';
+                return '<a href="'.route("editpatient",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
             })
             ->make();
     }

@@ -55,6 +55,7 @@
     .paginate_button{
       z-index:0;
     }
+    
   </style>
 
 </head>
@@ -264,23 +265,17 @@
           </li>
           <li class="nav-item has-treeview {{ (request()->is('service/create') || request()->is('service/record')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('service/create') || request()->is('service/record')) ? 'active' : '' }}">
-              <i class="nav-icon fas fa-stethoscope"></i>
+              <i class="nav-icon fas fa-cog"></i>
               <p>
-                Services
+                Settings
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('createservice') }}" class="nav-link {{ (request()->is('service/create')) ? 'active' : '' }}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Add New</p>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a href="{{ route('servicerecord') }}" class="nav-link {{ (request()->is('service/record')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Services List</p>
+                  <p>Services</p>
                 </a> 
               </li>
             </ul>

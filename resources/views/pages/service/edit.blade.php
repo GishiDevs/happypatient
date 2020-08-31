@@ -13,7 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
-              <li class="breadcrumb-item active">Add Service</li>
+              <li class="breadcrumb-item active">Update Service</li>
             </ol>
           </div>
         </div>
@@ -29,34 +29,35 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Service</h3>
+                <h3 class="card-title">Update Service</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" id="serviceform">
+              <form role="form" id="serviceform" method="POST" action="{{ route('updateservice', $service->id) }}">
+                @csrf
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="lastname">Service</label> <span class="text-danger">*</span>
-                      <input type="text" name="service" class="form-control" id="service" placeholder="Enter service">
+                      <input type="text" name="service" class="form-control" id="service" placeholder="Enter service" value="{{ $service->service }}">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
                         <div class="custom-control custom-radio">
-                          <input class="custom-control-input" type="radio" id="status-active" name="status" value="active" checked>
+                          <input class="custom-control-input" type="radio" id="status-active" name="status" value="active" @if($service->status == 'active') checked @endif>
                           <label for="status-active" class="custom-control-label">Active</label>
                         </div>
                         <div class="custom-control custom-radio">
-                          <input class="custom-control-input" type="radio" id="status-inactive" name="status" value="inactive">
+                          <input class="custom-control-input" type="radio" id="status-inactive" name="status" value="inactive"  @if($service->status == 'inactive') checked @endif>
                           <label for="status-inactive" class="custom-control-label">Inactive</label>
                         </div>
-                    </div>
+                      </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="submit" id="btn-submit" class="btn btn-primary" disabled>Update</button>
                 </div>
               </form>
             </div>
@@ -78,6 +79,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+   var submit = false;
 
   //Service Form Validation
   $('#serviceform').validate({
@@ -105,42 +107,48 @@ $(document).ready(function () {
       $(element).removeClass('is-invalid');
     },
     submitHandler: function(e){
-      
-    var data = $('#serviceform').serializeArray();
-    data.push({name: "_token", value: "{{ csrf_token() }}"});
-
-    $.ajax({
-        url: "{{ route('storeservice') }}",
-        method: "POST",
-        data: data,
-        success: function(response){
-          console.log(response);
-
-          if(response.success)
-          {
-            $('#serviceform')[0].reset();
-            // Sweet Alert
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-            });
-          }
-          else
-          {
-            $('#service').addClass('is-invalid');
-            $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
-          }
-
-        },
-        error: function(response){
-          console.log(response);
-        }
-      });
+        var data = $('#serviceform').serializeArray();
+        data.push({name: "_token", value: "{{ csrf_token() }}"});
+        data.push({name: "serviceid", value: "{{ $service->id }}"});
+        $.ajax({
+            url: "{{ route('updateservice') }}",
+            method: "POST",
+            data: data,
+            success: function(response){
+                if(response.success)
+                {
+                    Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Record has been updated',
+                                showConfirmButton: false,
+                                timer: 2500
+                              });   
+                  setTimeout(function() {
+                    $(location).attr('href', "{{ route('servicerecord') }}");
+                  },1000);
+                }   
+                else
+                {
+                    $('#service').addClass('is-invalid');
+                    $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
+                }
+                console.log(response);
+            },
+            error: function(response){
+                console.log(response);
+            }
+        });
 
     }
+        
+  });
+  
+
+  $('#serviceform').on('change input',function(e){
+    
+    $('#btn-submit').attr('disabled', false);
+   
   });
 
 });
