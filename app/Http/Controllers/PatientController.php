@@ -144,7 +144,7 @@ class PatientController extends Controller
     public function edit($patientid)
     {       
         $patient = Patient::findOrFail($patientid);
-        $birthdate = Carbon::parse($patient->birthdate)->format('m-d-y');
+        $birthdate = Carbon::parse($patient->birthdate)->format('m-d-Y');
         return view('pages.patient.edit', compact('patient', 'birthdate'));
     }
 

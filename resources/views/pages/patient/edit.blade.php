@@ -53,13 +53,19 @@
                   <div class="row">
                     <div class="form-group col-md-3">
                       <label for="birthdate">Birthdate</label> <span class="text-danger">*</span>
-                      <div id="datetimepicker-birthdate" class="input-group date" data-target-input="nearest">
+                      <!-- <div id="datetimepicker-birthdate" class="input-group date" data-target-input="nearest">
                         <div class="input-group-append" data-target="#datetimepicker-birthdate" data-toggle="datetimepicker">
                           <div class="input-group-text">
                             <i class="fa fa-calendar"></i>
                           </div>
                         </div>
                         <input type="text" class="form-control datetimepicker-input" name="birthdate" id="birthdate" value="{{ $birthdate }}" data-target="#datetimepicker-birthdate"  placeholder="MM/DD/YYYY" readonly>
+                      </div> -->
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="birthdate" id="birthdate" value="{{ $birthdate }}" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask>
                       </div>
                     </div> 
                     <!-- <div class="form-group col-md-3">
@@ -351,6 +357,8 @@ $(document).ready(function () {
       },
       birthdate: {
         required: true,
+        date: true,
+        // dateFormat: true,
       },
       weight: {
         number: true,

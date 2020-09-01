@@ -44,3 +44,6 @@ Route::get('services', 'ServiceController@getservicerecord')->name('getservicere
 Route::post('service/edit', 'ServiceController@edit')->name('editservice');
 Route::post('service/update', 'ServiceController@update')->name('updateservice');
 Route::post('service/delete', 'ServiceController@delete')->name('deleteservice');
+
+//Patient Services
+Route::get('patientservices/create', 'PatientServiceController@create')->name('createpatientservice');

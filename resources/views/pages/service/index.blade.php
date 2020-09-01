@@ -133,6 +133,7 @@
     
     //Click Edit
     $('#btn-add-service').click(function(e){
+      $('#serviceform')[0].reset();
       $('.modal-title').empty().append('Add Service');
       action_type = 'add'
     });
@@ -299,6 +300,7 @@
             success: function(response){
                 if(response.success)
                 {   
+                    $('#serviceform')[0].reset();
                     $('#service-table').DataTable().ajax.reload();
                     Swal.fire({
                                 position: 'center',
@@ -307,8 +309,6 @@
                                 showConfirmButton: false,
                                 timer: 2500
                               });  
-                    
-                    $('#serviceform')[0].reset();
                     $('#modal-service').modal('toggle');
                 }   
                 else

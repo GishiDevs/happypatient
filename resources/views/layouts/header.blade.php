@@ -263,6 +263,23 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item has-treeview {{ (request()->is('patientservices/create')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patientservices/create')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-stethoscope"></i>
+              <p>
+                Services
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('createpatientservice') }}" class="nav-link {{ (request()->is('patientservices/create')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Patient Services</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item has-treeview {{ (request()->is('service/create') || request()->is('service/record')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('service/create') || request()->is('service/record')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>

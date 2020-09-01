@@ -43,7 +43,7 @@
                     <th>Gender</th>
                     <th>Weight (Kg)</th>
                     <th>Mobile</th>
-                    <th width="150px">Actions</th>
+                    <th width="140px">Actions</th>
                   </tr>
                   </thead>
                   <tfoot>
