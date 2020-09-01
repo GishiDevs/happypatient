@@ -6,6 +6,7 @@ use App\PatientService;
 use App\Service;
 use App\Patient;
 use Illuminate\Http\Request;
+use Validator;
 
 class PatientServiceController extends Controller
 {
@@ -22,8 +23,28 @@ class PatientServiceController extends Controller
     }
 
     public function store(Request $request)
-    {
-        //
+    {   
+
+        $rules = [
+            'patient.required' => 'Please select patient',
+            'docdate.required' => 'Please enter document date',
+            'docdate.date' => 'Please enter a valid date',
+            'services.required' => 'Please select at least 1 service'
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'patient' => 'required',
+            'docdate' => 'required|date',
+            'services' => 'required'
+        ], $rules);
+
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 200);
+        }
+
+        return response()->json(['success', 'Record has successfully added'], 200);
+
     }
 
     public function show(PatientService $patientService)

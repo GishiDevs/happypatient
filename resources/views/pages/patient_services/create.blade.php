@@ -37,9 +37,9 @@
                 <div class="card-body">
                   <div class="row d-flex justify-content-around"> 
                     <div class="form-group col-md-4">
-                    <label for="patient">Patient</label>
+                      <label for="patient">Patient</label>
                       <select class="form-control select2" name="patient" id="patient" style="width: 100%;">
-                        <option selected="selected" disabled>Select Patient</option>
+                        <option selected="selected" value="" disabled>Select Patient</option>
                         @foreach($patients as $patient)
                         <option value="{{ $patient->id }}">{{ $patient->id . ' - ' . $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename }}</option>
                         @endforeach
@@ -51,7 +51,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         </div>
-                        <input type="text" class="form-control" name="birthdate" id="birthdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask>
+                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy">
                       </div>
                     </div>
                   </div>
@@ -59,7 +59,7 @@
                     
                   </div> -->
                   <hr>
-                  <div class="row d-flex justify-content-center">
+                  <div class="row d-flex justify-content-center div-services">
                     @foreach($services as $service)
                     <div class="form-group col-md-4">
                         <div class="custom-control custom-checkbox">
@@ -73,18 +73,12 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
+                  <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
                 </div>
               </form>
             </div>
             <!-- /.card -->
-            </div>
-          <!--/.col (left) -->
-          <!-- right column -->
-          <div class="col-md-6">
-
           </div>
-          <!--/.col (right) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -95,12 +89,114 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+
+
+  //Service Form Validation
+  $('#patientserviceform').validate({
+    rules: {
+      patient: {
+        required: true,
+      },
+      docdate: {
+        required: true,
+        date: true
+      },     
+    },
+    messages: {
+      patient: {
+        required: "Please select patient",
+      },
+      docdate: {
+        required: "Please enter document date",
+      },   
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+      if ($(element).hasClass('select2'))
+      { 
+        $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+      }
+      
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    },
+    submitHandler: function(e){
+        var data = $('#patientserviceform').serializeArray();
+        data.push({name: "_token", value: "{{ csrf_token() }}"});
+        $.ajax({
+            url: "{{ route('storepatientservice') }}",
+            method: "POST",
+            data: data,
+            success: function(response){
+                if(response.success)
+                {
+                    Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Record has successfully added',
+                                showConfirmButton: false,
+                                timer: 2500
+                              });   
+                  setTimeout(function() {
+                    // $(location).attr('href', "{{ route('servicerecord') }}");
+                  },1000);
+                }   
+                else
+                {
+                    $('.div-services').addClass('is-invalid text-danger');
+                    $('.div-services').after('<span id="service-error" class="error invalid-feedback">'+ response.services +'</span>');
+                }
+                console.log(response);
+            },
+            error: function(response){
+                console.log(response);
+            }
+        });
+
+    }
+        
+  });
+
+  $('#patient').on('change', function(e){
+    $("[aria-labelledby='select2-patient-container']").removeAttr('style');
+    $('#patient-error').remove();
+  });
+
+  $('[name="services[]"]').change(function(){
+    serviceischecked();
+  });
+
+  $('#btn-add').click(function(e){
+    serviceischecked();
+  });
+
   $('[data-mask]').inputmask();
   $('.select2').select2();
 
   $('#patient').on('change', function(e){
     $('#btn-add').attr('disabled', false);
   });
+
+  function serviceischecked(){
+
+    if ($('[name="services[]"]').is(':checked')) {
+      $('.div-services').removeClass('is-invalid text-danger');
+      $('#service-error').remove();
+    }
+    else
+    {
+      $('.div-services').addClass('is-invalid text-danger');
+      $('.div-services').after('<span id="service-error" class="error invalid-feedback">Please select at least 1 service</span>');
+    }
+    
+  }
 
 });
 </script>

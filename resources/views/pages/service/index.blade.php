@@ -290,7 +290,7 @@
   } 
 
   function updateservice(){
-    var data = $('#serviceform').serializeArray();
+    var data = $('#patientserviceform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         data.push({name: "serviceid", value: serviceid});
         $.ajax({

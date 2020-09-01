@@ -47,3 +47,4 @@ Route::post('service/delete', 'ServiceController@delete')->name('deleteservice')
 
 //Patient Services
 Route::get('patientservices/create', 'PatientServiceController@create')->name('createpatientservice');
+Route::post('patientservices/store', 'PatientServiceController@store')->name('storepatientservice');
