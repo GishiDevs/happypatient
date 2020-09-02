@@ -1,7 +1,7 @@
 
 @extends('layouts.main')
 @section('title', 'Add Patient')
-@section('main_content')
+@section('main_content')                                
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -29,7 +29,7 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Patient</h3>
+                <h3 class="card-title">Add Patient </h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->

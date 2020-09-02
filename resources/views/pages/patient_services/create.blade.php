@@ -135,8 +135,11 @@ $(document).ready(function () {
             method: "POST",
             data: data,
             success: function(response){
+                console.log(response);
                 if(response.success)
-                {
+                {   
+                    $('#select2-patient-container').empty().append('Select Patient');
+                    $('#patientserviceform')[0].reset();
                     Swal.fire({
                                 position: 'center',
                                 icon: 'success',
@@ -144,16 +147,17 @@ $(document).ready(function () {
                                 showConfirmButton: false,
                                 timer: 2500
                               });   
-                  setTimeout(function() {
-                    // $(location).attr('href', "{{ route('servicerecord') }}");
-                  },1000);
+                  // setTimeout(function() {
+                  //   // $(location).attr('href', "{{ route('servicerecord') }}");
+                  // },1000);
                 }   
                 else
-                {
+                {   
+                  alert();
                     $('.div-services').addClass('is-invalid text-danger');
                     $('.div-services').after('<span id="service-error" class="error invalid-feedback">'+ response.services +'</span>');
                 }
-                console.log(response);
+                
             },
             error: function(response){
                 console.log(response);
@@ -191,9 +195,10 @@ $(document).ready(function () {
       $('#service-error').remove();
     }
     else
-    {
+    { 
+      $('#service-error').remove();
       $('.div-services').addClass('is-invalid text-danger');
-      $('.div-services').after('<span id="service-error" class="error invalid-feedback">Please select at least 1 service</span>');
+      $('.div-services').after('<span id="service-error" class="invalid-feedback">Please select at least 1 service</span>');
     }
     
   }

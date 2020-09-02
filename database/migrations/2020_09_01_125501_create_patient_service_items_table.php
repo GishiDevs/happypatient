@@ -17,7 +17,6 @@ class CreatePatientServiceItemsTable extends Migration
             $table->id();
             $table->integer('psid');
             $table->integer('serviceid');
-            $table->string('service');
             $table->string('status')->nullable();
             $table->timestamps();
         });

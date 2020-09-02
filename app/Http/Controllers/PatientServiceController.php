@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\PatientService;
+use App\PatientServiceItem;
 use App\Service;
 use App\Patient;
 use Illuminate\Http\Request;
 use Validator;
+use Carbon\Carbon;
 
 class PatientServiceController extends Controller
 {
@@ -24,7 +26,7 @@ class PatientServiceController extends Controller
 
     public function store(Request $request)
     {   
-
+        
         $rules = [
             'patient.required' => 'Please select patient',
             'docdate.required' => 'Please enter document date',
@@ -43,7 +45,26 @@ class PatientServiceController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
-        return response()->json(['success', 'Record has successfully added'], 200);
+        $patient = Patient::find($request->get('patient'));
+
+        $patientservice  = new PatientService();
+        $patientservice->patientid = $request->get('patient');
+        $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
+        $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
+        $patientservice->save();
+
+        $ctr = count($request->get('services'));
+        $services = $request->get('services');
+
+        for($x=0; $x < $ctr; $x++)
+        {
+            $serviceitem = new PatientServiceItem();
+            $serviceitem->psid = $patientservice->id;
+            $serviceitem->serviceid = $services[$x];
+            $serviceitem->save();
+        }
+
+        return response()->json(['success' => 'Record has successfully added'], 200);
 
     }
 

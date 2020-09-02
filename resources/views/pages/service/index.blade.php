@@ -82,7 +82,7 @@
           <div class="row">
             <div class="form-group col-md-12">
               <label for="lastname">Service</label> <span class="text-danger">*</span>
-              <input type="text" name="service" class="form-control" id="service" placeholder="Enter service">
+              <input type="text" name="service" class="form-control" id="service" placeholder="Enter service" autofocus>
             </div>
           </div>
           <div class="row">
