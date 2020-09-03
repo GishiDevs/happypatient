@@ -12,7 +12,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
               <li class="breadcrumb-item active">Update Service</li>
             </ol>
           </div>
@@ -33,7 +33,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" id="serviceform" method="POST" action="{{ route('updateservice', $service->id) }}">
+              <form role="form" id="serviceform" method="POST" action="{{ route('service.update', $service->id) }}">
                 @csrf
                 <div class="card-body">
                   <div class="row">
@@ -111,7 +111,7 @@ $(document).ready(function () {
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         data.push({name: "serviceid", value: "{{ $service->id }}"});
         $.ajax({
-            url: "{{ route('updateservice') }}",
+            url: "{{ route('service.update') }}",
             method: "POST",
             data: data,
             success: function(response){
@@ -125,7 +125,7 @@ $(document).ready(function () {
                                 timer: 2500
                               });   
                   setTimeout(function() {
-                    $(location).attr('href', "{{ route('servicerecord') }}");
+                    $(location).attr('href', "{{ route('service.index') }}");
                   },1000);
                 }   
                 else

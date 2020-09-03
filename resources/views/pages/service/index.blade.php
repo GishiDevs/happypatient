@@ -12,7 +12,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
               <li class="breadcrumb-item active">Service Record Lists</li>
             </ol>
           </div>
@@ -145,7 +145,7 @@
       serviceid = $(this).data('serviceid');
 
       $.ajax({
-        url: "{{ route('editservice') }}",
+        url: "{{ route('service.edit') }}",
         method: "POST",
         data: {_token: "{{ csrf_token() }}", serviceid: $(this).data('serviceid')},
         success: function(response){
@@ -187,7 +187,7 @@
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url: "{{ route('deleteservice') }}",
+            url: "{{ route('service.delete') }}",
             method: "POST",
             data: {_token: "{{ csrf_token() }}", serviceid: serviceid},
             success: function(response){
@@ -256,7 +256,7 @@
     data.push({name: "_token", value: "{{ csrf_token() }}"});
 
     $.ajax({
-        url: "{{ route('storeservice') }}",
+        url: "{{ route('service.store') }}",
         method: "POST",
         data: data,
         success: function(response){
@@ -294,7 +294,7 @@
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         data.push({name: "serviceid", value: serviceid});
         $.ajax({
-            url: "{{ route('updateservice') }}",
+            url: "{{ route('service.update') }}",
             method: "POST",
             data: data,
             success: function(response){

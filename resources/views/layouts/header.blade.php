@@ -250,8 +250,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/record') || request()->is('patient/edit')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/record') || request()->is('patient/edit')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-wheelchair"></i>
               <p>
                 Patient
@@ -260,21 +260,21 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('createpatient') }}" class="nav-link {{ (request()->is('patient/create')) ? 'active' : '' }}">
+                <a href="{{ route('patient.create') }}" class="nav-link {{ (request()->is('patient/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('patientrecord') }}" class="nav-link {{ (request()->is('patient/record')) ? 'active' : '' }}">
+                <a href="{{ route('patient.index') }}" class="nav-link {{ (request()->is('patient/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patients Record</p>
                 </a> 
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview {{ (request()->is('patientservices/create')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('patientservices/create')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('patientservice/create')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patientservice/create')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-stethoscope"></i>
               <p>
                 Services
@@ -283,15 +283,15 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('createpatientservice') }}" class="nav-link {{ (request()->is('patientservices/create')) ? 'active' : '' }}">
+                <a href="{{ route('patientservice.create') }}" class="nav-link {{ (request()->is('patientservices/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patient Services</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview {{ (request()->is('service/create') || request()->is('service/record')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('service/create') || request()->is('service/record')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('service/create') || request()->is('service/index')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('service/create') || request()->is('service/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Settings
@@ -300,7 +300,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('servicerecord') }}" class="nav-link {{ (request()->is('service/record')) ? 'active' : '' }}">
+                <a href="{{ route('service.index') }}" class="nav-link {{ (request()->is('service/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services</p>
                 </a> 

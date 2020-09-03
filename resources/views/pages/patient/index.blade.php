@@ -12,7 +12,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
               <li class="breadcrumb-item active">Patient Record</li>
             </ol>
           </div>
@@ -28,7 +28,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Patient Record Lists</h3>
-                <a href="{{ route('createpatient') }}" class="btn btn-primary float-right">Add New</a>
+                <a href="{{ route('patient.create') }}" class="btn btn-primary float-right">Add New</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -138,7 +138,7 @@
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url: "{{ route('deletepatient') }}",
+            url: "{{ route('patient.delete') }}",
             method: "POST",
             data: {_token: "{{ csrf_token() }}", patientid: patientid},
             success: function(response){

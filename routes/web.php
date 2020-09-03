@@ -22,14 +22,43 @@ Route::get('/', function () {
 Auth::routes();
 
 //Patient Route
-Route::get('patient/create', 'PatientController@create')->name('createpatient');
-Route::post('patient/store', 'PatientController@store')->name('storepatient');
-Route::get('patient/record', 'PatientController@index')->name('patientrecord');
-Route::get('patients', 'PatientController@getpatientrecord')->name('getpatientrecord');
-Route::get('patient/view/{id}', 'PatientController@view')->name('viewpatient');
-Route::get('patient/edit/{id}', 'PatientController@edit')->name('editpatient');
-Route::post('patient/update/{id}', 'PatientController@update')->name('updatepatient');
-Route::post('patient/delete', 'PatientController@delete')->name('deletepatient');
+Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], function(){
+    Route::get('/index', [
+        'uses' => 'PatientController@index',
+        'as' => 'patient.index',
+    ]);
+    Route::get('/create', [
+        'uses' => 'PatientController@create',
+        'as' => 'patient.create',
+    ]);
+    Route::post('/store', [
+        'uses' => 'PatientController@store',
+        'as' => 'patient.store',
+    ]);
+    Route::get('/patients', [
+        'uses' => 'PatientController@getpatientrecord',
+        'as' => 'getpatientrecord',
+    ]);
+    Route::get('/view/{id}', [
+        'uses' => 'PatientController@view',
+        'as' => 'patient.view',
+    ]);
+    Route::get('/edit/{id}', [
+        'uses' => 'PatientController@edit',
+        'as' => 'patient.edit',
+    ]);
+    Route::post('/update/{id}', [
+        'uses' => 'PatientController@edit',
+        'as' => 'patient.update',
+    ]);
+    
+    Route::post('/delete', [
+        'uses' => 'PatientController@delete',
+        'as' => 'patient.delete',
+    ]);
+});
+
+
 
 //Addresses Route
 Route::get('provinces', 'PatientController@getprovinces')->name('getprovinces');
@@ -37,14 +66,46 @@ Route::post('cities', 'PatientController@getcities')->name('getcities');
 Route::post('barangays', 'PatientController@getbarangays')->name('getbarangays');
 
 //Services Route
-Route::get('service/record', 'ServiceController@index')->name('servicerecord');
-Route::get('service/create', 'ServiceController@create')->name('createservice');
-Route::post('service/store', 'ServiceController@store')->name('storeservice');
-Route::get('services', 'ServiceController@getservicerecord')->name('getservicerecord');
-Route::post('service/edit', 'ServiceController@edit')->name('editservice');
-Route::post('service/update', 'ServiceController@update')->name('updateservice');
-Route::post('service/delete', 'ServiceController@delete')->name('deleteservice');
+Route::group(['prefix' => 'service', 'middleware' => ['auth','service_crud']], function(){
+    Route::get('/index', [
+        'uses' => 'ServiceController@index',
+        'as' => 'service.index',
+    ]);
+    Route::get('/create', [
+        'uses' => 'ServiceController@create',
+        'as' => 'service.create',
+    ]);
+    Route::post('/store', [
+        'uses' => 'ServiceController@store',
+        'as' => 'service.store',
+    ]);
+    Route::get('/services', [
+        'uses' => 'ServiceController@getservicerecord',
+        'as' => 'getservicerecord',
+    ]);
+    Route::post('/edit', [
+        'uses' => 'ServiceController@edit',
+        'as' => 'service.edit',
+    ]);
+    Route::post('/update', [
+        'uses' => 'ServiceController@update',
+        'as' => 'service.update',
+    ]);
+    Route::post('/delete', [
+        'uses' => 'ServiceController@delete',
+        'as' => 'service.delete',
+    ]);
+
+});
 
 //Patient Services
-Route::get('patientservices/create', 'PatientServiceController@create')->name('createpatientservice');
-Route::post('patientservices/store', 'PatientServiceController@store')->name('storepatientservice');
+Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_service']], function(){
+    Route::get('/create', [
+        'uses' => 'PatientServiceController@create',
+        'as' => 'patientservice.create',
+    ]);
+    Route::get('/store', [
+        'uses' => 'PatientServiceController@store',
+        'as' => 'patientservice.store',
+    ]);
+});

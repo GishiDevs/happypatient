@@ -12,7 +12,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
               <li class="breadcrumb-item active">Add Patient</li>
             </ol>
           </div>
@@ -353,7 +353,7 @@ $(document).ready(function () {
       data.push({name: "_token", value: "{{ csrf_token() }}"});
       
       $.ajax({
-        url: "{{ route('storepatient') }}",
+        url: "{{ route('patient.store') }}",
         method: "POST",
         data: data,
         success: function(response){
