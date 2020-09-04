@@ -245,7 +245,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('patient.index') }}" class="nav-link {{ (request()->is('/') || request()->is('patient/index')) ? 'active' : '' }}">
+                <a href="{{ route('patient.index') }}" class="nav-link {{ (request()->is('patient/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patients Record</p>
                 </a> 
