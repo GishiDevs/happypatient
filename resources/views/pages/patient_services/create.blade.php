@@ -51,7 +51,7 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         </div>
-                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy">
+                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
                       </div>
                     </div>
                   </div>
