@@ -32,15 +32,11 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-
                       <th>Lastname</th>
                       <th>Firstname</th>
                       <th>Middlename</th>
-
                       <th>Gender</th>
-
                       <th>Mobile</th>
-
                     </tr>
                   </thead>
 
