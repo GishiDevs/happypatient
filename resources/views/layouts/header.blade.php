@@ -283,15 +283,38 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('patientservice.create') }}" class="nav-link {{ (request()->is('patientservices/create')) ? 'active' : '' }}">
+                <a href="{{ route('patientservice.create') }}" class="nav-link {{ (request()->is('patientservice/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patient Services</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview {{ (request()->is('service/create') || request()->is('service/index')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('service/create') || request()->is('service/index')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-user-circle"></i>
+              <p>
+                User
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('user.create') }}" class="nav-link {{ (request()->is('user/create')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add New</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('user.index') }}" class="nav-link {{ (request()->is('user/index')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Users Record</p>
+                </a> 
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Settings
@@ -303,6 +326,22 @@
                 <a href="{{ route('service.index') }}" class="nav-link {{ (request()->is('service/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services</p>
+                </a> 
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('permission.index') }}" class="nav-link {{ (request()->is('permission/index')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Permissions</p>
+                </a> 
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('role.index') }}" class="nav-link {{ (request()->is('role/index')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Roles</p>
                 </a> 
               </li>
             </ul>

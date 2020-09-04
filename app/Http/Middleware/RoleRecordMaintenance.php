@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 
-class PatientService
+class RoleRecordMaintenance
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,9 @@ class PatientService
      */
     public function handle($request, Closure $next)
     {
-        if($request->is('patientservice/create') || $request->is('patientservice/store'))
+        if($request->is('role/index') || $request->is('role/roles') || $request->is('role/create') 
+            || $request->is('role/store') || $request->is('role/edit') || $request->is('role/update') 
+            || $request->is('role/delete'))
         {
             if(Auth::user())
             {

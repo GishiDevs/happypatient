@@ -1,0 +1,110 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use DataTables;
+use Validator;
+
+class RoleController extends Controller
+{
+    public function index()
+    {       
+        $roles = Role::all();
+        return view('pages.roles.index');
+    }
+
+    public function getrolerecord()
+    {
+        $role = Role::all();
+        return DataTables::of($role)
+            ->addColumn('action',function($role){
+                return '<a href="" class="btn btn-sm btn-info" data-roleid="'.$role->id.'" data-action="edit" id="btn-edit-role" data-toggle="modal" data-target="#modal-role"><i class="fa fa-edit"></i> Edit</a>
+                        <a href="" class="btn btn-sm btn-danger" data-roleid="'.$role->id.'" data-action="delete" id="btn-delete-role"><i class="fa fa-trash"></i> Delete</a>';
+            })
+            ->make();
+    }
+
+
+    public function create()
+    {
+        return view('pages.roles.create');
+    }
+
+
+    public function store(Request $request)
+    {   
+        
+        $rules = [
+            'role.required' => 'Please enter role',
+            'role.unique' => 'Role already exists'
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'role' => 'required|unique:roles,name'
+        ], $rules);
+
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 200);
+        }
+
+        $role = new Role();
+        $role->name = $request->get('role');
+        $role->guard_name = 'web';
+        $role->save();
+
+        return response()->json(['success' => 'Record has successfully added'], 200);
+    }
+
+
+    public function edit(Request $request)
+    {   
+        $roleid = $request->get('roleid');
+
+        $role = Role::findOrFail($roleid);
+        
+        // return view('pages.service.edit', compact('service'));
+        return response()->json($role, 200);
+
+    }
+
+
+    public function update(Request $request)
+    {   
+
+        $roleid = $request->get('roleid');
+
+        $rules = [
+            'role.required' => 'Please enter role',
+            'role.unique' => 'Role already exists'
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'role' => 'required|unique:roles,name,'.$roleid
+        ], $rules);
+
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 200);
+        }
+
+        $role = Role::findOrFail($roleid);
+        $role->name = $request->get('role');
+        $role->save();
+
+        return response()->json(['success' => 'Record has been updated']);
+    }
+
+
+    public function delete(Request $request)
+    {   
+        $roleid = $request->get('roleid');
+        $role = Role::findOrFail($roleid);
+        $role->delete();
+
+        return response()->json(['success' => 'Record has been deleted'], 200);
+    }
+}

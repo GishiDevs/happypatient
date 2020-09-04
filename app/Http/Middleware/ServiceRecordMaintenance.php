@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Auth;
 
 class ServiceRecordMaintenance
 {
@@ -15,6 +16,14 @@ class ServiceRecordMaintenance
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if($request->is('service/index') || $request->is('service/services') || $request->is('service/create') 
+            || $request->is('service/store') || $request->is('service/edit') || $request->is('service/update') 
+            || $request->is('service/delete'))
+        {
+            if(Auth::user())
+            {
+                return $next($request);
+            }
+        }
     }
 }

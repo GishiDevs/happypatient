@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Services')
+@section('title', 'Permissions')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Service</h1>
+            <h1>Permissions</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
-              <li class="breadcrumb-item active">Service Record Lists</li>
+              <li class="breadcrumb-item active">Permission Lists</li>
             </ol>
           </div>
         </div>
@@ -27,25 +27,23 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Service Record Lists</h3>
-                <a href="" id="btn-add-service" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-service">Add New</a>
+                <h3 class="card-title">Permission Lists</h3>
+                <a href="" id="btn-add-permission" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-permission">Add New</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="service-table" class="table table-bordered table-striped">
+                <table id="permission-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Service</th>
-                      <th>Status</th>
+                      <th>Permission</th>
                       <th width="140px">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>ID</th>
-                      <th>Service</th>
-                      <th>Status</th>
+                      <th>Permission</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
@@ -67,7 +65,7 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-<div class="modal fade" id="modal-service">
+<div class="modal fade" id="modal-permission">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -77,24 +75,12 @@
         </button>
       </div>
       <div class="modal-body">
-      <form role="form" id="serviceform">
+      <form role="form" id="permissionform">
         <div class="card-body">
           <div class="row">
             <div class="form-group col-md-12">
-              <label for="lastname">Service</label> <span class="text-danger">*</span>
-              <input type="text" name="service" class="form-control" id="service" placeholder="Enter service" autofocus>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-4">
-                <div class="custom-control custom-radio">
-                  <input class="custom-control-input" type="radio" id="status-active" name="status" value="active" checked>
-                  <label for="status-active" class="custom-control-label">Active</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input class="custom-control-input" type="radio" id="status-inactive" name="status" value="inactive">
-                  <label for="status-inactive" class="custom-control-label">Inactive</label>
-                </div>
+              <label for="permission">Permission</label> <span class="text-danger">*</span>
+              <input type="text" name="permission" class="form-control" id="permission" placeholder="Enter permission" autofocus>
             </div>
           </div>
         </div>
@@ -114,57 +100,44 @@
 
   $(document).ready(function() {
     var action_type;
-    var serviceid;
+    var permissionid;
 			// $('#tax-table').DataTable();
-	  $('#service-table').DataTable({
+	  $('#permission-table').DataTable({
         "responsive": true,
         "autoWidth": false,
 		    "processing": true,
 		    "serverSide": true,
-		    "ajax": "{{ route('getservicerecord') }}",
+		    "ajax": "{{ route('getpermissionrecord') }}",
 		    "bDestroy": true,
 		    "columns": [
                     { "data": "id"},
-		    		{ "data": "service"},
-		    		{ "data": "status"},
-		    		{ "data": "action", orderable: false, searchable: false}
+                    { "data": "name"},
+                    { "data": "action", orderable: false, searchable: false}
 		    ]
     });
     
     //Click Edit
-    $('#btn-add-service').click(function(e){
-      $('#status-active').attr('checked', true);
-      $('#status-inactive').attr('checked', false);
+    $('#btn-add-permission').click(function(e){
       $('#btn-save').attr('disabled', false);
-      $('#serviceform')[0].reset();
-      $('.modal-title').empty().append('Add Service');
+      $('#permissionform')[0].reset();
+      $('.modal-title').empty().append('Add permission');
       action_type = 'add'
     });
 
     //Click Edit
-    $('#service-table').on('click', 'tbody td #btn-edit-service', function(e){
+    $('#permission-table').on('click', 'tbody td #btn-edit-permission', function(e){
       $('#btn-save').attr('disabled', true);
-      $('.modal-title').empty().append('Update Service');
+      $('.modal-title').empty().append('Update Permission');
       action_type = 'update';
-      serviceid = $(this).data('serviceid');
+      permissionid = $(this).data('permissionid');
 
       $.ajax({
-        url: "{{ route('service.edit') }}",
+        url: "{{ route('permission.edit') }}",
         method: "POST",
-        data: {_token: "{{ csrf_token() }}", serviceid: $(this).data('serviceid')},
+        data: {_token: "{{ csrf_token() }}", permissionid: $(this).data('permissionid')},
         success: function(response){
           console.log(response);
-          $('#service').val(response.service);
-          if(response.status == 'active')
-          { 
-            $('#status-inactive').removeAttr('checked');
-            $('#status-active').attr('checked', true);
-          }
-          else
-          {
-            $('#status-active').removeAttr('checked');
-            $('#status-inactive').attr('checked', true);
-          }
+          $('#permission').val(response.name);
         },
         error: function(response){
           console.log(response);
@@ -174,11 +147,11 @@
     });
 
     //Delete Patient
-    $('#service-table').on('click', 'tbody td #btn-delete-service', function(e){
+    $('#permission-table').on('click', 'tbody td #btn-delete-permission', function(e){
 
       e.preventDefault();
 
-      var serviceid = $(this).data('serviceid');
+      var permissionid = $(this).data('permissionid');
 
       Swal.fire({
         title: 'Are you sure?',
@@ -191,9 +164,9 @@
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url: "{{ route('service.delete') }}",
+            url: "{{ route('permission.delete') }}",
             method: "POST",
-            data: {_token: "{{ csrf_token() }}", serviceid: serviceid},
+            data: {_token: "{{ csrf_token() }}", permissionid: permissionid},
             success: function(response){
               console.log(response);
               if(response.success)
@@ -203,7 +176,7 @@
                   'Record has been deleted.',
                   'success'
                 );
-                $('#service-table').DataTable().ajax.reload();
+                $('#permission-table').DataTable().ajax.reload();
               }
             },
             error: function(response){
@@ -215,17 +188,17 @@
       });
     });
 
-    //Service Form Validation
-  $('#serviceform').validate({
+    //permission Form Validation
+  $('#permissionform').validate({
     rules: {
-      service: {
+      permission: {
         required: true,
       },
       
     },
     messages: {
-      service: {
-        required: "Please enter service",
+      permission: {
+        required: "Please enter permission",
       },
      
     },
@@ -244,23 +217,23 @@
       
       if(action_type == 'add')
       {
-        addservice();
+        addpermission();
       }
       else
       {
-        updateservice();
+        updatepermission();
       }
 
     }
   });
     
-  function addservice(){
+  function addpermission(){
     
-    var data = $('#serviceform').serializeArray();
+    var data = $('#permissionform').serializeArray();
     data.push({name: "_token", value: "{{ csrf_token() }}"});
 
     $.ajax({
-        url: "{{ route('service.store') }}",
+        url: "{{ route('permission.store') }}",
         method: "POST",
         data: data,
         success: function(response){
@@ -268,7 +241,7 @@
 
           if(response.success)
           {
-            $('#serviceform')[0].reset();
+            $('#permissionform')[0].reset();
             // Sweet Alert
             Swal.fire({
                 position: 'center',
@@ -277,13 +250,13 @@
                 showConfirmButton: false,
                 timer: 2500
             });
-            $('#service-table').DataTable().ajax.reload();
-            $('#modal-service').modal('toggle');
+            $('#permission-table').DataTable().ajax.reload();
+            $('#modal-permission').modal('toggle');
           }
           else
           {
-            $('#service').addClass('is-invalid');
-            $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
+            $('#permission').addClass('is-invalid');
+            $('#permission').after('<span id="permission-error" class="error invalid-feedback">'+ response.permission +'</span>');
           }
 
         },
@@ -293,19 +266,19 @@
       });
   } 
 
-  function updateservice(){
-    var data = $('#serviceform').serializeArray();
+  function updatepermission(){
+    var data = $('#permissionform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
-        data.push({name: "serviceid", value: serviceid});
+        data.push({name: "permissionid", value: permissionid});
         $.ajax({
-            url: "{{ route('service.update') }}",
+            url: "{{ route('permission.update') }}",
             method: "POST",
             data: data,
             success: function(response){
                 if(response.success)
                 {   
-                    $('#serviceform')[0].reset();
-                    $('#service-table').DataTable().ajax.reload();
+                    $('#permissionform')[0].reset();
+                    $('#permission-table').DataTable().ajax.reload();
                     Swal.fire({
                                 position: 'center',
                                 icon: 'success',
@@ -313,12 +286,12 @@
                                 showConfirmButton: false,
                                 timer: 2500
                               });  
-                    $('#modal-service').modal('toggle');
+                    $('#modal-permission').modal('toggle');
                 }   
                 else
                 {
-                    $('#service').addClass('is-invalid');
-                    $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
+                    $('#permission').addClass('is-invalid');
+                    $('#permission').after('<span id="permission-error" class="error invalid-feedback">'+ response.permission +'</span>');
                 }
                 console.log(response);
             },
@@ -327,17 +300,17 @@
             }
         });
   } 
-    $('#serviceform').on('change input',function(e){
+    $('#permissionform').on('change input',function(e){
       
       $('#btn-save').attr('disabled', false);
     
     });
 
     $('#btn-cancel').click(function(e){
-        $('#serviceform')[0].reset();
+          $('#permissionform')[0].reset();
     });
   
-  });
+	});
 
 </script>
 @endsection

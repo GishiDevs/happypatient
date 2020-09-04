@@ -72,7 +72,7 @@ class ServiceController extends Controller
 
 
     public function update(Request $request)
-    {
+    {   
         $serviceid = $request->get('serviceid');
 
         $rules = [

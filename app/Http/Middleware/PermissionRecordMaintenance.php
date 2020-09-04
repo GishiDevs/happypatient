@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 
-class PatientService
+class PermissionRecordMaintenance
 {
     /**
      * Handle an incoming request.
@@ -15,13 +15,16 @@ class PatientService
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
-        if($request->is('patientservice/create') || $request->is('patientservice/store'))
+    {   
+        if($request->is('permission/index') || $request->is('permission/permissions') || $request->is('permission/create') 
+            || $request->is('permission/store') || $request->is('permission/edit') || $request->is('permission/update') 
+            || $request->is('permission/delete'))
         {
             if(Auth::user())
             {
                 return $next($request);
             }
         }
+        
     }
 }

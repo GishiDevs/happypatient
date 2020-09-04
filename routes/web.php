@@ -15,9 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('auth.login');
-});
-
+    return view('pages.patient.index');
+})->middleware('auth');
 
 Auth::routes();
 
@@ -57,8 +56,6 @@ Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], f
         'as' => 'patient.delete',
     ]);
 });
-
-
 
 //Addresses Route
 Route::get('provinces', 'PatientController@getprovinces')->name('getprovinces');
@@ -107,5 +104,108 @@ Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_ser
     Route::get('/store', [
         'uses' => 'PatientServiceController@store',
         'as' => 'patientservice.store',
+    ]);
+});
+
+//Permissions
+Route::group(['prefix' => 'permission', 'middleware' => ['auth','permission_crud']], function(){
+    Route::get('/index', [
+        'uses' => 'PermissionController@index',
+        'as' => 'permission.index',
+    ]);
+    Route::get('/create', [
+        'uses' => 'PermissionController@create',
+        'as' => 'permission.create',
+    ]);
+    Route::post('/store', [
+        'uses' => 'PermissionController@store',
+        'as' => 'permission.store',
+    ]);
+    Route::get('/permissions', [
+        'uses' => 'PermissionController@getpermissionrecord',
+        'as' => 'getpermissionrecord',
+    ]);
+    Route::post('/edit', [
+        'uses' => 'PermissionController@edit',
+        'as' => 'permission.edit',
+    ]);
+    Route::post('/update', [
+        'uses' => 'PermissionController@update',
+        'as' => 'permission.update',
+    ]);
+    Route::post('/delete', [
+        'uses' => 'PermissionController@delete',
+        'as' => 'permission.delete',
+    ]);
+
+});
+
+//Roles
+Route::group(['prefix' => 'role', 'middleware' => ['auth','role_crud']], function(){
+    Route::get('/index', [
+        'uses' => 'RoleController@index',
+        'as' => 'role.index',
+    ]);
+    Route::get('/create', [
+        'uses' => 'RoleController@create',
+        'as' => 'role.create',
+    ]);
+    Route::post('/store', [
+        'uses' => 'RoleController@store',
+        'as' => 'role.store',
+    ]);
+    Route::get('/roles', [
+        'uses' => 'RoleController@getrolerecord',
+        'as' => 'getrolerecord',
+    ]);
+    Route::post('/edit', [
+        'uses' => 'RoleController@edit',
+        'as' => 'role.edit',
+    ]);
+    Route::post('/update', [
+        'uses' => 'RoleController@update',
+        'as' => 'role.update',
+    ]);
+    Route::post('/delete', [
+        'uses' => 'RoleController@delete',
+        'as' => 'role.delete',
+    ]);
+
+});
+
+//User Route
+Route::group(['prefix' => 'user', 'middleware' => ['auth','user_crud']], function(){
+    Route::get('/index', [
+        'uses' => 'UserController@index',
+        'as' => 'user.index',
+    ]);
+    Route::get('/create', [
+        'uses' => 'UserController@create',
+        'as' => 'user.create',
+    ]);
+    Route::post('/store', [
+        'uses' => 'UserController@store',
+        'as' => 'user.store',
+    ]);
+    Route::get('/users', [
+        'uses' => 'UserController@getuserrecord',
+        'as' => 'getuserrecord',
+    ]);
+    Route::get('/view/{id}', [
+        'uses' => 'UserController@view',
+        'as' => 'user.view',
+    ]);
+    Route::get('/edit/{id}', [
+        'uses' => 'UserController@edit',
+        'as' => 'user.edit',
+    ]);
+    Route::post('/update/{id}', [
+        'uses' => 'UserController@edit',
+        'as' => 'user.update',
+    ]);
+    
+    Route::post('/delete', [
+        'uses' => 'UserController@delete',
+        'as' => 'user.delete',
     ]);
 });

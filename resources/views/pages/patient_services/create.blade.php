@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Add Service')
+@section('title', 'Patient Services')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -12,7 +12,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('patientrecord') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
               <li class="breadcrumb-item active">Patient Services</li>
             </ol>
           </div>
@@ -131,7 +131,7 @@ $(document).ready(function () {
         var data = $('#patientserviceform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         $.ajax({
-            url: "{{ route('storepatientservice') }}",
+            url: "{{ route('patientservice.store') }}",
             method: "POST",
             data: data,
             success: function(response){
@@ -147,13 +147,10 @@ $(document).ready(function () {
                                 showConfirmButton: false,
                                 timer: 2500
                               });   
-                  // setTimeout(function() {
-                  //   // $(location).attr('href', "{{ route('servicerecord') }}");
-                  // },1000);
+
                 }   
                 else
                 {   
-                  alert();
                     $('.div-services').addClass('is-invalid text-danger');
                     $('.div-services').after('<span id="service-error" class="error invalid-feedback">'+ response.services +'</span>');
                 }
@@ -189,17 +186,20 @@ $(document).ready(function () {
   });
 
   function serviceischecked(){
-
+    
     if ($('[name="services[]"]').is(':checked')) {
       $('.div-services').removeClass('is-invalid text-danger');
       $('#service-error').remove();
     }
     else
     { 
-      $('#service-error').remove();
-      $('.div-services').addClass('is-invalid text-danger');
-      $('.div-services').after('<span id="service-error" class="invalid-feedback">Please select at least 1 service</span>');
-    }
+      if($('#patientserviceform [type="checkbox"]').length > 0){
+          $('#service-error').remove();
+          $('.div-services').addClass('is-invalid text-danger');
+          $('.div-services').after('<span id="service-error" class="invalid-feedback">Please select at least 1 service</span>');
+      
+      }
+     }
     
   }
 

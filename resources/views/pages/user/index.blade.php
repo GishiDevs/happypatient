@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Patient Record')
+@section('title', 'User Record')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Patient</h1>
+            <h1>User</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
-              <li class="breadcrumb-item active">Patient Record</li>
+              <li class="breadcrumb-item active">User Record</li>
             </ol>
           </div>
         </div>
@@ -27,35 +27,27 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Patient Record Lists</h3>
-                <a href="{{ route('patient.create') }}" class="btn btn-primary float-right">Add New</a>
+                <h3 class="card-title">User Record Lists</h3>
+                <a href="{{ route('user.create') }}" class="btn btn-primary float-right">Add New</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="patient-table" class="table table-bordered table-striped">
+                <table id="user-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Lastname</th>
-                      <th>Firstname</th>
-                      <th>Middlename</th>
-                      <th>Birthdate</th>
-                      <th>Gender</th>
-                      <th>Weight (Kg)</th>
-                      <th>Mobile</th>
+                      <th>Name</th>
+                      <th>Username</th>
+                      <th>Email</th>
                       <th width="140px">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>ID</th>
-                      <th>Lastname</th>
-                      <th>Firstname</th>
-                      <th>Middlename</th>
-                      <th>Birthdate</th>
-                      <th>Gender</th>
-                      <th>Weight (Kg)</th>
-                      <th>Mobile</th>
+                      <th>Name</th>
+                      <th>Username</th>
+                      <th>Email</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
@@ -82,50 +74,46 @@
   $(document).ready(function() {
      
 			// $('#tax-table').DataTable();
-	  $('#patient-table').DataTable({
+	  $('#user-table').DataTable({
         "responsive": true,
         "autoWidth": false,
 		    "processing": true,
 		    "serverSide": true,
-		    "ajax": "{{ route('getpatientrecord') }}",
+		    "ajax": "{{ route('getuserrecord') }}",
 		    "bDestroy": true,
 		    "columns": [
             { "data": "id"},
-		    		{ "data": "lastname"},
-		    		{ "data": "firstname"},
-		    		{ "data": "middlename"},
-            { "data": "birthdate"},
-            { "data": "gender"},
-            { "data": "weight"},
-            { "data": "mobile"},
+		    		{ "data": "name"},
+		    		{ "data": "username"},
+		    		{ "data": "email"},
 		    		{ "data": "action", orderable: false, searchable: false}
 		    ]
     });
     
-    //View Patient
-    $('#patient-table').on('click', 'tbody td #btn-view-patient', function(e){
+    //View user
+    $('#user-table').on('click', 'tbody td #btn-view-user', function(e){
       
-      var patientid = $(this).data('patientid');
-      $('#view-text-patientid').val(patientid);
-      $('#form-viewpatient').submit();
+      var userid = $(this).data('userid');
+      $('#view-text-userid').val(userid);
+      $('#form-viewuser').submit();
 
     });
 
-    //Edit Patient
-    $('#patient-table').on('click', 'tbody td #btn-edit-patient', function(e){
+    //Edit user
+    $('#user-table').on('click', 'tbody td #btn-edit-user', function(e){
       
-      var patientid = $(this).data('patientid');
-      $('#edit-text-patientid').val(patientid);
-      $('#form-editpatient').submit();
+      var userid = $(this).data('userid');
+      $('#edit-text-userid').val(userid);
+      $('#form-edituser').submit();
 
     });
 
-    //Delete Patient
-    $('#patient-table').on('click', 'tbody td #btn-delete-patient', function(e){
+    //Delete user
+    $('#user-table').on('click', 'tbody td #btn-delete-user', function(e){
 
       e.preventDefault();
 
-      var patientid = $(this).data('patientid');
+      var userid = $(this).data('userid');
 
       Swal.fire({
         title: 'Are you sure?',
@@ -138,9 +126,9 @@
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url: "{{ route('patient.delete') }}",
+            url: "{{ route('user.delete') }}",
             method: "POST",
-            data: {_token: "{{ csrf_token() }}", patientid: patientid},
+            data: {_token: "{{ csrf_token() }}", userid: userid},
             success: function(response){
               console.log(response);
               if(response.success)
@@ -150,7 +138,7 @@
                   'Record has been deleted.',
                   'success'
                 );
-                $('#patient-table').DataTable().ajax.reload();
+                $('#user-table').DataTable().ajax.reload();
               }
             },
             error: function(response){

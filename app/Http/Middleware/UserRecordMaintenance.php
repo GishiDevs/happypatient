@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-class PatientRecordMaintenance
+
+class UserRecordMaintenance
 {
     /**
      * Handle an incoming request.
@@ -14,10 +15,9 @@ class PatientRecordMaintenance
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {   
-        
-        //Patient Record
-        if($request->is('patient/index') || $request->is('patient/patients')){
+    {
+        //User Record
+        if($request->is('user/index') || $request->is('user/users')){
             if(Auth::user()){
                 return $next($request); 
             }
@@ -27,8 +27,8 @@ class PatientRecordMaintenance
             }
         }
         
-        //Patient Create
-        if($request->is('patient/create') || $request->is('patient/store')){
+        //User Create
+        if($request->is('user/create') || $request->is('user/store')){
             if(Auth::user()){
                 return $next($request);
             }
@@ -38,8 +38,8 @@ class PatientRecordMaintenance
             }
         }
 
-        //Patient Edit
-        if($request->is('patient/edit/*') || $request->is('patient/update/*')){
+        //User Edit
+        if($request->is('user/edit/*') || $request->is('user/update/*')){
             if(Auth::user()){
                 return $next($request);
             }
@@ -49,8 +49,8 @@ class PatientRecordMaintenance
             }
         }
 
-        //Patient Delete
-        if($request->is('patient/delete')){
+        //User Delete
+        if($request->is('user/delete')){
             if(Auth::user()){
                 return $next($request);
             }
@@ -59,8 +59,5 @@ class PatientRecordMaintenance
                 return response()->json("You don't have permission!", 200);
             }
         }
-        
-        
     }
-
 }

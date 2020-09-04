@@ -66,5 +66,10 @@ class Kernel extends HttpKernel
         'patient_crud' => \App\Http\Middleware\PatientRecordMaintenance::class,
         'service_crud' => \App\Http\Middleware\ServiceRecordMaintenance::class,
         'patient_service' => \App\Http\Middleware\PatientService::class,
+        'permission_crud' => \App\Http\Middleware\PermissionRecordMaintenance::class,
+        'role_crud' => \App\Http\Middleware\RoleRecordMaintenance::class,
+        'user_crud' => \App\Http\Middleware\UserRecordMaintenance::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
     ];
 }

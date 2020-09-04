@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Services')
+@section('title', 'Roles')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Service</h1>
+            <h1>Roles</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
-              <li class="breadcrumb-item active">Service Record Lists</li>
+              <li class="breadcrumb-item active">Role Lists</li>
             </ol>
           </div>
         </div>
@@ -27,26 +27,24 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Service Record Lists</h3>
-                <a href="" id="btn-add-service" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-service">Add New</a>
+                <h3 class="card-title">Role Lists</h3>
+                <a href="" id="btn-add-role" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-role">Add New</a>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="service-table" class="table table-bordered table-striped">
+                <table id="role-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Service</th>
-                      <th>Status</th>
-                      <th width="140px">Actions</th>
+                        <th>ID</th>
+                        <th>Role</th>
+                        <th width="140px">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <th>ID</th>
-                      <th>Service</th>
-                      <th>Status</th>
-                      <th>Actions</th>
+                        <th>ID</th>
+                        <th>Role</th>
+                        <th>Actions</th>
                     </tr>
                   </tfoot>
                 </table>
@@ -67,7 +65,7 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-<div class="modal fade" id="modal-service">
+<div class="modal fade" id="modal-role">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -77,24 +75,12 @@
         </button>
       </div>
       <div class="modal-body">
-      <form role="form" id="serviceform">
+      <form role="form" id="roleform">
         <div class="card-body">
           <div class="row">
             <div class="form-group col-md-12">
-              <label for="lastname">Service</label> <span class="text-danger">*</span>
-              <input type="text" name="service" class="form-control" id="service" placeholder="Enter service" autofocus>
-            </div>
-          </div>
-          <div class="row">
-            <div class="form-group col-md-4">
-                <div class="custom-control custom-radio">
-                  <input class="custom-control-input" type="radio" id="status-active" name="status" value="active" checked>
-                  <label for="status-active" class="custom-control-label">Active</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input class="custom-control-input" type="radio" id="status-inactive" name="status" value="inactive">
-                  <label for="status-inactive" class="custom-control-label">Inactive</label>
-                </div>
+              <label for="role">Role</label> <span class="text-danger">*</span>
+              <input type="text" name="role" class="form-control" id="role" placeholder="Enter role" autofocus>
             </div>
           </div>
         </div>
@@ -114,57 +100,44 @@
 
   $(document).ready(function() {
     var action_type;
-    var serviceid;
+    var roleid;
 			// $('#tax-table').DataTable();
-	  $('#service-table').DataTable({
+	  $('#role-table').DataTable({
         "responsive": true,
         "autoWidth": false,
 		    "processing": true,
 		    "serverSide": true,
-		    "ajax": "{{ route('getservicerecord') }}",
+		    "ajax": "{{ route('getrolerecord') }}",
 		    "bDestroy": true,
 		    "columns": [
                     { "data": "id"},
-		    		{ "data": "service"},
-		    		{ "data": "status"},
-		    		{ "data": "action", orderable: false, searchable: false}
+                    { "data": "name"},
+                    { "data": "action", orderable: false, searchable: false}
 		    ]
     });
     
     //Click Edit
-    $('#btn-add-service').click(function(e){
-      $('#status-active').attr('checked', true);
-      $('#status-inactive').attr('checked', false);
+    $('#btn-add-role').click(function(e){
       $('#btn-save').attr('disabled', false);
-      $('#serviceform')[0].reset();
-      $('.modal-title').empty().append('Add Service');
+      $('#roleform')[0].reset();
+      $('.modal-title').empty().append('Add role');
       action_type = 'add'
     });
 
     //Click Edit
-    $('#service-table').on('click', 'tbody td #btn-edit-service', function(e){
+    $('#role-table').on('click', 'tbody td #btn-edit-role', function(e){
       $('#btn-save').attr('disabled', true);
-      $('.modal-title').empty().append('Update Service');
+      $('.modal-title').empty().append('Update Role');
       action_type = 'update';
-      serviceid = $(this).data('serviceid');
+      roleid = $(this).data('roleid');
 
       $.ajax({
-        url: "{{ route('service.edit') }}",
+        url: "{{ route('role.edit') }}",
         method: "POST",
-        data: {_token: "{{ csrf_token() }}", serviceid: $(this).data('serviceid')},
+        data: {_token: "{{ csrf_token() }}", roleid: $(this).data('roleid')},
         success: function(response){
           console.log(response);
-          $('#service').val(response.service);
-          if(response.status == 'active')
-          { 
-            $('#status-inactive').removeAttr('checked');
-            $('#status-active').attr('checked', true);
-          }
-          else
-          {
-            $('#status-active').removeAttr('checked');
-            $('#status-inactive').attr('checked', true);
-          }
+          $('#role').val(response.name);
         },
         error: function(response){
           console.log(response);
@@ -174,11 +147,11 @@
     });
 
     //Delete Patient
-    $('#service-table').on('click', 'tbody td #btn-delete-service', function(e){
+    $('#role-table').on('click', 'tbody td #btn-delete-role', function(e){
 
       e.preventDefault();
 
-      var serviceid = $(this).data('serviceid');
+      var roleid = $(this).data('roleid');
 
       Swal.fire({
         title: 'Are you sure?',
@@ -191,9 +164,9 @@
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url: "{{ route('service.delete') }}",
+            url: "{{ route('role.delete') }}",
             method: "POST",
-            data: {_token: "{{ csrf_token() }}", serviceid: serviceid},
+            data: {_token: "{{ csrf_token() }}", roleid: roleid},
             success: function(response){
               console.log(response);
               if(response.success)
@@ -203,7 +176,7 @@
                   'Record has been deleted.',
                   'success'
                 );
-                $('#service-table').DataTable().ajax.reload();
+                $('#role-table').DataTable().ajax.reload();
               }
             },
             error: function(response){
@@ -215,17 +188,17 @@
       });
     });
 
-    //Service Form Validation
-  $('#serviceform').validate({
+    //role Form Validation
+  $('#roleform').validate({
     rules: {
-      service: {
+      role: {
         required: true,
       },
       
     },
     messages: {
-      service: {
-        required: "Please enter service",
+      role: {
+        required: "Please enter role",
       },
      
     },
@@ -244,23 +217,23 @@
       
       if(action_type == 'add')
       {
-        addservice();
+        addrole();
       }
       else
       {
-        updateservice();
+        updaterole();
       }
 
     }
   });
     
-  function addservice(){
+  function addrole(){
     
-    var data = $('#serviceform').serializeArray();
+    var data = $('#roleform').serializeArray();
     data.push({name: "_token", value: "{{ csrf_token() }}"});
 
     $.ajax({
-        url: "{{ route('service.store') }}",
+        url: "{{ route('role.store') }}",
         method: "POST",
         data: data,
         success: function(response){
@@ -268,7 +241,7 @@
 
           if(response.success)
           {
-            $('#serviceform')[0].reset();
+            $('#roleform')[0].reset();
             // Sweet Alert
             Swal.fire({
                 position: 'center',
@@ -277,13 +250,13 @@
                 showConfirmButton: false,
                 timer: 2500
             });
-            $('#service-table').DataTable().ajax.reload();
-            $('#modal-service').modal('toggle');
+            $('#role-table').DataTable().ajax.reload();
+            $('#modal-role').modal('toggle');
           }
           else
           {
-            $('#service').addClass('is-invalid');
-            $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
+            $('#role').addClass('is-invalid');
+            $('#role').after('<span id="role-error" class="error invalid-feedback">'+ response.role +'</span>');
           }
 
         },
@@ -293,19 +266,19 @@
       });
   } 
 
-  function updateservice(){
-    var data = $('#serviceform').serializeArray();
+  function updaterole(){
+    var data = $('#roleform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
-        data.push({name: "serviceid", value: serviceid});
+        data.push({name: "roleid", value: roleid});
         $.ajax({
-            url: "{{ route('service.update') }}",
+            url: "{{ route('role.update') }}",
             method: "POST",
             data: data,
             success: function(response){
                 if(response.success)
                 {   
-                    $('#serviceform')[0].reset();
-                    $('#service-table').DataTable().ajax.reload();
+                    $('#roleform')[0].reset();
+                    $('#role-table').DataTable().ajax.reload();
                     Swal.fire({
                                 position: 'center',
                                 icon: 'success',
@@ -313,12 +286,12 @@
                                 showConfirmButton: false,
                                 timer: 2500
                               });  
-                    $('#modal-service').modal('toggle');
+                    $('#modal-role').modal('toggle');
                 }   
                 else
                 {
-                    $('#service').addClass('is-invalid');
-                    $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
+                    $('#role').addClass('is-invalid');
+                    $('#role').after('<span id="role-error" class="error invalid-feedback">'+ response.role +'</span>');
                 }
                 console.log(response);
             },
@@ -327,17 +300,17 @@
             }
         });
   } 
-    $('#serviceform').on('change input',function(e){
+    $('#roleform').on('change input',function(e){
       
       $('#btn-save').attr('disabled', false);
     
     });
 
     $('#btn-cancel').click(function(e){
-        $('#serviceform')[0].reset();
+          $('#roleform')[0].reset();
     });
   
-  });
+	});
 
 </script>
 @endsection
