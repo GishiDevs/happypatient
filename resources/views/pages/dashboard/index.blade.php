@@ -68,15 +68,11 @@
 		    "ajax": "{{ route('getpatientrecord') }}",
 		    "bDestroy": true,
 		    "columns": [
-
 		    		{ "data": "lastname"},
 		    		{ "data": "firstname"},
 		    		{ "data": "middlename"},
-
-            { "data": "gender"},
-
-            { "data": "mobile"},
-
+                    { "data": "gender"},
+                    { "data": "mobile"},
 		    ]
     });
 
