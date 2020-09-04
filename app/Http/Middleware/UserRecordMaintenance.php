@@ -15,7 +15,8 @@ class UserRecordMaintenance
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
+    {   
+        
         //User Record
         if($request->is('user/index') || $request->is('user/users')){
             if(Auth::user()){

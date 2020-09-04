@@ -210,7 +210,7 @@ class PatientController extends Controller
         $patient->barangay = $request->get('barangay');
         $patient->save();
 
-        return redirect('patient/record');
+        return redirect('patient/index');
     }
 
     public function delete(Request $request)

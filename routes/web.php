@@ -47,7 +47,7 @@ Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], f
         'as' => 'patient.edit',
     ]);
     Route::post('/update/{id}', [
-        'uses' => 'PatientController@edit',
+        'uses' => 'PatientController@update',
         'as' => 'patient.update',
     ]);
     
@@ -200,7 +200,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth','user_crud']], functio
         'as' => 'user.edit',
     ]);
     Route::post('/update/{id}', [
-        'uses' => 'UserController@edit',
+        'uses' => 'UserController@update',
         'as' => 'user.update',
     ]);
     

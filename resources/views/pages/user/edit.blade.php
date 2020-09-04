@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Add User')
+@section('title', 'Update User')
 @section('main_content')                                
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -13,7 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
-              <li class="breadcrumb-item active">Add User</li>
+              <li class="breadcrumb-item active">Update User</li>
             </ol>
           </div>
         </div>
@@ -29,39 +29,40 @@
             <!-- jquery validation -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add User </h3>
+                <h3 class="card-title">Update User </h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" id="userform">
+              <form role="form" id="userform" method="POST" action="{{ route('user.update', $user->id) }}">
+                @csrf
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="name">Full Name</label> <span class="text-danger">*</span>
-                      <input type="text" id="name" type="text" class="form-control" name="name" required autofocus placeholder="Enter full name">
+                      <input type="text" id="name" type="text" class="form-control" name="name" value="{{ $user->name }}" required autofocus placeholder="Enter full name">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="email">Email</label>
-                      <input id="email" type="email" class="form-control" name="email" placeholder="Enter email">
+                      <input id="email" type="email" class="form-control" name="email" value="{{ $user->email }}" placeholder="Enter email">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
-                      <label for="name">Username</label> <span class="text-danger">*</span>
-                      <input type="text" id="username" type="text" class="form-control" name="username" required placeholder="Enter username">
+                      <label for="name">Username</label>
+                      <input type="text" id="username" type="text" class="form-control" name="username" value="{{ $user->username }}" readonly required placeholder="Enter username">
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
-                      <label for="password">Password</label> <span class="text-danger">*</span>
+                      <label for="password">Password</label>
                       <input type="password" class="form-control" name="password" id="password" placeholder="Enter password">
                     </div>
                   </div> 
                   <div class="row">
                     <div class="form-group col-md-4">
-                      <label for="confirm_password">Confirm Password</label> <span class="text-danger">*</span>
+                      <label for="confirm_password">Confirm Password</label>
                       <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Enter confirm password">
                     </div>
                   </div>
@@ -70,7 +71,7 @@
                       <label for="role">Role</label>
                       <select multiple class="custom-select" name="roles[]" id="roles">
                         @foreach($roles as $role)
-                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                        <option value="{{ $role }}" @if(in_array($role,$userRole)) selected @endif>{{ $role }}</option>
                         @endforeach
                       </select>
                     </div>
@@ -78,7 +79,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="submit" id="btn-submit" class="btn btn-primary" disabled>Update</button>
                 </div>
               </form>
             </div>
@@ -115,10 +116,10 @@ $(document).ready(function () {
       },
       password: {
         minlength: 8,
-        required: true,
+        // required: true,
       },
       confirm_password: {
-        required: true,
+        // required: true,
         equalTo: "#password",
       },
       
@@ -147,35 +148,20 @@ $(document).ready(function () {
     },
     submitHandler: function(e){
 
-      var data = $('#userform').serializeArray();
-      data.push({name: "_token", value: "{{ csrf_token() }}"});
-      
-      $.ajax({
-        url: "{{ route('user.store') }}",
-        method: "POST",
-        data: data,
-        success: function(response){
-          console.log(response);
-
-          if(response.success)
-          {
-            $('#userform')[0].reset();
-            // Sweet Alert
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Record has successfully added',
-              showConfirmButton: false,
-              timer: 2500
-            });
-          }
-        },
-        error: function(response){
-          console.log(response);
-        }
-      });
-
+      Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Record has been updated',
+            showConfirmButton: false,
+            timer: 2500
+          });
+      return true;
     }
+  });
+  $('#userform').on('change input',function(e){
+    
+    $('#btn-submit').attr('disabled', false);
+   
   });
 
 });

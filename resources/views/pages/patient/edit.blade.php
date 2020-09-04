@@ -33,7 +33,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" id="patientform" method="POST" action="{{ route('patient.edit', $patient->id) }}">
+              <form role="form" id="patientform" method="POST" action="{{ route('patient.update', $patient->id) }}">
                 @csrf
                 <div class="card-body">
                   <div class="row">
@@ -426,7 +426,6 @@ $(document).ready(function () {
       return true;
     }
   });
-  
   
 
   $('#patientform').on('change input',function(e){

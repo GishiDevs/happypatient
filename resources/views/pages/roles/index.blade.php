@@ -83,6 +83,19 @@
               <input type="text" name="role" class="form-control" id="role" placeholder="Enter role" autofocus>
             </div>
           </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="selectPatient">Permission</label>
+              @foreach($permissions as $permission)
+              <div class="form-group col-md-12">
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" name="permission[]" type="checkbox" id="checkbox-permissionid-{{ $permission->id }}" value="{{ $permission->id }}">
+                  <label for="checkbox-permissionid-{{ $permission->id }}" class="custom-control-label">{{ $permission->name }}</label>
+                </div>
+              </div>
+              @endforeach
+            </div>
+          </div>
         </div>
         <!-- /.card-body -->
         <div class="modal-footer">
@@ -118,14 +131,16 @@
     
     //Click Edit
     $('#btn-add-role').click(function(e){
+      uncheckpermission();
       $('#btn-save').attr('disabled', false);
       $('#roleform')[0].reset();
       $('.modal-title').empty().append('Add role');
-      action_type = 'add'
+      action_type = 'add';
     });
 
     //Click Edit
     $('#role-table').on('click', 'tbody td #btn-edit-role', function(e){
+
       $('#btn-save').attr('disabled', true);
       $('.modal-title').empty().append('Update Role');
       action_type = 'update';
@@ -137,7 +152,14 @@
         data: {_token: "{{ csrf_token() }}", roleid: $(this).data('roleid')},
         success: function(response){
           console.log(response);
-          $('#role').val(response.name);
+
+          $('#role').val(response.role.name);
+          
+          //check all permission
+          $.each(response.rolePermissions, function(i){
+            $('#checkbox-permissionid-'+response.rolePermissions[i]).attr('checked', true);
+          });
+
         },
         error: function(response){
           console.log(response);
@@ -215,6 +237,8 @@
     },
     submitHandler: function(e){
       
+      uncheckpermission();
+
       if(action_type == 'add')
       {
         addrole();
@@ -307,8 +331,16 @@
     });
 
     $('#btn-cancel').click(function(e){
-          $('#roleform')[0].reset();
+        $('#roleform')[0].reset();
+        uncheckpermission();
     });
+
+    function uncheckpermission()
+    {
+      $('[name="permission[]"]').each(function(){
+          $(this).attr('checked', false);
+      });
+    }
   
 	});
 

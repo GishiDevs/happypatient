@@ -7,13 +7,15 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DataTables;
 use Validator;
+use DB;
 
 class RoleController extends Controller
 {
     public function index()
-    {       
+    {   
         $roles = Role::all();
-        return view('pages.roles.index');
+        $permissions = Permission::all();
+        return view('pages.roles.index', compact('permissions'));
     }
 
     public function getrolerecord()
@@ -29,8 +31,9 @@ class RoleController extends Controller
 
 
     public function create()
-    {
-        return view('pages.roles.create');
+    {   
+        $permissions = Permission::all();
+        return view('pages.roles.create', compact('permissions'));
     }
 
 
@@ -55,6 +58,7 @@ class RoleController extends Controller
         $role->name = $request->get('role');
         $role->guard_name = 'web';
         $role->save();
+        $role->syncPermissions($request->get('permission'));
 
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
@@ -65,9 +69,12 @@ class RoleController extends Controller
         $roleid = $request->get('roleid');
 
         $role = Role::findOrFail($roleid);
-        
+        $permission = Permission::get();
+        $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$roleid)
+            ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
+            ->all();
         // return view('pages.service.edit', compact('service'));
-        return response()->json($role, 200);
+        return response()->json(['role' => $role, 'permission' => $permission, 'rolePermissions' => $rolePermissions], 200);
 
     }
 
@@ -94,6 +101,8 @@ class RoleController extends Controller
         $role = Role::findOrFail($roleid);
         $role->name = $request->get('role');
         $role->save();
+
+        $role->syncPermissions($request->get('permission'));
 
         return response()->json(['success' => 'Record has been updated']);
     }
