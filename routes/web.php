@@ -15,10 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('pages.patient.index');
+    return view('pages.dashboard.index');
 })->middleware('auth');
 
 Auth::routes();
+
 
 //Patient Route
 Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], function(){
