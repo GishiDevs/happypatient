@@ -75,8 +75,6 @@
                     { "data": "mobile"},
 		    ]
     });
-
-
 	});
 
 </script>
