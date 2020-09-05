@@ -28,7 +28,9 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Patient Record Lists</h3>
+                @if(Auth::user()->hasPermissionTo('patient-create'))
                 <a href="{{ route('patient.create') }}" class="btn btn-primary float-right">Add New</a>
+                @endif
               </div>
               <!-- /.card-header -->
               <div class="card-body">

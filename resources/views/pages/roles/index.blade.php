@@ -237,7 +237,7 @@
     },
     submitHandler: function(e){
       
-      uncheckpermission();
+      
 
       if(action_type == 'add')
       {
@@ -248,6 +248,8 @@
         updaterole();
       }
 
+      uncheckpermission();
+      
     }
   });
     

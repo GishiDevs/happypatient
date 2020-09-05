@@ -39,6 +39,7 @@
                       <th>Name</th>
                       <th>Username</th>
                       <th>Email</th>
+                      <th>Roles</th>
                       <th width="140px">Actions</th>
                     </tr>
                   </thead>
@@ -48,6 +49,7 @@
                       <th>Name</th>
                       <th>Username</th>
                       <th>Email</th>
+                      <th>Roles</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
@@ -86,7 +88,8 @@
 		    		{ "data": "name"},
 		    		{ "data": "username"},
 		    		{ "data": "email"},
-		    		{ "data": "action", orderable: false, searchable: false}
+		    		{ "data": "roles"},
+            { "data": "action", orderable: false, searchable: false}
 		    ]
     });
     

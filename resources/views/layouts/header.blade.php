@@ -209,10 +209,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ asset('dist/img/user-default.png') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">{{Auth::user()->name}}</a>
         </div>
       </div>
 
@@ -229,8 +229,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-wheelchair"></i>
               <p>
                 Patient
@@ -238,18 +238,22 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @if(Auth::user()->hasPermissionTo('patient-create'))
               <li class="nav-item">
                 <a href="{{ route('patient.create') }}" class="nav-link {{ (request()->is('patient/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New</p>
                 </a>
               </li>
+              @endif
+              @if(Auth::user()->hasPermissionTo('patient-list'))
               <li class="nav-item">
                 <a href="{{ route('patient.index') }}" class="nav-link {{ (request()->is('patient/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patients Record</p>
                 </a> 
               </li>
+              @endif
             </ul>
           </li>
           <li class="nav-item has-treeview {{ (request()->is('patientservice/create')) ? 'menu-open' : '' }}">
@@ -261,16 +265,18 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @if(Auth::user()->hasPermissionTo('patientservices-create'))
               <li class="nav-item">
                 <a href="{{ route('patientservice.create') }}" class="nav-link {{ (request()->is('patientservice/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patient Services</p>
                 </a>
               </li>
+              @endif
             </ul>
           </li>
-          <li class="nav-item has-treeview {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-circle"></i>
               <p>
                 User
@@ -278,18 +284,22 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @if(Auth::user()->hasPermissionTo('user-create'))
               <li class="nav-item">
                 <a href="{{ route('user.create') }}" class="nav-link {{ (request()->is('user/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New</p>
                 </a>
               </li>
+              @endif
+              @if(Auth::user()->hasPermissionTo('user-list'))
               <li class="nav-item">
                 <a href="{{ route('user.index') }}" class="nav-link {{ (request()->is('user/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Users Record</p>
                 </a> 
               </li>
+              @endif
             </ul>
           </li>
           <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">

@@ -10,14 +10,24 @@ use DataTables;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
-
+use Auth;
 
 class UserController extends Controller
 {
     public function index()
-    {
+    {   
+           
         $users = User::all();
-        return view('pages.user.index');
+        $user = User::find(Auth::user()->id);
+        // if($user->hasRole('Manage Patient'))
+        // {
+        //     return '1';
+        // }
+        // else
+        // {
+        //     return '0';
+        // }
+        return view('pages.user.index', compact('users'));
     }
 
     public function create()
@@ -28,12 +38,26 @@ class UserController extends Controller
 
     public function getuserrecord()
     {   
+        
         $user = User::all();
         return DataTables::of($user)
+            ->addColumn('roles',function($user){
+                $roles = '';
+                if(!empty($user->getRoleNames()))
+                {
+                    foreach($user->getRoleNames() as $role)
+                    {
+                        $roles = $roles . '<span class="badge bg-secondary">'.$role.'</span>';
+                    }
+                }
+                
+                return $roles;
+            })
             ->addColumn('action',function($user){
                 return '<a href="'.route("user.edit",$user->id).'" class="btn btn-sm btn-info" data-userid="'.$user->id.'" data-action="edit" id="btn-edit-user"><i class="fa fa-edit"></i> Edit</a>
                         <a href="" class="btn btn-sm btn-danger" data-userid="'.$user->id.'" data-action="delete" id="btn-delete-user"><i class="fa fa-trash"></i> Delete</a>';
             })
+            ->rawColumns(['roles', 'action'])
             ->make();
     } 
 
@@ -82,6 +106,7 @@ class UserController extends Controller
 
     public function update(Request $request, $userid)
     {   
+        
         $rules = [
             'name.required' => 'Please enter name',
             'email.email' => 'Please enter a valid email',
@@ -115,7 +140,9 @@ class UserController extends Controller
             $user->password = Hash::make($request->get('password'));
         }
         $user->save();
-
+        
+        DB::table('model_has_roles')->where('model_id',$userid)->delete();
+        
         $user->assignRole($request->get('roles'));
 
         return redirect('/user/index');
