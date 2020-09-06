@@ -12,7 +12,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('patient.index') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
               <li class="breadcrumb-item active">Permission Lists</li>
             </ol>
           </div>
@@ -28,7 +28,9 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Permission Lists</h3>
+                @if(Auth::user()->hasPermissionTo('permission-create'))
                 <a href="" id="btn-add-permission" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-permission">Add New</a>
+                @endif
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -37,14 +39,18 @@
                     <tr>
                       <th>ID</th>
                       <th>Permission</th>
+                      @if(Auth::user()->hasRole('Admin'))
                       <th width="140px">Actions</th>
+                      @endif
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>ID</th>
                       <th>Permission</th>
+                      @if(Auth::user()->hasRole('Admin'))
                       <th>Actions</th>
+                      @endif
                     </tr>
                   </tfoot>
                 </table>
@@ -101,6 +107,11 @@
   $(document).ready(function() {
     var action_type;
     var permissionid;
+    var columns = [{ "data": "id"},
+                   { "data": "name"}];
+    if("{{ Auth::user()->hasRole('Admin') }}"){
+      columns.push({data: "action"});
+    }
 			// $('#tax-table').DataTable();
 	  $('#permission-table').DataTable({
         "responsive": true,
@@ -109,11 +120,8 @@
 		    "serverSide": true,
 		    "ajax": "{{ route('getpermissionrecord') }}",
 		    "bDestroy": true,
-		    "columns": [
-                    { "data": "id"},
-                    { "data": "name"},
-                    { "data": "action", orderable: false, searchable: false}
-		    ]
+		    "columns": columns,
+		    
     });
     
     //Click Edit
