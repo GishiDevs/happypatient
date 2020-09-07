@@ -11,6 +11,7 @@ use Yajra\Address\Entities\Barangay;
 use Validator;
 use Carbon\Carbon;
 use DataTables;
+use Auth;
 
 class PatientController extends Controller
 {
@@ -31,8 +32,22 @@ class PatientController extends Controller
         $patient = Patient::all();
         return DataTables::of($patient)
             ->addColumn('action',function($patient){
-                return '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</a>
-                        <a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
+
+                $edit = '';
+                $delete = '';
+
+                if(Auth::user()->hasPermissionTo('patient-edit'))
+                {
+                    $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</a>';
+                }
+
+                if(Auth::user()->hasPermissionTo('patient-delete'))
+                {
+                    $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
+                }
+                
+
+                return $edit .' '. $delete;
             })
             ->make();
     }

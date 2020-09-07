@@ -45,7 +45,9 @@
                       <th>Gender</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
+                      @if(Auth::user()->hasPermissionTo('patient-edit') || Auth::user()->hasPermissionTo('patient-delete'))
                       <th width="140px">Actions</th>
+                      @endif
                     </tr>
                   </thead>
                   <tfoot>
@@ -58,7 +60,9 @@
                       <th>Gender</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
+                      @if(Auth::user()->hasPermissionTo('patient-edit') || Auth::user()->hasPermissionTo('patient-delete'))
                       <th>Actions</th>
+                      @endif
                     </tr>
                   </tfoot>
                 </table>
@@ -82,7 +86,19 @@
 <script>
 
   $(document).ready(function() {
-     
+    var columns = [{ "data": "id"},
+                   { "data": "lastname"},
+                   { "data": "firstname"},
+                   { "data": "middlename"},
+                   { "data": "birthdate"},
+                   { "data": "gender"},
+                   { "data": "weight"},
+                   { "data": "mobile"}];
+
+    if("{{ Auth::user()->hasPermissionTo('patient-edit') }}" || "{{ Auth::user()->hasPermissionTo('patient-delete') }}"){
+      columns.push({data: "action"});
+    }
+
 			// $('#tax-table').DataTable();
 	  $('#patient-table').DataTable({
         "responsive": true,
@@ -91,17 +107,7 @@
 		    "serverSide": true,
 		    "ajax": "{{ route('getpatientrecord') }}",
 		    "bDestroy": true,
-		    "columns": [
-            { "data": "id"},
-		    		{ "data": "lastname"},
-		    		{ "data": "firstname"},
-		    		{ "data": "middlename"},
-            { "data": "birthdate"},
-            { "data": "gender"},
-            { "data": "weight"},
-            { "data": "mobile"},
-		    		{ "data": "action", orderable: false, searchable: false}
-		    ]
+		    "columns": columns,
     });
     
     //View Patient

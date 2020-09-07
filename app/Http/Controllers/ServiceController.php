@@ -20,8 +20,20 @@ class ServiceController extends Controller
         $service = Service::all();
         return DataTables::of($service)
             ->addColumn('action',function($service){
-                return '<a href="" class="btn btn-sm btn-info" data-serviceid="'.$service->id.'" data-action="edit" id="btn-edit-service" data-toggle="modal" data-target="#modal-service"><i class="fa fa-edit"></i> Edit</a>
-                        <a href="" class="btn btn-sm btn-danger" data-serviceid="'.$service->id.'" data-action="delete" id="btn-delete-service"><i class="fa fa-trash"></i> Delete</a>';
+
+                $edit = '';
+                $delete = '';
+
+                if(Auth::user()->hasPermissionTo('service-edit'))
+                {
+                    $edit = '<a href="" class="btn btn-sm btn-info" data-serviceid="'.$service->id.'" data-action="edit" id="btn-edit-service" data-toggle="modal" data-target="#modal-service"><i class="fa fa-edit"></i> Edit</a>';
+                }
+
+                if(Auth::user()->hasPermissionTo('service-delete'))
+                {
+                    $delete = '<a href="" class="btn btn-sm btn-danger" data-serviceid="'.$service->id.'" data-action="delete" id="btn-delete-service"><i class="fa fa-trash"></i> Delete</a>';
+                }
+                return $edit . ' ' . $delete;
             })
             ->make();
     }

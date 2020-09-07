@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DataTables;
 use Validator;
+use Auth;
 
 class PermissionController extends Controller
 {
@@ -21,9 +22,13 @@ class PermissionController extends Controller
         $permission = Permission::all();
         return DataTables::of($permission)
             ->addColumn('action',function($permission){
+
+                if(Auth::user()->hasRole('Admin'))
+                {
+                    return '<a href="" class="btn btn-sm btn-info" data-permissionid="'.$permission->id.'" data-action="edit" id="btn-edit-permission" data-toggle="modal" data-target="#modal-permission"><i class="fa fa-edit"></i> Edit</a>
+                            <a href="" class="btn btn-sm btn-danger" data-permissionid="'.$permission->id.'" data-action="delete" id="btn-delete-permission"><i class="fa fa-trash"></i> Delete</a>';
+                }
                 
-                return '<a href="" class="btn btn-sm btn-info" data-permissionid="'.$permission->id.'" data-action="edit" id="btn-edit-permission" data-toggle="modal" data-target="#modal-permission"><i class="fa fa-edit"></i> Edit</a>
-                        <a href="" class="btn btn-sm btn-danger" data-permissionid="'.$permission->id.'" data-action="delete" id="btn-delete-permission"><i class="fa fa-trash"></i> Delete</a>';
             })
             ->make();
     }

@@ -32,23 +32,28 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                @if(Auth::user()->hasPermissionTo('role-list'))
                 <table id="role-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                         <th>ID</th>
                         <th>Role</th>
+                        @if(Auth::user()->hasPermissionTo('role-edit') || Auth::user()->hasPermissionTo('role-delete'))
                         <th width="140px">Actions</th>
+                        @endif
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                         <th>ID</th>
                         <th>Role</th>
+                        @if(Auth::user()->hasPermissionTo('role-edit') || Auth::user()->hasPermissionTo('role-delete'))
                         <th>Actions</th>
+                        @endif
                     </tr>
                   </tfoot>
                 </table>
-    
+                @endif
               </div>
               <!-- /.card-body -->
             </div>
@@ -114,6 +119,11 @@
   $(document).ready(function() {
     var action_type;
     var roleid;
+    var columns = [{ "data": "id"},
+                  { "data": "name"}];
+    if("{{ Auth::user()->hasPermissionTo('role-edit') }}" || "{{ Auth::user()->hasPermissionTo('role-delete') }}"){
+      columns.push({data: "action"});
+    }
 			// $('#tax-table').DataTable();
 	  $('#role-table').DataTable({
         "responsive": true,
@@ -122,11 +132,7 @@
 		    "serverSide": true,
 		    "ajax": "{{ route('getrolerecord') }}",
 		    "bDestroy": true,
-		    "columns": [
-                    { "data": "id"},
-                    { "data": "name"},
-                    { "data": "action", orderable: false, searchable: false}
-		    ]
+		    "columns": columns
     });
     
     //Click Edit

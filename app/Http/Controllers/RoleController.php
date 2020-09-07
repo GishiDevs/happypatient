@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Permission;
 use DataTables;
 use Validator;
 use DB;
+use Auth;
 
 class RoleController extends Controller
 {
@@ -23,8 +24,20 @@ class RoleController extends Controller
         $role = Role::all();
         return DataTables::of($role)
             ->addColumn('action',function($role){
-                return '<a href="" class="btn btn-sm btn-info" data-roleid="'.$role->id.'" data-action="edit" id="btn-edit-role" data-toggle="modal" data-target="#modal-role"><i class="fa fa-edit"></i> Edit</a>
-                        <a href="" class="btn btn-sm btn-danger" data-roleid="'.$role->id.'" data-action="delete" id="btn-delete-role"><i class="fa fa-trash"></i> Delete</a>';
+
+                $edit = '';
+                $delete = '';
+
+                if(Auth::user()->hasPermissionTo('role-edit'))
+                {
+                    $edit = '<a href="" class="btn btn-sm btn-info" data-roleid="'.$role->id.'" data-action="edit" id="btn-edit-role" data-toggle="modal" data-target="#modal-role"><i class="fa fa-edit"></i> Edit</a>';
+                }
+                
+                if(Auth::user()->hasPermissionTo('role-delete'))
+                {
+                    $delete = '<a href="" class="btn btn-sm btn-danger" data-roleid="'.$role->id.'" data-action="delete" id="btn-delete-role"><i class="fa fa-trash"></i> Delete</a>';
+                }
+                return $edit . ' ' . $delete;
             })
             ->make();
     }

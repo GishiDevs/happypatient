@@ -19,14 +19,7 @@ class UserController extends Controller
            
         $users = User::all();
         $user = User::find(Auth::user()->id);
-        // if($user->hasRole('Manage Patient'))
-        // {
-        //     return '1';
-        // }
-        // else
-        // {
-        //     return '0';
-        // }
+
         return view('pages.user.index', compact('users'));
     }
 
@@ -54,8 +47,21 @@ class UserController extends Controller
                 return $roles;
             })
             ->addColumn('action',function($user){
-                return '<a href="'.route("user.edit",$user->id).'" class="btn btn-sm btn-info" data-userid="'.$user->id.'" data-action="edit" id="btn-edit-user"><i class="fa fa-edit"></i> Edit</a>
-                        <a href="" class="btn btn-sm btn-danger" data-userid="'.$user->id.'" data-action="delete" id="btn-delete-user"><i class="fa fa-trash"></i> Delete</a>';
+
+                $edit = '';
+                $delete = '';
+
+                if(Auth::user()->hasPermissionTo('user-edit'))
+                {
+                    $edit = '<a href="'.route("user.edit",$user->id).'" class="btn btn-sm btn-info" data-userid="'.$user->id.'" data-action="edit" id="btn-edit-user"><i class="fa fa-edit"></i> Edit</a>';
+                }
+
+                if(Auth::user()->hasPermissionTo('user-delete'))
+                {
+                    $delete = '<a href="" class="btn btn-sm btn-danger" data-userid="'.$user->id.'" data-action="delete" id="btn-delete-user"><i class="fa fa-trash"></i> Delete</a>';
+                }
+
+                return $edit . ' ' . $delete;
             })
             ->rawColumns(['roles', 'action'])
             ->make();

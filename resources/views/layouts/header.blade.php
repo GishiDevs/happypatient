@@ -229,7 +229,7 @@
               </p>
             </a>
           </li>
-          @if(Auth::user()->hasPermissionTo('patient-list') and Auth::user()->hasPermissionTo('patient-create'))
+          @if(Auth::user()->hasPermissionTo('patient-list') || Auth::user()->hasPermissionTo('patient-create'))
           <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-wheelchair"></i>
@@ -258,7 +258,7 @@
             </ul>
           </li>
           @endif
-          @if(Auth::user()->hasPermissionTo('patientservices-list') and Auth::user()->hasPermissionTo('patientservices-create'))
+          @if(Auth::user()->hasPermissionTo('patientservices-list') || Auth::user()->hasPermissionTo('patientservices-create'))
           <li class="nav-item has-treeview {{ (request()->is('patientservice/create')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('patientservice/create')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-stethoscope"></i>
@@ -279,7 +279,7 @@
             </ul>
           </li>
           @endif
-          @if(Auth::user()->hasPermissionTo('user-list') and Auth::user()->hasPermissionTo('user-create'))
+          @if(Auth::user()->hasPermissionTo('user-list') || Auth::user()->hasPermissionTo('user-create'))
           <li class="nav-item has-treeview {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-circle"></i>
@@ -308,7 +308,7 @@
             </ul>
           </li>
           @endif
-          @if(Auth::user()->hasPermissionTo('service-list') and Auth::user()->hasPermissionTo('service-create') and Auth::user()->hasPermissionTo('permission-list') and Auth::user()->hasPermissionTo('permission-create') and Auth::user()->hasPermissionTo('role-list') and Auth::user()->hasPermissionTo('role-create'))
+          @if(Auth::user()->hasPermissionTo('service-list') || Auth::user()->hasPermissionTo('service-create') || Auth::user()->hasPermissionTo('permission-list') || Auth::user()->hasPermissionTo('permission-create') || Auth::user()->hasPermissionTo('role-list') || Auth::user()->hasPermissionTo('role-create'))
           <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
@@ -318,7 +318,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth::user()->hasPermissionTo('service-list') and Auth::user()->hasPermissionTo('service-create'))
+              @if(Auth::user()->hasPermissionTo('service-list') || Auth::user()->hasPermissionTo('service-create'))
               <li class="nav-item">
                 <a href="{{ route('service.index') }}" class="nav-link {{ (request()->is('service/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
@@ -334,7 +334,7 @@
                 </a> 
               </li>
               @endif
-              @if(Auth::user()->hasPermissionTo('role-list') and Auth::user()->hasPermissionTo('role-create'))
+              @if(Auth::user()->hasPermissionTo('role-list') || Auth::user()->hasPermissionTo('role-create'))
               <li class="nav-item">
                 <a href="{{ route('role.index') }}" class="nav-link {{ (request()->is('role/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>

@@ -109,9 +109,12 @@
     var permissionid;
     var columns = [{ "data": "id"},
                    { "data": "name"}];
+
+    //If This user has an 'Admin' role then show actions(edit/delete)
     if("{{ Auth::user()->hasRole('Admin') }}"){
       columns.push({data: "action"});
     }
+
 			// $('#tax-table').DataTable();
 	  $('#permission-table').DataTable({
         "responsive": true,

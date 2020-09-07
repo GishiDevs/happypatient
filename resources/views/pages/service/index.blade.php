@@ -28,17 +28,22 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Service Record Lists</h3>
+                @if(Auth::user()->hasPermissionTo('service-create'))
                 <a href="" id="btn-add-service" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-service">Add New</a>
+                @endif
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                @if(Auth::user()->hasPermissionTo('service-list'))
                 <table id="service-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
+                      @if(Auth::user()->hasPermissionTo('service-edit') || Auth::user()->hasPermissionTo('service-delete'))
                       <th width="140px">Actions</th>
+                      @endif
                     </tr>
                   </thead>
                   <tfoot>
@@ -46,11 +51,13 @@
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
+                      @if(Auth::user()->hasPermissionTo('service-edit') || Auth::user()->hasPermissionTo('service-delete'))
                       <th>Actions</th>
+                      @endif
                     </tr>
                   </tfoot>
                 </table>
-    
+                @endif
               </div>
               <!-- /.card-body -->
             </div>
@@ -115,6 +122,12 @@
   $(document).ready(function() {
     var action_type;
     var serviceid;
+    var columns = [{ "data": "id"},
+                  { "data": "service"},
+                  { "data": "status"}];
+    if("{{ Auth::user()->hasPermissionTo('service-edit') }}" || "{{ Auth::user()->hasPermissionTo('service-delete') }}"){
+      columns.push({data: "action"});
+    }
 			// $('#tax-table').DataTable();
 	  $('#service-table').DataTable({
         "responsive": true,
@@ -123,12 +136,7 @@
 		    "serverSide": true,
 		    "ajax": "{{ route('getservicerecord') }}",
 		    "bDestroy": true,
-		    "columns": [
-                    { "data": "id"},
-		    		{ "data": "service"},
-		    		{ "data": "status"},
-		    		{ "data": "action", orderable: false, searchable: false}
-		    ]
+		    "columns": columns
     });
     
     //Click Edit

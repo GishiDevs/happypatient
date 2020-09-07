@@ -28,7 +28,9 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">User Record Lists</h3>
+                @if(Auth::user()->hasPermissionTo('user-create'))
                 <a href="{{ route('user.create') }}" class="btn btn-primary float-right">Add New</a>
+                @endif
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -40,7 +42,9 @@
                       <th>Username</th>
                       <th>Email</th>
                       <th>Roles</th>
+                      @if(Auth::user()->hasPermissionTo('user-edit') || Auth::user()->hasPermissionTo('user-delete'))
                       <th width="140px">Actions</th>
+                      @endif
                     </tr>
                   </thead>
                   <tfoot>
@@ -50,7 +54,9 @@
                       <th>Username</th>
                       <th>Email</th>
                       <th>Roles</th>
+                      @if(Auth::user()->hasPermissionTo('user-edit') || Auth::user()->hasPermissionTo('user-delete'))
                       <th>Actions</th>
+                      @endif
                     </tr>
                   </tfoot>
                 </table>
@@ -74,7 +80,15 @@
 <script>
 
   $(document).ready(function() {
-     
+    var columns = [{ "data": "id"},
+		    		       { "data": "name"},
+		    		       { "data": "username"},
+		    		       { "data": "email"},
+		    		       { "data": "roles"}];
+
+    if("{{ Auth::user()->hasPermissionTo('user-edit') }}" || "{{ Auth::user()->hasPermissionTo('user-delete') }}"){
+      columns.push({data: "action"});
+    }
 			// $('#tax-table').DataTable();
 	  $('#user-table').DataTable({
         "responsive": true,
@@ -83,14 +97,7 @@
 		    "serverSide": true,
 		    "ajax": "{{ route('getuserrecord') }}",
 		    "bDestroy": true,
-		    "columns": [
-            { "data": "id"},
-		    		{ "data": "name"},
-		    		{ "data": "username"},
-		    		{ "data": "email"},
-		    		{ "data": "roles"},
-            { "data": "action", orderable: false, searchable: false}
-		    ]
+		    "columns": columns
     });
     
     //View user
