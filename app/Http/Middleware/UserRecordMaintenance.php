@@ -19,7 +19,7 @@ class UserRecordMaintenance
         
         //User Record
         if($request->is('user/index') || $request->is('user/users')){
-            if(Auth::user()){
+            if(Auth::user()->hasPermissionTo('user-list')){
                 return $next($request); 
             }
             else
@@ -30,7 +30,7 @@ class UserRecordMaintenance
         
         //User Create
         if($request->is('user/create') || $request->is('user/store')){
-            if(Auth::user()){
+            if(Auth::user()->hasPermissionTo('user-create')){
                 return $next($request);
             }
             else
@@ -41,7 +41,7 @@ class UserRecordMaintenance
 
         //User Edit
         if($request->is('user/edit/*') || $request->is('user/update/*')){
-            if(Auth::user()){
+            if(Auth::user()->hasPermissionTo('user-edit')){
                 return $next($request);
             }
             else
@@ -52,7 +52,7 @@ class UserRecordMaintenance
 
         //User Delete
         if($request->is('user/delete')){
-            if(Auth::user()){
+            if(Auth::user()->hasPermissionTo('user-delete')){
                 return $next($request);
             }
             else
