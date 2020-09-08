@@ -16,7 +16,7 @@ class PatientService
      */
     public function handle($request, Closure $next)
     {   
-        if($request->is('patientservice/index') || $request->is('patientservice/patientservices'))
+        if($request->is('patientservice/index') || $request->is('patientservice/services-list'))
         {
             if(Auth::user()->can('patientservices-list'))
             {
@@ -39,7 +39,7 @@ class PatientService
                 return response()->json("You don't have permission!", 200);
             }
         }
-        if($request->is('patientservice/services-list') || $request->is('/'))
+        if($request->is('patientservice/services-list-per-user') || $request->is('/'))
         {
             if(Auth::user()->can('patientservices-list', 'patientservices-list-ultrasound', 'patientservices-list-ecg', 'patientservices-list-checkup', 'patientservices-list-laboratory', 'patientservices-list-physicaltherapy', 'patientservices-list-xray'))
             {
