@@ -12,6 +12,7 @@ use Validator;
 use Carbon\Carbon;
 use DataTables;
 use Auth;
+use DB;
 
 class PatientController extends Controller
 {
@@ -29,19 +30,20 @@ class PatientController extends Controller
 
     public function getpatientrecord()
     {
-        $patient = Patient::all();
+        $patient = Patient::select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'weight', 'mobile');
+
         return DataTables::of($patient)
             ->addColumn('action',function($patient){
 
                 $edit = '';
                 $delete = '';
 
-                if(Auth::user()->hasPermissionTo('patient-edit'))
+                if(Auth::user()->can('patient-edit'))
                 {
                     $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</a>';
                 }
 
-                if(Auth::user()->hasPermissionTo('patient-delete'))
+                if(Auth::user()->can('patient-delete'))
                 {
                     $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
                 }

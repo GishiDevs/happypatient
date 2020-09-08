@@ -18,7 +18,7 @@ class ServiceRecordMaintenance
     {
         if($request->is('service/index') || $request->is('service/services'))
         {
-            if(Auth::user()->hasPermissionTo('service-list'))
+            if(Auth::user()->can('service-list'))
             {
                 return $next($request);
             }
@@ -30,7 +30,7 @@ class ServiceRecordMaintenance
 
         if($request->is('service/create') || $request->is('service/store'))
         {
-            if(Auth::user()->hasPermissionTo('service-create'))
+            if(Auth::user()->can('service-create'))
             {
                 return $next($request);
             }
@@ -42,7 +42,7 @@ class ServiceRecordMaintenance
 
         if($request->is('service/edit') || $request->is('service/update'))
         {
-            if(Auth::user()->hasPermissionTo('service-edit'))
+            if(Auth::user()->can('service-edit'))
             {
                 return $next($request);
             }
@@ -54,7 +54,7 @@ class ServiceRecordMaintenance
 
         if($request->is('service/delete'))
         {
-            if(Auth::user()->hasPermissionTo('service-delete'))
+            if(Auth::user()->can('service-delete'))
             {
                 return $next($request);
             }

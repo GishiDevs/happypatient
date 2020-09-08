@@ -28,22 +28,22 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Service Record Lists</h3>
-                @if(Auth::user()->hasPermissionTo('service-create'))
+                @can('service-create')
                 <a href="" id="btn-add-service" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-service">Add New</a>
-                @endif
+                @endcan
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                @if(Auth::user()->hasPermissionTo('service-list'))
+                @can('service-list')
                 <table id="service-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
-                      @if(Auth::user()->hasPermissionTo('service-edit') || Auth::user()->hasPermissionTo('service-delete'))
+                      @can('service-edit','service-delete')
                       <th width="140px">Actions</th>
-                      @endif
+                      @endcan
                     </tr>
                   </thead>
                   <tfoot>
@@ -51,13 +51,13 @@
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
-                      @if(Auth::user()->hasPermissionTo('service-edit') || Auth::user()->hasPermissionTo('service-delete'))
+                      @can('service-edit','service-delete')
                       <th>Actions</th>
-                      @endif
+                      @endcan
                     </tr>
                   </tfoot>
                 </table>
-                @endif
+                @endcan
               </div>
               <!-- /.card-body -->
             </div>

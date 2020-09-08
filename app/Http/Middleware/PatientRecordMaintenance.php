@@ -29,7 +29,7 @@ class PatientRecordMaintenance
         
         //Patient Create
         if($request->is('patient/create') || $request->is('patient/store')){
-            if(Auth::user()->hasPermissionTo('patient-create')){
+            if(Auth::user()->can('patient-create')){
                 return $next($request);
             }
             else
@@ -40,7 +40,7 @@ class PatientRecordMaintenance
 
         //Patient Edit
         if($request->is('patient/edit/*') || $request->is('patient/update/*')){
-            if(Auth::user()->hasPermissionTo('patient-edit')){
+            if(Auth::user()->can('patient-edit')){
                 return $next($request);
             }
             else
@@ -51,7 +51,7 @@ class PatientRecordMaintenance
 
         //Patient Delete
         if($request->is('patient/delete')){
-            if(Auth::user()->hasPermissionTo('patient-delete')){
+            if(Auth::user()->can('patient-delete')){
                 return $next($request);
             }
             else

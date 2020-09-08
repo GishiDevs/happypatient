@@ -98,14 +98,31 @@ Route::group(['prefix' => 'service', 'middleware' => ['auth','service_crud']], f
 
 //Patient Services
 Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_service']], function(){
+    
+    Route::get('/index', [
+        'uses' => 'PatientServiceController@index',
+        'as' => 'patientservice.index',
+    ]);
+
     Route::get('/create', [
         'uses' => 'PatientServiceController@create',
         'as' => 'patientservice.create',
     ]);
-    Route::get('/store', [
+    Route::post('/store', [
         'uses' => 'PatientServiceController@store',
         'as' => 'patientservice.store',
     ]);
+    Route::get('/services-list-per-user', [
+        'uses' => 'PatientServiceController@servicesperuser',
+        'as' => 'patientservice.servicesperuser',
+    ]);
+
+    Route::get('/services-list', [
+        'uses' => 'PatientServiceController@serviceslist',
+        'as' => 'patientservice.serviceslist',
+    ]);
+
+
 });
 
 //Permissions

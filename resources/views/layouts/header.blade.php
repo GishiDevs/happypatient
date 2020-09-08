@@ -229,7 +229,7 @@
               </p>
             </a>
           </li>
-          @if(Auth::user()->hasPermissionTo('patient-list') || Auth::user()->hasPermissionTo('patient-create'))
+          @can('patient-list','patient-create')
           <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-wheelchair"></i>
@@ -239,28 +239,28 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth::user()->hasPermissionTo('patient-create'))
+              @can('patient-create')
               <li class="nav-item">
                 <a href="{{ route('patient.create') }}" class="nav-link {{ (request()->is('patient/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New</p>
                 </a>
               </li>
-              @endif
-              @if(Auth::user()->hasPermissionTo('patient-list'))
+              @endcan
+              @can('patient-list')
               <li class="nav-item">
                 <a href="{{ route('patient.index') }}" class="nav-link {{ (request()->is('patient/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patients Record</p>
                 </a> 
               </li>
-              @endif
+              @endcan
             </ul>
           </li>
-          @endif
-          @if(Auth::user()->hasPermissionTo('patientservices-list') || Auth::user()->hasPermissionTo('patientservices-create'))
-          <li class="nav-item has-treeview {{ (request()->is('patientservice/create')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('patientservice/create')) ? 'active' : '' }}">
+          @endcan
+          @can('patientservices-list','patientservices-create')
+          <li class="nav-item has-treeview {{ (request()->is('patientservice/create') || request()->is('patientservice/index')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patientservice/create') || request()->is('patientservice/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-stethoscope"></i>
               <p>
                 Services
@@ -268,18 +268,28 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth::user()->hasPermissionTo('patientservices-create'))
+              @can('patientservices-create')
               <li class="nav-item">
                 <a href="{{ route('patientservice.create') }}" class="nav-link {{ (request()->is('patientservice/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Patient Services</p>
+                  <p>Create Services</p>
                 </a>
               </li>
-              @endif
+              @endcan
+            </ul>
+            <ul class="nav nav-treeview">
+              @can('patientservices-list')
+              <li class="nav-item">
+                <a href="{{ route('patientservice.index') }}" class="nav-link {{ (request()->is('patientservice/index')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Services List</p>
+                </a>
+              </li>
+              @endcan
             </ul>
           </li>
-          @endif
-          @if(Auth::user()->hasPermissionTo('user-list') || Auth::user()->hasPermissionTo('user-create'))
+          @endcan
+          @can('user-list','user-create')
           <li class="nav-item has-treeview {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-circle"></i>
@@ -289,26 +299,26 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth::user()->hasPermissionTo('user-create'))
+              @can('user-create')
               <li class="nav-item">
                 <a href="{{ route('user.create') }}" class="nav-link {{ (request()->is('user/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New</p>
                 </a>
               </li>
-              @endif
-              @if(Auth::user()->hasPermissionTo('user-list'))
+              @endcan
+              @can('user-list')
               <li class="nav-item">
                 <a href="{{ route('user.index') }}" class="nav-link {{ (request()->is('user/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Users Record</p>
                 </a> 
               </li>
-              @endif
+              @endcan
             </ul>
           </li>
-          @endif
-          @if(Auth::user()->hasPermissionTo('service-list') || Auth::user()->hasPermissionTo('service-create') || Auth::user()->hasPermissionTo('permission-list') || Auth::user()->hasPermissionTo('permission-create') || Auth::user()->hasPermissionTo('role-list') || Auth::user()->hasPermissionTo('role-create'))
+          @endcan
+          @can('service-list','service-create','permission-list','permission-create','role-list','role-create')
           <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
@@ -318,33 +328,33 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth::user()->hasPermissionTo('service-list') || Auth::user()->hasPermissionTo('service-create'))
+              @can('service-list','service-create')
               <li class="nav-item">
                 <a href="{{ route('service.index') }}" class="nav-link {{ (request()->is('service/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services</p>
                 </a> 
               </li>
-              @endif
-              @if(Auth::user()->hasRole('Admin'))
+              @endcan
+              @role('Admin')
               <li class="nav-item">
                 <a href="{{ route('permission.index') }}" class="nav-link {{ (request()->is('permission/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Permissions</p>
                 </a> 
               </li>
-              @endif
-              @if(Auth::user()->hasPermissionTo('role-list') || Auth::user()->hasPermissionTo('role-create'))
+              @endrole
+              @can('role-list','role-create')
               <li class="nav-item">
                 <a href="{{ route('role.index') }}" class="nav-link {{ (request()->is('role/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Roles</p>
                 </a> 
               </li>
-              @endif
+              @endcan
             </ul>
           </li>
-          @endif
+          @endcan
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

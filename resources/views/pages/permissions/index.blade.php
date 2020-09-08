@@ -28,7 +28,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Permission Lists</h3>
-                @if(Auth::user()->hasPermissionTo('permission-create'))
+                @can('permission-create')
                 <a href="" id="btn-add-permission" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-permission">Add New</a>
                 @endif
               </div>
@@ -39,18 +39,18 @@
                     <tr>
                       <th>ID</th>
                       <th>Permission</th>
-                      @if(Auth::user()->hasRole('Admin'))
+                      @role('Admin')
                       <th width="140px">Actions</th>
-                      @endif
+                      @endrole
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                       <th>ID</th>
                       <th>Permission</th>
-                      @if(Auth::user()->hasRole('Admin'))
+                      @role('Admin')
                       <th>Actions</th>
-                      @endif
+                      @endrole
                     </tr>
                   </tfoot>
                 </table>
@@ -105,15 +105,16 @@
 <script>
 
   $(document).ready(function() {
+
     var action_type;
     var permissionid;
     var columns = [{ "data": "id"},
                    { "data": "name"}];
 
     //If This user has an 'Admin' role then show actions(edit/delete)
-    if("{{ Auth::user()->hasRole('Admin') }}"){
+    @role('Admin')
       columns.push({data: "action"});
-    }
+    @endrole
 
 			// $('#tax-table').DataTable();
 	  $('#permission-table').DataTable({

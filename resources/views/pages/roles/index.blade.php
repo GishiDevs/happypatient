@@ -32,28 +32,28 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                @if(Auth::user()->hasPermissionTo('role-list'))
+                @can('role-list')
                 <table id="role-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                         <th>ID</th>
                         <th>Role</th>
-                        @if(Auth::user()->hasPermissionTo('role-edit') || Auth::user()->hasPermissionTo('role-delete'))
+                        @can('role-edit','role-delete')
                         <th width="140px">Actions</th>
-                        @endif
+                        @endcan
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
                         <th>ID</th>
                         <th>Role</th>
-                        @if(Auth::user()->hasPermissionTo('role-edit') || Auth::user()->hasPermissionTo('role-delete'))
+                        @can('role-edit','role-delete')
                         <th>Actions</th>
-                        @endif
+                        @endcan
                     </tr>
                   </tfoot>
                 </table>
-                @endif
+                @endcan
               </div>
               <!-- /.card-body -->
             </div>
@@ -81,7 +81,7 @@
       </div>
       <div class="modal-body">
       <form role="form" id="roleform">
-        <div class="card-body">
+        <div class="card-body col-md-12">
           <div class="row">
             <div class="form-group col-md-12">
               <label for="role">Role</label> <span class="text-danger">*</span>
@@ -91,14 +91,14 @@
           <div class="row">
             <div class="form-group col-md-12">
               <label for="selectPatient">Permission</label>
-              @foreach($permissions as $permission)
               <div class="form-group col-md-12">
+                @foreach($permissions as $permission)
                 <div class="custom-control custom-checkbox">
                     <input class="custom-control-input" name="permission[]" type="checkbox" id="checkbox-permissionid-{{ $permission->id }}" value="{{ $permission->id }}">
                   <label for="checkbox-permissionid-{{ $permission->id }}" class="custom-control-label">{{ $permission->name }}</label>
                 </div>
+                @endforeach
               </div>
-              @endforeach
             </div>
           </div>
         </div>
@@ -117,13 +117,16 @@
 <script>
 
   $(document).ready(function() {
+    
     var action_type;
     var roleid;
     var columns = [{ "data": "id"},
                   { "data": "name"}];
-    if("{{ Auth::user()->hasPermissionTo('role-edit') }}" || "{{ Auth::user()->hasPermissionTo('role-delete') }}"){
+                  
+    @can('role-edit','role-delete')
       columns.push({data: "action"});
-    }
+    @endcan
+
 			// $('#tax-table').DataTable();
 	  $('#role-table').DataTable({
         "responsive": true,
@@ -205,6 +208,14 @@
                   'success'
                 );
                 $('#role-table').DataTable().ajax.reload();
+              }
+              else
+              {
+                Swal.fire(
+                  'Error!',
+                   response.error,
+                  'error'
+                );
               }
             },
             error: function(response){
@@ -351,7 +362,7 @@
     }
   
 	});
-
+  
 </script>
 @endsection
 

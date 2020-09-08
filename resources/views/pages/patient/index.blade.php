@@ -28,9 +28,9 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Patient Record Lists</h3>
-                @if(Auth::user()->hasPermissionTo('patient-create'))
+                @can('patient-create')
                 <a href="{{ route('patient.create') }}" class="btn btn-primary float-right">Add New</a>
-                @endif
+                @endcan
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -45,9 +45,9 @@
                       <th>Gender</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
-                      @if(Auth::user()->hasPermissionTo('patient-edit') || Auth::user()->hasPermissionTo('patient-delete'))
+                      @can('patient-edit','patient-delete')
                       <th width="140px">Actions</th>
-                      @endif
+                      @endcan
                     </tr>
                   </thead>
                   <tfoot>
@@ -60,9 +60,9 @@
                       <th>Gender</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
-                      @if(Auth::user()->hasPermissionTo('patient-edit') || Auth::user()->hasPermissionTo('patient-delete'))
+                      @can('patient-edit','patient-delete')
                       <th>Actions</th>
-                      @endif
+                      @endcan
                     </tr>
                   </tfoot>
                 </table>

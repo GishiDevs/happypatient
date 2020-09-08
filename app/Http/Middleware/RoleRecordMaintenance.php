@@ -18,7 +18,7 @@ class RoleRecordMaintenance
     {
         if($request->is('role/index') || $request->is('role/roles'))
         {
-            if(Auth::user()->hasPermissionTo('role-list'))
+            if(Auth::user()->can('role-list'))
             {
                 return $next($request);
             }
@@ -30,7 +30,7 @@ class RoleRecordMaintenance
 
         if($request->is('role/create') || $request->is('role/store'))
         {
-            if(Auth::user()->hasPermissionTo('role-create'))
+            if(Auth::user()->can('role-create'))
             {
                 return $next($request);
             }
@@ -42,7 +42,7 @@ class RoleRecordMaintenance
 
         if($request->is('role/edit') || $request->is('role/update'))
         {
-            if(Auth::user()->hasPermissionTo('role-edit'))
+            if(Auth::user()->can('role-edit'))
             {
                 return $next($request);
             }
@@ -54,7 +54,7 @@ class RoleRecordMaintenance
 
         if($request->is('role/delete'))
         {
-            if(Auth::user()->hasPermissionTo('role-delete'))
+            if(Auth::user()->can('role-delete'))
             {
                 return $next($request);
             }

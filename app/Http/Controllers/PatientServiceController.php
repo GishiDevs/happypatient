@@ -9,12 +9,95 @@ use App\Patient;
 use Illuminate\Http\Request;
 use Validator;
 use Carbon\Carbon;
+use Auth;
+use DB;
+use DataTables;
 
 class PatientServiceController extends Controller
-{
+{   
+
+
     public function index()
     {
-        //
+        return view('pages.patient_services.index');
+    }
+
+    public function serviceslist()
+    {
+        $patientservices =  DB::table('patient_services')
+                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                 ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
+                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
+                 ->orderBy('patient_services.id', 'Asc')
+                 ->get();
+
+        return DataTables::of($patientservices)
+                     ->addColumn('status',function($patientservices){
+                        
+                        return '<span class="badge bg-warning">'.$patientservices->status.'</span>';
+   
+                     })
+                     ->rawColumns(['status'])
+                     ->make();
+    }
+
+    public function servicesperuser()
+    {   
+
+        $services;
+
+        if(Auth::user()->can('patientservices-list-ultrasound'))
+        {
+            $services[] = 'Ultrasound';
+        }
+
+        if(Auth::user()->can('patientservices-list-ecg'))
+        {
+            $services[] = 'E.C.G';
+        }
+
+        if(Auth::user()->can('patientservices-list-checkup'))
+        {
+            $services[] = 'Check-up';
+        }
+
+        if(Auth::user()->can('patientservices-list-laboratory'))
+        {
+            $services[] = 'Laboratory';
+        }
+
+        if(Auth::user()->can('patientservices-list-physicaltherapy'))
+        {
+            $services[] = 'Physical Therapy';
+        }
+
+        if(Auth::user()->can('patientservices-list-xray'))
+        {
+            $services[] = 'X-Ray';
+        }
+
+        $patientservices =  DB::table('patient_services')
+                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                 ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
+                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
+                 ->whereIn('services.service', $services)
+                 ->where('patient_service_items.status', '=', 'pending')
+                 ->orderBy('services.service', 'Asc')
+                 ->orderBy('patient_services.docdate', 'Asc')
+                 ->get();
+
+        return DataTables::of($patientservices)
+                     ->addColumn('status',function($patientservices){
+ 
+                        return '<span class="badge bg-warning">'.$patientservices->status.'</span>';
+   
+                     })
+                     ->rawColumns(['status'])
+                     ->make();
+
+        // return $services_ultrasound = PatientService::where('id','1')
+        //                                             ->with('PatientServiceItems.PatientServiceItemNames')
+        //                                             ->get();
     }
 
     public function create()
@@ -61,6 +144,7 @@ class PatientServiceController extends Controller
             $serviceitem = new PatientServiceItem();
             $serviceitem->psid = $patientservice->id;
             $serviceitem->serviceid = $services[$x];
+            $serviceitem->status = "pending";
             $serviceitem->save();
         }
 

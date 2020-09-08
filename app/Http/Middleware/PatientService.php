@@ -18,20 +18,38 @@ class PatientService
     {   
         if($request->is('patientservice/index') || $request->is('patientservice/patientservices'))
         {
-            if(Auth::user()->hasPermissionTo('patientservices-list'))
+            if(Auth::user()->can('patientservices-list'))
             {
                 return $next($request);
+            }
+            else
+            {
+                return response()->json("You don't have permission!", 200);
             }
         }
 
         if($request->is('patientservice/create') || $request->is('patientservice/store'))
         {
-            if(Auth::user()->hasPermissionTo('patientservices-create'))
+            if(Auth::user()->can('patientservices-create'))
             {
                 return $next($request);
             }
+            else
+            {
+                return response()->json("You don't have permission!", 200);
+            }
         }
-
+        if($request->is('patientservice/services-list') || $request->is('/'))
+        {
+            if(Auth::user()->can('patientservices-list', 'patientservices-list-ultrasound', 'patientservices-list-ecg', 'patientservices-list-checkup', 'patientservices-list-laboratory', 'patientservices-list-physicaltherapy', 'patientservices-list-xray'))
+            {
+                return $next($request);
+            }
+            else
+            {
+                return response()->json("You don't have permission!", 200);
+            }
+        }
 
     }
 }

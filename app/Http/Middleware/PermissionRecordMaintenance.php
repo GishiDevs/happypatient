@@ -18,7 +18,7 @@ class PermissionRecordMaintenance
     {   
         if($request->is('permission/index') || $request->is('permission/permissions'))
         {
-            if(Auth::user()->hasPermissionTo('permission-list'))
+            if(Auth::user()->can('permission-list'))
             {
                 return $next($request);
             }
@@ -30,7 +30,7 @@ class PermissionRecordMaintenance
 
         if($request->is('permission/create') || $request->is('permission/store'))
         {
-            if(Auth::user()->hasPermissionTo('permission-create'))
+            if(Auth::user()->can('permission-create'))
             {
                 return $next($request);
             }
@@ -42,7 +42,7 @@ class PermissionRecordMaintenance
 
         if($request->is('permission/edit') || $request->is('permission/update'))
         {
-            if(Auth::user()->hasPermissionTo('permission-edit'))
+            if(Auth::user()->hasRole('Admin') && Auth::user()->hasPermissionTo('permission-edit'))
             {
                 return $next($request);
             }
@@ -54,7 +54,7 @@ class PermissionRecordMaintenance
 
         if($request->is('permission/delete'))
         {
-            if(Auth::user()->hasPermissionTo('permission-delete'))
+            if(Auth::user()->hasRole('Admin') && Auth::user()->hasPermissionTo('permission-delete'))
             {
                 return $next($request);
             }

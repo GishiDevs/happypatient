@@ -28,14 +28,15 @@ class RoleController extends Controller
                 $edit = '';
                 $delete = '';
 
-                if(Auth::user()->hasPermissionTo('role-edit'))
-                {
-                    $edit = '<a href="" class="btn btn-sm btn-info" data-roleid="'.$role->id.'" data-action="edit" id="btn-edit-role" data-toggle="modal" data-target="#modal-role"><i class="fa fa-edit"></i> Edit</a>';
+                if(Auth::user()->can('role-edit'))
+                {   
+                    $edit = '<a href="" class="btn btn-sm btn-info" data-roleid="'.$role->id.'" data-action="edit" id="btn-edit-role" data-toggle="modal" data-target="#modal-role"><i class="fa fa-edit"></i> Edit</a>';     
                 }
                 
-                if(Auth::user()->hasPermissionTo('role-delete'))
-                {
+                if(Auth::user()->can('role-delete'))
+                {   
                     $delete = '<a href="" class="btn btn-sm btn-danger" data-roleid="'.$role->id.'" data-action="delete" id="btn-delete-role"><i class="fa fa-trash"></i> Delete</a>';
+                    
                 }
                 return $edit . ' ' . $delete;
             })
@@ -125,6 +126,12 @@ class RoleController extends Controller
     {   
         $roleid = $request->get('roleid');
         $role = Role::findOrFail($roleid);
+
+        if($role->name == 'Admin')
+        {
+            return response()->json(['error' => "You can't delete role Admin"], 200);
+        }
+
         $role->delete();
 
         return response()->json(['success' => 'Record has been deleted'], 200);

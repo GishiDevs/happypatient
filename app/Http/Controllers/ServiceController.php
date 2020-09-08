@@ -6,6 +6,7 @@ use App\Service;
 use Illuminate\Http\Request;
 use Validator;
 use DataTables;
+use Auth;
 
 class ServiceController extends Controller
 {
@@ -24,12 +25,12 @@ class ServiceController extends Controller
                 $edit = '';
                 $delete = '';
 
-                if(Auth::user()->hasPermissionTo('service-edit'))
+                if(Auth::user()->can('service-edit'))
                 {
                     $edit = '<a href="" class="btn btn-sm btn-info" data-serviceid="'.$service->id.'" data-action="edit" id="btn-edit-service" data-toggle="modal" data-target="#modal-service"><i class="fa fa-edit"></i> Edit</a>';
                 }
 
-                if(Auth::user()->hasPermissionTo('service-delete'))
+                if(Auth::user()->can('service-delete'))
                 {
                     $delete = '<a href="" class="btn btn-sm btn-danger" data-serviceid="'.$service->id.'" data-action="delete" id="btn-delete-service"><i class="fa fa-trash"></i> Delete</a>';
                 }
