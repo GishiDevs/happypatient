@@ -37,6 +37,7 @@ class PatientServiceController extends Controller
                         return '<span class="badge bg-warning">'.$patientservices->status.'</span>';
    
                      })
+                     ->addIndexColumn()
                      ->rawColumns(['status'])
                      ->make();
     }
@@ -92,6 +93,7 @@ class PatientServiceController extends Controller
                         return '<span class="badge bg-warning">'.$patientservices->status.'</span>';
    
                      })
+                     ->addIndexColumn()
                      ->rawColumns(['status'])
                      ->make();
 

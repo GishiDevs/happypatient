@@ -31,6 +31,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                      <th width="20px">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
@@ -75,23 +76,25 @@
 		    "ajax": "{{ route('patientservice.servicesperuser') }}",
 		    "bDestroy": true,
 		    "columns": [
+                    { "data": "DT_RowIndex"},
                     { "data": "id"},
 		    		        { "data": "docdate"},
 		    		        { "data": "patientname"},
 		    		        { "data": "service"},
                     { "data": "status"}
 		    ],
-        "order": [[ 0, "asc" ], 
-                  [ 1, "asc" ], 
-                  [ 3, "asc" ], 
-                  [ 2, "asc" ]
+        "order": [[ 1, "asc" ], 
+                  [ 2, "asc" ], 
+                  [ 4, "asc" ], 
+                  [ 3, "asc" ]
         ],
 
         "columnDefs": [
-          { "visible": false, "targets": 0 }
-        ],
+          { "visible": false, "targets": 1 },
+
+        ]
+        // "bSort" : false 
         
-        "bSort" : false 
         
         
     });

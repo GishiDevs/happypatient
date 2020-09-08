@@ -37,6 +37,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
+                      <th width="20px">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
@@ -46,6 +47,7 @@
                   </thead>
                   <tfoot>
                     <tr>
+                      <th>#</th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
@@ -82,6 +84,7 @@
 		    "ajax": "{{ route('patientservice.serviceslist') }}",
 		    "bDestroy": true,
 		    "columns": [
+                    { "data": "DT_RowIndex"},
                     { "data": "id"},
 		    		        { "data": "docdate"},
 		    		        { "data": "patientname"},
