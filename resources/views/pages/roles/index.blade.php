@@ -357,6 +357,11 @@
         uncheckpermission();
     });
 
+    $('.close').click(function(e){
+        $('#roleform')[0].reset();
+        uncheckpermission();
+    });
+
     function uncheckpermission()
     {
       $('[name="permission[]"]').each(function(){
