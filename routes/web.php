@@ -14,12 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
-    return view('pages.dashboard.index');
-})->middleware('auth');
-
+Route::get('/', 'DashboardController@index')->middleware('auth');
+Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
 Auth::routes();
 
+// Route::group(['prefix' => '/', 'middleware' => ['auth','dashboard']], function(){
+//     Route::get('', [
+//         'uses' => 'DashboardController@index',
+//         'as' => 'dashboard.index',
+//     ]);
+//     Route::get('/patient-information', [
+//         'uses' => 'DashboardController@getpatientrecord',
+//         'as' => 'dashboard.getpatientrecord',
+//     ]);
+// });
 
 //Patient Route
 Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], function(){

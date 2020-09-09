@@ -30,6 +30,7 @@ class PermissionController extends Controller
                 }
                 
             })
+            ->addIndexColumn()
             ->make();
     }
 

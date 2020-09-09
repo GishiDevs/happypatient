@@ -30,7 +30,10 @@ class PatientController extends Controller
 
     public function getpatientrecord()
     {
-        $patient = Patient::select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'weight', 'mobile');
+        $patient = DB::table('patients')
+                     ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'weight', 'mobile')
+                     ->orderBy('id', 'Asc')
+                     ->get();
 
         return DataTables::of($patient)
             ->addColumn('action',function($patient){
@@ -48,9 +51,9 @@ class PatientController extends Controller
                     $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
                 }
                 
-
                 return $edit .' '. $delete;
             })
+            ->addIndexColumn()
             ->make();
     }
 

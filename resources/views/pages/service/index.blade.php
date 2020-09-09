@@ -38,6 +38,7 @@
                 <table id="service-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                      <th width="20px">#</th>
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
@@ -48,6 +49,7 @@
                   </thead>
                   <tfoot>
                     <tr>
+                      <th>#</th>
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
@@ -122,12 +124,15 @@
   $(document).ready(function() {
     var action_type;
     var serviceid;
-    var columns = [{ "data": "id"},
-                  { "data": "service"},
-                  { "data": "status"}];
-    if("{{ Auth::user()->hasPermissionTo('service-edit') }}" || "{{ Auth::user()->hasPermissionTo('service-delete') }}"){
+    var columns = [{ "data": "DT_RowIndex"},
+                   { "data": "id"},
+                   { "data": "service"},
+                   { "data": "status"}];
+
+    @canany(['service-edit', 'service-delete'])
       columns.push({data: "action"});
-    }
+    @endcanany
+    
 			// $('#tax-table').DataTable();
 	  $('#service-table').DataTable({
         "responsive": true,

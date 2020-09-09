@@ -87,15 +87,52 @@ class PatientServiceController extends Controller
                  ->orderBy('patient_services.docdate', 'Asc')
                  ->get();
 
-        return DataTables::of($patientservices)
-                     ->addColumn('status',function($patientservices){
+
+        $patient = DB::table('patients')
+                 ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'weight', 'mobile')
+                 ->orderBy('id', 'Asc')
+                 ->get();
+
+
+        if(Auth::user()->can('patientservices-list-ultrasound') || Auth::user()->can('patientservices-list-ecg') || Auth::user()->can('patientservices-list-checkup') || Auth::user()->can('patientservices-list-laboratory') || Auth::user()->can('patientservices-list-physicaltherapy') || Auth::user()->can('patientservices-list-xray'))
+        {
+            return DataTables::of($patientservices)
+                ->addColumn('status',function($patientservices){
  
                         return '<span class="badge bg-warning">'.$patientservices->status.'</span>';
    
-                     })
-                     ->addIndexColumn()
-                     ->rawColumns(['status'])
-                     ->make();
+                })
+                ->addIndexColumn()
+                ->rawColumns(['status'])
+                ->make();
+        }
+        else
+        {
+            return DataTables::of($patient)
+                ->addColumn('action',function($patient){
+
+                        $edit = '';
+                        $delete = '';
+
+                        if(Auth::user()->can('patient-edit'))
+                        {
+                            $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</a>';
+                        }
+
+                        if(Auth::user()->can('patient-delete'))
+                        {
+                            $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
+                        }
+                        
+                        return $edit .' '. $delete;
+                })
+                ->addIndexColumn()
+                ->make();
+        }
+
+        
+
+        
 
         // return $services_ultrasound = PatientService::where('id','1')
         //                                             ->with('PatientServiceItems.PatientServiceItemNames')

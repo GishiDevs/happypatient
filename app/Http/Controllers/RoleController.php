@@ -40,6 +40,7 @@ class RoleController extends Controller
                 }
                 return $edit . ' ' . $delete;
             })
+            ->addIndexColumn()
             ->make();
     }
 

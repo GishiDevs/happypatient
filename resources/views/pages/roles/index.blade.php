@@ -36,6 +36,7 @@
                 <table id="role-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                        <th width="20px">#</th>
                         <th>ID</th>
                         <th>Role</th>
                         @can('role-edit','role-delete')
@@ -45,6 +46,7 @@
                   </thead>
                   <tfoot>
                     <tr>
+                        <th>#</th>
                         <th>ID</th>
                         <th>Role</th>
                         @can('role-edit','role-delete')
@@ -120,12 +122,13 @@
     
     var action_type;
     var roleid;
-    var columns = [{ "data": "id"},
-                  { "data": "name"}];
+    var columns = [{ "data": "DT_RowIndex"},
+                   { "data": "id"},
+                   { "data": "name"}];
                   
-    @can('role-edit','role-delete')
+    @canany(['role-edit','role-delete'])
       columns.push({data: "action"});
-    @endcan
+    @endcanany
 
 			// $('#tax-table').DataTable();
 	  $('#role-table').DataTable({

@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'permission_crud' => \App\Http\Middleware\PermissionRecordMaintenance::class,
         'role_crud' => \App\Http\Middleware\RoleRecordMaintenance::class,
         'user_crud' => \App\Http\Middleware\UserRecordMaintenance::class,
+        'dashboard' => \App\Http\Middleware\Dashboard::class,
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
     ];

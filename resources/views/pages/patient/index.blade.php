@@ -37,6 +37,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                      <th width="20px">#</th>
                       <th>ID</th>
                       <th>Lastname</th>
                       <th>Firstname</th>
@@ -52,6 +53,7 @@
                   </thead>
                   <tfoot>
                     <tr>
+                      <th>#</th>
                       <th>ID</th>
                       <th>Lastname</th>
                       <th>Firstname</th>
@@ -86,7 +88,8 @@
 <script>
 
   $(document).ready(function() {
-    var columns = [{ "data": "id"},
+    var columns = [{ "data": "DT_RowIndex"},
+                   { "data": "id"},
                    { "data": "lastname"},
                    { "data": "firstname"},
                    { "data": "middlename"},
@@ -95,9 +98,9 @@
                    { "data": "weight"},
                    { "data": "mobile"}];
 
-    if("{{ Auth::user()->hasPermissionTo('patient-edit') }}" || "{{ Auth::user()->hasPermissionTo('patient-delete') }}"){
+    @canany(['patient-edit', 'patient-delete'])
       columns.push({data: "action"});
-    }
+    @endcanany
 
 			// $('#tax-table').DataTable();
 	  $('#patient-table').DataTable({

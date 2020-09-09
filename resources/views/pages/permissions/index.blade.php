@@ -36,7 +36,8 @@
               <div class="card-body">
                 <table id="permission-table" class="table table-bordered table-striped">
                   <thead>
-                    <tr>
+                    <tr> 
+                      <th width="20px">#</th>
                       <th>ID</th>
                       <th>Permission</th>
                       @role('Admin')
@@ -46,6 +47,7 @@
                   </thead>
                   <tfoot>
                     <tr>
+                      <th>#</th>
                       <th>ID</th>
                       <th>Permission</th>
                       @role('Admin')
@@ -108,7 +110,8 @@
 
     var action_type;
     var permissionid;
-    var columns = [{ "data": "id"},
+    var columns = [{ "data": "DT_RowIndex"},
+                   { "data": "id"},
                    { "data": "name"}];
 
     //If This user has an 'Admin' role then show actions(edit/delete)

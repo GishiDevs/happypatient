@@ -36,6 +36,7 @@ class ServiceController extends Controller
                 }
                 return $edit . ' ' . $delete;
             })
+            ->addIndexColumn()
             ->make();
     }
 

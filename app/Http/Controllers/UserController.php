@@ -63,6 +63,7 @@ class UserController extends Controller
 
                 return $edit . ' ' . $delete;
             })
+            ->addIndexColumn()
             ->rawColumns(['roles', 'action'])
             ->make();
     } 
