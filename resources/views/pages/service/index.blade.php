@@ -42,7 +42,7 @@
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
-                      @can('service-edit','service-delete')
+                      @canany(['service-edit','service-delete'])
                       <th width="140px">Actions</th>
                       @endcan
                     </tr>
@@ -53,9 +53,9 @@
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
-                      @can('service-edit','service-delete')
+                      @canany(['service-edit','service-delete'])
                       <th>Actions</th>
-                      @endcan
+                      @endcanany
                     </tr>
                   </tfoot>
                 </table>

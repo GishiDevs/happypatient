@@ -46,9 +46,9 @@
                       <th>Gender</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
-                      @can('patient-edit','patient-delete')
+                      @canany(['patient-edit','patient-delete'])
                       <th width="140px">Actions</th>
-                      @endcan
+                      @endcanany
                     </tr>
                   </thead>
                   <tfoot>
@@ -62,9 +62,9 @@
                       <th>Gender</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
-                      @can('patient-edit','patient-delete')
+                      @canany(['patient-edit','patient-delete'])
                       <th>Actions</th>
-                      @endcan
+                      @endcanany
                     </tr>
                   </tfoot>
                 </table>

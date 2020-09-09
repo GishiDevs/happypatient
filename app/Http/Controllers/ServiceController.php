@@ -34,6 +34,7 @@ class ServiceController extends Controller
                 {
                     $delete = '<a href="" class="btn btn-sm btn-danger" data-serviceid="'.$service->id.'" data-action="delete" id="btn-delete-service"><i class="fa fa-trash"></i> Delete</a>';
                 }
+                
                 return $edit . ' ' . $delete;
             })
             ->addIndexColumn()

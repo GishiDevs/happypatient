@@ -39,9 +39,9 @@
                         <th width="20px">#</th>
                         <th>ID</th>
                         <th>Role</th>
-                        @can('role-edit','role-delete')
+                        @canany(['role-edit','role-delete'])
                         <th width="140px">Actions</th>
-                        @endcan
+                        @endcanany
                     </tr>
                   </thead>
                   <tfoot>
@@ -49,9 +49,9 @@
                         <th>#</th>
                         <th>ID</th>
                         <th>Role</th>
-                        @can('role-edit','role-delete')
+                        @canany(['role-edit','role-delete'])
                         <th>Actions</th>
-                        @endcan
+                        @endcanany
                     </tr>
                   </tfoot>
                 </table>

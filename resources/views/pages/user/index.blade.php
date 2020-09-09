@@ -43,9 +43,9 @@
                       <th>Username</th>
                       <th>Email</th>
                       <th>Roles</th>
-                      @can('user-edit','user-delete')
+                      @canany(['user-edit','user-delete'])
                       <th width="140px">Actions</th>
-                      @endcan
+                      @endcanany
                     </tr>
                   </thead>
                   <tfoot>
@@ -56,9 +56,9 @@
                       <th>Username</th>
                       <th>Email</th>
                       <th>Roles</th>
-                      @can('user-edit','user-delete')
+                      @canany(['user-edit','user-delete'])
                       <th>Actions</th>
-                      @endcan
+                      @endcanany
                     </tr>
                   </tfoot>
                 </table>
