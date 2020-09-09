@@ -38,7 +38,7 @@
                 <table id="service-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="20px">#</th>
+                      <th width="30px">#</th>
                       <th>ID</th>
                       <th>Service</th>
                       <th>Status</th>
@@ -141,7 +141,12 @@
 		    "serverSide": true,
 		    "ajax": "{{ route('getservicerecord') }}",
 		    "bDestroy": true,
-		    "columns": columns
+		    "columns": columns,
+        "order": [ 1, "asc" ],
+        "columnDefs": [{
+                          "targets": 0,
+                          "orderable": false
+                        }] 
     });
     
     //Click Edit

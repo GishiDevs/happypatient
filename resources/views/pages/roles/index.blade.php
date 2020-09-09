@@ -36,7 +36,7 @@
                 <table id="role-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                        <th width="20px">#</th>
+                        <th width="30px">#</th>
                         <th>ID</th>
                         <th>Role</th>
                         @canany(['role-edit','role-delete'])
@@ -138,7 +138,12 @@
 		    "serverSide": true,
 		    "ajax": "{{ route('getrolerecord') }}",
 		    "bDestroy": true,
-		    "columns": columns
+		    "columns": columns,
+        "order": [ 1, "asc" ],
+        "columnDefs": [{
+                          "targets": 0,
+                          "orderable": false
+                        }] 
     });
     
     //Click Edit

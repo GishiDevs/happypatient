@@ -31,7 +31,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="20px">#</th>
+                      <th width="30px">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
@@ -91,6 +91,7 @@
 
         "columnDefs": [
           { "visible": false, "targets": 1 },
+          { "targets": 0,"orderable": false }
 
         ]
         // "bSort" : false 

@@ -32,13 +32,7 @@ class PatientServiceController extends Controller
                  ->get();
 
         return DataTables::of($patientservices)
-                     ->addColumn('status',function($patientservices){
-                        
-                        return '<span class="badge bg-warning">'.$patientservices->status.'</span>';
-   
-                     })
                      ->addIndexColumn()
-                     ->rawColumns(['status'])
                      ->make();
     }
 

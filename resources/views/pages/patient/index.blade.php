@@ -37,7 +37,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="20px">#</th>
+                      <th width="30px">#</th>
                       <th>ID</th>
                       <th>Lastname</th>
                       <th>Firstname</th>
@@ -111,6 +111,11 @@
 		    "ajax": "{{ route('getpatientrecord') }}",
 		    "bDestroy": true,
 		    "columns": columns,
+        "order": [ 1, "asc" ],
+        "columnDefs": [{
+                          "targets": 0,
+                          "orderable": false
+                        }] 
     });
     
     //View Patient

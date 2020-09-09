@@ -29,7 +29,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="20px">#</th>
+                      <th width="30px">#</th>
                       <th>Lastname</th>
                       <th>Firstname</th>
                       <th>Middlename</th>
@@ -90,6 +90,11 @@
 		    "ajax": "{{ route('getpatientlists') }}",
 		    "bDestroy": true,
 		    "columns": columns,
+        "order": [ 1, "asc" ],
+        "columnDefs": [{
+                          "targets": 0,
+                          "orderable": false
+                        }] 
     });
         
 	});

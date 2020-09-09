@@ -37,7 +37,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                      <th width="20px">#</th>
+                      <th width="30px">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
@@ -91,10 +91,33 @@
 		    		        { "data": "service"},
                     { "data": "status"}
 		    ],
-        "order": [[ 0, "asc" ]]      
-        
+        "order": [ 1, "asc" ],
+        "columnDefs": [{
+                          "targets": 0,
+                          "orderable": false
+                        },
+                        {
+                        "targets": 5,
+                        "data": "patientname",
+                        "render": function ( data ) {
+
+                            if(data == 'closed')
+                            {
+                              return '<span class="badge bg-success">'+data+'</span>';
+                            }
+                            else if(data == 'pending')
+                            {
+                              return '<span class="badge bg-warning">'+data+'</span>';
+                            }
+                            else if(data == 'cancelled')
+                            {
+                              return '<span class="badge bg-danger">'+data+'</span>';
+                            }
+                            
+                        }
+        }]       
     });
-    
+
 	});
 
 </script>
