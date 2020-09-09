@@ -40,8 +40,9 @@ class PatientService
             }
         }
         if($request->is('patientservice/services-list-per-user') || $request->is('/'))
-        {
-            if(Auth::user()->can('patientservices-list', 'patientservices-list-ultrasound', 'patientservices-list-ecg', 'patientservices-list-checkup', 'patientservices-list-laboratory', 'patientservices-list-physicaltherapy', 'patientservices-list-xray'))
+        {   
+
+            if(Auth::user()->can('patientservices-list-ultrasound', 'patientservices-list-ecg', 'patientservices-list-checkup', 'patientservices-list-laboratory', 'patientservices-list-physicaltherapy', 'patientservices-list-xray'))
             {
                 return $next($request);
             }
