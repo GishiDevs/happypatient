@@ -44,6 +44,7 @@
                       <th>Middlename</th>
                       <th>Birthdate</th>
                       <th>Gender</th>
+                      <th>Civil Status</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
                       @canany(['patient-edit','patient-delete'])
@@ -60,6 +61,7 @@
                       <th>Middlename</th>
                       <th>Birthdate</th>
                       <th>Gender</th>
+                      <th>Civil Status</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
                       @canany(['patient-edit','patient-delete'])
@@ -95,6 +97,7 @@
                    { "data": "middlename"},
                    { "data": "birthdate"},
                    { "data": "gender"},
+                   { "data": "civilstatus"},
                    { "data": "weight"},
                    { "data": "mobile"}];
 

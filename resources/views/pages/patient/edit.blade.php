@@ -51,7 +51,38 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
+                      <label for="gender">Gender</label>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="gender" id="radio-male" value="male" 
+                        @if($patient->gender == 'male') checked @endif>
+                        <label class="form-check-label" for="gender-male">Male</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female"
+                        @if($patient->gender == 'female') checked @endif>
+                        <label class="form-check-label" for="gender-female">Female</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label for="gender">Civil Status</label>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="civilstatus" id="radio-single" value="single" checked
+                        @if($patient->civilstatus == 'single') checked @endif>
+                        <label class="form-check-label" for="gender-male">Single</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="civilstatus" id="radio-married" value="married"
+                        @if($patient->civilstatus == 'married') checked @endif>
+                        <label class="form-check-label" for="gender-female">Married</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="civilstatus" id="radio-widowed" value="widowed"
+                        @if($patient->civilstatus == 'widowed') checked @endif>
+                        <label class="form-check-label" for="gender-female">Widowed</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
                       <label for="birthdate">Birthdate</label> <span class="text-danger">*</span>
                       <!-- <div id="datetimepicker-birthdate" class="input-group date" data-target-input="nearest">
                         <div class="input-group-append" data-target="#datetimepicker-birthdate" data-toggle="datetimepicker">
@@ -72,26 +103,13 @@
                       <label for="age">Age</label>
                       <input type="text" class="form-control" name="age" id="age" readonly>
                     </div> -->
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                       <label for="weight">Weight</label> <span class="text-danger">*</span>
                       <div class="input-group">
                         <input class="form-control" type="text" name="weight" id="weight" value="{{ $patient->weight }}" placeholder="0.00">
                         <div class="input-group-append">
                           <span class="input-group-text">Kg</span>
                         </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                      <label for="gender">Gender</label>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="radio-male" value="male" 
-                        @if($patient->gender == 'male') checked @endif>
-                        <label class="form-check-label" for="gender-male">Male</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gender" id="radio-female" value="female"
-                        @if($patient->gender == 'female') checked @endif>
-                        <label class="form-check-label" for="gender-female">Female</label>
                       </div>
                     </div>
                   </div>

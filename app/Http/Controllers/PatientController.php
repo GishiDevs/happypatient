@@ -31,7 +31,7 @@ class PatientController extends Controller
     public function getpatientrecord()
     {
         $patient = DB::table('patients')
-                     ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'weight', 'mobile')
+                     ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'civilstatus', 'weight', 'mobile')
                      ->orderBy('id', 'Asc')
                      ->get();
 
@@ -88,7 +88,7 @@ class PatientController extends Controller
  
     public function store(Request $request)
     {   
-
+        
         $rules = [
             'lastname.required' => 'Please enter lastname',
             'firstname.required' => 'Please enter firstname',
@@ -140,6 +140,7 @@ class PatientController extends Controller
         $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('y-m-d');
         $patient->weight = $request->get('weight');
         $patient->gender = $request->get('gender');
+        $patient->civilstatus = $request->get('civilstatus');
         $patient->landline = $request->get('landline');
         $patient->mobile = $request->get('mobile');
         $patient->email = $request->get('email');
@@ -221,6 +222,7 @@ class PatientController extends Controller
         $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('y-m-d');
         $patient->weight = $request->get('weight');
         $patient->gender = $request->get('gender');
+        $patient->civilstatus = $request->get('civilstatus');
         $patient->landline = $request->get('landline');
         $patient->mobile = $request->get('mobile');
         $patient->email = $request->get('email');

@@ -27,7 +27,7 @@ class DashboardController extends Controller
     public function getpatientlists()
     {
         $patient = DB::table('patients')
-                     ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'weight', 'mobile')
+                     ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'civilstatus', 'weight', 'mobile')
                      ->orderBy('id', 'Asc')
                      ->get();
 
