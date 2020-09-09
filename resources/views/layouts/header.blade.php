@@ -229,7 +229,7 @@
               </p>
             </a>
           </li>
-          @can('patient-list','patient-create')
+          @canany(['patient-list','patient-create'])
           <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-wheelchair"></i>
@@ -257,8 +257,8 @@
               @endcan
             </ul>
           </li>
-          @endcan
-          @can('patientservices-list','patientservices-create')
+          @endcanany
+          @canany(['patientservices-list','patientservices-create'])
           <li class="nav-item has-treeview {{ (request()->is('patientservice/create') || request()->is('patientservice/index')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('patientservice/create') || request()->is('patientservice/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-stethoscope"></i>
@@ -288,8 +288,8 @@
               @endcan
             </ul>
           </li>
-          @endcan
-          @can('user-list','user-create')
+          @endcanany
+          @canany(['user-list','user-create'])
           <li class="nav-item has-treeview {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('user/create') || request()->is('user/index') || request()->is('user/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-circle"></i>
@@ -317,8 +317,8 @@
               @endcan
             </ul>
           </li>
-          @endcan
-          @can('service-list','service-create','permission-list','permission-create','role-list','role-create')
+          @endcanany
+          @canany(['service-list','service-create','permission-list','permission-create','role-list','role-create'])
           <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
@@ -328,14 +328,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @can('service-list','service-create')
+              @canany(['service-list','service-create'])
               <li class="nav-item">
                 <a href="{{ route('service.index') }}" class="nav-link {{ (request()->is('service/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services</p>
                 </a> 
               </li>
-              @endcan
+              @endcanany
               @role('Admin')
               <li class="nav-item">
                 <a href="{{ route('permission.index') }}" class="nav-link {{ (request()->is('permission/index')) ? 'active' : '' }}">
@@ -344,17 +344,17 @@
                 </a> 
               </li>
               @endrole
-              @can('role-list','role-create')
+              @canany(['role-list','role-create'])
               <li class="nav-item">
                 <a href="{{ route('role.index') }}" class="nav-link {{ (request()->is('role/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Roles</p>
                 </a> 
               </li>
-              @endcan
+              @endcanany
             </ul>
           </li>
-          @endcan
+          @endcanany
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
