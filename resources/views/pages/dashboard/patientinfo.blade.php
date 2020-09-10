@@ -29,7 +29,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="30px">#</th>
+                      <th width="30px" class="no-sort">#</th>
                       <th>Lastname</th>
                       <th>Firstname</th>
                       <th>Middlename</th>
@@ -95,7 +95,7 @@
 		    "columns": columns,
         "order": [ 1, "asc" ],
         "columnDefs": [{
-                          "targets": 0,
+                          "targets": "no-sort",
                           "orderable": false
                         }] 
     });

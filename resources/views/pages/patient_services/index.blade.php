@@ -37,7 +37,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                      <th width="30px">#</th>
+                      <th width="30px" class="no-sort">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
@@ -93,7 +93,7 @@
 		    ],
         "order": [ 1, "asc" ],
         "columnDefs": [{
-                          "targets": 0,
+                          "targets": "no-sort",
                           "orderable": false
                         },
                         {

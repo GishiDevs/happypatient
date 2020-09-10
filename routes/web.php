@@ -235,3 +235,14 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth','user_crud']], functio
         'as' => 'user.delete',
     ]);
 });
+
+
+//Diagnosis Route
+Route::group(['prefix' => 'diagnosis', 'middleware' => ['auth', 'diagnosis']], function(){
+    Route::get('/create/{id}', [
+        'uses' => 'DiagnosisController@create',
+        'as' => 'diagnosis.create',
+    ]);
+
+
+});

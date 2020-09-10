@@ -31,22 +31,26 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="30px">#</th>
+                      <th width="30px" class="no-sort">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th width="50px">Status</th>
+                      <th width="210px" class="no-sort">Actions</th>
                     </tr>
                   </thead>
-                  <!-- <tfoot>
+                  <tfoot>
                     <tr>
+                      <th>#</th>
+                      <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th>Status</th>
+                      <th>Actions</th>
                     </tr>
-                  </tfoot> -->
+                  </tfoot>
                 </table>
 
               </div>
@@ -81,17 +85,17 @@
 		    		        { "data": "docdate"},
 		    		        { "data": "patientname"},
 		    		        { "data": "service"},
-                    { "data": "status"}
+                    { "data": "status"},
+                    { "data": "action"}
 		    ],
-        "order": [[ 1, "asc" ], 
-                  [ 2, "asc" ], 
+        "order": [[ 2, "asc" ], 
                   [ 4, "asc" ], 
                   [ 3, "asc" ]
         ],
 
         "columnDefs": [
           { "visible": false, "targets": 1 },
-          { "targets": 0,"orderable": false }
+          { "targets": "no-sort","orderable": false }
 
         ]
         // "bSort" : false 

@@ -37,7 +37,7 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="30px">#</th>
+                      <th width="30px" class="no-sort">#</th>
                       <th>ID</th>
                       <th>Lastname</th>
                       <th>Firstname</th>
@@ -48,7 +48,7 @@
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
                       @canany(['patient-edit','patient-delete'])
-                      <th width="140px">Actions</th>
+                      <th width="140px" class="no-sort">Actions</th>
                       @endcanany
                     </tr>
                   </thead>
@@ -116,7 +116,7 @@
 		    "columns": columns,
         "order": [ 1, "asc" ],
         "columnDefs": [{
-                          "targets": 0,
+                          "targets": "no-sort",
                           "orderable": false
                         }] 
     });

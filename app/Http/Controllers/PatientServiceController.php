@@ -74,60 +74,27 @@ class PatientServiceController extends Controller
         $patientservices =  DB::table('patient_services')
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                  ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
+                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.status', '=', 'pending')
-                 ->orderBy('services.service', 'Asc')
                  ->orderBy('patient_services.docdate', 'Asc')
+                 ->orderBy('services.service', 'Asc')
                  ->get();
 
-
-        $patient = DB::table('patients')
-                 ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m-%d-%Y') as birthdate") , 'gender', 'weight', 'mobile')
-                 ->orderBy('id', 'Asc')
-                 ->get();
-
-
-        if(Auth::user()->can('patientservices-list-ultrasound') || Auth::user()->can('patientservices-list-ecg') || Auth::user()->can('patientservices-list-checkup') || Auth::user()->can('patientservices-list-laboratory') || Auth::user()->can('patientservices-list-physicaltherapy') || Auth::user()->can('patientservices-list-xray'))
-        {
             return DataTables::of($patientservices)
                 ->addColumn('status',function($patientservices){
  
                         return '<span class="badge bg-warning">'.$patientservices->status.'</span>';
    
                 })
-                ->addIndexColumn()
-                ->rawColumns(['status'])
-                ->make();
-        }
-        else
-        {
-            return DataTables::of($patient)
-                ->addColumn('action',function($patient){
-
-                        $edit = '';
-                        $delete = '';
-
-                        if(Auth::user()->can('patient-edit'))
-                        {
-                            $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</a>';
-                        }
-
-                        if(Auth::user()->can('patient-delete'))
-                        {
-                            $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
-                        }
-                        
-                        return $edit .' '. $delete;
+                ->addcolumn('action',function($patientservices){
+                    return '<a href="'.route("diagnosis.create",$patientservices->ps_items_id).'" class="btn btn-sm btn-success" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Create Diagnosis</a>
+                            <a href="" class="btn btn-sm btn-danger" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="cancel" id="btn-cancel-diagnosis"><i class="fa fa-times"></i> Cancel</a>';
                 })
                 ->addIndexColumn()
+                ->rawColumns(['status','action'])
                 ->make();
-        }
-
-        
-
-        
-
+       
         // return $services_ultrasound = PatientService::where('id','1')
         //                                             ->with('PatientServiceItems.PatientServiceItemNames')
         //                                             ->get();

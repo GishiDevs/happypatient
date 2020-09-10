@@ -36,11 +36,11 @@
                 <table id="role-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                        <th width="30px">#</th>
+                        <th width="30px" class="no-sort">#</th>
                         <th>ID</th>
                         <th>Role</th>
                         @canany(['role-edit','role-delete'])
-                        <th width="140px">Actions</th>
+                        <th width="140px" class="no-sort">Actions</th>
                         @endcanany
                     </tr>
                   </thead>
@@ -141,7 +141,7 @@
 		    "columns": columns,
         "order": [ 1, "asc" ],
         "columnDefs": [{
-                          "targets": 0,
+                          "targets": "no-sort",
                           "orderable": false
                         }] 
     });
