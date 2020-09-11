@@ -35,40 +35,51 @@
               <!-- form start -->
               <form role="form" id="patientserviceform">
                 <div class="card-body">
-                  <div class="row d-flex justify-content-around"> 
-                    <div class="form-group col-md-4">
-                      <label for="patient">Patient</label>
-                      <select class="form-control select2" name="patient" id="patient" style="width: 100%;">
-                        <option selected="selected" value="" disabled>Select Patient</option>
-                        @foreach($patients as $patient)
-                        <option value="{{ $patient->id }}">{{ $patient->id . ' - ' . $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename }}</option>
-                        @endforeach
-                       </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                      <label for="selectPatient">Document Date</label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                  <!-- <div class="stepwizard">
+                    <div class="stepwizard-row setup-panel">
+                        <div class="stepwizard-step col-xs-3"> 
+                            <a href="#step-1" type="button" class="btn btn-success btn-circle">1</a>
+                            <p><small>Services</small></p>
                         </div>
-                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
+                        <div class="stepwizard-step col-xs-3"> 
+                            <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
+                            <p><small>Billings</small></p>
+                        </div>
+                    </div>
+                  </div> -->
+                  <div class="setup-content" id="step-1">
+                    <div class="row d-flex justify-content-around"> 
+                      <div class="form-group col-md-4">
+                        <label for="patient">Patient</label>
+                        <select class="form-control select2" name="patient" id="patient" style="width: 100%;">
+                          <option selected="selected" value="" disabled>Select Patient</option>
+                          @foreach($patients as $patient)
+                          <option value="{{ $patient->id }}">{{ $patient->id . ' - ' . $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename }}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <label for="selectPatient">Document Date</label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                          </div>
+                          <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <!-- <div class="row d-flex justify-content-center">
-                    
-                  </div> -->
-                  <hr>
-                  <div class="row d-flex justify-content-center div-services">
-                    @foreach($services as $service)
-                    <div class="form-group col-md-4">
-                        <div class="custom-control custom-checkbox">
-                          <input class="custom-control-input" type="checkbox" name="services[]" id="Checkbox-{{ $service->service }}" value="{{ $service->id }}" 
-                          @if($service->status == 'inactive') disabled @endif>
-                          <label for="Checkbox-{{ $service->service }}" class="custom-control-label">{{ $service->service }}</label>
-                        </div>
+                    <hr>
+                    <div class="row d-flex justify-content-center div-services">
+                      @foreach($services as $service)
+                      <div class="form-group col-md-4">
+                          <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" name="services[]" id="Checkbox-{{ $service->service }}" value="{{ $service->id }}" 
+                            @if($service->status == 'inactive') disabled @endif>
+                            <label for="Checkbox-{{ $service->service }}" class="custom-control-label">{{ $service->service }}</label>
+                          </div>
+                      </div>
+                      @endforeach
                     </div>
-                    @endforeach
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -90,8 +101,29 @@
 
 $(document).ready(function () {
 
+  var navListItems = $('div.setup-panel div a');
+  var allWells = $('.setup-content');
 
-  //Service Form Validation
+  // $('#step-2').hide();
+
+  // navListItems.click(function (e) {
+  //         e.preventDefault();
+  //         var $target = $($(this).attr('href')),
+  //             $item = $(this);
+
+  //         $target.show();
+
+  //         if (!$item.hasClass('disabled')) {
+  //             navListItems.removeClass('btn-success').addClass('btn-default');
+  //             $item.removeClass('disabled').addClass('btn-success');
+  //             $item.removeAttr('disabled');
+  //             allWells.hide();
+  //             $target.show();
+  //             $target.removeAttr('hidden');
+  //         }
+  // });
+  
+    //Service Form Validation
   $('#patientserviceform').validate({
     rules: {
       patient: {
@@ -128,6 +160,7 @@ $(document).ready(function () {
       $(element).removeClass('is-invalid');
     },
     submitHandler: function(e){
+        
         var data = $('#patientserviceform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         $.ajax({
