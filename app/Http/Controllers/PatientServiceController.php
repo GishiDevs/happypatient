@@ -134,7 +134,7 @@ class PatientServiceController extends Controller
         $patientservice->patientid = $request->get('patient');
         $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
-        $patientservice->save();
+        // $patientservice->save();
 
         $ctr = count($request->get('services'));
         $services = $request->get('services');
@@ -145,7 +145,7 @@ class PatientServiceController extends Controller
             $serviceitem->psid = $patientservice->id;
             $serviceitem->serviceid = $services[$x];
             $serviceitem->status = "pending";
-            $serviceitem->save();
+            // $serviceitem->save();
         }
 
         return response()->json(['success' => 'Record has successfully added'], 200);
