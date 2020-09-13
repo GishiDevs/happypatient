@@ -38,11 +38,11 @@
                   <div class="stepwizard">
                     <div class="stepwizard-row setup-panel">
                         <div class="stepwizard-step col-xs-3"> 
-                            <a href="#step-1" type="button" class="btn btn-success btn-circle" data-step="step-1">1</a>
+                            <a href="#step-1" type="button" id="btn-stepper-1" class="btn btn-success btn-circle" data-step="step-1">1</a>
                             <p><small>Services</small></p>
                         </div>
                         <div class="stepwizard-step col-xs-3"> 
-                            <a href="#step-2" type="button" class="btn btn-default btn-circle" data-step="step-2" disabled="disabled">2</a>
+                            <a href="#step-2" type="button" id="btn-stepper-2" class="btn btn-default btn-circle" data-step="step-2" disabled="disabled">2</a>
                             <p><small>Billings</small></p>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                       @foreach($services as $service)
                       <div class="form-group col-md-4">
                           <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input" type="checkbox" name="services[]" id="Checkbox-{{ $service->service }}" data-service="{{ $service->service }}" value="{{ $service->id }}" 
+                            <input class="custom-control-input" type="checkbox" name="services[]" id="Checkbox-{{ $service->service }}" data-service="{{ $service->service }}" data-service-id="{{ $service->id }}" value="{{ $service->id }}" 
                             @if($service->status == 'inactive') disabled @endif>
                             <label for="Checkbox-{{ $service->service }}" class="custom-control-label">{{ $service->service }}</label>
                           </div>
@@ -114,51 +114,27 @@
                       </div>						
                       </div> 
                       <hr>                     
-                      <div class="table-scrollable col-md-6">
-                        <!-- if you're updating the layout of this table, make sure update purchaseOrderReceiveTable.hbs/.js as well-->
+                      <div class="table-scrollable col-md-7">
                         <table class="table table-striped table-bordered table-hover" id="table-services">
                           <thead>
-                            <th width="70%">Services</th>
+                            <th width="30%">Services</th>
                             <th width="30%">Price</th>
+                            <th width="20%">Discount</th>
+                            <th width="20%">Total Amount</th>
                           </thead>
                           <tbody>														
                           </tbody>
                           <tfoot>
 												<tr>
-													<td colspan="1">
-														<span class="pull-right">SubTotal :</span>
+													<td colspan="3">
+														<strong><span class="pull-right">Grand Total :</span></strong>
 													</td>
-													<td><span class="service-subTotal">0.00</span></td>
-												</tr>
-												<!-- <tr>
-													<td colspan="1">
-														<span class="pull-right">Tax :</span>
-													</td>													
-													<td><input class="form-control input-small affect-total service-tax" type="text" name="tax" id="tax" placeholder="0.00"></td>
-												</tr>								 -->
-												<tr>
-													<td colspan="1">
-														<span class="pull-right">Discount :</span>
-													</td>
-													<td>
-                            <div class="input-group">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text">%</span>
-                              </div>
-                              <input class="form-control input-small affect-total service-discount" type="text" name="discount" id="discount" placeholder="0.00" disabled>
-                            </div>
-                          </td>
-												</tr>																
-												<tr>
-													<td colspan="1">
-														<strong><span class="pull-right">Total :</span></strong>
-													</td>
-													<td><strong><span class="service-total">0.00</span></strong></td>
+													<td><strong><span class="service-grand-total">0.00</span></strong></td>
 												</tr>
 											</tfoot>
                         </table>
                       </div>
-                      <div class="form-group col-md-6">
+                      <div class="form-group col-md-7">
                         <label for="selectPatient">Notes</label>
                         <div class="input-group">
                           <textarea class="form-control" id="receiveTab_notes" style="resize: none;"></textarea>
@@ -201,115 +177,37 @@ $(document).ready(function () {
       if(step == 'step-2')
       {
         $('#btn-add').text('Submit');
+        $('.card-footer').show();
       }
 
     }
 
     if(step == 'step-1')
-    {
-      $('#btn-add').text('Next');
+    { 
+      if($('#btn-add').text() == 'Submit')
+      {
+        $('.card-footer').hide();
+      }
     }
       
   });
   
-  //Service Form Validation
-  // $('#patientserviceform').validate({
-  //   rules: {
-  //     patient: {
-  //       required: true,
-  //     },
-  //     docdate: {
-  //       required: true,
-  //       date: true
-  //     },     
-  //   },
-  //   messages: {
-  //     patient: {
-  //       required: "Please select patient",
-  //     },
-  //     docdate: {
-  //       required: "Please enter document date",
-  //     },   
-  //   },
-  //   errorElement: 'span',
-  //   errorPlacement: function (error, element) {
-      
-  //     error.addClass('invalid-feedback');
-  //     element.closest('.form-group').append(error);
-
-  //     if ($(element).hasClass('select2'))
-  //     { 
-  //       $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
-  //     }
-      
-  //   },
-  //   highlight: function (element, errorClass, validClass) {
-  //     $(element).addClass('is-invalid');
-  //   },
-  //   unhighlight: function (element, errorClass, validClass) {
-  //     $(element).removeClass('is-invalid');
-  //   },
-  //   submitHandler: function(e){
-        
-
-  //       $('#patient-name').empty().append($("#patient :selected").data('patient-name'));
-  //       $('#document-date').empty().append($('#docdate').val());
-  //       $('#table-services tbody').empty();
-
-  //       $('input:checkbox').each(function () {
-  //           var services = (this.checked ? $(this).data('service') : "");
-
-  //           if(services)
-  //           {
-  //             $('#table-services tbody').append('<tr><td>'+ services +'</td><td><input class="form-control input-small affect-total" type="text" name="price[]" id="price" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask></td></tr>');
-  //           }
-            
-  //       });
-
-  //       if($('[name="services[]"]').is(':checked'))
-  //       {
-  //         $('[href="#step-2"]').removeClass('btn-default').addClass('btn-success').removeAttr('disabled');
-  //         $('#step-2').removeAttr('hidden');
-  //         $('#step-1').attr('hidden', true);
-  //         $('#btn-add').text('Submit');
-  //       }
-  //       else
-  //       {
-  //         $('[href="#step-2"]').removeClass('btn-success').addClass('btn-default').attr('disabled', true);
-  //       }
-
-  //       //Sum each price
-  //       $('[name="price[]"]').on('change input',function(){
-  //         $('[name="price[]"]').each(function(){
-  //           alert($(this).val());
-  //           $('.service-subTotal').empty().append($(this).val());
-  //           $('.service-total').empty().append($(this).val());
-  //         });
-  //       });
-
-  //       $('[name="price[]"]').inputmask({
-  //           mask:'9',repeat:7,placeholder:"0000000",numericInput: true,rightAlign: true
-  //       });
-  //       $('#tax').inputmask({
-  //           mask:'9',repeat:4,placeholder:"0000000",numericInput: true,rightAlign: true
-  //       });
-  //       $('#discount').inputmask({
-  //           mask:'9',repeat:4,placeholder:"0000000",numericInput: true,rightAlign: true
-  //       });
-  //   }
-        
-  // });
-
+  //Remove error label when patient dropdown has value
   $('#patient').on('change', function(e){
     $("[aria-labelledby='select2-patient-container']").removeAttr('style');
     $('#patient-error').remove();
+    $('#btn-add').text('Next');
+    $('.card-footer').show();
   });
 
+  //Call serviceischecked function when service is checked
   $('[name="services[]"]').change(function(){
+    $('#btn-add').text('Next');
+    $('.card-footer').show();
     serviceischecked();
   });
 
-  
+  // Add Services with Stepper
   $('#btn-add').click(function(e){
     e.preventDefault();
 
@@ -344,13 +242,7 @@ $(document).ready(function () {
                                   timer: 2500
                                 });   
 
-                  }   
-                  else
-                  {   
-                      $('.div-services').addClass('is-invalid text-danger');
-                      $('.div-services').after('<span id="service-error" class="error invalid-feedback">'+ response.services +'</span>');
-                  }
-                  
+                  }                     
               },
               error: function(response){
                   console.log(response);
@@ -362,13 +254,25 @@ $(document).ready(function () {
         $('#patient-name').empty().append($("#patient :selected").data('patient-name'));
         $('#document-date').empty().append($('#docdate').val());
         $('#table-services tbody').empty();
+        $('.service-grand-total').empty().append("0.00");
 
+        //Append table all selected services on billing stepper
         $('input:checkbox').each(function () {
             var services = (this.checked ? $(this).data('service') : "");
+            var service_id = (this.checked ? $(this).data('service-id') : "");
 
             if(services)
             {
-              $('#table-services tbody').append('<tr><td>'+ services +'</td><td><input class="form-control input-small affect-total" type="text" name="price[]" id="price" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask></td></tr>');
+              $('#table-services tbody').append('<tr>'+
+                                                    '<td>'+ services +'</td><td><input class="form-control input-small affect-total" type="text" name="price[]" id="price-serviceid-'+service_id+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="'+ services +'" data-serviceid="'+ service_id +'"></td>'+
+                                                    '<td>'+
+                                                         '<div class="input-group">'+
+                                                            '<input class="form-control input-small affect-total" type="text" name="discount[]" id="discount-serviceid-'+service_id+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask disabled data-service="'+ services +'" data-serviceid="'+ service_id +'">'+
+                                                            '<div class="input-group-prepend"><span class="input-group-text">%</span></div>'+
+                                                         '</div>'+
+                                                    '</td>'+   
+                                                    '<td><span class="service-total-amount" id="total-serviceid-'+service_id+'">0.00</span></td>'+
+                                                '</tr>');
             }
             
         });
@@ -390,59 +294,113 @@ $(document).ready(function () {
         var sum;
         var price;
         var total;
-        $('input[name="price[]"]').on('keyup',function(){
-          sum = 0.00;
-          $('input[name="price[]"]:visible').each(function(){
-            
-            if($(this).val())
-            {
-              price = parseFloat($(this).val()).toFixed(2);
-            }
-            else
-            {
-              price = parseFloat(0.00).toFixed(2);
-            }
 
-            sum = parseFloat(sum)  + parseFloat(price);
-            
-            //disable/enable discount textbox
-            if(sum > 0){
-              $('#discount').removeAttr('disabled');
-            }
-            else
-            {
-              $('#discount').attr('disabled', true);
-            }
+        $('#table-services').on('keyup', 'tbody td input[name="price[]"]', function(e){
+          // alert($(this).closest('td').parent()[0].sectionRowIndex);
+          var service = $(this).data('service');
+          var service_id = $(this).data('serviceid');
+          var price_per_service;
+          var discount_per_service;
 
-          });
-          // alert(sum);
-          $('.service-subTotal').empty().append(parseFloat(sum).toFixed(2));
-          $('.service-total').empty().append(parseFloat(sum).toFixed(2));
-        });
-
-        $('#discount').on('keyup',function(){
-          discount = parseFloat($(this).val()).toFixed(2) / 100;
-          discount_amount = parseFloat(sum) * parseFloat(discount);
-          total = parseFloat(sum) - parseFloat(discount_amount);
-
-          //if discount is null then append original amount
+          //if price has value
           if($(this).val())
           {
-            $('.service-total').empty().append(parseFloat(total).toFixed(2));
+            price_per_service = parseFloat($(this).val()).toFixed(2);
           }
           else
           {
-            $('.service-total').empty().append(parseFloat(sum).toFixed(2));
+            price_per_service = 0;
+          }
+
+          //if discount has value
+          if($('#discount-serviceid-'+ service_id).val())
+          {
+            discount_per_service = parseFloat($('#discount-serviceid-'+ service_id).val()).toFixed(2) / 100;
+          }
+          else
+          {
+            discount_per_service = 0.00;
           }
           
-          // alert(discount);
+          var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
+          var total = parseFloat(price_per_service) - parseFloat(discount_amount);
+
+          
+          //disable/enable discount textbox
+          if(price_per_service > 0){
+            $('#discount-serviceid-'+ service_id).removeAttr('disabled');
+          }
+          else
+          {
+            $('#discount-serviceid-'+ service_id).attr('disabled', true);
+          }
+
+          //if price is not null then append total amount
+          if($(this).val())
+          {
+            $('#total-serviceid-'+service_id).empty().append(parseFloat(total).toFixed(2));
+          }
+          else
+          {
+            $('#total-serviceid-'+service_id).empty().append(parseFloat(total).toFixed(2));
+          }
+
+          //call function getGrandTotal
+          getGrandTotal();
+          
+        });
+
+
+        $('#table-services').on('keyup', 'tbody td input[name="discount[]"]', function(e){
+          var service = $(this).data('service');
+          var service_id = $(this).data('serviceid');
+          var price_per_service = parseFloat($('#price-serviceid-'+service_id).val()).toFixed(2);
+          var discount_per_service = parseFloat($(this).val()).toFixed(2) / 100;
+
+          //if discount has value
+          if($(this).val())
+          {
+            discount_per_service = parseFloat($(this).val()).toFixed(2) / 100;
+          }
+          else
+          {
+            discount_per_service = 0.00;
+          }
+
+          var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
+          var total = parseFloat(price_per_service) - parseFloat(discount_amount);
+
+          //if discount is null then append total amount
+          if($(this).val())
+          {
+            $('#total-serviceid-'+service_id).empty().append(parseFloat(total).toFixed(2));
+          }
+          else
+          {
+            $('#total-serviceid-'+service_id).empty().append(parseFloat(total).toFixed(2));
+          }
+          
+          //call function getGrandTotal
+          getGrandTotal();
+
         });
 
         $('[name="price[]"]').inputmask('decimal', {
-          rightAlign: true
+          rightAlign: true,
+          digits:2,
         });
         $('#tax').inputmask('decimal', {
-          rightAlign: true
+          rightAlign: true,
+          integerDigits:3,
+          digits:2,
+          allowMinus:false
+        });
+        $('[name="discount[]"]').inputmask('decimal', {
+          rightAlign: true,
+          integerDigits:3,
+          digits:2,
+          allowMinus:false
+        
         });
         $('#discount').inputmask('decimal', {
           rightAlign: true
@@ -450,18 +408,12 @@ $(document).ready(function () {
         });
     }
 
-
-
-
   });
 
   $('[data-mask]').inputmask();
   $('.select2').select2();
 
-  $('#patient').on('change', function(e){
-    $('#btn-add').attr('disabled', false);
-  });
-
+  //append error span for services
   function serviceischecked(){
     
     if ($('[name="services[]"]').is(':checked')) {
@@ -475,12 +427,28 @@ $(document).ready(function () {
           $('.div-services').addClass('is-invalid text-danger');
           $('.div-services').after('<span id="service-error" class="invalid-feedback">Please select at least 1 service</span>');
       }
-      else
-      {
-        $('[href="#step-2"]').removeClass('btn-success').addClass('btn-default').attr('disabled', true);
-      }
-     }
+
+      $('[href="#step-2"]').removeClass('btn-success').addClass('btn-default').attr('disabled', true);
+      
+    }
     
+  }
+
+
+  function getGrandTotal()
+  {
+    var sum = 0.00;
+    var price = 0.00;
+    
+    //loop then sum each service total amount
+    $('.service-total-amount').each(function(){
+        price = parseFloat($(this).text()).toFixed(2);
+        sum = parseFloat(sum)  + parseFloat(price);   
+    });
+
+    //append Grand Total
+    $('.service-grand-total').empty().append(parseFloat(sum).toFixed(2));
+
   }
 
 });
