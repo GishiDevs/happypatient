@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PatientService extends Model
 {
-    protected $fillable = ['patientid', 'patientname', 'docdate'];
+    protected $fillable = ['patientid', 'patientname', 'docdate', 'or_number', 'note', 'grand_total'];
 
     public function PatientServiceItems()
     {

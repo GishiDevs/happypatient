@@ -18,6 +18,9 @@ class CreatePatientServicesTable extends Migration
             $table->integer('patientid');
             $table->string('patientname');
             $table->date('docdate');
+            $table->string('or_number')->nullable();
+            $table->string('note')->nullable();
+            $table->decimal('grand_total', 8, 2);
             $table->timestamps();
         });
     }

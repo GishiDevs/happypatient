@@ -58,7 +58,7 @@
                           @endforeach
                         </select>
                       </div>
-                      <div class="form-group col-md-4">
+                      <div class="form-group col-md-4 div-docdate">
                         <label for="selectPatient">Document Date</label>
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -109,7 +109,7 @@
                         <div class="form-group col-md-2">
                         <label for="selectPatient">Official Receipt No.</label>
                         <div class="input-group">
-                          <input type="text" class="form-control" name="or" id="or">
+                          <input type="text" class="form-control" name="or_number" id="or_number">
                         </div>
                       </div>						
                       </div> 
@@ -137,7 +137,7 @@
                       <div class="form-group col-md-7">
                         <label for="selectPatient">Notes</label>
                         <div class="input-group">
-                          <textarea class="form-control" id="receiveTab_notes" style="resize: none;"></textarea>
+                          <textarea class="form-control" name="note" id="note" style="resize: none;"></textarea>
                         </div>
                       </div>
                   </div>							
@@ -207,10 +207,38 @@ $(document).ready(function () {
     serviceischecked();
   });
 
+  //document date text change
+  $('#docdate').keyup(function(e){
+    $('#btn-add').text('Next');
+    $('.card-footer').show();
+
+    var docdate = new Date($(this).val());
+    
+    
+    //Valide Document Date
+    if(docdate == 'Invalid Date')
+    { 
+      $('#docdate-error').remove();
+      $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
+      $('[href="#step-2"]').removeClass('btn-success').addClass('btn-default').attr('disabled', true);
+    }
+    else
+    {
+      $('#docdate-error').remove();
+    }
+    
+
+  });
+
+
   // Add Services with Stepper
   $('#btn-add').click(function(e){
-    e.preventDefault();
 
+    var docdate = new Date($('#docdate').val());
+
+    e.preventDefault();
+    
+    //patient validation error
     if(!$('#patient').val())
     { 
       $('#patient-error').remove();
@@ -219,11 +247,21 @@ $(document).ready(function () {
     }
     
     serviceischecked();
-    
+
+    //Document Date validation error
+    if(docdate == 'Invalid Date')
+    { 
+      $('#docdate-error').remove();
+      $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
+      $('[href="#step-2"]').removeClass('btn-success').addClass('btn-default').attr('disabled', true);
+    }
+        
     if($('#btn-add').text() == 'Submit')
     {
           var data = $('#patientserviceform').serializeArray();
           data.push({name: "_token", value: "{{ csrf_token() }}"});
+          data.push({name: "grand_total", value: $('.service-grand-total').text()});
+
           $.ajax({
               url: "{{ route('patientservice.store') }}",
               method: "POST",
@@ -240,7 +278,13 @@ $(document).ready(function () {
                                   title: 'Record has successfully added',
                                   showConfirmButton: false,
                                   timer: 2500
-                                });   
+                                });  
+
+                      $('.service-total-amount').each(function () { 
+                        $(this).empty().append("0.00");
+                      });
+
+                      $('.service-grand-total').empty().append('0.00');
 
                   }                     
               },
@@ -250,34 +294,60 @@ $(document).ready(function () {
           });
     }
     else
-    {
+    {   
         $('#patient-name').empty().append($("#patient :selected").data('patient-name'));
         $('#document-date').empty().append($('#docdate').val());
-        $('#table-services tbody').empty();
-        $('.service-grand-total').empty().append("0.00");
+        // $('#table-services tbody').empty();
 
         //Append table all selected services on billing stepper
         $('input:checkbox').each(function () {
-            var services = (this.checked ? $(this).data('service') : "");
-            var service_id = (this.checked ? $(this).data('service-id') : "");
+            var checked_services = (this.checked ? $(this).data('service') : "");
+            var checked_service_id = (this.checked ? $(this).data('service-id') : "");
+            var services= $(this).data('service');
+            var service_id= $(this).data('service-id');
+            var price_per_service = parseFloat($('#price-serviceid-'+service_id).val()).toFixed(2);
 
-            if(services)
+            //if price has value
+            if($.isNumeric(price_per_service))
             {
-              $('#table-services tbody').append('<tr>'+
+              price_per_service = parseFloat($('#price-serviceid-'+service_id).val()).toFixed(2);
+            }
+            else
+            {
+              price_per_service = 0;
+            }
+
+            if(services == checked_services)
+            {
+              if(price_per_service == 0)
+              { 
+                $('#row-serviceid-'+service_id).remove();
+
+                $('#table-services tbody').append('<tr id="row-serviceid-'+service_id+'">'+
                                                     '<td>'+ services +'</td><td><input class="form-control input-small affect-total" type="text" name="price[]" id="price-serviceid-'+service_id+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="'+ services +'" data-serviceid="'+ service_id +'"></td>'+
                                                     '<td>'+
                                                          '<div class="input-group">'+
                                                             '<input class="form-control input-small affect-total" type="text" name="discount[]" id="discount-serviceid-'+service_id+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask disabled data-service="'+ services +'" data-serviceid="'+ service_id +'">'+
+                                                            '<input type="text" name="service_id[]" value='+service_id+' hidden>'+
                                                             '<div class="input-group-prepend"><span class="input-group-text">%</span></div>'+
                                                          '</div>'+
                                                     '</td>'+   
                                                     '<td><span class="service-total-amount" id="total-serviceid-'+service_id+'">0.00</span></td>'+
                                                 '</tr>');
-            }
-            
+              }
+              
+            }  
+            else
+            {
+              $('#row-serviceid-'+service_id).remove();
+            }          
         });
 
-        if($('[name="services[]"]').is(':checked') && $('#patient').val())
+        //call getGrandTotal function to sum each row total
+        getGrandTotal();
+        
+        //validate all fields on step 1
+        if($('[name="services[]"]').is(':checked') && $('#patient').val() && docdate != "Invalid Date")
         {
           $('[href="#step-2"]').removeClass('btn-default').addClass('btn-success').removeAttr('disabled');
           $('#step-2').removeAttr('hidden');
@@ -388,6 +458,7 @@ $(document).ready(function () {
         $('[name="price[]"]').inputmask('decimal', {
           rightAlign: true,
           digits:2,
+          allowMinus:false
         });
         $('#tax').inputmask('decimal', {
           rightAlign: true,
@@ -442,7 +513,7 @@ $(document).ready(function () {
     
     //loop then sum each service total amount
     $('.service-total-amount').each(function(){
-        price = parseFloat($(this).text()).toFixed(2);
+        price = parseFloat($(this).text()).toFixed(2);  
         sum = parseFloat(sum)  + parseFloat(price);   
     });
 

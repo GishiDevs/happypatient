@@ -109,7 +109,7 @@ class PatientServiceController extends Controller
 
     public function store(Request $request)
     {   
-        
+        // return $request;
         $rules = [
             'patient.required' => 'Please select patient',
             'docdate.required' => 'Please enter document date',
@@ -134,17 +134,30 @@ class PatientServiceController extends Controller
         $patientservice->patientid = $request->get('patient');
         $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
+        $patientservice->or_number = $request->get('patient');
+        $patientservice->note = $request->get('note');
+        $patientservice->grand_total = $request->get('grand_total');
         // $patientservice->save();
 
-        $ctr = count($request->get('services'));
-        $services = $request->get('services');
+        $ctr = count($request->get('service_id'));
+        $service_id = $request->get('service_id');
+        $price = $request->get('price');
+        $discount = $request->get('discount');
+
 
         for($x=0; $x < $ctr; $x++)
-        {
+        {   
+            $discounted_amt = ($price[$x] * ($discount[$x] / 100));
+            $total_amount = $price[$x] - $discounted_amt;
+
             $serviceitem = new PatientServiceItem();
             $serviceitem->psid = $patientservice->id;
-            $serviceitem->serviceid = $services[$x];
+            $serviceitem->serviceid = $service_id[$x];
             $serviceitem->status = "pending";
+            $serviceitem->price = $price[$x];
+            $serviceitem->discount = $discount[$x];
+            $serviceitem->total_amount = $service_id[$x];
+
             // $serviceitem->save();
         }
 
