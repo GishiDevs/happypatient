@@ -139,8 +139,8 @@ class PatientServiceController extends Controller
         $patientservice->grand_total = $request->get('grand_total');
         // $patientservice->save();
 
-        $ctr = count($request->get('service_id'));
-        $service_id = $request->get('service_id');
+        $ctr = count($request->get('services'));
+        $service_id = $request->get('services');
         $price = $request->get('price');
         $discount = $request->get('discount');
 
