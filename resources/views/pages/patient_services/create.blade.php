@@ -85,7 +85,7 @@
                         </tfoot>
                       </table>
                     </div>
-                    <div class="form-group col-md-7">
+                    <div class="form-group col-md-4">
                       <label for="Notes">Notes</label>
                       <div class="input-group">
                         <textarea class="form-control" name="note" id="note" style="resize: none;"></textarea>
@@ -97,7 +97,7 @@
               </form>
             </div>
             <div class="card-footer">
-              <button type="submit" id="btn-add" class="btn btn-primary">Next</button>
+              <button type="submit" id="btn-add" class="btn btn-primary">Submit</button>
             </div>
             <!-- /.card -->
           </div>
@@ -143,11 +143,20 @@ $(document).ready(function () {
   //add new line item on services table
   $('#add-item').click(function(e){
     e.preventDefault();
-    
+    var service_object = [{}];
+    $('#table-services tbody tr td').find('.span-service').each(function(){
+      var service_id = $(this).data('service_id');
+      var service = $(this).text();
+      service_object.push({service_id, service});
+    });
+
+    service_object.forEach(function (item, key) {
+      // console.log(key);
+      return 'selectasda'
+    });
+
     var x = linenum - 1
 
-    //count table tr length - default(2) 1 for header and 1 for footer
-    var tr_length = $('#table-services tr').length;
 
   
       $('#table-services tbody').append('<tr id="row-'+linenum+'">'+
@@ -178,13 +187,34 @@ $(document).ready(function () {
         
     $('.select2').select2();
 
+    //find services on table then remove them from the select option if exists
+    $('#table-services tbody tr td').find('.span-service').each(function(){
+      var service = $(this).text();
+      $('select').find('[data-service="'+service+'"]').remove();
+      
+    });
+
+    //count service select option
+    var ctr = 0;
+    $('[name="service"]').find('option').each(function(){
+        ctr++;
+    });
+
+
+    //disable add-item button by default
     $('#add-item').addClass('disabled');
+
+    $('#service-table-error').remove();
 
     $('#table-services').on('change', 'tbody td [name="service"]', function(e){ 
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var service = $(this).find(':selected').data('service');
-      $('.div-service').after('<span id="span-service-linenum-'+linenum+'" data-service="'+service+'">'+service+'</span>')
+      var service_id = $(this).val();
+      
+      $('#services-linenum-'+linenum).val(service_id);
+
+      $('.div-service').after('<span class="span-service" id="span-service-linenum-'+linenum+'" data-service="'+service+'" data-service_id="'+service_id+'">'+service+'</span>')
       $('.div-service').remove();
       if($(this).val())
       {
@@ -192,6 +222,12 @@ $(document).ready(function () {
         $('#price-linenum-'+ linenum).removeAttr('disabled');
       }
 
+      
+      //if service select option has no more item
+      if(ctr == 2)
+      {
+        $('#add-item').addClass('disabled');    
+      }
     });
     
     //service price text change
@@ -291,26 +327,28 @@ $(document).ready(function () {
     //delete row
     $('#table-services').on('click', 'tbody td #delete-item', function(e){
       e.preventDefault();
+
       var linenum = $(this).data('linenum');
       var service = $('#span-service-linenum-'+linenum).text();
       var hasDropDown = false;
+      var tr_length = $('#table-services tbody tr').length;
+
+      //delete row
+      $('#row-'+linenum).remove();   
 
       //scan if there is a dropdown on a table
       $('#table-services tbody tr td').find('select').each(function(){
          //$(this)   //select box of same row
          hasDropDown = true
       });
-
+      // alert(hasDropDown);
       if(hasDropDown == false)
       {
         $('#add-item').removeClass('disabled');
       }
       
-      $('#row-'+linenum).remove();
       //call function getGrandTotal
       getGrandTotal();
-
-
 
     });
 
@@ -370,6 +408,15 @@ $(document).ready(function () {
       $('#docdate-error').remove();
       $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
     }
+
+    //count table tbody rows
+    var tr_length = $('#table-services tbody tr').length;
+
+    if(tr_length == 0)
+    {
+      $('#service-table-error').remove();
+      $('.table-scrollable').append('<span id="service-table-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please add at least 1 service on the table</span>');
+    }
         
     var data = $('#patientserviceform').serializeArray();
     data.push({name: "_token", value: "{{ csrf_token() }}"});
@@ -399,7 +446,9 @@ $(document).ready(function () {
 
               $('.service-grand-total').empty().append('0.00');
 
-            }                     
+              $('#table-services tbody').empty();
+
+            }                 
         },
         error: function(response){
           console.log(response);

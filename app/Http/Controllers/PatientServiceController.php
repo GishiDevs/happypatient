@@ -134,20 +134,29 @@ class PatientServiceController extends Controller
         $patientservice->patientid = $request->get('patient');
         $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
-        $patientservice->or_number = $request->get('patient');
+        $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->grand_total = $request->get('grand_total');
-        // $patientservice->save();
+        $patientservice->save();
 
         $ctr = count($request->get('services'));
         $service_id = $request->get('services');
         $price = $request->get('price');
         $discount = $request->get('discount');
-
-
+        $service_discount = 0.00;
+        // return $discount[];
         for($x=0; $x < $ctr; $x++)
         {   
-            $discounted_amt = ($price[$x] * ($discount[$x] / 100));
+            if($discount[$x])
+            {
+                $service_discount = $discount[$x];
+            }
+            else
+            {
+                $service_discount = 0.00;
+            }
+
+            $discounted_amt = ($price[$x] * ($service_discount / 100));
             $total_amount = $price[$x] - $discounted_amt;
 
             $serviceitem = new PatientServiceItem();
@@ -155,10 +164,10 @@ class PatientServiceController extends Controller
             $serviceitem->serviceid = $service_id[$x];
             $serviceitem->status = "pending";
             $serviceitem->price = $price[$x];
-            $serviceitem->discount = $discount[$x];
-            $serviceitem->total_amount = $service_id[$x];
+            $serviceitem->discount = $service_discount;
+            $serviceitem->total_amount = $total_amount;
 
-            // $serviceitem->save();
+            $serviceitem->save();
         }
 
         return response()->json(['success' => 'Record has successfully added'], 200);
