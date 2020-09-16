@@ -143,10 +143,21 @@ class PatientServiceController extends Controller
         $service_id = $request->get('services');
         $price = $request->get('price');
         $discount = $request->get('discount');
+        $service_price = 0.00;
         $service_discount = 0.00;
         // return $discount[];
         for($x=0; $x < $ctr; $x++)
         {   
+
+            if($price[$x])
+            {
+                $service_price = $price[$x];
+            }
+            else
+            {
+                $service_price = 0.00;
+            }
+
             if($discount[$x])
             {
                 $service_discount = $discount[$x];
@@ -163,7 +174,7 @@ class PatientServiceController extends Controller
             $serviceitem->psid = $patientservice->id;
             $serviceitem->serviceid = $service_id[$x];
             $serviceitem->status = "pending";
-            $serviceitem->price = $price[$x];
+            $serviceitem->price = $service_price;
             $serviceitem->discount = $service_discount;
             $serviceitem->total_amount = $total_amount;
 
