@@ -40,9 +40,11 @@
                       <th width="30px" class="no-sort">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
+                      <th>OR Number</th>
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th width="50px">Status</th>
+                      <th width="50px">Cancelled</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -50,9 +52,11 @@
                       <th>#</th>
                       <th>ID</th>
                       <th>Document Date</th>
+                      <th>OR Number</th>
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th>Status</th>
+                      <th>Cancelled</th>
                     </tr>
                   </tfoot>
                 </table>
@@ -87,9 +91,11 @@
                     { "data": "DT_RowIndex"},
                     { "data": "id"},
 		    		        { "data": "docdate"},
+                    { "data": "or_number"},
 		    		        { "data": "patientname"},
 		    		        { "data": "service"},
-                    { "data": "status"}
+                    { "data": "status"},
+                    { "data": "cancelled"}
 		    ],
         "order": [ 1, "asc" ],
         "columnDefs": [{
@@ -97,25 +103,25 @@
                           "orderable": false
                         },
                         {
-                        "targets": 5,
-                        "data": "patientname",
-                        "render": function ( data ) {
+                          "targets": 6,
+                          // "data": "status",
+                          "render": function ( data ) {
 
-                            if(data == 'closed')
-                            {
-                              return '<span class="badge bg-success">'+data+'</span>';
-                            }
-                            else if(data == 'pending')
-                            {
-                              return '<span class="badge bg-warning">'+data+'</span>';
-                            }
-                            else if(data == 'cancelled')
-                            {
-                              return '<span class="badge bg-danger">'+data+'</span>';
-                            }
-                            
-                        }
-        }]       
+                              if(data == 'closed')
+                              {
+                                return '<span class="badge bg-success">'+data+'</span>';
+                              }
+                              else if(data == 'pending')
+                              {
+                                return '<span class="badge bg-warning">'+data+'</span>';
+                              }
+                              else if(data == 'cancelled')
+                              {
+                                return '<span class="badge bg-danger">'+data+'</span>';
+                              }
+                              
+                          }
+                        }],
     });
 
 	});

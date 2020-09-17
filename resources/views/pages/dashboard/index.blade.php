@@ -37,7 +37,7 @@
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th width="50px">Status</th>
-                      <th width="210px" class="no-sort">Actions</th>
+                      <th width="140px" class="no-sort">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>

@@ -120,16 +120,26 @@ Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_ser
         'uses' => 'PatientServiceController@store',
         'as' => 'patientservice.store',
     ]);
+    Route::get('/edit/{id}', [
+        'uses' => 'PatientServiceController@edit',
+        'as' => 'patientservice.edit',
+    ]);
+    Route::post('/update/{id}', [
+        'uses' => 'PatientServiceController@update',
+        'as' => 'patientservice.update',
+    ]);
+    Route::post('/cancel/{id}', [
+        'uses' => 'PatientServiceController@cancel',
+        'as' => 'patientservice.cancel',
+    ]);
     Route::get('/services-list-per-user', [
         'uses' => 'PatientServiceController@servicesperuser',
         'as' => 'patientservice.servicesperuser',
     ]);
-
     Route::get('/services-list', [
         'uses' => 'PatientServiceController@serviceslist',
         'as' => 'patientservice.serviceslist',
     ]);
-
 
 });
 
@@ -244,5 +254,9 @@ Route::group(['prefix' => 'diagnosis', 'middleware' => ['auth', 'diagnosis']], f
         'as' => 'diagnosis.create',
     ]);
 
+    Route::post('/store', [
+        'uses' => 'DiagnosisController@store',
+        'as' => 'diagnosis.store',
+    ]);
 
 });

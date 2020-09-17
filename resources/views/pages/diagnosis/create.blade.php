@@ -26,38 +26,32 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <!-- jquery validation -->
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Add Diagnosis </h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form role="form" id="diagnosisform">
-                <div class="card-body">
-                  <!-- <div class="row">
-                    <div class="form-group col-md-4">
-                      <label for="lastname">Lastname</label> <span class="text-danger">*</span>
-                      <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Enter lastname">
-                    </div>
-                    <div class="form-group col-md-4">
-                      <label for="firstname">Firstname</label> <span class="text-danger">*</span>
-                      <input type="text" class="form-control" name="firstname" id="firstname" placeholder="Enter firstname">
-                    </div>
-                    <div class="form-group col-md-4">
-                      <label for="middlename">Middlename</label>
-                      <input type="text" class="form-control" name="middlename" id="middlename" placeholder="Enter middlename">
-                    </div>
-                  </div> -->
+            <form action="{{ route('diagnosis.store') }}" method="POST">
+            @csrf
+              <!-- jquery validation -->
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Add Diagnosis </h3>
                 </div>
-                <!-- /.card-body -->
+                <!-- /.card-header -->
+                <div class="card-body pad col-md-6">
+                  <div class="mb-3"> 
+                    <textarea name="diagnosis" class="textarea" placeholder="Place some text here"
+                                style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                  </div>
+                  <div>
+                  @if($diagnosis)
+                    {!! $diagnosis !!}
+                  @endif
+                  </div>
+                </div>
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="submit" id="btn-add" class="btn btn-primary">Submit</button>
                 </div>
-              </form>
-            </div>
+              </div>
+            </form>
             <!-- /.card -->
-            </div>
+          </div>
           <!--/.col (left) -->
           <!-- right column -->
           <div class="col-md-6">
@@ -75,7 +69,10 @@
 
 $(document).ready(function () {
 
-  
+  $(function () {
+    // Summernote
+    $('.textarea').summernote()
+  })
 
 });
 </script>

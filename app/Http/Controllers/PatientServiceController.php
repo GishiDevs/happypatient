@@ -27,12 +27,18 @@ class PatientServiceController extends Controller
         $patientservices =  DB::table('patient_services')
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                  ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
+                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.or_number', 'patient_services.patientname', 'services.service', 'patient_service_items.status', 'patient_services.cancelled')
                  ->orderBy('patient_services.id', 'Asc')
                  ->get();
 
         return DataTables::of($patientservices)
                      ->addIndexColumn()
+                     ->addColumn('id',function($patientservices){
+ 
+                        return '<a href="'.route('patientservice.edit',$patientservices->id).'">'.$patientservices->id.'</a>';
+   
+                     })
+                     ->rawColumns(['id'])
                      ->make();
     }
 
@@ -76,6 +82,7 @@ class PatientServiceController extends Controller
                  ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
+                 ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_service_items.status', '=', 'pending')
                  ->orderBy('patient_services.docdate', 'Asc')
                  ->orderBy('services.service', 'Asc')
@@ -88,8 +95,8 @@ class PatientServiceController extends Controller
    
                 })
                 ->addcolumn('action',function($patientservices){
-                    return '<a href="'.route("diagnosis.create",$patientservices->ps_items_id).'" class="btn btn-sm btn-success" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Create Diagnosis</a>
-                            <a href="" class="btn btn-sm btn-danger" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="cancel" id="btn-cancel-diagnosis"><i class="fa fa-times"></i> Cancel</a>';
+                    return '<a href="'.route("diagnosis.create",$patientservices->ps_items_id).'" class="btn btn-sm btn-success" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Create Diagnosis</a>';
+                            // <a href="" class="btn btn-sm btn-danger" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="cancel" id="btn-cancel-diagnosis"><i class="fa fa-times"></i> Cancel</a>';
                 })
                 ->addIndexColumn()
                 ->rawColumns(['status','action'])
@@ -137,6 +144,7 @@ class PatientServiceController extends Controller
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->grand_total = $request->get('grand_total');
+        $patientservice->cancelled = 'N';
         $patientservice->save();
 
         $ctr = count($request->get('services'));
@@ -190,14 +198,40 @@ class PatientServiceController extends Controller
         //
     }
 
-    public function edit(PatientService $patientService)
+    public function edit($psid)
+    {   
+        $patientservice = PatientService::find($psid);
+        $patientserviceitems =  DB::table('patient_service_items')
+                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                 ->select('services.service', 'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount')
+                 ->where('patient_service_items.psid', '=', $psid)
+                 ->orderBy('patient_service_items.id', 'Asc')
+                 ->get();
+
+        return view('pages.patient_services.edit', compact('patientservice', 'patientserviceitems'));
+    }   
+
+    public function update(Request $request, $psid)
     {
-        //
+        $patientservice = PatientService::find($psid);
+        $patientservice->or_number = $request->get('or_number');
+        $patientservice->note = $request->get('note');
+        $patientservice->save();
+
+        return redirect('patientservice/index');
+
     }
 
-    public function update(Request $request, PatientService $patientService)
+    public function cancel(Request $request, $psid)
     {
-        //
+        $patientservice = PatientService::find($psid);
+        $patientservice->or_number = $request->get('or_number');
+        $patientservice->note = $request->get('note');
+        $patientservice->cancelled = 'Y';
+        $patientservice->save();
+
+        return redirect('patientservice/index');
+
     }
 
     public function destroy(PatientService $patientService)

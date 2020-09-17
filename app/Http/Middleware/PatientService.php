@@ -39,6 +39,35 @@ class PatientService
                 return response()->json("You don't have permission!", 200);
             }
         }
+
+        if($request->is('patientservice/edit/*') || $request->is('patientservice/update/*'))
+        {   
+            if(Auth::user()->can('patientservices-edit'))
+            {
+                return $next($request);
+            }
+            else
+            {
+                return response()->json("You don't have permission!", 200);
+            }
+
+        }
+
+        if($request->is('patientservice/cancel/*'))
+        {   
+            if(Auth::user()->can('patientservices-cancel'))
+            {
+                return $next($request);
+            }
+            else
+            {
+                return response()->json("You don't have permission!", 200);
+            }
+
+        }
+
+
+
         if($request->is('patientservice/services-list-per-user') || $request->is('/'))
         {   
 

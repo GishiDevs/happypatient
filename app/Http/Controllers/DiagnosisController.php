@@ -107,8 +107,9 @@ class DiagnosisController extends Controller
 
  
     public function store(Request $request)
-    {
-        //
+    {   
+        $diagnosis = $request->get('diagnosis');
+        return view('pages.diagnosis.create', compact('diagnosis'));
     }
 
  

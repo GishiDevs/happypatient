@@ -16,7 +16,7 @@ class Diagnosis
      */
     public function handle($request, Closure $next)
     {   
-        if($request->is('diagnosis/create/*')){
+        if($request->is('diagnosis/create/*') || $request->is('diagnosis/store')){
             if(Auth::user()->can('patientservices-list-ultrasound') || Auth::user()->can('patientservices-list-ecg') || Auth::user()->can('patientservices-list-checkup') || Auth::user()->can('patientservices-list-laboratory') || Auth::user()->can('patientservices-list-physicaltherapy') || Auth::user()->can('patientservices-list-xray'))
             {   
                 return $next($request);

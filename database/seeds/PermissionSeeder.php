@@ -34,6 +34,8 @@ class PermissionSeeder extends Seeder
             'role-edit',
             'role-delete',
             'patientservices-create',
+            'patientservices-edit',
+            'patientservices-cancel',
             'patientservices-list',
             'patientservices-list-ultrasound',
             'patientservices-list-ecg',
