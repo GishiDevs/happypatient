@@ -61,6 +61,7 @@
                           <th width="20%">Price (PHP)</th>
                           <th width="15%">Discount</th>
                           <th width="15%">Total Amount (PHP)</th>
+                          <th width="5%">Status</th>
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
@@ -69,6 +70,15 @@
                           <td>{{ $services->price }}</td>
                           <td>{{ $services->discount }}</td>
                           <td>{{ $services->total_amount }}</td>
+                          <td>
+                              @if($services->status == 'diagnosed')
+                                <span class="badge bg-success">{{ $services->status }}</span>
+                              @elseif(data == 'pending')
+                                <span class="badge bg-success">{{ $services->status }}</span>
+                              @elseif(data == 'cancelled')
+                                <span class="badge bg-success">{{ $services->status }}</span>
+                              @endif
+                          </td>
                         </tr>
                         @endforeach									
                         </tbody>

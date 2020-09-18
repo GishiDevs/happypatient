@@ -25,20 +25,19 @@ class PatientServiceController extends Controller
     public function serviceslist()
     {
         $patientservices =  DB::table('patient_services')
-                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
-                 ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.or_number', 'patient_services.patientname', 'services.service', 'patient_service_items.status', 'patient_services.cancelled')
+                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number', 'patient_services.patientname', 'patient_services.cancelled')
                  ->orderBy('patient_services.id', 'Asc')
                  ->get();
 
         return DataTables::of($patientservices)
                      ->addIndexColumn()
-                     ->addColumn('id',function($patientservices){
+                     ->addColumn('action',function($patientservices){
  
-                        return '<a href="'.route('patientservice.edit',$patientservices->id).'">'.$patientservices->id.'</a>';
+                        // return '<a href="'.route('patientservice.edit',$patientservices->id).'">'.$patientservices->id.'</a>';
+                        return '<a href="'.route('patientservice.edit',$patientservices->id).'" class="btn btn-sm btn-info" data-psid="'.$patientservices->id.'" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
    
                      })
-                     ->rawColumns(['id'])
+                    //  ->rawColumns(['action'])
                      ->make();
     }
 
@@ -203,7 +202,7 @@ class PatientServiceController extends Controller
         $patientservice = PatientService::find($psid);
         $patientserviceitems =  DB::table('patient_service_items')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('services.service', 'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount')
+                 ->select('services.service', 'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount', 'patient_service_items.status')
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
                  ->get();

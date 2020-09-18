@@ -42,9 +42,8 @@
                       <th>Document Date</th>
                       <th>OR Number</th>
                       <th>Patient Name</th>
-                      <th>Service</th>
-                      <th width="50px">Status</th>
                       <th width="50px">Cancelled</th>
+                      <th width="70px" class="no-sort">Action</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -54,9 +53,8 @@
                       <th>Document Date</th>
                       <th>OR Number</th>
                       <th>Patient Name</th>
-                      <th>Service</th>
-                      <th>Status</th>
                       <th>Cancelled</th>
+                      <th>Action</th>
                     </tr>
                   </tfoot>
                 </table>
@@ -93,35 +91,35 @@
 		    		        { "data": "docdate"},
                     { "data": "or_number"},
 		    		        { "data": "patientname"},
-		    		        { "data": "service"},
-                    { "data": "status"},
-                    { "data": "cancelled"}
+                    { "data": "cancelled"},
+                    { "data": "action"}
 		    ],
         "order": [ 1, "asc" ],
         "columnDefs": [{
                           "targets": "no-sort",
                           "orderable": false
                         },
-                        {
-                          "targets": 6,
-                          // "data": "status",
-                          "render": function ( data ) {
+                        // {
+                        //   "targets": 6,
+                        //   // "data": "status",
+                        //   "render": function ( data ) {
 
-                              if(data == 'diagnosed')
-                              {
-                                return '<span class="badge bg-success">'+data+'</span>';
-                              }
-                              else if(data == 'pending')
-                              {
-                                return '<span class="badge bg-warning">'+data+'</span>';
-                              }
-                              else if(data == 'cancelled')
-                              {
-                                return '<span class="badge bg-danger">'+data+'</span>';
-                              }
+                        //       if(data == 'diagnosed')
+                        //       {
+                        //         return '<span class="badge bg-success">'+data+'</span>';
+                        //       }
+                        //       else if(data == 'pending')
+                        //       {
+                        //         return '<span class="badge bg-warning">'+data+'</span>';
+                        //       }
+                        //       else if(data == 'cancelled')
+                        //       {
+                        //         return '<span class="badge bg-danger">'+data+'</span>';
+                        //       }
                               
-                          }
-                        }],
+                        //   }
+                        // }
+                        ],
     });
 
 	});
