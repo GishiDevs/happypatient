@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\PatientServiceItem;
 use DB;
 use Auth;
+use Validator;
 
 class DiagnosisController extends Controller
 {
@@ -23,8 +24,13 @@ class DiagnosisController extends Controller
         $patient_service = DB::table('patients')
                                   ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
                                   ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                                  ->join('provinces', 'patients.province', '=', 'provinces.province_id')
+                                  ->join('cities', 'patients.city', '=', 'cities.city_id')
+                                  ->join('barangays', 'patients.barangay', '=', 'barangays.id')
                                   ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patients.civilstatus')
+                                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 
+                                                                          'patient_services.patientname', 'services.service', 'patients.civilstatus', 'patients.age', 'patients.gender',
+                                                                          'patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
@@ -105,11 +111,43 @@ class DiagnosisController extends Controller
         
     }
 
- 
-    public function store(Request $request)
+
+    public function store(Request $request, $ps_item_id)
     {   
-        $diagnosis = $request->get('diagnosis');
-        return view('pages.diagnosis.create', compact('diagnosis'));
+        // return $request;
+        $rules = [
+            'physician.required' => 'Please enter physician',
+            'bloodpressure.required' => 'Please enter blood pressure',
+            'title.required' => 'Please enter template title',
+            'content.required' => 'Please enter template content',
+            'content.max' => "Content is too long. Content must not contain images."
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'physician' => 'required',
+            'bloodpressure' => 'required',
+            'title' => 'required',
+            'content' => 'required|max:65535'
+        ], $rules);
+        
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 200);
+        }
+
+        $diagnosis = new Diagnosis();
+        $diagnosis->ps_items_id = $ps_item_id;
+        $diagnosis->physician = $request->get('physician');
+        $diagnosis->bloodpressure = $request->get('bloodpressure');
+        $diagnosis->title = $request->get('title');
+        $diagnosis->content = $request->get('content');
+        $diagnosis->save();
+
+        $ps_item = PatientServiceItem::findOrFail($ps_item_id);
+        $ps_item->status = 'diagnosed';
+        $ps_item->save();
+        
+        return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
  

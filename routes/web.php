@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', 'DashboardController@index')->middleware('auth');
+Route::get('/', 'DashboardController@index')->name('dashboard.index')->middleware('auth');
 Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
 Auth::routes();
 
@@ -254,7 +254,7 @@ Route::group(['prefix' => 'diagnosis', 'middleware' => ['auth', 'diagnosis']], f
         'as' => 'diagnosis.create',
     ]);
 
-    Route::post('/store', [
+    Route::post('/store/{id}', [
         'uses' => 'DiagnosisController@store',
         'as' => 'diagnosis.store',
     ]);

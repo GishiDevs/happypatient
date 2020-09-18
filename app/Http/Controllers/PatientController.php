@@ -140,6 +140,7 @@ class PatientController extends Controller
         $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('y-m-d');
         $patient->weight = $request->get('weight');
         $patient->gender = $request->get('gender');
+        $patient->age = $request->get('age');
         $patient->civilstatus = $request->get('civilstatus');
         $patient->landline = $request->get('landline');
         $patient->mobile = $request->get('mobile');
@@ -175,6 +176,7 @@ class PatientController extends Controller
             'lastname.required' => 'Please enter lastname',
             'firstname.required' => 'Please enter firstname',
             'birthdate.required' => 'Please enter birthdate',
+            'age.numeric' => 'Please enter a valid value',
             'weight.required' => 'Please enter weight',
             'weight.numeric' => 'Please enter a valid value',
             'weight.between' => 'Please enter a valid value',
@@ -189,6 +191,7 @@ class PatientController extends Controller
             'lastname' => 'required',
             'firstname' => 'required',
             'birthdate' => 'required',
+            'age' => 'sometimes|numeric',
             'weight' => 'required|numeric|between:0,999.99',
             'province' => 'required',
             'city' => 'required',
@@ -222,6 +225,7 @@ class PatientController extends Controller
         $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('y-m-d');
         $patient->weight = $request->get('weight');
         $patient->gender = $request->get('gender');
+        $patient->age = $request->get('age');
         $patient->civilstatus = $request->get('civilstatus');
         $patient->landline = $request->get('landline');
         $patient->mobile = $request->get('mobile');

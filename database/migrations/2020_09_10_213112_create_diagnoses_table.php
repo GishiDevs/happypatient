@@ -15,6 +15,11 @@ class CreateDiagnosesTable extends Migration
     {
         Schema::create('diagnoses', function (Blueprint $table) {
             $table->id();
+            $table->integer('ps_items_id');   
+            $table->string('physician'); 
+            $table->string('bloodpressure'); 
+            $table->string('title');
+            $table->text('content', 65,535);
             $table->timestamps();
         });
     }

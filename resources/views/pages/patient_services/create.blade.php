@@ -97,7 +97,7 @@
               </form>
             </div>
             <div class="card-footer">
-              <button type="submit" id="btn-add" class="btn btn-primary">Submit</button>
+              <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
             </div>
             <!-- /.card -->
           </div>
@@ -143,21 +143,8 @@ $(document).ready(function () {
   //add new line item on services table
   $('#add-item').click(function(e){
     e.preventDefault();
-    var service_object = [{}];
-    $('#table-services tbody tr td').find('.span-service').each(function(){
-      var service_id = $(this).data('service_id');
-      var service = $(this).text();
-      service_object.push({service_id, service});
-    });
-
-    service_object.forEach(function (item, key) {
-      // console.log(key);
-      return 'selectasda'
-    });
 
     var x = linenum - 1
-
-
   
       $('#table-services tbody').append('<tr id="row-'+linenum+'">'+
                                         '<td>'+

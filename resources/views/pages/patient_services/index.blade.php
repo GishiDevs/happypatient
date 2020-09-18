@@ -107,7 +107,7 @@
                           // "data": "status",
                           "render": function ( data ) {
 
-                              if(data == 'closed')
+                              if(data == 'diagnosed')
                               {
                                 return '<span class="badge bg-success">'+data+'</span>';
                               }

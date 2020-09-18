@@ -12,6 +12,7 @@ class Patient extends Model
                            'birthdate',
                            'weight',
                            'gender',
+                           'age',
                            'civilstatus',
                            'landline',
                            'mobile',
