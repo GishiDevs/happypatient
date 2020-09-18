@@ -117,7 +117,6 @@ class DiagnosisController extends Controller
         // return $request;
         $rules = [
             'physician.required' => 'Please enter physician',
-            'bloodpressure.required' => 'Please enter blood pressure',
             'title.required' => 'Please enter template title',
             'content.required' => 'Please enter template content',
             'content.max' => "Content is too long. Content must not contain images."
@@ -125,7 +124,6 @@ class DiagnosisController extends Controller
 
         $validator = Validator::make($request->all(),[
             'physician' => 'required',
-            'bloodpressure' => 'required',
             'title' => 'required',
             'content' => 'required|max:65535'
         ], $rules);
@@ -151,9 +149,9 @@ class DiagnosisController extends Controller
     }
 
  
-    public function show(Diagnosis $diagnosis)
+    public function print(Diagnosis $diagnosis)
     {
-        //
+        return view('pages.diagnosis.pdf');
     }
 
 

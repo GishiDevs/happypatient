@@ -109,6 +109,7 @@
                 <!-- /.card-header -->
                 <div class="card-footer">
                   <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
+                  <button type="submit" id="btn-add" class="btn btn-primary">Add & Print</button>
                 </div>
               </div>
             </form>
