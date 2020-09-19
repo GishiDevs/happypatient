@@ -16,15 +16,18 @@ class Diagnosis
      */
     public function handle($request, Closure $next)
     {   
-        if($request->is('diagnosis/create/*') || $request->is('diagnosis/store/*')){
+
+        if($request->is('diagnosis/create/*') || $request->is('diagnosis/store/*') || $request->is('diagnosis/print') || $request->is('diagnosis/edit/*') || $request->is('diagnosis/update/*')){
             if(Auth::user()->can('patientservices-list-ultrasound') || Auth::user()->can('patientservices-list-ecg') || Auth::user()->can('patientservices-list-checkup') || Auth::user()->can('patientservices-list-laboratory') || Auth::user()->can('patientservices-list-physicaltherapy') || Auth::user()->can('patientservices-list-xray'))
             {   
                 return $next($request);
             }
             else
-            {
-                return response()->json("You don't have permission!", 200);
+            {   
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
+        
     }
 }

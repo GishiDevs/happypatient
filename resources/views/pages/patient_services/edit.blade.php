@@ -57,11 +57,12 @@
                     <div class="table-scrollable col-md-10">
                       <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
-                          <th width="30%">Services</th>
-                          <th width="20%">Price (PHP)</th>
+                          <th width="20%">Services</th>
+                          <th width="15%">Price (PHP)</th>
                           <th width="15%">Discount</th>
                           <th width="15%">Total Amount (PHP)</th>
                           <th width="5%">Status</th>
+                          <th width="5%">Action</th>
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
@@ -73,10 +74,15 @@
                           <td>
                               @if($services->status == 'diagnosed')
                                 <span class="badge bg-success">{{ $services->status }}</span>
-                              @elseif(data == 'pending')
-                                <span class="badge bg-success">{{ $services->status }}</span>
-                              @elseif(data == 'cancelled')
-                                <span class="badge bg-success">{{ $services->status }}</span>
+                              @elseif($services->status == 'pending')
+                                <span class="badge bg-warning">{{ $services->status }}</span>
+                              @elseif($services->status == 'cancelled')
+                                <span class="badge bg-danger">{{ $services->status }}</span>
+                              @endif
+                          </td>
+                          <td>
+                              @if($services->status == 'diagnosed')
+                                <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" data-ps-items-id="{{ $services->id }}" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>
                               @endif
                           </td>
                         </tr>

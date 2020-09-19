@@ -259,10 +259,25 @@ Route::group(['prefix' => 'diagnosis', 'middleware' => ['auth', 'diagnosis']], f
         'as' => 'diagnosis.store',
     ]);
 
+    Route::get('/edit/{id}', [
+        'uses' => 'DiagnosisController@edit',
+        'as' => 'diagnosis.edit',
+    ]);
+
+    Route::post('/update/{id}', [
+        'uses' => 'DiagnosisController@update',
+        'as' => 'diagnosis.update',
+    ]);
+
+    Route::get('/print', [
+        'uses' => 'DiagnosisController@print',
+        'as' => 'diagnosis.print',
+    ]);
+
 });
 
-Route::get('/diagnosis/print', function(){
-    // $pdf = PDF::loadView('pages.diagnosis.pdf');
-    // return $pdf->download('invoice.pdf');
-    return view('pages.diagnosis.pdf');
-});
+// Route::get('/diagnosis/print', function(){
+//     // $pdf = PDF::loadView('pages.diagnosis.pdf');
+//     // return $pdf->download('invoice.pdf');
+//     return view('pages.diagnosis.pdf');
+// });

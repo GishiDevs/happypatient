@@ -96,7 +96,7 @@
                     
                     <div class="form-group col-md-3">
                       <label for="age">Age</label>
-                      <input type="text" class="form-control" name="age" id="age">
+                      <input type="text" class="form-control" name="age" id="age" placeholder="0">
                     </div>
                     <div class="form-group col-md-3">
                       <label for="weight">Weight</label> <span class="text-danger">*</span>

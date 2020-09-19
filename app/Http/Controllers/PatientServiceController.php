@@ -78,13 +78,14 @@ class PatientServiceController extends Controller
 
         $patientservices =  DB::table('patient_services')
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
-                 ->leftJoin('services', 'patient_service_items.serviceid', '=', 'services.id')
+                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_service_items.status', '=', 'pending')
                  ->orderBy('patient_services.docdate', 'Asc')
                  ->orderBy('services.service', 'Asc')
+                 ->orderBy('patient_service_items.id', 'Asc')
                  ->get();
 
             return DataTables::of($patientservices)
@@ -200,13 +201,20 @@ class PatientServiceController extends Controller
     public function edit($psid)
     {   
         $patientservice = PatientService::find($psid);
+
+        //if record is empty then display error page
+        if(empty($patientservice->id))
+        {
+            return abort(404);
+        }
+
         $patientserviceitems =  DB::table('patient_service_items')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('services.service', 'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount', 'patient_service_items.status')
+                 ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount', 'patient_service_items.status')
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
                  ->get();
-
+        
         return view('pages.patient_services.edit', compact('patientservice', 'patientserviceitems'));
     }   
 

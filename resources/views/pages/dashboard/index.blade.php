@@ -81,7 +81,7 @@
 		    "bDestroy": true,
 		    "columns": [
                     { "data": "DT_RowIndex"},
-                    { "data": "id"},
+                    { "data": "ps_items_id"},
 		    		        { "data": "docdate"},
 		    		        { "data": "patientname"},
 		    		        { "data": "service"},
@@ -90,7 +90,7 @@
 		    ],
         "order": [[ 2, "asc" ], 
                   [ 4, "asc" ], 
-                  [ 3, "asc" ]
+                  [ 1, "asc" ]
         ],
 
         "columnDefs": [

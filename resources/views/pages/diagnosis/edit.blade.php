@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Add Diagnosis')
+@section('title', 'Edit Diagnosis')
 @section('main_content')                                
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -13,7 +13,8 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active">Add Diagnosis</li>
+              <li class="breadcrumb-item"><a href="{{ route('patientservice.edit', $patient_service->id) }}">Patient Services</a></li>
+              <li class="breadcrumb-item active">Edit Diagnosis</li>
             </ol>
           </div>
         </div>
@@ -31,7 +32,7 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add Diagnosis </h3>
+                  <h3 class="card-title">Edit Diagnosis </h3>
                 </div>
                 <div class="card-body pad col-md-12">
                   <div class="row">
@@ -40,13 +41,8 @@
                       <h5>{{ $patient_service->patientname }}</h5>
                     </div>
                     <div class="form-group col-md-4">
-                    <label for="docdate">Diagnose Date</label>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                        </div>
-                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
-                      </div>
+                      <label for="date">Diagnose Date: </label>
+                      <h5>{{ $patient_service->docdate }}</h5>
                     </div>
                   </div>
                   <div class="row">
@@ -82,7 +78,7 @@
                     </div>
                     <div class="form-group col-md-4">
                       <label for="file#">File #: </label>
-                      <h5>{{ $file_no }}</h5>
+                      <h5>{{ $patient_service->file_no }}</h5>
                     </div>
                   </div>
                   <hr>
@@ -90,13 +86,13 @@
                     <div class="form-group col-md-4">
                       <label for="title">Referring Physician</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician">
+                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician" value="{{ $patient_service->physician }}">
                       </div>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="title">Blood Pressure</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" placeholder="Enter blood pressure">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" placeholder="Enter blood pressure" value="{{ $patient_service->bloodpressure }}">
                       </div>
                     </div>
                   </div> 
@@ -105,31 +101,26 @@
                     <div class="form-group col-md-4">
                       <label for="title">Title</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title">
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" value="{{ $patient_service->title }}">
                       </div>
                     </div>
                   </div> 
                   <label for="content">Content</label>
                   <div class="mb-3 div-content"> 
                     <textarea name="content" id="content" class="textarea" placeholder="Place some text here"
-                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
                   </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-footer">
-                  <button type="submit" id="btn-add" class="btn btn-primary">Add & Download PDF</button>
-                  <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
+                  <button type="submit" id="btn-update" class="btn btn-primary">Update & Download PDF</button>
+                  <button type="submit" id="btn-download" class="btn btn-primary">Download PDF</button>
                 </div>
               </div>
             </form>
             <!-- /.card -->
           </div>
           <!--/.col (left) -->
-          <!-- right column -->
-          <div class="col-md-6">
-
-          </div>
-          <!--/.col (right) -->
         </div>
         <!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -146,7 +137,7 @@ $(document).ready(function () {
     $(location).attr('href', "{{ route('diagnosis.print')}}");
   });
   
-  $('#btn-add').click(function(e){
+  $('#btn-update').click(function(e){
 
     // e.preventDefault();
 
@@ -198,7 +189,7 @@ $(document).ready(function () {
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         
         $.ajax({
-          url: "{{ route('diagnosis.store', $patient_service->ps_items_id) }}",
+          url: "{{ route('diagnosis.update', $patient_service->diagnoses_id) }}",
           method: "POST",
           data: data,
           success: function(response){
@@ -206,18 +197,14 @@ $(document).ready(function () {
 
             if(response.success)
             {
-              $('#diagnosisform')[0].reset();
-              
               // Sweet Alert
               Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: 'Record has successfully added',
+                title: 'Record has been updated',
                 showConfirmButton: false,
                 timer: 2500
               });
-
-              $(location).attr('href', "{{ route('dashboard.index')}}");
             }
           },
           error: function(response){
@@ -247,7 +234,6 @@ $(document).ready(function () {
   }
   });
 
-  $('[data-mask]').inputmask();
 
 });
 </script>

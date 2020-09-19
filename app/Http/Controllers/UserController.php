@@ -106,6 +106,11 @@ class UserController extends Controller
     public function edit($userid)
     {
         $user = User::findOrFail($userid);
+        //if record is empty then display error page
+        if(empty($user->id))
+        {
+            return abort(404);
+        }
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
         return view('pages.user.edit', compact('user', 'roles', 'userRole'));

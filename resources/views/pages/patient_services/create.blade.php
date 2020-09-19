@@ -46,7 +46,7 @@
                       </select>
                     </div>
                     <div class="form-group col-md-4 div-docdate">
-                      <label for="selectPatient">Document Date</label>
+                      <label for="docdate">Document Date</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>

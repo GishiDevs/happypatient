@@ -24,7 +24,8 @@ class UserRecordMaintenance
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
         
@@ -35,7 +36,8 @@ class UserRecordMaintenance
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
 
@@ -46,7 +48,8 @@ class UserRecordMaintenance
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
 
@@ -57,7 +60,8 @@ class UserRecordMaintenance
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
     }

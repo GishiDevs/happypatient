@@ -24,7 +24,8 @@ class PatientService
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
 
@@ -36,7 +37,8 @@ class PatientService
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
 
@@ -48,7 +50,8 @@ class PatientService
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
 
         }
@@ -61,7 +64,8 @@ class PatientService
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
 
         }
@@ -77,7 +81,8 @@ class PatientService
             }
             else
             {
-                return response()->json("You don't have permission!", 200);
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
             }
         }
 
