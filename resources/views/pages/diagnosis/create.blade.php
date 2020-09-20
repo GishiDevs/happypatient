@@ -82,7 +82,7 @@
                     </div>
                     <div class="form-group col-md-4">
                       <label for="file#">File #: </label>
-                      <h5>{{ $file_no }}</h5>
+                      <h5>{{ $file_no }} <input type="text" name="file_no" value="{{ $file_no }}" hidden></h5>
                     </div>
                   </div>
                   <hr>
@@ -96,7 +96,7 @@
                     <div class="form-group col-md-4">
                       <label for="title">Blood Pressure</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" placeholder="Enter blood pressure">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" placeholder="Enter blood pressure" value="{{ $patient_service->bloodpressure }}">
                       </div>
                     </div>
                   </div> 

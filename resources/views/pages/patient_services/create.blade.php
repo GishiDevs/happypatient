@@ -36,7 +36,7 @@
               <form role="form" id="patientserviceform">
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-4 div-patient">
+                    <div class="form-group col-md-3 div-patient">
                       <label for="patient">Patient</label>
                       <select class="form-control select2" name="patient" id="patient" style="width: 100%;">
                         <option selected="selected" value="" disabled>Select Patient</option>
@@ -45,7 +45,7 @@
                         @endforeach
                       </select>
                     </div>
-                    <div class="form-group col-md-4 div-docdate">
+                    <div class="form-group col-md-3 div-docdate">
                       <label for="docdate">Document Date</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
@@ -54,7 +54,13 @@
                         <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
                       </div>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                      <label for="bloodpressure">Blood Pressure</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
+                      </div>
+                    </div> 
+                    <div class="form-group col-md-3">
                       <label for="OfficialReceipt">Official Receipt No.</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="or_number" id="or_number">
@@ -64,11 +70,11 @@
                   <hr>
                   <div class="row">
                     <div class="table-scrollable col-md-10">
-                      <table class="table table-striped table-bordered table-hover" id="table-services">
+                      <table class="table table-striped table-bordered table-hover table-responsive" id="table-services">
                         <thead>
                           <th width="30%">Services</th>
                           <th width="20%">Price (PHP)</th>
-                          <th width="15%">Discount</th>
+                          <th width="20%">Discount</th>
                           <th width="15%">Total Amount (PHP)</th>
                           <th width="10%">Action</th>
                         </thead>
@@ -97,7 +103,7 @@
               </form>
             </div>
             <div class="card-footer">
-              <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
+              <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
             </div>
             <!-- /.card -->
           </div>
@@ -118,10 +124,10 @@ $(document).ready(function () {
     $('#patient-error').remove();
   });
 
-  //Call serviceischecked function when service is checked
-  $('[name="services[]"]').change(function(){
-    serviceischecked();
-  });
+  // //Call serviceischecked function when service is checked
+  // $('[name="services[]"]').change(function(){
+  //   serviceischecked();
+  // });
 
   //document date text change
   $('#docdate').keyup(function(e){
@@ -190,6 +196,8 @@ $(document).ready(function () {
 
     //disable add-item button by default
     $('#add-item').addClass('disabled');
+    //disable btn-add button by default
+    $('#btn-add').attr('disabled', true);
 
     $('#service-table-error').remove();
 
@@ -205,7 +213,7 @@ $(document).ready(function () {
       $('.div-service').remove();
       if($(this).val())
       {
-        $('#add-item').removeClass('disabled');
+        // $('#add-item').removeClass('disabled');
         $('#price-linenum-'+ linenum).removeAttr('disabled');
       }
 
@@ -230,10 +238,16 @@ $(document).ready(function () {
       if($(this).val())
       {
         price_per_service = parseFloat($(this).val()).toFixed(2);
+        
+        $('#add-item').removeClass('disabled');
+        $('#btn-add').removeAttr('disabled');
       }
       else
       {
         price_per_service = 0;
+
+        $('#add-item').addClass('disabled');
+        $('#btn-add').attr('disabled', true);
       }
 
       //if discount has value

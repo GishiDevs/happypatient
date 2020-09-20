@@ -63,6 +63,18 @@ class PatientRecordMaintenance
                 return abort(401);
             }
         }
+
+        //Patient History
+        if($request->is('patient/history/*') || $request->is('patient/diagnosis/*')){
+            if(Auth::user()->can('patient-history')){
+                return $next($request);
+            }
+            else
+            {
+                // return response()->json("You don't have permission!", 200);
+                return abort(401);
+            }
+        }
         
         
     }

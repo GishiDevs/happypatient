@@ -40,6 +40,7 @@ class PatientController extends Controller
 
                 $edit = '';
                 $delete = '';
+                $view = '';
 
                 if(Auth::user()->can('patient-edit'))
                 {
@@ -50,8 +51,13 @@ class PatientController extends Controller
                 {
                     $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
                 }
+
+                if(Auth::user()->can('patient-history'))
+                {
+                    $view = '<a href="'.route("patient.history",$patient->id).'" class="btn btn-sm btn-primary" data-patientid="'.$patient->id.'" data-action="history" id="btn-history"><i class="fa fa-eye"></i> History</a>';
+                }
                 
-                return $edit .' '. $delete;
+                return $edit .' '. $delete .' '. $view;
             })
             ->addIndexColumn()
             ->make();
@@ -154,15 +160,6 @@ class PatientController extends Controller
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
-
-    public function view($patientid)
-    {   
-        $patient = Patient::find($patientid);
-
-        return view('pages.patient.view', compact('patient'));
-    }
-
-
     public function edit($patientid)
     {       
         $patient = Patient::findOrFail($patientid);
@@ -252,5 +249,63 @@ class PatientController extends Controller
         $patient->delete();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
+    }
+
+    public function history($patientid)
+    {   
+        $patient = DB::table('patients')
+                        ->join('provinces', 'patients.province', '=', 'provinces.province_id')
+                        ->join('cities', 'patients.city', '=', 'cities.city_id')
+                        ->join('barangays', 'patients.barangay', '=', 'barangays.id')
+                        ->select('patients.id', 'patients.lastname', 'patients.firstname', 'patients.middlename', 'patients.age', 'patients.gender', 'patients.civilstatus','patients.weight',
+                                 DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patients.landline', 'patients.mobile', 'patients.email', 'patients.address',
+                                 DB::raw('provinces.name as province'), DB::raw('cities.name as city'), DB::raw('barangays.name as barangay'))
+                        ->where('patients.id', '=', $patientid)
+                        ->first();
+        //if record is empty then display error page
+        if(empty($patient->id))
+        {
+            return abort(404);
+        }
+
+        $patientservices = DB::table('patients')
+                                  ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
+                                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                                  ->select('patient_service_items.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number','services.service', 
+                                           'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount', 'patient_service_items.status')
+                                  ->where('patient_services.cancelled', '=', 'N')
+                                  ->where('patients.id', '=', $patientid)
+                                  ->get();
+
+        return view('pages.patient.history', compact('patient', 'patientservices'));
+    }
+
+    public function diagnosis($ps_item_id)
+    {
+        $patient_service = DB::table('patients')
+                                  ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
+                                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                                  ->join('provinces', 'patients.province', '=', 'provinces.province_id')
+                                  ->join('cities', 'patients.city', '=', 'cities.city_id')
+                                  ->join('barangays', 'patients.barangay', '=', 'barangays.id')
+                                  ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                                  ->select(DB::raw('patients.id as patient_id') ,DB::raw('patient_services.id as patient_services_id'), DB::raw('patient_service_items.id as ps_items_id'), DB::raw('patients.id as patient_id'), 
+                                           DB::raw('diagnoses.id as diagnoses_id'), DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.patientname', 'services.service',  
+                                           DB::raw('services.id as service_id'), 'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', 
+                                           DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),'diagnoses.physician', 
+                                           'diagnoses.bloodpressure', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no')
+                                  ->where('patient_service_items.id', '=', $ps_item_id)
+                                  ->first();
+        
+        //if record is empty then display error page
+        if(empty($patient_service->patient_id))
+        {
+            return abort(404);
+        }
+
+        return view('pages.patient.diagnosis',compact('patient_service'));
+        
     }
 }

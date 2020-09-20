@@ -13,7 +13,7 @@ use Carbon\Carbon;
 
 class DiagnosisController extends Controller
 {
-
+    
     public function index()
     {
         //
@@ -31,7 +31,7 @@ class DiagnosisController extends Controller
                                   ->join('cities', 'patients.city', '=', 'cities.city_id')
                                   ->join('barangays', 'patients.barangay', '=', 'barangays.id')
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 
+                                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.bloodpressure', 
                                                                           'patient_services.patientname', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus', 'patients.age', 'patients.gender',
                                                                           'patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)
@@ -159,7 +159,7 @@ class DiagnosisController extends Controller
 
         $diagnosis = new Diagnosis();
         $diagnosis->ps_items_id = $ps_item_id;
-        $diagnosis->file_no = 1;
+        $diagnosis->file_no = $request->get('file_no');
         $diagnosis->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
         $diagnosis->physician = $request->get('physician');
         $diagnosis->bloodpressure = $request->get('bloodpressure');

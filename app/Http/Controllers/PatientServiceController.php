@@ -23,7 +23,7 @@ class PatientServiceController extends Controller
     }
 
     public function serviceslist()
-    {
+    {   
         $patientservices =  DB::table('patient_services')
                  ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number', 'patient_services.patientname', 'patient_services.cancelled')
                  ->orderBy('patient_services.id', 'Asc')
@@ -79,7 +79,7 @@ class PatientServiceController extends Controller
         $patientservices =  DB::table('patient_services')
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
+                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_service_items.status', '=', 'pending')
@@ -141,6 +141,7 @@ class PatientServiceController extends Controller
         $patientservice->patientid = $request->get('patient');
         $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
+        $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->grand_total = $request->get('grand_total');
@@ -200,6 +201,39 @@ class PatientServiceController extends Controller
 
     public function edit($psid)
     {   
+
+        $services;
+
+        if(Auth::user()->can('patientservices-list-ultrasound'))
+        {
+            $services[] = 'Ultrasound';
+        }
+
+        if(Auth::user()->can('patientservices-list-ecg'))
+        {
+            $services[] = 'E.C.G';
+        }
+
+        if(Auth::user()->can('patientservices-list-checkup'))
+        {
+            $services[] = 'Check-up';
+        }
+
+        if(Auth::user()->can('patientservices-list-laboratory'))
+        {
+            $services[] = 'Laboratory';
+        }
+
+        if(Auth::user()->can('patientservices-list-physicaltherapy'))
+        {
+            $services[] = 'Physical Therapy';
+        }
+
+        if(Auth::user()->can('patientservices-list-xray'))
+        {
+            $services[] = 'X-Ray';
+        }
+
         $patientservice = PatientService::find($psid);
 
         //if record is empty then display error page
@@ -211,6 +245,7 @@ class PatientServiceController extends Controller
         $patientserviceitems =  DB::table('patient_service_items')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount', 'patient_service_items.status')
+                 ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
                  ->get();
@@ -221,6 +256,7 @@ class PatientServiceController extends Controller
     public function update(Request $request, $psid)
     {
         $patientservice = PatientService::find($psid);
+        $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->save();

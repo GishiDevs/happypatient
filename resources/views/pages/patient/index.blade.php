@@ -48,7 +48,7 @@
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
                       @canany(['patient-edit','patient-delete'])
-                      <th width="140px" class="no-sort">Actions</th>
+                      <th class="no-sort">Actions</th>
                       @endcanany
                     </tr>
                   </thead>
@@ -64,7 +64,7 @@
                       <th>Civil Status</th>
                       <th>Weight (Kg)</th>
                       <th>Mobile</th>
-                      @canany(['patient-edit','patient-delete'])
+                      @canany(['patient-edit','patient-delete','patient-history'])
                       <th>Actions</th>
                       @endcanany
                     </tr>

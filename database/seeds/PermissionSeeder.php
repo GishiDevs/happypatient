@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
             'patient-create',
             'patient-edit',
             'patient-delete',
+            'patient-history',
             'user-list',
             'user-create',
             'user-edit',

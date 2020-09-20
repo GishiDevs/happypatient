@@ -47,9 +47,9 @@ Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], f
         'uses' => 'PatientController@getpatientrecord',
         'as' => 'getpatientrecord',
     ]);
-    Route::get('/view/{id}', [
-        'uses' => 'PatientController@view',
-        'as' => 'patient.view',
+    Route::get('/history/{id}', [
+        'uses' => 'PatientController@history',
+        'as' => 'patient.history',
     ]);
     Route::get('/edit/{id}', [
         'uses' => 'PatientController@edit',
@@ -64,6 +64,12 @@ Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], f
         'uses' => 'PatientController@delete',
         'as' => 'patient.delete',
     ]);
+
+    Route::get('/diagnosis/{id}', [
+        'uses' => 'PatientController@diagnosis',
+        'as' => 'patient.diagnosis',
+    ]);
+  
 });
 
 //Addresses Route

@@ -13,7 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('patientservice.edit', $patient_service->id) }}">Patient Services</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('patient.history', $patient_service->patient_id) }}">Patient History</a></li>
               <li class="breadcrumb-item active">Diagnosis</li>
             </ol>
           </div>

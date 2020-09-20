@@ -37,15 +37,21 @@
                 @csrf
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-4 div-patient">
+                    <div class="form-group col-md-3 div-patient">
                       <label for="patient">Patient:</label>
                       <h5>{{ $patientservice->patientname }}</h5>
                     </div>
-                    <div class="form-group col-md-4 div-docdate">
+                    <div class="form-group col-md-3 div-docdate">
                       <label for="selectPatient">Document Date: </label>
                       <h5>{{ date('m/d/Y', strtotime($patientservice->docdate)) }}</h5>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                      <label for="bloodpressure">Blood Pressure</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" value="{{ $patientservice->bloodpressure }}">
+                      </div>
+                    </div> 
+                    <div class="form-group col-md-3">
                       <label for="OfficialReceipt">Official Receipt No.</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="or_number" id="or_number" value="{{ $patientservice->or_number }}">
@@ -81,9 +87,7 @@
                               @endif
                           </td>
                           <td>
-                              @if($services->status == 'diagnosed')
-                                <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" data-ps-items-id="{{ $services->id }}" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>
-                              @endif
+                              <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info @if($services->status == 'pending') disabled @endif" data-ps-items-id="{{ $services->id }}" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>  
                           </td>
                         </tr>
                         @endforeach									
