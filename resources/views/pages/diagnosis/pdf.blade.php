@@ -62,7 +62,7 @@
 		letter-spacing: 0.5px;
 	}
 	#Diagnostic_Clinic {
-		left: 220px;
+		left: 250px;
 		top: 175px;
 		position: absolute;
 		overflow: visible;
@@ -71,7 +71,7 @@
 		text-align: left;
 		font-family: Vivaldi;
 		font-style: normal;
-		font-weight: normal;
+		font-weight: bolder;
 		font-size: 40px;
 		color: rgba(5,109,198,1);
 		letter-spacing: 1px;
@@ -149,7 +149,7 @@
 		text-align: right;
 		font-family: Maiandra GD;
 		font-style: normal;
-		font-weight: normal;
+		font-weight: bolder;
 		font-size: 20px;
 		color: rgba(11,3,255,1);
 		letter-spacing: 0.5px;
