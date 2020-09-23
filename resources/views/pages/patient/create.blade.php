@@ -113,7 +113,7 @@
                     <div class="form-group col-md-4">
                       <label for="landline">Landline</label>
                       <div class="input-group">
-                        <div class="input-group-append">
+                        <div class="input-group-prepend">
                           <span class="input-group-text">
                             <i class="fa fa-phone"></i>
                           </span>
@@ -124,7 +124,7 @@
                     <div class="form-group col-md-4">
                       <label for="mobile">Mobile No.</label>
                       <div class="input-group">
-                        <div class="input-group-append">
+                        <div class="input-group-prepend">
                           <span class="input-group-text">
                             <i class="fa fa-mobile"></i>
                           </span>

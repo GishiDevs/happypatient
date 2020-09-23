@@ -76,7 +76,7 @@
                           <th width="20%">Price (PHP)</th>
                           <th width="20%">Discount</th>
                           <th width="15%">Total Amount (PHP)</th>
-                          <th width="10%">Action</th>
+                          <th width="12%">Action</th>
                         </thead>
                         <tbody>												
                         </tbody>

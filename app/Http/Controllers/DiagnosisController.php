@@ -178,7 +178,7 @@ class DiagnosisController extends Controller
     public function print(Diagnosis $diagnosis)
     {   
         $pdf = PDF::loadView('pages.diagnosis.pdf');
-        return $pdf->download('invoice.pdf');
+        return $pdf->download(Carbon::now()->timestamp.'.pdf');
         // return view('pages.diagnosis.pdf');
     }
 
