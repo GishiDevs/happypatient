@@ -19,49 +19,49 @@ class UserRecordMaintenance
         
         //User Record
         if($request->is('user/index') || $request->is('user/users')){
-            if(Auth::user()->hasPermissionTo('user-list')){
+            if(Auth::user()->can('user-list')){
                 return $next($request); 
             }
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
         
         //User Create
         if($request->is('user/create') || $request->is('user/store')){
-            if(Auth::user()->hasPermissionTo('user-create')){
+            if(Auth::user()->can('user-create')){
                 return $next($request);
             }
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
         //User Edit
         if($request->is('user/edit/*') || $request->is('user/update/*')){
-            if(Auth::user()->hasPermissionTo('user-edit')){
+            if(Auth::user()->can('user-edit')){
                 return $next($request);
             }
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
         //User Delete
         if($request->is('user/delete')){
-            if(Auth::user()->hasPermissionTo('user-delete')){
+            if(Auth::user()->can('user-delete')){
                 return $next($request);
             }
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');;
             }
         }
     }

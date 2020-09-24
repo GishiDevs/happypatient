@@ -78,7 +78,13 @@ class ServiceController extends Controller
     {   
         $serviceid = $request->get('serviceid');
 
-        $service = Service::findOrFail($serviceid);
+        $service = Service::find($serviceid);
+
+        //if record is empty then display error page
+        if(empty($service->id))
+        {
+            return abort(404, 'Not Found');
+        }
         
         // return view('pages.service.edit', compact('service'));
         return response()->json($service, 200);
@@ -104,7 +110,14 @@ class ServiceController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
-        $service = Service::findOrFail($serviceid);
+        $service = Service::find($serviceid);
+
+        //if record is empty then display error page
+        if(empty($service->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $service->service = $request->get('service');
         $service->status = $request->get('status');
         $service->save();
@@ -116,7 +129,14 @@ class ServiceController extends Controller
     public function delete(Request $request)
     {   
         $serviceid = $request->get('serviceid');
-        $service = Service::findOrFail($serviceid);
+        $service = Service::find($serviceid);
+
+        //if record is empty then display error page
+        if(empty($service->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $service->delete();
 
         return response()->json(['success' => 'Record has been deleted'], 200);

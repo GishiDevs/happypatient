@@ -83,7 +83,14 @@ class RoleController extends Controller
     {   
         $roleid = $request->get('roleid');
 
-        $role = Role::findOrFail($roleid);
+        $role = Role::find($roleid);
+
+        //if record is empty then display error page
+        if(empty($role->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $permission = Permission::get();
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$roleid)
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
@@ -113,7 +120,14 @@ class RoleController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
-        $role = Role::findOrFail($roleid);
+        $role = Role::find($roleid);
+
+        //if record is empty then display error page
+        if(empty($role->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $role->name = $request->get('role');
         $role->save();
 
@@ -126,11 +140,18 @@ class RoleController extends Controller
     public function delete(Request $request)
     {   
         $roleid = $request->get('roleid');
-        $role = Role::findOrFail($roleid);
+        $role = Role::find($roleid);
+
+        //if record is empty then display error page
+        if(empty($role->id))
+        {
+            return abort(404, 'Not Found');
+        }
 
         if($role->name == 'Admin')
-        {
-            return response()->json(['error' => "You can't delete role Admin"], 200);
+        {   
+            return abort(401, 'Forbidden');
+            // return response()->json(['error' => "You can't delete role Admin"], 200);
         }
 
         $role->delete();

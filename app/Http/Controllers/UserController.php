@@ -105,12 +105,14 @@ class UserController extends Controller
 
     public function edit($userid)
     {
-        $user = User::findOrFail($userid);
+        $user = User::find($userid);
+
         //if record is empty then display error page
         if(empty($user->id))
         {
-            return abort(404);
+            return abort(404, 'Not Found');
         }
+
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
         return view('pages.user.edit', compact('user', 'roles', 'userRole'));
@@ -144,7 +146,14 @@ class UserController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
-        $user = User::findOrFail($userid);
+        $user = User::find($userid);
+
+        //if record is empty then display error page
+        if(empty($user->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $user->name = $request->get('name');
         $user->email = $request->get('email');
         if(!empty($request->get('password')))
@@ -162,7 +171,14 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
-        $user = User::findOrFail($request->get('userid'));
+        $user = User::find($request->get('userid'));
+
+        //if record is empty then display error page
+        if(empty($user->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $user->delete();
 
         return response()->json(['success' => 'Record has been deleted'], 200);

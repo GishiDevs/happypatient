@@ -25,7 +25,7 @@ class PermissionRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -38,33 +38,33 @@ class PermissionRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
         if($request->is('permission/edit') || $request->is('permission/update'))
         {
-            if(Auth::user()->hasRole('Admin') && Auth::user()->hasPermissionTo('permission-edit'))
+            if(Auth::user()->hasRole('Admin') && Auth::user()->can('permission-edit'))
             {
                 return $next($request);
             }
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
         if($request->is('permission/delete'))
         {
-            if(Auth::user()->hasRole('Admin') && Auth::user()->hasPermissionTo('permission-delete'))
+            if(Auth::user()->hasRole('Admin') && Auth::user()->can('permission-delete'))
             {
                 return $next($request);
             }
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
         

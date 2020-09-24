@@ -42,7 +42,7 @@ class DiagnosisController extends Controller
         //if record is empty then display error page
         if(empty($patient_service->id))
         {
-            return abort(404);
+            return abort(404, 'Not Found');
         }
 
         //list of diagnosis per service (used to count the rows for creating file_no)
@@ -206,7 +206,7 @@ class DiagnosisController extends Controller
         
         if(empty($patient_service->id))
         {
-            return abort('404');
+            return abort(404, 'Not Found');
         }
 
         //list of diagnosis per service (used to count the rows for creating file_no)
@@ -249,6 +249,12 @@ class DiagnosisController extends Controller
         }
 
         $diagnosis = Diagnosis::find($diagnoses_id);
+
+        if(empty($diagnosis->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $diagnosis->physician = $request->get('physician');
         $diagnosis->bloodpressure = $request->get('bloodpressure');
         $diagnosis->title = $request->get('title');

@@ -18,13 +18,13 @@ class PatientRecordMaintenance
         
         //Patient Record
         if($request->is('patient/index') || $request->is('patient/patients')){
-            if(Auth::user()->hasPermissionTo('patient-list')){
+            if(Auth::user()->can('patient-list')){
                 return $next($request); 
             }
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
         
@@ -36,7 +36,7 @@ class PatientRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -48,7 +48,7 @@ class PatientRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -60,7 +60,7 @@ class PatientRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -72,7 +72,7 @@ class PatientRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
         

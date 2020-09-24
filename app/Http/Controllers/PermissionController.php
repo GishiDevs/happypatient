@@ -71,7 +71,13 @@ class PermissionController extends Controller
     {   
         $permissionid = $request->get('permissionid');
 
-        $permission = Permission::findOrFail($permissionid);
+        $permission = Permission::find($permissionid);
+
+        //if record is empty then display error page
+        if(empty($permission->id))
+        {
+            return abort(404, 'Not Found');
+        }
         
         // return view('pages.service.edit', compact('service'));
         return response()->json($permission, 200);
@@ -98,7 +104,14 @@ class PermissionController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
-        $permission = Permission::findOrFail($permissionid);
+        $permission = Permission::find($permissionid);
+
+        //if record is empty then display error page
+        if(empty($permission->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $permission->name = $request->get('permission');
         $permission->save();
 
@@ -109,7 +122,14 @@ class PermissionController extends Controller
     public function delete(Request $request)
     {   
         $permissionid = $request->get('permissionid');
-        $permission = Permission::findOrFail($permissionid);
+        $permission = Permission::find($permissionid);
+        
+        //if record is empty then display error page
+        if(empty($permission->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $permission->delete();
 
         return response()->json(['success' => 'Record has been deleted'], 200);

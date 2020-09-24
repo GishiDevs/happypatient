@@ -137,6 +137,12 @@ class PatientServiceController extends Controller
 
         $patient = Patient::find($request->get('patient'));
 
+        //if record is empty then display error page
+        if(empty($patient->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $patientservice  = new PatientService();
         $patientservice->patientid = $request->get('patient');
         $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
@@ -239,7 +245,7 @@ class PatientServiceController extends Controller
         //if record is empty then display error page
         if(empty($patientservice->id))
         {
-            return abort(404);
+            return abort(404, 'Not Found');
         }
 
         $patientserviceitems =  DB::table('patient_service_items')
@@ -256,6 +262,13 @@ class PatientServiceController extends Controller
     public function update(Request $request, $psid)
     {
         $patientservice = PatientService::find($psid);
+
+        //if record is empty then display error page
+        if(empty($patientservice->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
@@ -268,6 +281,13 @@ class PatientServiceController extends Controller
     public function cancel(Request $request, $psid)
     {
         $patientservice = PatientService::find($psid);
+
+        //if record is empty then display error page
+        if(empty($patientservice->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->cancelled = 'Y';

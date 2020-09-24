@@ -162,12 +162,12 @@ class PatientController extends Controller
 
     public function edit($patientid)
     {       
-        $patient = Patient::findOrFail($patientid);
+        $patient = Patient::find($patientid);
 
         //if record is empty then display error page
         if(empty($patient->id))
         {
-            return abort(404);
+            return abort(404, 'Not Found');
         }
 
         $birthdate = Carbon::parse($patient->birthdate)->format('m-d-Y');
@@ -222,7 +222,14 @@ class PatientController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
-        $patient = Patient::findOrFail($patientid);
+        $patient = Patient::find($patientid);
+
+        //if record is empty then display error page
+        if(empty($patient->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $patient->lastname = $request->get('lastname');
         $patient->firstname = $request->get('firstname');
         $patient->middlename = $request->get('middlename');
@@ -245,7 +252,14 @@ class PatientController extends Controller
 
     public function delete(Request $request)
     {   
-        $patient = Patient::findOrFail($request->get('patientid'));
+        $patient = Patient::find($request->get('patientid'));
+
+        //if record is empty then display error page
+        if(empty($patient->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
         $patient->delete();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
@@ -265,7 +279,7 @@ class PatientController extends Controller
         //if record is empty then display error page
         if(empty($patient->id))
         {
-            return abort(404);
+            return abort(404, 'Not Found');
         }
 
         $patientservices = DB::table('patients')
@@ -302,7 +316,7 @@ class PatientController extends Controller
         //if record is empty then display error page
         if(empty($patient_service->patient_id))
         {
-            return abort(404);
+            return abort(404, 'Not Found');
         }
 
         return view('pages.patient.diagnosis',compact('patient_service'));

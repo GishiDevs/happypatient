@@ -25,7 +25,7 @@ class RoleRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -38,7 +38,7 @@ class RoleRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -51,7 +51,7 @@ class RoleRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -64,7 +64,7 @@ class RoleRecordMaintenance
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
     }

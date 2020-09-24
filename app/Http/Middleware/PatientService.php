@@ -25,7 +25,7 @@ class PatientService
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -38,7 +38,7 @@ class PatientService
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -51,7 +51,7 @@ class PatientService
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
 
         }
@@ -65,12 +65,10 @@ class PatientService
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
 
         }
-
-
 
         if($request->is('patientservice/services-list-per-user') || $request->is('/'))
         {   
@@ -82,7 +80,7 @@ class PatientService
             else
             {
                 // return response()->json("You don't have permission!", 200);
-                return abort(401);
+                return abort(401, 'Unauthorized');
             }
         }
 
