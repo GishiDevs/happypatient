@@ -65,10 +65,10 @@
                         <thead>
                           <th width="20%">Services</th>
                           <th width="15%">Price (PHP)</th>
-                          <th width="15%">Discount</th>
+                          <th width="15%">Discount (%)</th>
                           <th width="15%">Total Amount (PHP)</th>
                           <th width="5%">Status</th>
-                          <th width="5%">Action</th>
+                          <th width="7%">Action</th>
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)

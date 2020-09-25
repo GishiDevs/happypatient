@@ -55,7 +55,12 @@
 
     .btn-back-home {
       font-size: 15px;
-      padding: 10px 20px 50px 25px;
+      padding: 5px 15px 0 0;
+      text-align: center;
+    }
+    .btn-home {
+      font-size: 15px;
+      padding: 5px 0 0 15px;
       text-align: center;
     }
 
@@ -76,7 +81,10 @@
       </div>
       <div class="row justify-content-center">
         <div class="btn-back-home">
-          <a href="{{ route('dashboard.index') }}"><i class="fa fa-angle-double-left"></i> Back to Homepage</a>
+          <a href="{{ url()->previous() }}"><i class="fa fa-angle-double-left"></i> Back</a>
+        </div>
+        <div class="btn-home">
+          <a href="{{ route('dashboard.index') }}"> Homepage</a>
         </div>
       </div>
     </div>

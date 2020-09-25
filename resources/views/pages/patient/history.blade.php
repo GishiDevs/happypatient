@@ -108,7 +108,7 @@
                           <th>Document Date</th>
                           <th>Services</th>
                           <th>Price (PHP)</th>
-                          <th>Discount</th>
+                          <th>Discount (%)</th>
                           <th>Total Amount (PHP)</th>
                           <th>Status</th>
                           <th width="100px"  class="no-sort">Action</th>

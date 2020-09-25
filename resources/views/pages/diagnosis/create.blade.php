@@ -140,12 +140,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-  
-  $('#btn-download').click(function(e){
-    e.preventDefault();
-    $(location).attr('href', "{{ route('diagnosis.print')}}");
-  });
-  
+    
   $('#btn-add').click(function(e){
 
     // e.preventDefault();

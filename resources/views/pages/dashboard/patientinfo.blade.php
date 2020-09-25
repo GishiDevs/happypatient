@@ -36,7 +36,6 @@
                       <th>Birthdate</th>
                       <th>Gender</th>
                       <th>Civil Status</th>
-                      <th>Weight (Kg)</th>
                       <th>Mobile</th>
                     </tr>
                   </thead>
@@ -49,7 +48,6 @@
                       <th>Birthdate</th>
                       <th>Gender</th>
                       <th>Civil Status</th>
-                      <th>Weight (Kg)</th>
                       <th>Mobile</th>
                     </tr>
                   </tfoot>
@@ -81,7 +79,6 @@
                    { "data": "birthdate"},
                    { "data": "gender"},
                    { "data": "civilstatus"},
-                   { "data": "weight"},
                    { "data": "mobile"}];
 
 			// $('#tax-table').DataTable();

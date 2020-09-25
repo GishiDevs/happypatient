@@ -45,10 +45,9 @@
                       <th>Birthdate</th>
                       <th>Gender</th>
                       <th>Civil Status</th>
-                      <th>Weight (Kg)</th>
                       <th>Mobile</th>
                       @canany(['patient-edit','patient-delete'])
-                      <th class="no-sort">Actions</th>
+                      <th class="no-sort" width="220px">Actions</th>
                       @endcanany
                     </tr>
                   </thead>
@@ -62,7 +61,6 @@
                       <th>Birthdate</th>
                       <th>Gender</th>
                       <th>Civil Status</th>
-                      <th>Weight (Kg)</th>
                       <th>Mobile</th>
                       @canany(['patient-edit','patient-delete','patient-history'])
                       <th>Actions</th>
@@ -98,7 +96,6 @@
                    { "data": "birthdate"},
                    { "data": "gender"},
                    { "data": "civilstatus"},
-                   { "data": "weight"},
                    { "data": "mobile"}];
 
     @canany(['patient-edit', 'patient-delete'])

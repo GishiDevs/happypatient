@@ -134,7 +134,8 @@ $(document).ready(function () {
   
   $('#btn-download').click(function(e){
     e.preventDefault();
-    $(location).attr('href', "{{ route('diagnosis.print')}}");
+    //download pdf
+    $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
   });
   
   $('#btn-update').click(function(e){
@@ -205,6 +206,10 @@ $(document).ready(function () {
                 showConfirmButton: false,
                 timer: 2500
               });
+
+              //download pdf
+              $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+
             }
           },
           error: function(response){

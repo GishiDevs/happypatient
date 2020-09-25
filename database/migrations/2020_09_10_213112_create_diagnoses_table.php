@@ -16,7 +16,7 @@ class CreateDiagnosesTable extends Migration
         Schema::create('diagnoses', function (Blueprint $table) {
             $table->id();
             $table->integer('ps_items_id');  
-            $table->integer('file_no');  
+            $table->string('file_no');  
             $table->date('docdate'); 
             $table->string('physician'); 
             $table->string('bloodpressure')->nullable(); 

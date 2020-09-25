@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Diagnosis;
 use Illuminate\Http\Request;
 use App\PatientServiceItem;
+use App\Service;
 use DB;
 use Auth;
 use Validator;
 use PDF;
 use Carbon\Carbon;
+use Session;
 
 class DiagnosisController extends Controller
 {
@@ -157,6 +159,17 @@ class DiagnosisController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
+        $ps_item = PatientServiceItem::find($ps_item_id);
+
+        //if record is empty then display error page
+        if(empty($ps_item->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        $ps_item->status = 'diagnosed';
+        // $ps_item->save();
+
         $diagnosis = new Diagnosis();
         $diagnosis->ps_items_id = $ps_item_id;
         $diagnosis->file_no = $request->get('file_no');
@@ -165,18 +178,70 @@ class DiagnosisController extends Controller
         $diagnosis->bloodpressure = $request->get('bloodpressure');
         $diagnosis->title = $request->get('title');
         $diagnosis->content = $request->get('content');
-        $diagnosis->save();
+        // $diagnosis->save();
+       
+        //create session for download pdf
+        Session::flash('download_pdf', $ps_item_id);
 
-        $ps_item = PatientServiceItem::findOrFail($ps_item_id);
-        $ps_item->status = 'diagnosed';
-        $ps_item->save();
-        
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
  
-    public function print(Diagnosis $diagnosis)
+    public function print($ps_item_id)
     {   
+        $patient_service = DB::table('patients')
+                                  ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
+                                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                                  ->join('provinces', 'patients.province', '=', 'provinces.province_id')
+                                  ->join('cities', 'patients.city', '=', 'cities.city_id')
+                                  ->join('barangays', 'patients.barangay', '=', 'barangays.id')
+                                  ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                                  ->select(DB::raw('patients.id as patient_id') ,DB::raw('patient_services.id as patient_services_id'), DB::raw('patient_service_items.id as ps_items_id'), DB::raw('patients.id as patient_id'), 
+                                           DB::raw('diagnoses.id as diagnoses_id'), DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.patientname', 'services.service',  
+                                           DB::raw('services.id as service_id'), 'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', 
+                                           DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),'diagnoses.physician', 
+                                           'diagnoses.bloodpressure', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no')
+                                  ->where('patient_service_items.id', '=', $ps_item_id)
+                                  ->first();
+
+        // service id (1)
+        if($patient_service->service == 'Ultrasound')
+        {
+            $pdf = PDF::loadView('pages.diagnosis.template.uts', compact('patient_service'));
+            return $pdf->download($patient_service->patientname.'-Ultrasound'.Carbon::now()->timestamp.'.pdf');
+        }
+        // service id (2)
+        else if($patient_service->service == 'E.C.G')
+        {
+            $pdf = PDF::loadView('pages.diagnosis.template.ecg', compact('patient_service'));
+            return $pdf->download($patient_service->patientname.'-ECG'.Carbon::now()->timestamp.'.pdf');
+        }
+        // service id (3)
+        else if($patient_service->service == 'Check-up')
+        {
+            $pdf = PDF::loadView('pages.diagnosis.template.checkup', compact('patient_service'));
+            return $pdf->download($patient_service->patientname.'-Checkup'.Carbon::now()->timestamp.'.pdf');
+        }
+        // service id (4)
+        else if($patient_service->service == 'Laboratory')
+        {
+            $pdf = PDF::loadView('pages.diagnosis.template.laboratory', compact('patient_service'));
+            return $pdf->download($patient_service->patientname.'-Laboratory'.Carbon::now()->timestamp.'.pdf');
+        }
+        // service id (5)
+        else if($patient_service->service == 'Physical Therapy')
+        {
+            $pdf = PDF::loadView('pages.diagnosis.template.physical_therapy', compact('patient_service'));
+            return $pdf->download($patient_service->patientname.'-PhysicalTherapy'.Carbon::now()->timestamp.'.pdf');
+        }
+        // service id (6)
+        else if($patient_service->service == 'X-Ray')
+        {
+            $pdf = PDF::loadView('pages.diagnosis.template.xray', compact('patient_service'));
+            return $pdf->download($patient_service->patientname.'-Xray'.Carbon::now()->timestamp.'.pdf');
+        }
+
         $pdf = PDF::loadView('pages.diagnosis.pdf');
         return $pdf->download(Carbon::now()->timestamp.'.pdf');
         // return view('pages.diagnosis.pdf');
