@@ -168,7 +168,7 @@ class DiagnosisController extends Controller
         }
 
         $ps_item->status = 'diagnosed';
-        // $ps_item->save();
+        $ps_item->save();
 
         $diagnosis = new Diagnosis();
         $diagnosis->ps_items_id = $ps_item_id;
@@ -178,7 +178,7 @@ class DiagnosisController extends Controller
         $diagnosis->bloodpressure = $request->get('bloodpressure');
         $diagnosis->title = $request->get('title');
         $diagnosis->content = $request->get('content');
-        // $diagnosis->save();
+        $diagnosis->save();
        
         //create session for download pdf
         Session::flash('download_pdf', $ps_item_id);
