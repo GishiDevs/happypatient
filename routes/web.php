@@ -282,7 +282,7 @@ Route::group(['prefix' => 'diagnosis', 'middleware' => ['auth', 'diagnosis']], f
 
 });
 
-Route::get('/diagnosis/pdf/1', function(){
+Route::get('/diagnosis/pdf', function(){
     // $pdf = PDF::loadView('pages.diagnosis.pdf');
     // return $pdf->download('invoice.pdf');
     return view('pages.diagnosis.pdf');
