@@ -189,7 +189,7 @@ class DiagnosisController extends Controller
  
     public function print($ps_item_id)
     {   
-        return $patient_service = DB::table('patients')
+        $patient_service = DB::table('patients')
                                   ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
                                   ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                                   ->join('provinces', 'patients.province', '=', 'provinces.province_id')
