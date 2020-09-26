@@ -11,7 +11,7 @@
 
 <body>
     <div class="container-fluid">
-        <img class="img-fluid" src="{{ asset('/img/docsHeader/docsHeader.png') }}">
+        <img class="img-fluid" src="{{ asset('dist/img/docsHeader/docsHeader.png') }}">
     </div>
 
     <script src="assets/js/jquery.min.js"></script>
