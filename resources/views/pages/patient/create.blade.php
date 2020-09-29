@@ -50,7 +50,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-2">
                       <label for="gender">Gender</label>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="gender" id="radio-male" value="male" checked>
@@ -76,7 +76,7 @@
                         <label class="form-check-label" for="gender-female">Widowed</label>
                       </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                       <label for="birthdate">Birthdate</label> <span class="text-danger">*</span>
                       <!-- <div id="datetimepicker-birthdate" class="input-group date" data-target-input="nearest">
                         <div class="input-group-append" data-target="#datetimepicker-birthdate" data-toggle="datetimepicker">
@@ -94,11 +94,11 @@
                       </div>
                     </div>
                     
-                    <div class="form-group col-md-3">
+                    <!-- <div class="form-group col-md-3">
                       <label for="age">Age</label>
                       <input type="text" class="form-control" name="age" id="age" placeholder="0">
-                    </div>
-                    <div class="form-group col-md-3">
+                    </div> -->
+                    <div class="form-group col-md-4">
                       <label for="weight">Weight</label> <span class="text-danger">*</span>
                       <div class="input-group">
                         <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">

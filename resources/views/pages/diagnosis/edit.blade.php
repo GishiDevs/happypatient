@@ -48,7 +48,7 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="age">Age: </label>
-                      <h5>{{ $patient_service->age }}</h5>
+                      <h5 class="age"></h5>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="gender">Gender</label>
@@ -132,6 +132,26 @@
 
 $(document).ready(function () {
   
+  var dob = '{{ $patient_service->birthdate }}';
+  var birthdate = dob.split('/');
+  var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
+  var getdocdate = $('#docdate').val().split('/');
+  var documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
+  var docdate = moment(documentdate, 'YYYY-MM-DD');
+  var age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+
+  $('#age').val(age);
+  $('.age').empty().append(age);
+
+  $('#docdate').on('keyup', function(){
+    getdocdate = $('#docdate').val().split('/');
+    documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
+    docdate = moment(documentdate, 'YYYY-MM-DD');
+    age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+    $('#age').val(age);
+    $('.age').empty().append(age);
+  });
+
   $('#btn-download').click(function(e){
     e.preventDefault();
     //download pdf

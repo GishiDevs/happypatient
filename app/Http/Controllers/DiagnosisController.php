@@ -33,9 +33,10 @@ class DiagnosisController extends Controller
                                   ->join('cities', 'patients.city', '=', 'cities.city_id')
                                   ->join('barangays', 'patients.barangay', '=', 'barangays.id')
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m-%d-%Y') as docdate"), 'patient_services.bloodpressure', 
-                                                                          'patient_services.patientname', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus', 'patients.age', 'patients.gender',
-                                                                          'patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"))
+                                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),  
+                                           'patient_services.bloodpressure', 'patient_services.patientname', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus',
+                                           'patients.age', 'patients.gender', 'patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),
+                                           DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
@@ -263,7 +264,8 @@ class DiagnosisController extends Controller
                                   ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw('patients.id as patient_id'), DB::raw('diagnoses.id as diagnoses_id'), 
                                             DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.patientname', 'services.service', DB::raw('services.id as service_id'), 
                                             'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),
-                                            'diagnoses.physician', 'diagnoses.bloodpressure', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no')
+                                            'diagnoses.physician', 'diagnoses.bloodpressure', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no',
+                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')

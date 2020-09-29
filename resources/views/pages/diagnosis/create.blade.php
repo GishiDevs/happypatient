@@ -45,14 +45,15 @@
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         </div>
-                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
+                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m/d/Y') }}">
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="age">Age: </label>
-                      <h5>{{ $patient_service->age }}</h5>
+                      <h5 class='age'></h5>
+                      <input type="text" class="form-control" name="age" id="age" hidden>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="gender">Gender</label>
@@ -140,7 +141,28 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-    
+
+  var dob = '{{ $patient_service->birthdate }}';
+  var birthdate = dob.split('/');
+  var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
+  var getdocdate = $('#docdate').val().split('/');
+  var documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
+  var docdate = moment(documentdate, 'YYYY-MM-DD');
+  var age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+
+  $('#age').val(age);
+  $('.age').empty().append(age);
+
+  $('#docdate').on('keyup', function(){
+    getdocdate = $('#docdate').val().split('/');
+    documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
+    docdate = moment(documentdate, 'YYYY-MM-DD');
+    age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+    $('#age').val(age);
+    $('.age').empty().append(age);
+  });
+
+
   $('#btn-add').click(function(e){
 
     // e.preventDefault();
