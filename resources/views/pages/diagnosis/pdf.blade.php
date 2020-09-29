@@ -16,95 +16,97 @@
         <img class="img-fluid" src="{{ asset('dist/img/docsHeader/docsHeader.png') }}">
 
 
-        <div class="row">
-            <div class="col" style="height: 0;"></div>
-            <div class="col align-self-center">
-                <div class="row">
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 10px;">DATE:&nbsp;</label><span style="font-size: 10px;">DATE HERE</span></div>
-                    </div>
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 10px;">FILE #:&nbsp;</label><span style="font-size: 10px;">DATE HERE</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row" style="height: 40px;">
-            <div class="col">
-                <div class="row">
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end" style="padding-left: 10%;">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 12px;"><span style="text-decoration: underline;">NAME of PATIENT</span>:&nbsp;<span>Name here</span></label></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end" style="height: 0;"></div>
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-center justify-content-xl-start align-items-xl-end">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 10px;">AGE:&nbsp;</label><span style="font-size: 10px;">Age here</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col align-self-center">
-                <div class="row">
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 10px;">GENDER:&nbsp;</label><span style="font-size: 10px;">Gender HERE</span></div>
-                    </div>
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 10px;">C.S. :&nbsp;</label><span style="font-size: 10px;">CSHERE</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end" style="max-width: 25%;height: 40px;"></div>
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-center justify-content-xl-start align-items-xl-end">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 10px;">ADDRESS:&nbsp;</label><span style="font-size: 10px;">Age here</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="row">
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-stretch justify-content-xl-start align-items-xl-end" style="max-width: 25%;height: 40px;"></div>
-                    <div class="col d-flex d-xl-flex justify-content-between align-items-center align-content-center align-self-center justify-content-xl-start align-items-xl-end">
-                        <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center"><label style="font-style: italic;font-weight: bold;font-size: 10px;">REFFERRING PHYSICIAN:&nbsp;&nbsp;</label><span style="font-size: 10px;">Age here</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center align-items-center" style="padding-right: 1%;padding-left: 1%;border-top-style: none;">
-            <div class="col d-flex justify-content-center align-items-center align-content-center align-self-center justify-content-xl-center align-items-xl-center" style="/*padding-left: 0;*//*padding-right: 0;*//*padding-bottom: 0;*//*padding-top: 0;*/border-top-style: solid;border-bottom-style: solid;">
-                <div class="form-group text-center d-flex d-xl-flex justify-content-between align-content-center justify-content-xl-center align-items-xl-center"><label class="text-danger" style="font-style: normal;font-weight: bold;font-size: 12px;">REPORT&nbsp;TITLE HERE..</label></div>
-            </div>
-        </div>
-        <div class="row" style="padding-top: 5%;padding-right: 2%;padding-left: 2%;padding-bottom: 5%;">
-            <div class="col">
-                <p style="font-size: 11px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fermentum leo vel orci porta non. Nunc congue nisi vitae suscipit tellus mauris.<br><br>Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fermentum leo vel orci porta non. Nunc congue nisi vitae suscipit tellus mauris.<br><br>Lorem ipsum dolor sit amet, consectetur adipiscing
-                    elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fermentum leo vel orci porta non. Nunc congue nisi vitae suscipit tellus mauris.<br><br></p>
-            </div>
-        </div>
-        <div class="row" style="padding-right: 2%;padding-left: 2%;">
-            <div class="col">
-                <h1 style="font-size: 11px;font-weight: bold;">IMPRESSION:</h1>
-                <ul class="text-uppercase" style="font-size: 11px;">
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                    <li>Item 4</li>
-                </ul>
-            </div>
-        </div>
-        <div class="row justify-content-center align-items-center" style="padding-right: 1%;padding-left: 1%;border-style: none;border-top-style: none;">
-            <div class="col d-flex justify-content-center align-items-center align-content-center align-self-center justify-content-xl-center align-items-xl-center" style="/*padding-left: 0;*//*padding-right: 0;*//*padding-bottom: 0;*//*padding-top: 0;*//*border-top-style: solid;*//*border-bottom-style: solid;*/">
-                <div class="form-group text-center d-flex d-xl-flex flex-column justify-content-between align-content-center justify-content-xl-center align-items-xl-center"><label class="text-primary" style="font-style: normal;font-weight: bold;font-size: 10px;">DOCTOR FULL NAME</label><span style="font-size: 8px;">Doctor details here...</span></div>
-            </div>
+        <div class="table-responsive" style="border-style: none;">
+            <table class="table table-borderless table-sm">
+                <thead class="invisible" style="border-style: none;">
+                    <tr>
+                        <th>Column 1</th>
+                        <th>Column 1</th>
+                        <th>Column 2</th>
+                        <th>Column 2</th>
+                    </tr>
+                </thead>
+                <tbody style="border-style: none;">
+                    <tr style="border-style: none;border-color: rgb(255,255,255);border-top-style: none;">
+                        <td style="border-style: none;border-color: rgba(33,37,41,0);height: 10px;"></td>
+                        <td style="width: 25%;border-style: none;border-color: rgb(255,255,255);"></td>
+                        <td style="width: 25%;border-style: none;border-color: rgb(255,255,255);"><strong style="font-size: 10PX;"><em>DATE:&nbsp;</em></strong><span style="font-size: 10PX;">Date here</span></td>
+                        <td style="width: 25%;border-style: none;"><strong style="font-size: 10PX;"><em>FILE #:&nbsp;</em></strong><span style="font-size: 10PX;">FILE# here</span></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 12PX;width: 10%;" colspan="4"><strong><em>NAME OF PATIENT:&nbsp;</em></strong><span style="font-size: 12PX;">Name here</span></td>
+                    </tr>
+                    <tr style="border-style: none;border-color: rgb(255,255,255);border-top-style: none;">
+                        <td class="text-right" style="border-style: none;border-color: rgb(255,255,255);"><strong style="font-size: 10PX;"><em>AGE:&nbsp;</em></strong><span style="font-size: 10PX;">Age&nbsp;here</span></td>
+                        <td class="text-center" style="border-style: none;border-color: rgb(255,255,255);"><strong style="font-size: 10PX;"><em>GENDER:&nbsp;</em></strong><span style="font-size: 10PX;">TEXT here</span></td>
+                        <td style="border-style: none;"><strong style="font-size: 10PX;"><em>C.S.&nbsp;</em></strong><span style="font-size: 10PX;">TEXT HERE</span></td>
+                    </tr>
+                    <tr style="border-style: none;border-color: rgb(255,255,255);border-top-style: none;">
+                        <td class="text-right" style="border-style: none;border-color: rgb(255,255,255);"><strong style="font-size: 10PX;"><em>ADDRESS :</em></strong></td>
+                        <td class="text-left" style="border-style: none;border-color: rgb(255,255,255);padding: 0;padding-top: 4.8PX;" colspan="3"><span style="font-size: 10PX;">TEXT here</span></td>
+                    </tr>
+                    <tr style="border-style: none;border-color: rgb(255,255,255);border-top-style: none;">
+                        <td class="text-right" style="border-style: none;border-color: rgb(255,255,255);"><strong style="font-size: 10PX;"><em>REFERRING PHYSICIAN:&nbsp;</em></strong></td>
+                        <td class="text-left" style="border-style: none;border-color: rgb(255,255,255);padding: 0;padding-top: 4.8PX;" colspan="3"><span style="font-size: 10PX;">TEXT here</span></td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td class="text-uppercase text-center text-danger" colspan="4" style="height: 25px;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-uppercase" colspan="4" style="height: 10px;border-width: 1px;border-top-style: solid;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-uppercase text-center text-danger" style="font-size: 12px;text-align: center;" colspan="4"><strong style="font-size: 12px;">template name</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="height: 10px;border-width: 1px;border-bottom-style: solid;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="height: 25px;border-style: none;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-uppercase text-center text-danger" style="font-size: 12px;text-align: center;color: rgb(0,0,0);border-style: none;border-color: rgb(255,255,255);border-top-width: 1px;border-top-color: rgb(0,0,0);border-bottom-color: rgb(0,0,0);"
+                            colspan="4">
+                            <p style="color: rgb(0,0,0);text-align: left;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Arcu non odio euismod lacinia at. Non odio euismod lacinia at quis risus sed vulputate odio. Lorem
+                                ipsum dolor sit amet consectetur adipiscing elit ut aliquam. Arcu cursus vitae congue mauris rhoncus. Semper quis lectus nulla at. In arcu cursus euismod quis viverra. Sed nisi lacus sed viverra tellus. Dui faucibus in
+                                ornare quam viverra. Neque ornare aenean euismod elementum nisi quis eleifend.<br></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="height: 25px;border-style: none;"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-uppercase text-center" style="font-size: 12px;text-align: left;color: rgb(0,0,0);border-style: none;border-color: rgb(255,255,255);border-top-width: 1px;border-top-color: rgb(0,0,0);border-bottom-color: rgb(0,0,0);font-weight: normal;"
+                            colspan="4">
+                            <h1 style="text-align: left;font-size: 12px;font-weight: bold;">IMPRESSION:</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-uppercase text-center" style="font-size: 12px;text-align: left;color: rgb(0,0,0);border-style: none;border-color: rgb(255,255,255);border-top-width: 1px;border-top-color: rgb(0,0,0);border-bottom-color: rgb(0,0,0);font-weight: normal;"
+                            colspan="4">
+                            <ul style="text-align: left;">
+                                <li>Item 1</li>
+                                <li>Item 2</li>
+                                <li>Item 3</li>
+                                <li>Item 4</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-uppercase text-center" style="font-size: 12px;text-align: left;color: rgb(0,0,0);border-style: none;border-color: rgb(255,255,255);border-top-width: 1px;border-top-color: rgb(0,0,0);border-bottom-color: rgb(0,0,0);font-weight: normal;"
+                            colspan="4">
+                            <h1 style="text-align: center;font-size: 10px;font-weight: bold;color: rgb(79,67,222);">DOCTOR FULL NAME</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-uppercase text-center" style="font-size: 12px;text-align: left;color: rgb(0,0,0);border-style: none;border-color: rgb(255,255,255);border-top-width: 1px;border-top-color: rgb(0,0,0);border-bottom-color: rgb(0,0,0);font-weight: normal;"></td>
+                        <td class="text-uppercase text-center" style="font-size: 12px;text-align: left;color: rgb(0,0,0);border-style: none;border-color: rgb(255,255,255);border-top-width: 1px;border-top-color: rgb(0,0,0);border-bottom-color: rgb(0,0,0);font-weight: normal;"
+                            colspan="2"><span style="font-size: 8px;color: rgb(51,43,142);">Doctor details</span></td>
+                        <td class="text-uppercase text-center" style="font-size: 12px;text-align: left;color: rgb(0,0,0);border-style: none;border-color: rgb(255,255,255);border-top-width: 1px;border-top-color: rgb(0,0,0);border-bottom-color: rgb(0,0,0);font-weight: normal;"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
 
