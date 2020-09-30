@@ -233,8 +233,8 @@ $(document).ready(function () {
                 showConfirmButton: false,
                 timer: 2500
               });
-
-              $(location).attr('href', "{{ route('dashboard.index')}}");
+              $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+              // $(location).attr('href', "{{ route('dashboard.index')}}");
             }
           },
           error: function(response){
