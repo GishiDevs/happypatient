@@ -113,8 +113,8 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-footer">
-                  <button type="submit" id="btn-update" class="btn btn-primary" disabled>Update & Download PDF</button>
-                  <button type="submit" id="btn-download" class="btn btn-primary">Download PDF</button>
+                  <button type="submit" id="btn-update" class="btn btn-primary" disabled>Update & Preview</button>
+                  <button type="submit" id="btn-preview" class="btn btn-primary">Preview</button>
                 </div>
               </div>
             </form>
@@ -135,7 +135,7 @@ $(document).ready(function () {
   var dob = '{{ $patient_service->birthdate }}';
   var birthdate = dob.split('/');
   var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
-  var getdocdate = $('#docdate').val().split('/');
+  var getdocdate = '{{ $patient_service->docdate }}'.split('/');
   var documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
   var docdate = moment(documentdate, 'YYYY-MM-DD');
   var age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
@@ -152,10 +152,11 @@ $(document).ready(function () {
     $('.age').empty().append(age);
   });
 
-  $('#btn-download').click(function(e){
+  $('#btn-preview').click(function(e){
     e.preventDefault();
     //download pdf
-    $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+    // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+    window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
   });
   
   $('#btn-update').click(function(e){
@@ -228,7 +229,8 @@ $(document).ready(function () {
               });
 
               //download pdf
-              $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+              // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+              window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
 
             }
           },
@@ -260,7 +262,7 @@ $(document).ready(function () {
   });
 
   $('#diagnosisform').on('change input',function(e){
-    
+
     $('#btn-update').attr('disabled', false);
    
   });

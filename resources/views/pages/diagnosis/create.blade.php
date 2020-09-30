@@ -118,7 +118,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-footer">
-                  <button type="submit" id="btn-add" class="btn btn-primary">Add & Download PDF</button>
+                  <button type="submit" id="btn-add" class="btn btn-primary">Add & Preview</button>
                   <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
                 </div>
               </div>
@@ -233,8 +233,10 @@ $(document).ready(function () {
                 showConfirmButton: false,
                 timer: 2500
               });
-              $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
-              // $(location).attr('href', "{{ route('dashboard.index')}}");
+
+              // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+              window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
+              $(location).attr('href', "{{ route('dashboard.index')}}");
             }
           },
           error: function(response){
