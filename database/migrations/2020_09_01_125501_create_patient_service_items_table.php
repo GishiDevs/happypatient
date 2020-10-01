@@ -19,6 +19,7 @@ class CreatePatientServiceItemsTable extends Migration
             $table->integer('serviceid');
             $table->decimal('price', 8, 2);
             $table->decimal('discount', 8, 2);
+            $table->decimal('discount_amt', 8, 2);
             $table->decimal('total_amount', 8, 2);
             $table->string('status')->nullable();
             $table->timestamps();

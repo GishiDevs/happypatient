@@ -60,15 +60,16 @@
                   </div>
                   <hr>
                   <div class="row">
-                    <div class="table-scrollable col-md-10">
+                    <div class="table-scrollable col-md-12 table-responsive">
                       <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
-                          <th width="20%">Services</th>
-                          <th width="15%">Price (PHP)</th>
-                          <th width="15%">Discount (%)</th>
-                          <th width="15%">Total Amount (PHP)</th>
-                          <th width="5%">Status</th>
-                          <th width="7%">Action</th>
+                          <th>Services</th>
+                          <th>Price (PHP)</th>
+                          <th>Discount (%)</th>
+                          <th>Discount (PHP)</th>
+                          <th>Total Amount (PHP)</th>
+                          <th>Status</th>
+                          <th width="170px">Action</th>
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
@@ -76,6 +77,7 @@
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->price }}</td>
                           <td>{{ $services->discount }}</td>
+                          <td>{{ $services->discount_amt }}</td>
                           <td>{{ $services->total_amount }}</td>
                           <td>
                               @if($services->status == 'diagnosed')
@@ -87,14 +89,18 @@
                               @endif
                           </td>
                           <td>
-                              <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info @if($services->status == 'pending') disabled @endif" data-ps-items-id="{{ $services->id }}" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>  
+                              @if($services->status == 'diagnosed')
+                                <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View Diagnosis</a> 
+                              @elseif($services->status == 'pending')
+                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Create Diagnosis</a>
+                              @endif 
                           </td>
                         </tr>
                         @endforeach									
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="3">
+                            <td colspan="4">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">{{ $patientservice->grand_total}}</span></strong></td>
@@ -182,6 +188,7 @@ $(document).ready(function () {
     $('#btn-update').attr('disabled', false);
    
   });
+  
 
 });
 </script>

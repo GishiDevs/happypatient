@@ -101,7 +101,7 @@
                   </div>
                   <hr>
                   <div class="row">
-                    <div class="table-scrollable col-md-12">
+                    <div class="table-scrollable col-md-12 table-responsive">
                       <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
                           <th>Official Receipt No.</th>
@@ -109,9 +109,10 @@
                           <th>Services</th>
                           <th>Price (PHP)</th>
                           <th>Discount (%)</th>
-                          <th>Total Amount (PHP)</th>
+                          <th>Discount (PHP)</th>
+                          <th>Total (PHP)</th>
                           <th>Status</th>
-                          <th width="100px"  class="no-sort">Action</th>
+                          <th width="170px"  class="no-sort">Action</th>
                         </thead>
                         <tbody>			
                         @foreach($patientservices as $services)
@@ -121,6 +122,7 @@
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->price }}</td>
                           <td>{{ $services->discount }}</td>
+                          <td>{{ $services->discount_amt }}</td>
                           <td>{{ $services->total_amount }}</td>
                           <td>
                               @if($services->status == 'diagnosed')
@@ -132,7 +134,11 @@
                               @endif
                           </td>
                           <td>
-                              <a href="{{ route('patient.diagnosis', $services->id) }}" class="btn btn-sm btn-info @if($services->status == 'pending') disabled @endif" data-ps-items-id="{{ $services->id }}" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>  
+                              @if($services->status == 'diagnosed')
+                                <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View Diagnosis</a> 
+                              @elseif($services->status == 'pending')
+                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Create Diagnosis</a>
+                              @endif 
                           </td>
                         </tr>
                         @endforeach									
@@ -160,15 +166,15 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-  $('#table-services').DataTable({
-        "responsive": true,
-        "autoWidth": false,
-		    "processing": true,
-        "columnDefs": [{
-                          "targets": "no-sort",
-                          "orderable": false
-                        }] 
-    });
+  // $('#table-services').DataTable({
+  //       "responsive": true,
+  //       "autoWidth": false,
+	// 	    "processing": true,
+  //       "columnDefs": [{
+  //                         "targets": "no-sort",
+  //                         "orderable": false
+  //                       }] 
+  //   });
 });
 </script>
 @endsection

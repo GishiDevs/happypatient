@@ -37,6 +37,7 @@
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th width="50px">Status</th>
+                      <th>Diagnose Date</th>
                       <th width="140px" class="no-sort">Actions</th>
                     </tr>
                   </thead>
@@ -48,6 +49,7 @@
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th>Status</th>
+                      <th>Diagnose Date</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
@@ -91,22 +93,53 @@
 		    		        { "data": "patientname"},
 		    		        { "data": "service"},
                     { "data": "status"},
+                    { "data": "diagnose_date"},
                     { "data": "action"}
 		    ],
-        "order": [[ 2, "asc" ], 
+        "order": [[ 5, "desc" ],
+                  [ 2, "asc" ], 
                   [ 4, "asc" ], 
                   [ 1, "asc" ]
         ],
 
         "columnDefs": [
           { "visible": false, "targets": 1 },
-          { "targets": "no-sort","orderable": false }
+          { "targets": "no-sort","orderable": false },
+          {
+            "targets": 5,
+            "render": function ( data ) {
+                if(data == 'diagnosed')
+                {
+                  return '<span class="badge bg-success">'+data+'</span>';
+                }
+                else if(data == 'pending')
+                {
+                  return '<span class="badge bg-warning">'+data+'</span>';
+                }
+                else if(data == 'cancelled')
+                {
+                  return '<span class="badge bg-danger">'+data+'</span>';
+                }
+                              
+              }
+          },
+          {
+            "targets": 7,
+            "render": function ( data, type, object ) {
+                // console.log(object);
+                if(object.status == 'pending')
+                {
+                  return data;
+                }
+                else
+                {
+                  return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-sm btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View Diagnosis</a>';
+                }                 
+              }
+          }
 
         ]
         // "bSort" : false 
-        
-        
-        
     });
 
 	});

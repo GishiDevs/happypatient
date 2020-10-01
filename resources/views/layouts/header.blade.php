@@ -190,8 +190,8 @@
             </a>
           </li>
           @canany(['patient-list','patient-create'])
-          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*') || request()->is('patient/history/*')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*') || request()->is('patient/history/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-wheelchair"></i>
               <p>
                 Patient
@@ -219,8 +219,8 @@
           </li>
           @endcanany
           @canany(['patientservices-list','patientservices-create'])
-          <li class="nav-item has-treeview {{ (request()->is('patientservice/create') || request()->is('patientservice/index')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('patientservice/create') || request()->is('patientservice/index')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('patientservice/create') || request()->is('patientservice/index') || request()->is('patientservice/edit/*')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('patientservice/create') || request()->is('patientservice/index') || request()->is('patientservice/edit/*')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-stethoscope"></i>
               <p>
                 Services

@@ -287,7 +287,7 @@ class PatientController extends Controller
                                   ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                                   ->select('patient_service_items.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number','services.service', 
-                                           'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.total_amount', 'patient_service_items.status')
+                                           'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status')
                                   ->where('patient_services.cancelled', '=', 'N')
                                   ->where('patients.id', '=', $patientid)
                                   ->get();

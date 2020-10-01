@@ -69,20 +69,21 @@
                   </div>
                   <hr>
                   <div class="row">
-                    <div class="table-scrollable col-md-10">
-                      <table class="table table-striped table-bordered table-hover table-responsive" id="table-services">
+                    <div class="table-scrollable col-md-12 table-responsive">
+                      <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
-                          <th width="30%">Services</th>
-                          <th width="20%">Price (PHP)</th>
-                          <th width="20%">Discount (%)</th>
-                          <th width="15%">Total Amount (PHP)</th>
-                          <th width="12%">Action</th>
+                          <th>Services</th>
+                          <th>Price (PHP)</th>
+                          <th>Discount (%)</th>
+                          <th>Discount (PHP)</th>
+                          <th>Total Amount (PHP)</th>
+                          <th>Action</th>
                         </thead>
                         <tbody>												
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="3">
+                            <td colspan="4">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">0.00</span></strong></td>
@@ -173,6 +174,11 @@ $(document).ready(function () {
                                             '<div class="input-group-prepend"><span class="input-group-text">%</span></div>'+
                                         '</div>'+
                                         '</td>'+   
+                                        '<td>'+
+                                          '<div class="input-group">'+
+                                            '<input class="form-control input-small affect-total" type="text" name="discount_amt[]" id="discount_amt-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask disabled data-service="" data-serviceid="" data-linenum="'+linenum+'">'+
+                                        '</div>'+
+                                        '</td>'+
                                         '<td><span class="service-total-amount" id="total-linenum-'+linenum+'">0.00</span></td>'+
                                         '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Delete</a></td>'+
                                       '</tr>');
@@ -233,6 +239,7 @@ $(document).ready(function () {
       var service_id = $(this).data('serviceid');
       var price_per_service;
       var discount_per_service;
+      var discount_amt_per_service;
 
       //if price has value
       if($(this).val())
@@ -250,7 +257,7 @@ $(document).ready(function () {
         $('#btn-add').attr('disabled', true);
       }
 
-      //if discount has value
+      //if discount % has value
       if($('#discount-linenum-'+ linenum).val())
       {
         discount_per_service = parseFloat($('#discount-linenum-'+ linenum).val()).toFixed(2) / 100;
@@ -259,29 +266,34 @@ $(document).ready(function () {
       {
         discount_per_service = 0.00;
       }
+
+      //if discount amount has value
+      if($('#discount_amt-linenum-'+ linenum).val())
+      {
+        discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+ linenum).val()).toFixed(2);
+      }
+      else
+      {
+        discount_amt_per_service = 0.00;
+      }
           
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
-      var total = parseFloat(price_per_service) - parseFloat(discount_amount);
+      var total = parseFloat(price_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
           
       //disable/enable discount textbox
       if(price_per_service > 0){
         $('#discount-linenum-'+ linenum).removeAttr('disabled');
+        $('#discount_amt-linenum-'+ linenum).removeAttr('disabled');
       }
       else
       {
         $('#discount-linenum-'+ linenum).attr('disabled', true);
+        $('#discount_amt-linenum-'+ linenum).attr('disabled', true);
       }
 
-      //if price is not null then append total amount
-      if($(this).val())
-      {
-        $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
-      }
-      else
-      {
-        $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
-      }
+      //append total amount
+      $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
 
       //call function getGrandTotal
       getGrandTotal();
@@ -296,8 +308,9 @@ $(document).ready(function () {
       var service_id = $(this).data('serviceid');
       var price_per_service = parseFloat($('#price-linenum-'+linenum).val()).toFixed(2);
       var discount_per_service = parseFloat($(this).val()).toFixed(2) / 100;
+      var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
 
-      //if discount has value
+      //if discount % has value
       if($(this).val())
       {
         discount_per_service = parseFloat($(this).val()).toFixed(2) / 100;
@@ -307,19 +320,62 @@ $(document).ready(function () {
         discount_per_service = 0.00;
       }
 
-      var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
-      var total = parseFloat(price_per_service) - parseFloat(discount_amount);
-
-      //if discount is null then append total amount
-      if($(this).val())
+      //if discount amount has value
+      if($('#discount_amt-linenum-'+linenum).val())
       {
-        $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
+        discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
       }
       else
       {
-        $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
+        discount_amt_per_service = 0.00;
       }
+
+      var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
+      var total = parseFloat(price_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
+
+      //append total amount
+      $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
           
+      //call function getGrandTotal
+      getGrandTotal();
+
+    });
+
+    //service discount amount text change
+    $('#table-services').on('keyup', 'tbody td input[name="discount_amt[]"]', function(e){
+      var linenum = $(this).data('linenum');
+      var service = $(this).data('service');
+      var service_id = $(this).data('serviceid');
+      var price_per_service = parseFloat($('#price-linenum-'+linenum).val()).toFixed(2);
+      var discount_per_service = parseFloat($('#discount-linenum'+linenum).val()).toFixed(2) / 100;
+      var discount_amt_per_service = parseFloat($(this).val()).toFixed(2);
+
+      //if discount % has value
+      if($('#discount-linenum-'+ linenum).val())
+      {
+        discount_per_service = parseFloat($('#discount-linenum-'+ linenum).val()).toFixed(2) / 100;
+      }
+      else
+      {
+        discount_per_service = 0.00;
+      }
+
+      //if discount amount has value
+      if($(this).val())
+      {
+        discount_amt_per_service = parseFloat($(this).val()).toFixed(2);
+      }
+      else
+      {
+        discount_amt_per_service = 0.00;
+      }
+   
+      var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
+      var total = parseFloat(price_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
+
+      //append total amount
+      $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
+
       //call function getGrandTotal
       getGrandTotal();
 
@@ -372,6 +428,11 @@ $(document).ready(function () {
       digits:2,
       allowMinus:false
         
+    });
+    $('[name="discount_amt[]"]').inputmask('decimal', {
+      rightAlign: true,
+      digits:2,
+      allowMinus:false
     });
     $('#discount').inputmask('decimal', {
       rightAlign: true
