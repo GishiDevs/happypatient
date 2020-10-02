@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Patient Services')
+@section('title', 'Service Procedure')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -8,13 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Patient Services</h1>
+            <h1>Service Procedure</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('service.index') }}">Service Record</a></li>
-              <li class="breadcrumb-item">Create Service</li>
+              <li class="breadcrumb-item">Create Service Procedure</li>
             </ol>
           </div>
         </div>
@@ -37,11 +36,14 @@
               <form role="form" id="serviceform">
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-3 div-service">
                       <label for="service">Service</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" name="service" id="service">
-                      </div>
+                      <select class="form-control select2" name="service" id="service">
+                        <option selected="selected" value="" disabled>Select Service</option>
+                        @foreach($services as $service)
+                        <option value="{{ $service->id }}">{{ $service->service }}</option>
+                        @endforeach
+                      </select>
                     </div>           
                   </div>
                   <hr>
@@ -67,9 +69,9 @@
                 </div>
                 <!-- /.card-body -->
               </form>
-            </div>
-            <div class="card-footer">
-              <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
+              <div class="card-footer">
+                <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
+              </div>
             </div>
             <!-- /.card -->
           </div>
@@ -84,6 +86,13 @@
 
 $(document).ready(function () {
   
+
+  //Remove error label when patient dropdown has value
+  $('#service').on('change', function(e){
+    $("[aria-labelledby='select2-service-container']").removeAttr('style');
+    $('#service-error').remove();
+  });
+
   var linenum = 1;
   //add new line item on services table
   $('#add-item').click(function(e){
@@ -189,6 +198,14 @@ $(document).ready(function () {
 
     e.preventDefault();
     
+    //patient validation error
+    if(!$('#service').val())
+    { 
+      $('#service-error').remove();
+      $('.div-service').append('<span id="service-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please select service</span>');
+      $(".div-service").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+    }
+
     //count table tbody rows
     var tr_length = $('#table-services tbody tr').length;
 
@@ -202,7 +219,7 @@ $(document).ready(function () {
     data.push({name: "_token", value: "{{ csrf_token() }}"});
 
     $.ajax({
-        url: "{{ route('service.store') }}",
+        url: "{{ route('serviceprocedure.store') }}",
         method: "POST",
         data: data,
         success: function(response){
@@ -218,16 +235,10 @@ $(document).ready(function () {
                 showConfirmButton: false,
                 timer: 2500
               });  
-
+              $('#select2-service-container').empty().append('Select Patient');
               $('#table-services tbody').empty();
 
-            }
-            else
-            { 
-              $('#service-error').remove();
-              $('#service').addClass('is-invalid');
-              $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
-            }                
+            }               
         },
         error: function(response){
           console.log(response);

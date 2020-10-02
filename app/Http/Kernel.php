@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'patient_crud' => \App\Http\Middleware\PatientRecordMaintenance::class,
         'service_crud' => \App\Http\Middleware\ServiceRecordMaintenance::class,
+        'service_procedure_crud' => \App\Http\Middleware\ServiceProcedureRecordMaintenance::class,
         'patient_service' => \App\Http\Middleware\PatientService::class,
         'permission_crud' => \App\Http\Middleware\PermissionRecordMaintenance::class,
         'role_crud' => \App\Http\Middleware\RoleRecordMaintenance::class,

@@ -13,7 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active">Service Record Lists</li>
+              <li class="breadcrumb-item active">Service Record</li>
             </ol>
           </div>
         </div>
@@ -27,7 +27,7 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Service Record Lists</h3>
+                <h3 class="card-title">Service Record</h3>
                 @can('service-create')
                 <a href="" id="btn-add-service" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-service">Add New</a>
                 @endcan

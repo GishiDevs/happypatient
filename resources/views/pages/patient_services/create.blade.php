@@ -73,17 +73,18 @@
                       <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
                           <th>Services</th>
-                          <th>Price (PHP)</th>
-                          <th>Discount (%)</th>
-                          <th>Discount (PHP)</th>
-                          <th>Total Amount (PHP)</th>
-                          <th>Action</th>
+                          <th>Procedure</th>
+                          <th width="150px">Price (PHP)</th>
+                          <th width="150px">Discount (%)</th>
+                          <th width="150px">Discount (PHP)</th>
+                          <th width="170px">Total Amount (PHP)</th>
+                          <th width="130px">Action</th>
                         </thead>
                         <tbody>												
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">0.00</span></strong></td>
@@ -100,11 +101,11 @@
                     </div>						
                   </div>
                 </div>
+                <div class="card-footer">
+                  <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
+                </div>
                 <!-- /.card-body -->
               </form>
-            </div>
-            <div class="card-footer">
-              <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
             </div>
             <!-- /.card -->
           </div>
@@ -166,6 +167,16 @@ $(document).ready(function () {
                                           '<input type="text" id="services-linenum-'+linenum+'" name="services[]" value="" hidden>'+
                                         '</td>'+
                                         '<td>'+
+                                          '<div class="form-group div-procedure">'+
+                                            '<select class="form-control select2" name="procedure" id="procedure-linenum-'+linenum+'" style="width: 100%;" disabled>'+
+                                              '<option selected="selected" value="" disabled>Select Procedure</option>'+
+                                              '<option value="sample" data-procedure="sample" data-linenum="'+linenum+'">Sample</option>'+
+                                              '<option value="sample2" data-procedure="sample2" data-linenum="'+linenum+'">Sample2</option>'+
+                                            '</select>'+
+                                          '</div>'+
+                                          '<input type="text" id="procedure-linenum-'+linenum+'" name="procedure[]" value="" hidden>'+
+                                        '</td>'+
+                                        '<td>'+
                                           '<input class="form-control input-small affect-total" type="text" name="price[]" id="price-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="" data-serviceid="" data-linenum="'+linenum+'" disabled>'+
                                         '</td>'+
                                         '<td>'+
@@ -217,6 +228,34 @@ $(document).ready(function () {
 
       $('.div-service').after('<span class="span-service" id="span-service-linenum-'+linenum+'" data-service="'+service+'" data-service_id="'+service_id+'">'+service+'</span>')
       $('.div-service').remove();
+
+      if($(this).val())
+      {
+        // $('#add-item').removeClass('disabled');
+        $('#procedure-linenum-'+ linenum).removeAttr('disabled');
+      }
+
+      
+      //if service select option has no more item
+      // if(ctr == 2)
+      // {
+      //   $('#add-item').addClass('disabled');    
+      // }
+
+    });
+
+
+    $('#table-services').on('change', 'tbody td [name="procedure"]', function(e){ 
+      var linenum = $(this).find(':selected').data('linenum');
+      // alert($(this).closest('td').parent()[0].sectionRowIndex);
+      var procedure = $(this).find(':selected').data('procedure');
+      var procedure_id = $(this).val();
+
+      $('#procedure-linenum-'+linenum).val(procedure_id);
+
+      $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+procedure+'</span>')
+      $('.div-procedure').remove();
+
       if($(this).val())
       {
         // $('#add-item').removeClass('disabled');

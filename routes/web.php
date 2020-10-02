@@ -110,6 +110,39 @@ Route::group(['prefix' => 'service', 'middleware' => ['auth','service_crud']], f
 
 });
 
+//Services Procedure Route
+Route::group(['prefix' => 'serviceprocedure', 'middleware' => ['auth','service_procedure_crud']], function(){
+    Route::get('/index', [
+        'uses' => 'ServiceProcedureController@index',
+        'as' => 'serviceprocedure.index',
+    ]);
+    Route::get('/create', [
+        'uses' => 'ServiceProcedureController@create',
+        'as' => 'serviceprocedure.create',
+    ]);
+    Route::post('/store', [
+        'uses' => 'ServiceProcedureController@store',
+        'as' => 'serviceprocedure.store',
+    ]);
+    Route::get('/procedures', [
+        'uses' => 'ServiceProcedureController@getprocedurerecord',
+        'as' => 'getprocedurerecord',
+    ]);
+    Route::get('/edit/{id}', [
+        'uses' => 'ServiceProcedureController@edit',
+        'as' => 'serviceprocedure.edit',
+    ]);
+    Route::post('/update/{id}', [
+        'uses' => 'ServiceProcedureController@update',
+        'as' => 'serviceprocedure.update',
+    ]);
+    Route::post('/delete', [
+        'uses' => 'ServiceProcedureController@delete',
+        'as' => 'serviceprocedure.delete',
+    ]);
+
+});
+
 //Patient Services
 Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_service']], function(){
     
