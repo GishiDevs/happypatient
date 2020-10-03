@@ -73,7 +73,7 @@
 </div>
 <!-- /.content-wrapper -->
 <div class="modal fade" id="modal-role">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title"></h4>
@@ -83,7 +83,7 @@
       </div>
       <div class="modal-body">
       <form role="form" id="roleform">
-        <div class="card-body col-md-12">
+        <div class="card-body">
           <div class="row">
             <div class="form-group col-md-12">
               <label for="role">Role</label> <span class="text-danger">*</span>
@@ -93,13 +93,17 @@
           <div class="row">
             <div class="form-group col-md-12">
               <label for="selectPatient">Permission</label>
-              <div class="form-group col-md-12">
-                @foreach($permissions as $permission)
-                <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" name="permission[]" type="checkbox" id="checkbox-permissionid-{{ $permission->id }}" value="{{ $permission->id }}">
-                  <label for="checkbox-permissionid-{{ $permission->id }}" class="custom-control-label">{{ $permission->name }}</label>
-                </div>
+              <div class="form-group">
+                <div class="row">
+                @foreach($permissions as $permission)               
+                  <div class="col-md-6">
+                    <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input" name="permission[]" type="checkbox" id="checkbox-permissionid-{{ $permission->id }}" value="{{ $permission->id }}">
+                      <label for="checkbox-permissionid-{{ $permission->id }}" class="custom-control-label">{{ $permission->name }}</label>
+                    </div>
+                  </div>
                 @endforeach
+                </div>
               </div>
             </div>
           </div>

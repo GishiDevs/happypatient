@@ -278,9 +278,9 @@
             </ul>
           </li>
           @endcanany
-          @canany(['service-list','service-create','permission-list','permission-create','role-list','role-create'])
-          <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
+          @canany(['service-list','service-create','serviceprocedure-list','serviceprocedure-create','permission-list','permission-create','role-list','role-create'])
+          <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Settings
@@ -293,6 +293,14 @@
                 <a href="{{ route('service.index') }}" class="nav-link {{ (request()->is('service/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services</p>
+                </a> 
+              </li>
+              @endcanany
+              @canany(['serviceprocedure-list','serviceprocedure-create'])
+              <li class="nav-item">
+                <a href="{{ route('serviceprocedure.index') }}" class="nav-link {{ (request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Service Procedures</p>
                 </a> 
               </li>
               @endcanany
