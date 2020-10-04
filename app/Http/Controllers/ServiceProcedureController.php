@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\ServiceProcedure;
 use App\Service;
+use Validator;
+use Auth;
+use DB;
+use DataTables;
 
 class ServiceProcedureController extends Controller
 {   
@@ -37,6 +42,14 @@ class ServiceProcedureController extends Controller
             ->make();
     }
 
+    public function serviceprocedures(Request $request)
+    {   
+        $service_id = $request->get('service_id');
+        $procedures = ServiceProcedure::where('serviceid', '=', $service_id)->get();
+
+        return response()->json(['procedures' => $procedures], 200);
+    }
+
     public function create()
     {   
         $services = Service::all();
@@ -45,6 +58,33 @@ class ServiceProcedureController extends Controller
 
     public function store(Request $request)
     {
-        return $request;
+        $rules = [
+            'service.required' => 'Please enter service'
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'service' => 'required'
+        ], $rules);
+
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 200);
+        }
+
+        $ctr = count($request->get('procedure'));
+        $procedure = $request->get('procedure');
+        $price = $request->get('price');
+
+        for($x=0; $x < $ctr; $x++)
+        {
+            $service = new ServiceProcedure();
+            $service->serviceid = $request->get('service');
+            $service->procedure = $procedure[$x];
+            $service->price = $price[$x];
+            $service->save();
+
+        }
+
+        return response()->json(['success' => 'Record has successfully added'], 200);
     }
 }

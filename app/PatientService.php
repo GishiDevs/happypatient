@@ -15,7 +15,9 @@ class PatientService extends Model
                            'or_number', 
                            'note', 
                            'grand_total', 
-                           'cancelled'];
+                           'status', 
+                           'cancelled',
+                           'canceldate'];
 
     public function PatientServiceItems()
     {

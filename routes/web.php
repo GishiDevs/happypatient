@@ -128,6 +128,10 @@ Route::group(['prefix' => 'serviceprocedure', 'middleware' => ['auth','service_p
         'uses' => 'ServiceProcedureController@getprocedurerecord',
         'as' => 'getprocedurerecord',
     ]);
+    Route::post('/serviceprocedures', [
+        'uses' => 'ServiceProcedureController@serviceprocedures',
+        'as' => 'serviceprocedures',
+    ]);
     Route::get('/edit/{id}', [
         'uses' => 'ServiceProcedureController@edit',
         'as' => 'serviceprocedure.edit',

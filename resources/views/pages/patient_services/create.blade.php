@@ -190,11 +190,9 @@ $(document).ready(function () {
                                           '<div class="form-group div-procedure">'+
                                             '<select class="form-control select2" name="procedure" id="procedure-linenum-'+linenum+'" style="width: 100%;" disabled>'+
                                               '<option selected="selected" value="" disabled>Select Procedure</option>'+
-                                              '<option value="sample" data-procedure="sample" data-linenum="'+linenum+'">Sample</option>'+
-                                              '<option value="sample2" data-procedure="sample2" data-linenum="'+linenum+'">Sample2</option>'+
                                             '</select>'+
                                           '</div>'+
-                                          '<input type="text" id="procedure-linenum-'+linenum+'" name="procedure[]" value="" hidden>'+
+                                          '<input type="text" id="procedures-linenum-'+linenum+'" name="procedures[]" value="" hidden>'+
                                         '</td>'+
                                         '<td>'+
                                           '<input class="form-control input-small affect-total" type="text" name="price[]" id="price-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="" data-serviceid="" data-linenum="'+linenum+'" disabled>'+
@@ -218,11 +216,11 @@ $(document).ready(function () {
     $('.select2').select2();
 
     //find services on table then remove them from the select option if exists
-    $('#table-services tbody tr td').find('.span-service').each(function(){
-      var service = $(this).text();
-      $('select').find('[data-service="'+service+'"]').remove();
+    // $('#table-services tbody tr td').find('.span-service').each(function(){
+    //   var service = $(this).text();
+    //   $('select').find('[data-service="'+service+'"]').remove();
       
-    });
+    // });
 
     //count service select option
     var ctr = 0;
@@ -262,6 +260,24 @@ $(document).ready(function () {
       //   $('#add-item').addClass('disabled');    
       // }
 
+      $.ajax({
+        url: "{{ route('serviceprocedures') }}",
+        method: "POST",
+        data: {_token: "{{ csrf_token() }}", service_id: service_id},
+        success: function(response){
+
+          console.log(response);
+
+          $.each(response.procedures, function( index, value ) {
+            $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
+          }); 
+
+        },
+        error: function(response){
+
+        }
+      });
+
     });
 
 
@@ -271,7 +287,7 @@ $(document).ready(function () {
       var procedure = $(this).find(':selected').data('procedure');
       var procedure_id = $(this).val();
 
-      $('#procedure-linenum-'+linenum).val(procedure_id);
+      $('#procedures-linenum-'+linenum).val(procedure_id);
 
       $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+procedure+'</span>')
       $('.div-procedure').remove();
@@ -285,11 +301,8 @@ $(document).ready(function () {
       //Remove class disabled on Add Item Button 
       $('#add-item').removeClass('disabled'); 
 
-      //if service select option has no more item
-      // if(ctr == 2)
-      // {
-      //   $('#add-item').addClass('disabled');    
-      // }
+      //Remove attribute disabled on button Add
+      $('#btn-add').removeAttr('disabled'); 
 
     });
     

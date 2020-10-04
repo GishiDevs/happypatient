@@ -16,7 +16,7 @@ class ServiceProcedureRecordMaintenance
      */
     public function handle($request, Closure $next)
     {
-        if($request->is('serviceprocedure/index') || $request->is('serviceprocedure/procedures'))
+        if($request->is('serviceprocedure/index') || $request->is('serviceprocedure/procedures') || $request->is('serviceprocedure/serviceprocedures'))
         {
             if(Auth::user()->can('serviceprocedure-list'))
             {

@@ -15,6 +15,7 @@ class CreateServiceProceduresTable extends Migration
     {
         Schema::create('service_procedures', function (Blueprint $table) {
             $table->id();
+            $table->integer('serviceid');
             $table->string('procedure');
             $table->decimal('price', 8, 2);
             $table->timestamps();

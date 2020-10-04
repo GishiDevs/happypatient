@@ -48,6 +48,8 @@ class PermissionSeeder extends Seeder
             'patientservices-list-laboratory',
             'patientservices-list-physicaltherapy',
             'patientservices-list-xray',
+            'patientservices-list-package',
+            'patientservices-list-profile',
          ];
  
  

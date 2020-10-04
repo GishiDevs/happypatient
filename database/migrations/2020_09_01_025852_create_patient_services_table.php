@@ -24,7 +24,9 @@ class CreatePatientServicesTable extends Migration
             $table->string('or_number')->nullable();
             $table->string('note')->nullable();
             $table->decimal('grand_total', 8, 2);
+            $table->string('status');
             $table->string('cancelled');
+            $table->date('canceldate')->nullable();
             $table->timestamps();
         });
     }

@@ -103,7 +103,7 @@
                       <label for="age">Age</label>
                       <input type="text" class="form-control" name="age" id="age" value="{{ $patient->age }}" placeholder="0">
                     </div> -->
-                    <div class="form-group col-md-4">
+                    <!-- <div class="form-group col-md-4">
                       <label for="weight">Weight</label> <span class="text-danger">*</span>
                       <div class="input-group">
                         <input class="form-control" type="text" name="weight" id="weight" value="{{ $patient->weight }}" placeholder="0.00">
@@ -111,7 +111,7 @@
                           <span class="input-group-text">Kg</span>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                   <hr>
                   <div class="row">

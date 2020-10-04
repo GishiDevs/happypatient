@@ -154,14 +154,18 @@ class PatientServiceController extends Controller
         $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
         $patientservice->bloodpressure = $request->get('bloodpressure');
+        $patientservice->temperature = $request->get('temperature');
+        $patientservice->weight = $request->get('weight');
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->grand_total = $request->get('grand_total');
-        $patientservice->cancelled = 'N';
+        $patientservice->status = 'O'; //status Open
+        $patientservice->cancelled = 'N'; //cancelled (No)
         $patientservice->save();
 
         $ctr = count($request->get('services'));
         $service_id = $request->get('services');
+        $procedure_id = $request->get('procedures');
         $price = $request->get('price');
         $discount = $request->get('discount');
         $discount_amt = $request->get('discount_amt');
@@ -205,6 +209,7 @@ class PatientServiceController extends Controller
             $serviceitem = new PatientServiceItem();
             $serviceitem->psid = $patientservice->id;
             $serviceitem->serviceid = $service_id[$x];
+            $serviceitem->procedureid = $procedure_id[$x];
             $serviceitem->status = "pending";
             $serviceitem->price = $service_price;
             $serviceitem->discount = $service_discount;
@@ -258,6 +263,16 @@ class PatientServiceController extends Controller
             $services[] = 'X-Ray';
         }
 
+        if(Auth::user()->can('patientservices-list-package'))
+        {
+            $services[] = 'Package';
+        }
+
+        if(Auth::user()->can('patientservices-list-profile'))
+        {
+            $services[] = 'Profile';
+        }
+
         $patientservice = PatientService::find($psid);
 
         //if record is empty then display error page
@@ -309,6 +324,7 @@ class PatientServiceController extends Controller
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->cancelled = 'Y';
+        $patientservice->canceldate = Carbon::now()->format('Y-m-d');
         $patientservice->save();
 
         return redirect('patientservice/index');

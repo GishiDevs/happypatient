@@ -19,6 +19,8 @@ class ServicesSeeder extends Seeder
             'Laboratory',
             'Physical Therapy',
             'X-Ray',
+            'Package',
+            'Profile',
          ];
  
  

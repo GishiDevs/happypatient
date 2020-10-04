@@ -70,7 +70,7 @@ class ServiceController extends Controller
         $service->status = $request->get('status');
         $service->save();
 
-        return response()->json(['success' => 'Record has successfully added'], 200);
+        return response()->json(['success' => 'Record has successfully added', 'service' => $service], 200);
     }
 
 

@@ -19,7 +19,7 @@ class CreatePatientsTable extends Migration
             $table->string('firstname');
             $table->string('middlename')->nullable();
             $table->date('birthdate');
-            $table->decimal('weight',5,2);
+            $table->decimal('weight',5,2)->nullable();
             $table->string('gender');
             $table->integer('age')->nullable();
             $table->string('civilstatus');
