@@ -36,7 +36,7 @@
               <form role="form" id="patientserviceform">
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-3 div-patient">
+                    <div class="form-group col-md-4 div-patient">
                       <label for="patient">Patient</label>
                       <select class="form-control select2" name="patient" id="patient" style="width: 100%;">
                         <option selected="selected" value="" disabled>Select Patient</option>
@@ -45,7 +45,7 @@
                         @endforeach
                       </select>
                     </div>
-                    <div class="form-group col-md-3 div-docdate">
+                    <div class="form-group col-md-4 div-docdate">
                       <label for="docdate">Document Date</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
@@ -54,18 +54,38 @@
                         <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
                       </div>
                     </div>
-                    <div class="form-group col-md-3">
-                      <label for="bloodpressure">Blood Pressure</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
-                      </div>
-                    </div> 
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                       <label for="OfficialReceipt">Official Receipt No.</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="or_number" id="or_number">
                       </div>
                     </div>           
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="bloodpressure">Blood Pressure</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="temperature">Temperature</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="temperature" id="temperature" placeholder="00.0">
+                        <div class="input-group-append">
+                          <span class="input-group-text">°C</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="weight">Weight</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">
+                        <div class="input-group-append">
+                          <span class="input-group-text">Kg</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <hr>
                   <div class="row">
@@ -262,12 +282,15 @@ $(document).ready(function () {
         $('#price-linenum-'+ linenum).removeAttr('disabled');
       }
 
-      
+      //Remove class disabled on Add Item Button 
+      $('#add-item').removeClass('disabled'); 
+
       //if service select option has no more item
-      if(ctr == 2)
-      {
-        $('#add-item').addClass('disabled');    
-      }
+      // if(ctr == 2)
+      // {
+      //   $('#add-item').addClass('disabled');    
+      // }
+
     });
     
     //service price text change
@@ -286,14 +309,14 @@ $(document).ready(function () {
         price_per_service = parseFloat($(this).val()).toFixed(2);
         
         $('#add-item').removeClass('disabled');
-        $('#btn-add').removeAttr('disabled');
+        // $('#btn-add').removeAttr('disabled');
       }
       else
       {
         price_per_service = 0;
 
         $('#add-item').addClass('disabled');
-        $('#btn-add').attr('disabled', true);
+        // $('#btn-add').attr('disabled', true);
       }
 
       //if discount % has value
@@ -576,6 +599,21 @@ $(document).ready(function () {
     $('.service-grand-total').empty().append(parseFloat(sum).toFixed(2));
 
   }
+
+  $('#weight').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:2,
+      allowMinus:false
+        
+    });
+    $('#temperature').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:1,
+      allowMinus:false
+        
+    });
 
 });
 </script>

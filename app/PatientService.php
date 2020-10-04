@@ -10,6 +10,8 @@ class PatientService extends Model
                            'patientname', 
                            'docdate', 
                            'bloodpressure', 
+                           'weight',
+                           'temperature',
                            'or_number', 
                            'note', 
                            'grand_total', 
