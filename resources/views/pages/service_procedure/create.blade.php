@@ -39,19 +39,19 @@
                   <div class="row"> 
                     <div class="form-group col-md-4 div-service">
                       <label for="service">Service</label>
-                      <div class="input-group">
+                      <!-- <div class="input-group"> -->
                         <select class="form-control select2" name="service" id="service">
                           <option selected="selected" value="" disabled>Select Service</option>
                           @foreach($services as $service)
                           <option value="{{ $service->id }}">{{ $service->service }}</option>
                           @endforeach
                         </select>
-                        <div class="input-group-append">
+                        <!-- <div class="input-group-append">
                           <a href="" class="input-group-text btn-primary" id="btn-add-service" data-toggle="modal" data-target="#modal-service">
                             <i class="fa fa-plus"></i>
                           </a>
-                        </div>
-                      </div>
+                        </div> -->
+                      <!-- </div> -->
                       
                     </div>           
                   </div>

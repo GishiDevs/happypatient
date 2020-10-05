@@ -42,7 +42,7 @@ class ServiceProcedureRecordMaintenance
             }
         }
 
-        if($request->is('serviceprocedure/edit') || $request->is('serviceprocedure/update'))
+        if($request->is('serviceprocedure/edit/*') || $request->is('serviceprocedure/update/*'))
         {
             if(Auth::user()->can('serviceprocedure-edit'))
             {

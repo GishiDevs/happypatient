@@ -35,7 +35,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @can('service-list')
-                <table id="service-table" class="table table-bordered table-striped">
+                <table id="procedure-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
@@ -78,36 +78,108 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<!-- /.content-wrapper -->
+<div class="modal fade" id="modal-procedure">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Update Procedure</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form role="form" id="serviceprocedureform">
+        <div class="card-body">
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="service">Service</label>
+              <select class="form-control select2" name="service" id="service" style="width: 100%;">
+                <option selected="selected" value="" disabled>Select Service</option>
+                @foreach($services as $service)
+                <option value="{{ $service->id }}" data-service="{{ $service->service }}">{{ $service->service }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="procedure">Procedure</label>
+              <input type="text" name="procedure" class="form-control" id="procedure" placeholder="Enter procedure">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="price">Price</label>
+              <input type="text" name="price" class="form-control" id="price" placeholder="0.00">
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="modal-footer">
+          <button type="reset" id="btn-cancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" id="btn-save" class="btn btn-primary">Save</button> 
+        </div>
+      </form>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 <script>
 
   $(document).ready(function() {
-    // var action_type;
-    // var serviceid;
-    // var columns = [{ "data": "DT_RowIndex"},
-    //                { "data": "id"},
-    //                { "data": "service"},
-    //                { "data": "status"}];
+    var action_type;
+    var serviceid;
+    var columns = [{ "data": "DT_RowIndex"},
+                   { "data": "id"},
+                   { "data": "service"},
+                   { "data": "procedure"},
+                   { "data": "price"}];
 
-    // @canany(['service-edit', 'service-delete'])
-    //   columns.push({data: "action"});
-    // @endcanany
+    @canany(['serviceprocedure-edit', 'serviceprocedure-delete'])
+      columns.push({data: "action"});
+    @endcanany
     
-		// 	// $('#tax-table').DataTable();
-	  // $('#service-table').DataTable({
-    //     "responsive": true,
-    //     "autoWidth": false,
-		//     "processing": true,
-		//     "serverSide": true,
-		//     "ajax": "{{ route('getprocedurerecord') }}",
-		//     "bDestroy": true,
-		//     "columns": columns,
-    //     "order": [ 1, "asc" ],
-    //     "columnDefs": [{
-    //                       "targets": "no-sort",
-    //                       "orderable": false
-    //                     }] 
-    // });
+			// $('#tax-table').DataTable();
+	  $('#procedure-table').DataTable({
+        "responsive": true,
+        "autoWidth": false,
+		    "processing": true,
+		    "serverSide": true,
+		    "ajax": "{{ route('getprocedurerecord') }}",
+		    "bDestroy": true,
+		    "columns": columns,
+        "order": [ 1, "asc" ],
+        "columnDefs": [{
+                          "targets": "no-sort",
+                          "orderable": false
+                        }] 
+    });
 
+    $('#procedure-table').on('click', 'tbody td #btn-edit-procedure', function(e){
+      e.preventDefault();
+      $('#modal-procedure').modal('toggle');
+    });
+
+    $('[name="price"]').inputmask('decimal', {
+      rightAlign: true,
+      digits:2,
+      allowMinus:false
+    });
+
+
+    $('.select2').select2();
+
+    $('#btn-cancel').click(function(e){
+        $('#select2-service-container').empty().append('Select Service');
+        $('#serviceprocedureform')[0].reset();
+    });
+
+
+
+  });
 </script>
 @endsection
 

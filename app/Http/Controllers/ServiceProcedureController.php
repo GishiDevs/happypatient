@@ -13,27 +13,32 @@ use DataTables;
 class ServiceProcedureController extends Controller
 {   
     public function index()
-    {
-        return view('pages.service_procedure.index');
+    {   
+        $services = Service::all();
+
+        return view('pages.service_procedure.index', compact('services'));
     }
 
     public function getprocedurerecord()
     {
-        $service = Service::all();
-        return DataTables::of($service)
-            ->addColumn('action',function($service){
+        $serviceprocedures = DB::table('services')
+                               ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
+                               ->select('service_procedures.id', 'services.service', 'service_procedures.procedure', 'service_procedures.price')
+                               ->get();
+        return DataTables::of($serviceprocedures)
+            ->addColumn('action',function($serviceprocedures){
 
                 $edit = '';
                 $delete = '';
 
-                if(Auth::user()->can('service-edit'))
+                if(Auth::user()->can('serviceprocedure-edit'))
                 {
-                    $edit = '<a href="" class="btn btn-sm btn-info" data-serviceid="'.$service->id.'" data-action="edit" id="btn-edit-service" data-toggle="modal" data-target="#modal-service"><i class="fa fa-edit"></i> Edit</a>';
+                    $edit = '<a href="" class="btn btn-sm btn-info" data-procedureid="'.$serviceprocedures->id.'" data-action="edit" id="btn-edit-procedure"><i class="fa fa-edit"></i> Edit</a>';
                 }
 
-                if(Auth::user()->can('service-delete'))
+                if(Auth::user()->can('serviceprocedure-delete'))
                 {
-                    $delete = '<a href="" class="btn btn-sm btn-danger" data-serviceid="'.$service->id.'" data-action="delete" id="btn-delete-service"><i class="fa fa-trash"></i> Delete</a>';
+                    $delete = '<a href="" class="btn btn-sm btn-danger" data-procedureid="'.$serviceprocedures->id.'" data-action="delete" id="btn-delete-procedure"><i class="fa fa-trash"></i> Delete</a>';
                 }
                 
                 return $edit . ' ' . $delete;
@@ -86,5 +91,10 @@ class ServiceProcedureController extends Controller
         }
 
         return response()->json(['success' => 'Record has successfully added'], 200);
+    }
+
+    public function edit($procedure_id)
+    {
+        return response()->json($procedure_id, 200);
     }
 }
