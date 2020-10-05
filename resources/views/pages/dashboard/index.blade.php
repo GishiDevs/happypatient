@@ -36,9 +36,10 @@
                       <th>Document Date</th>
                       <th>Patient Name</th>
                       <th>Service</th>
+                      <th>Procedure</th>
                       <th width="50px">Status</th>
                       <th>Diagnose Date</th>
-                      <th width="140px" class="no-sort">Actions</th>
+                      <th width="100px" class="no-sort">Actions</th>
                     </tr>
                   </thead>
                   <tfoot>
@@ -48,6 +49,7 @@
                       <th>Document Date</th>
                       <th>Patient Name</th>
                       <th>Service</th>
+                      <th>Procedure</th>
                       <th>Status</th>
                       <th>Diagnose Date</th>
                       <th>Actions</th>
@@ -92,11 +94,12 @@
 		    		        { "data": "docdate"},
 		    		        { "data": "patientname"},
 		    		        { "data": "service"},
+                    { "data": "procedure"},
                     { "data": "status"},
                     { "data": "diagnose_date"},
                     { "data": "action"}
 		    ],
-        "order": [[ 5, "desc" ],
+        "order": [[ 6, "desc" ],
                   [ 2, "asc" ], 
                   [ 4, "asc" ], 
                   [ 1, "asc" ]
@@ -106,7 +109,7 @@
           { "visible": false, "targets": 1 },
           { "targets": "no-sort","orderable": false },
           {
-            "targets": 5,
+            "targets": 6,
             "render": function ( data ) {
                 if(data == 'diagnosed')
                 {

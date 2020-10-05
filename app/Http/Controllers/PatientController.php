@@ -44,17 +44,17 @@ class PatientController extends Controller
 
                 if(Auth::user()->can('patient-edit'))
                 {
-                    $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i> Edit</a>';
+                    $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>';
                 }
 
                 if(Auth::user()->can('patient-delete'))
                 {
-                    $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i> Delete</a>';
+                    $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i></a>';
                 }
 
                 if(Auth::user()->can('patient-history'))
                 {
-                    $view = '<a href="'.route("patient.history",$patient->id).'" class="btn btn-sm btn-primary" data-patientid="'.$patient->id.'" data-action="history" id="btn-history"><i class="fa fa-eye"></i> History</a>';
+                    $view = '<a href="'.route("patient.history",$patient->id).'" class="btn btn-sm btn-primary" data-patientid="'.$patient->id.'" data-action="history" id="btn-history"><i class="fa fa-eye"></i></a>';
                 }
                 
                 return $edit .' '. $delete .' '. $view;
@@ -286,7 +286,8 @@ class PatientController extends Controller
                                   ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
                                   ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select('patient_service_items.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number','services.service', 
+                                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                                  ->select('patient_service_items.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number','services.service', 'service_procedures.procedure',
                                            'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status')
                                   ->where('patient_services.cancelled', '=', 'N')
                                   ->where('patients.id', '=', $patientid)

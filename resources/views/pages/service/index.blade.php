@@ -331,7 +331,7 @@
                                 showConfirmButton: false,
                                 timer: 2500
                               });  
-                    $('#modal-service').modal('toggle');
+                    $('#modal-procedure').modal('toggle');
                 }   
                 else
                 {

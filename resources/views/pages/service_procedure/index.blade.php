@@ -130,8 +130,7 @@
 <script>
 
   $(document).ready(function() {
-    var action_type;
-    var serviceid;
+    var procedure_id;
     var columns = [{ "data": "DT_RowIndex"},
                    { "data": "id"},
                    { "data": "service"},
@@ -158,17 +157,125 @@
                         }] 
     });
 
+    // edit procedure
     $('#procedure-table').on('click', 'tbody td #btn-edit-procedure', function(e){
       e.preventDefault();
+      
+      $('#btn-save').removeAttr('disabled');
+
+      procedure_id = $(this).data('procedureid');
+
+      $.ajax({
+        url: "{{ route('serviceprocedure.edit') }}",
+        method: "POST",
+        data: {_token: "{{ csrf_token() }}", procedure_id: $(this).data('procedureid')},
+        success: function(response){
+          console.log(response);
+
+          $('#procedure').val(response.procedure.procedure);
+          $('#price').val(response.procedure.price);
+
+          $('#service').find('option').each(function(){
+            if($(this).val() == response.procedure.serviceid)
+            { 
+              $('#select2-service-container').empty().append(response.procedure.service);
+              $(this).attr('selected', 'selected');
+            }
+          });
+
+        },
+        error: function(response){
+          console.log(response);
+        }
+      });
+
       $('#modal-procedure').modal('toggle');
     });
+
+    //Delete Patient
+    $('#procedure-table').on('click', 'tbody td #btn-delete-procedure', function(e){
+
+      e.preventDefault();
+
+      procedure_id = $(this).data('procedureid');
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Delete record!'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: "{{ route('serviceprocedure.delete') }}",
+            method: "POST",
+            data: {_token: "{{ csrf_token() }}", procedure_id: procedure_id},
+            success: function(response){
+              console.log(response);
+              if(response.success)
+              {
+                Swal.fire(
+                  'Deleted!',
+                  'Record has been deleted.',
+                  'success'
+                );
+                $('#procedure-table').DataTable().ajax.reload();
+              }
+            },
+            error: function(response){
+              console.log(response);
+            }
+          });
+
+        }
+      });
+    });
+
+    $('#btn-save').click(function(e){
+
+      var data = $('#serviceprocedureform').serializeArray();
+      data.push({name: "_token", value: "{{ csrf_token() }}"});
+      data.push({name: "procedure_id", value: procedure_id});
+
+      e.preventDefault();
+      $.ajax({
+        url: "{{ route('serviceprocedure.update') }}",
+        method: "POST",
+        data: data,
+        success: function(response){
+          console.log(response);
+
+          if(response.success)
+          {
+            $('#select2-service-container').empty().append('Select Service');
+            $('#serviceprocedureform')[0].reset();
+            $('#procedure-table').DataTable().ajax.reload();
+            Swal.fire({
+                       position: 'center',
+                       icon: 'success',
+                       title: 'Record has been updated',
+                       showConfirmButton: false,
+                       timer: 2500
+                      });  
+            $('#modal-procedure').modal('toggle');
+          }
+
+        },
+        error: function(response){
+          console.log(response);
+        }
+      });
+    });
+    
 
     $('[name="price"]').inputmask('decimal', {
       rightAlign: true,
       digits:2,
       allowMinus:false
     });
-
 
     $('.select2').select2();
 
@@ -177,6 +284,17 @@
         $('#serviceprocedureform')[0].reset();
     });
 
+    $('#price').on('keyup', function(){
+      if($(this).val() == 0)
+      {
+        $('#btn-save').attr('disabled', true);
+      }
+      else
+      {
+        $('#btn-save').removeAttr('disabled');
+      }
+      
+    });
 
 
   });

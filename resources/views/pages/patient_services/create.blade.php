@@ -269,7 +269,7 @@ $(document).ready(function () {
           console.log(response);
 
           $.each(response.procedures, function( index, value ) {
-            $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
+            $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
           }); 
 
         },
@@ -285,9 +285,11 @@ $(document).ready(function () {
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var procedure = $(this).find(':selected').data('procedure');
+      var price = $(this).find(':selected').data('price');
       var procedure_id = $(this).val();
 
       $('#procedures-linenum-'+linenum).val(procedure_id);
+      $('#price-linenum-'+linenum).val(price);
 
       $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+procedure+'</span>')
       $('.div-procedure').remove();
@@ -296,6 +298,8 @@ $(document).ready(function () {
       {
         // $('#add-item').removeClass('disabled');
         $('#price-linenum-'+ linenum).removeAttr('disabled');
+        $('#discount-linenum-'+ linenum).removeAttr('disabled');
+        $('#discount_amt-linenum-'+ linenum).removeAttr('disabled');
       }
 
       //Remove class disabled on Add Item Button 
@@ -303,6 +307,11 @@ $(document).ready(function () {
 
       //Remove attribute disabled on button Add
       $('#btn-add').removeAttr('disabled'); 
+
+      $('#total-linenum-'+linenum).empty().append(parseFloat(price).toFixed(2));
+
+      //call function getGrandTotal
+      getGrandTotal();
 
     });
     

@@ -37,26 +37,51 @@
                 @csrf
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-3 div-patient">
+                    <div class="form-group col-md-4 div-patient">
                       <label for="patient">Patient:</label>
                       <h5>{{ $patientservice->patientname }}</h5>
                     </div>
-                    <div class="form-group col-md-3 div-docdate">
+                    <div class="form-group col-md-4 div-docdate">
                       <label for="selectPatient">Document Date: </label>
-                      <h5>{{ date('m/d/Y', strtotime($patientservice->docdate)) }}</h5>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m/d/Y', strtotime($patientservice->docdate)) }}">
+                      </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4 ">
+                      <label for="OfficialReceipt">Official Receipt No.</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="or_number" id="or_number" value="{{ $patientservice->or_number }}">
+                      </div>
+                    </div>      
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
                       <label for="bloodpressure">Blood Pressure</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" value="{{ $patientservice->bloodpressure }}">
                       </div>
                     </div> 
-                    <div class="form-group col-md-3">
-                      <label for="OfficialReceipt">Official Receipt No.</label>
+                    <div class="form-group col-md-4">
+                      <label for="temperature">Temperature</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="or_number" id="or_number" value="{{ $patientservice->or_number }}">
+                        <input class="form-control" type="text" name="temperature" id="temperature" placeholder="00.0" value="{{ $patientservice->temperature }}">
+                        <div class="input-group-append">
+                          <span class="input-group-text">°C</span>
+                        </div>
                       </div>
-                    </div>           
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="weight">Weight</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00" value="{{ $patientservice->weight }}"> 
+                        <div class="input-group-append">
+                          <span class="input-group-text">Kg</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <hr>
                   <div class="row">
@@ -64,17 +89,19 @@
                       <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
                           <th>Services</th>
+                          <th>Procedures</th>
                           <th>Price (PHP)</th>
                           <th>Discount (%)</th>
                           <th>Discount (PHP)</th>
                           <th>Total Amount (PHP)</th>
                           <th>Status</th>
-                          <th width="170px">Action</th>
+                          <th width="120px">Action</th>
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
                         <tr>
                           <td>{{ $services->service }}</td>
+                          <td>{{ $services->procedure }}</td>
                           <td>{{ $services->price }}</td>
                           <td>{{ $services->discount }}</td>
                           <td>{{ $services->discount_amt }}</td>
@@ -92,7 +119,7 @@
                               @if($services->status == 'diagnosed')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View Diagnosis</a> 
                               @elseif($services->status == 'pending')
-                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Create Diagnosis</a>
+                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
                               @endif 
                           </td>
                         </tr>
@@ -100,7 +127,7 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">{{ $patientservice->grand_total}}</span></strong></td>
@@ -189,6 +216,20 @@ $(document).ready(function () {
    
   });
   
+  $('#weight').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:2,
+      allowMinus:false
+        
+    });
+    $('#temperature').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:1,
+      allowMinus:false
+        
+    });
 
 });
 </script>

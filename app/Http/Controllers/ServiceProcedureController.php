@@ -93,8 +93,50 @@ class ServiceProcedureController extends Controller
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
-    public function edit($procedure_id)
-    {
-        return response()->json($procedure_id, 200);
+    public function edit(Request $request)
+    {   
+        $procedure_id = $request->get('procedure_id');
+
+        $procedure = DB::table('services')
+                       ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
+                       ->select('service_procedures.id', 'service_procedures.serviceid', 'services.service', 'service_procedures.procedure', 'service_procedures.price')
+                       ->where('service_procedures.id', '=', $procedure_id)
+                       ->first();
+
+        //if record is empty then display error page
+        if(empty($procedure->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        return response()->json(['procedure' => $procedure], 200);
+    }
+
+    public function update(Request $request)
+    {   
+        $procedure_id = $request->get('procedure_id');
+
+        $procedure = ServiceProcedure::find($procedure_id);
+        $procedure->procedure = $request->get('procedure');
+        $procedure->price = $request->get('price');
+        $procedure->save();
+
+        return response()->json(['success' => 'Record has been updated'], 200);
+    }
+
+    public function delete(Request $request)
+    {   
+        $procedure_id = $request->get('procedure_id');
+        $procedure = ServiceProcedure::find($procedure_id);
+
+        //if record is empty then display error page
+        if(empty($procedure->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        $procedure->delete();
+
+        return response()->json(['success' => 'Record has been deleted'], 200);
     }
 }

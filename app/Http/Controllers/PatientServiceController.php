@@ -80,8 +80,11 @@ class PatientServiceController extends Controller
         $diagnosed =  DB::table('patient_services')
                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                 ->join('diagnoses', 'patient_service_items.id' , '=', 'diagnoses.ps_items_id')
-                ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
+                ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 
+                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'patient_services.patientname', 'services.service', 
+                         'service_procedures.procedure', 'patient_service_items.status')
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
                 ->where('patient_service_items.status', '=', 'diagnosed')
@@ -92,7 +95,9 @@ class PatientServiceController extends Controller
         $patientservices =  DB::table('patient_services')
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), DB::raw("'' as diagnose_date"), 'patient_services.patientname', 'services.service', 'patient_service_items.status')
+                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 
+                          DB::raw("'' as diagnose_date"), 'patient_services.patientname', 'services.service', 'service_procedures.procedure', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_service_items.status', '=', 'pending')
@@ -101,7 +106,7 @@ class PatientServiceController extends Controller
 
             return DataTables::of($patientservices)
                 ->addcolumn('action',function($patientservices){
-                    return '<a href="'.route("diagnosis.create",$patientservices->ps_items_id).'" class="btn btn-sm btn-success" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Create Diagnosis</a>';
+                    return '<a href="'.route("diagnosis.create",$patientservices->ps_items_id).'" class="btn btn-sm btn-success" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>';
                             // <a href="" class="btn btn-sm btn-danger" data-ps_items_id="'.$patientservices->ps_items_id.'" data-action="cancel" id="btn-cancel-diagnosis"><i class="fa fa-times"></i> Cancel</a>';
                 })
                 ->addIndexColumn()
@@ -283,7 +288,9 @@ class PatientServiceController extends Controller
 
         $patientserviceitems =  DB::table('patient_service_items')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                 ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status')
+                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                 ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.procedure',
+                          'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
@@ -301,8 +308,10 @@ class PatientServiceController extends Controller
         {
             return abort(404, 'Not Found');
         }
-
+        $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
         $patientservice->bloodpressure = $request->get('bloodpressure');
+        $patientservice->temperature = $request->get('temperature');
+        $patientservice->weight = $request->get('weight');
         $patientservice->or_number = $request->get('or_number');
         $patientservice->note = $request->get('note');
         $patientservice->save();
