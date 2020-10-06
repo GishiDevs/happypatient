@@ -171,6 +171,10 @@ Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_ser
         'uses' => 'PatientServiceController@update',
         'as' => 'patientservice.update',
     ]);
+    Route::post('/update_price', [
+        'uses' => 'PatientServiceController@update_price',
+        'as' => 'patientservice.update_price',
+    ]);
     Route::post('/cancel/{id}', [
         'uses' => 'PatientServiceController@cancel',
         'as' => 'patientservice.cancel',

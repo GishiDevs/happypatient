@@ -320,6 +320,47 @@ class PatientServiceController extends Controller
 
     }
 
+    public function update_price(Request $request)
+    {   
+        $ps_item_id = $request->get('ps_item_id');
+        $patientserviceitem = PatientServiceItem::find($ps_item_id);
+
+        //if record is empty then display error page
+        if(empty($patientserviceitem->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        $patientserviceitem->price = $request->get('price');
+        $patientserviceitem->discount = $request->get('discount');
+        $patientserviceitem->discount_amt = $request->get('discount_amt');
+        $patientserviceitem->total_amount = $request->get('total_amount');
+        $patientserviceitem->save();
+
+        $service_amounts = PatientServiceItem::where('psid', $patientserviceitem->psid)->get();
+        $grand_total = 0;
+
+        foreach($service_amounts as $service_amount)
+        {
+            $grand_total = $grand_total + $service_amount->total_amount;
+        }
+
+        $patientservice = PatientService::find($patientserviceitem->psid);
+
+        //if record is empty then display error page
+        if(empty($patientservice->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        $patientservice->grand_total = $grand_total;
+
+        $patientservice->save();
+
+        return response()->json(['success' => 'Record has been updated'], 200);
+
+    }
+
     public function cancel(Request $request, $psid)
     {
         $patientservice = PatientService::find($psid);

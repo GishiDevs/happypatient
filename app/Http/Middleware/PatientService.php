@@ -42,7 +42,7 @@ class PatientService
             }
         }
 
-        if($request->is('patientservice/edit/*') || $request->is('patientservice/update/*'))
+        if($request->is('patientservice/edit/*') || $request->is('patientservice/update/*') || $request->is('patientservice/update_price'))
         {   
             if(Auth::user()->can('patientservices-edit'))
             {
