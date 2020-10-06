@@ -76,17 +76,32 @@
                       <h5>{{ $patient_service->address }}</h5>
                     </div>
                   </div>
+                  <hr>
                   <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                      <label for="bloodpressure">Blood Pressure:</label>
+                      <h5>{{ $patient_service->bloodpressure }}</h5>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="temperature">Temperature (°C):</label>
+                      <h5>{{ $patient_service->temperature }}</h5>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="weight">Weight (Kg):</label>
+                      <h5>{{ $patient_service->weight }}</h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-3">
                       <label for="service">Service: </label>
                       <h5>{{ $patient_service->service }}</h5>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                       <label for="file#">File #: </label>
                       <h5>{{ $file_no }} <input type="text" name="file_no" value="{{ $file_no }}" hidden></h5>
                     </div>
-                  </div>
-                  <hr>
+                  </div>                   
+                  <hr> 
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="title">Referring Physician</label>
@@ -94,14 +109,7 @@
                         <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician">
                       </div>
                     </div>
-                    <div class="form-group col-md-4">
-                      <label for="title">Blood Pressure</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" placeholder="Enter blood pressure" value="{{ $patient_service->bloodpressure }}">
-                      </div>
-                    </div>
-                  </div> 
-                  <hr> 
+                  </div>
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="title">Title</label>

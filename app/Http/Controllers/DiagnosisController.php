@@ -36,7 +36,7 @@ class DiagnosisController extends Controller
                                   ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),  
                                            'patient_services.bloodpressure', 'patient_services.patientname', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus',
                                            'patients.age', 'patients.gender', 'patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),
-                                           DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
+                                           DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.temperature', 'patient_services.weight')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
@@ -68,11 +68,7 @@ class DiagnosisController extends Controller
         {
             if(!Auth::user()->can('patientservices-list-ultrasound'))
             {
-                return "You don't have permission";
-            }
-            else
-            {
-                return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -80,11 +76,7 @@ class DiagnosisController extends Controller
         {
             if(!Auth::user()->can('patientservices-list-ecg'))
             {
-                return "You don't have permission";
-            }
-            else
-            {
-                return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -92,11 +84,7 @@ class DiagnosisController extends Controller
         {
             if(!Auth::user()->can('patientservices-list-checkup'))
             {
-                return "You don't have permission";
-            }
-            else
-            {
-                return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -104,11 +92,7 @@ class DiagnosisController extends Controller
         {
             if(!Auth::user()->can('patientservices-list-laboratory'))
             {
-                return "You don't have permission";
-            }
-            else
-            {
-                return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -116,11 +100,7 @@ class DiagnosisController extends Controller
         {
             if(!Auth::user()->can('patientservices-list-physicaltherapy'))
             {
-                return "You don't have permission";
-            }
-            else
-            {
-                return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
+                return abort(401, 'Unauthorized');
             }
         }
 
@@ -128,13 +108,11 @@ class DiagnosisController extends Controller
         {
             if(!Auth::user()->can('patientservices-list-xray'))
             {
-                return "You don't have permission";
-            }
-            else
-            {
-                return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
+                return abort(401, 'Unauthorized');
             }
         }
+
+        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
         
     }
 
@@ -176,7 +154,7 @@ class DiagnosisController extends Controller
         $diagnosis->file_no = $request->get('file_no');
         $diagnosis->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
         $diagnosis->physician = $request->get('physician');
-        $diagnosis->bloodpressure = $request->get('bloodpressure');
+        // $diagnosis->bloodpressure = $request->get('bloodpressure');
         $diagnosis->title = $request->get('title');
         $diagnosis->content = $request->get('content');
         $diagnosis->save();
@@ -202,7 +180,8 @@ class DiagnosisController extends Controller
                                            DB::raw('diagnoses.id as diagnoses_id'), DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.patientname', 'services.service',  
                                            DB::raw('services.id as service_id'), 'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', 
                                            DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),'diagnoses.physician', 
-                                           'diagnoses.bloodpressure', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
+                                           'patient_services.bloodpressure', 'patient_services.temperature', 'patient_services.weight', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', 
+                                           DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->first();
 
@@ -323,7 +302,7 @@ class DiagnosisController extends Controller
         }
 
         $diagnosis->physician = $request->get('physician');
-        $diagnosis->bloodpressure = $request->get('bloodpressure');
+        // $diagnosis->bloodpressure = $request->get('bloodpressure');
         $diagnosis->title = $request->get('title');
         $diagnosis->content = $request->get('content');
         $diagnosis->save();

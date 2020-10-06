@@ -117,6 +117,7 @@ class ServiceProcedureController extends Controller
         $procedure_id = $request->get('procedure_id');
 
         $procedure = ServiceProcedure::find($procedure_id);
+        $procedure->serviceid = $request->get('service');
         $procedure->procedure = $request->get('procedure');
         $procedure->price = $request->get('price');
         $procedure->save();
