@@ -191,7 +191,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ route('transactions.index') }}" class="nav-link {{ (request()->is('transactions')) ? 'active' : '' }}">
-              <i class="nav-icon fas fa-money-bill-alt"></i>
+              <i class="nav-icon fas fa-dollar-sign"></i>
               <p>
                 Transactions
               </p>

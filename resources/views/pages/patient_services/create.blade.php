@@ -267,6 +267,7 @@ $(document).ready(function () {
         success: function(response){
 
           console.log(response);
+          
           $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
           $.each(response.procedures, function( index, value ) {
             $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
@@ -274,7 +275,7 @@ $(document).ready(function () {
 
         },
         error: function(response){
-
+          console.log(response);
         }
       });
 
