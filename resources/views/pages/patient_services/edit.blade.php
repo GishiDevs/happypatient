@@ -95,7 +95,7 @@
                           <th>Discount (PHP)</th>
                           <th>Total Amount (PHP)</th>
                           <th>Status</th>
-                          <th width="200px">Action</th>
+                          <th width="180px">Actions</th>
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
@@ -116,7 +116,7 @@
                               @endif
                           </td>
                           <td>
-                              <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}"><i class="fa fa-edit"></i> Edit</a> 
+                              <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}" @if($services->docdate != date('Y-m-d')) hidden @endif><i class="fa fa-edit"></i> Edit {{date('Y-m-d')}} {{$services->docdate}}</a> 
                               @if($services->status == 'diagnosed')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending')

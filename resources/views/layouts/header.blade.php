@@ -189,6 +189,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('transactions.index') }}" class="nav-link {{ (request()->is('transactions')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-money-bill-alt"></i>
+              <p>
+                Transactions
+              </p>
+            </a>
+          </li>
           @canany(['patient-list','patient-create'])
           <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*') || request()->is('patient/history/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*') || request()->is('patient/history/*')) ? 'active' : '' }}">

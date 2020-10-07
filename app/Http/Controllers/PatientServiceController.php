@@ -228,11 +228,6 @@ class PatientServiceController extends Controller
 
     }
 
-    public function show(PatientService $patientService)
-    {
-        //
-    }
-
     public function edit($psid)
     {   
 
@@ -289,8 +284,9 @@ class PatientServiceController extends Controller
         $patientserviceitems =  DB::table('patient_service_items')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                 ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.procedure',
-                          'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status')
+                          'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate')
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
