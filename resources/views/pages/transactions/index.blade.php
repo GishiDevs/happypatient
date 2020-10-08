@@ -182,6 +182,12 @@
               $('#grand_total').empty().append('{{ number_format($grand_total, 2, '.','') }}');
             }
 
+
+            if(response.transactions.length == 0)
+            {
+              $('#transactions-table tbody').append('<tr><td class="dataTables_empty" colspan="6">No matching records found</td></tr>');
+            }
+
           },
           error: function(response){
             console.log(response);
