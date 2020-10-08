@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'DashboardController@index')->name('dashboard.index')->middleware('auth');
 Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
 Route::get('/transactions', 'TransactionController@index')->name('transactions.index')->middleware('auth');
-Route::post('/gettotalamount', 'TransactionController@gettotalamount')->name('gettotalamount')->middleware('auth');
+Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions')->middleware('auth');
 Auth::routes();
 
 // Route::group(['prefix' => '/', 'middleware' => ['auth','dashboard']], function(){

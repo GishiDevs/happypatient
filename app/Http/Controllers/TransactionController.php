@@ -23,7 +23,7 @@ class TransactionController extends Controller
                                      'patient_services.patientname', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'patient_service_items.price', 'patient_service_items.discount', 
                                      'patient_service_items.discount_amt', 'patient_service_items.total_amount')
                             ->where('patient_services.cancelled', '=', 'N')
-                            ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
+                            // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
                             ->get();
         
         $grand_total = 0.00;
@@ -36,12 +36,29 @@ class TransactionController extends Controller
         return view('pages.transactions.index', compact('transactions', 'grand_total', 'services'));
     }
 
-    public function gettotalamount(Request $request)
+    public function gettransactions(Request $request)
     {   
 
-        return $serviceid = $request->get('serviceid');
+        $services = Service::all();
+        
+        $serviceid = $request->get('serviceid');
+        $date_from = Carbon::make($request->get('date_from'))->format('Y-m-d');
+        $date_to = Carbon::make($request->get('date_to'))->format('Y-m-d');
+        $service_arr;
 
-        return $transactions =  DB::table('patient_services')
+        if(empty($serviceid))
+        {   
+            foreach($services as $service)
+            {
+                $service_arr[] = $service->id;
+            }
+        }
+        else
+        {
+            $service_arr[] = $request->get('serviceid');
+        }
+
+        $transactions =  DB::table('patient_services')
                             ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
@@ -49,8 +66,10 @@ class TransactionController extends Controller
                                      'patient_services.patientname', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'patient_service_items.price', 'patient_service_items.discount', 
                                      'patient_service_items.discount_amt', 'patient_service_items.total_amount')
                             ->where('patient_services.cancelled', '=', 'N')
-                            // ->where('services.id', '=', $serviceid)
-                            ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
+                            ->whereIn('services.id', $service_arr)
+                            ->whereDate('patient_services.docdate', '>=', $date_from)
+                            ->whereDate('patient_services.docdate', '<=', $date_to)
+                            // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
                             ->get();
         
         $grand_total = 0.00;
@@ -59,8 +78,8 @@ class TransactionController extends Controller
         {
             $grand_total = $grand_total + $transaction->total_amount;
         }
-
-        return response()->json(['grand_total' => $grand_total], 200);
+        
+        return response()->json(['transactions' => $transactions, 'grand_total' => $grand_total], 200);
     }
 
 
