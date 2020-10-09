@@ -47,6 +47,12 @@
                       </div>
                       @endif
                     </div>
+                    <div class="form-group col-md-4 ">
+                      <label for="OfficialReceipt">Official Receipt No.</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="or_number" id="or_number" value="{{ $patientservice->or_number }}">
+                      </div>
+                    </div>  
                     <div class="form-group col-md-4 div-docdate">
                       <label for="selectPatient">Document Date </label>
                       <div class="input-group">
@@ -55,13 +61,7 @@
                         </div>
                         <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m/d/Y', strtotime($patientservice->docdate)) }}">
                       </div>
-                    </div>
-                    <div class="form-group col-md-4 ">
-                      <label for="OfficialReceipt">Official Receipt No.</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" name="or_number" id="or_number" value="{{ $patientservice->or_number }}">
-                      </div>
-                    </div>      
+                    </div>    
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">

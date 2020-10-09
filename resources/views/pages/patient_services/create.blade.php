@@ -36,7 +36,7 @@
               <form role="form" id="patientserviceform">
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-1">
                       <label for="type">Type</label>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="type" id="radio-individual" value="individual" checked>
@@ -47,7 +47,7 @@
                         <label class="form-check-label" for="group">Group</label>
                       </div>
                     </div>
-                    <div class="form-group col-md-3 div-patient">
+                    <div class="form-group col-md-4 div-patient">
                       <label for="patient">Patient</label>
                       <select class="form-control select2" name="patient" id="patient" style="width: 100%;">
                         <option selected="selected" value="" disabled>Select Patient</option>
@@ -62,6 +62,12 @@
                         <input type="text" class="form-control" name="organization" id="organization">
                       </div>
                     </div>
+                    <div class="form-group col-md-4">
+                      <label for="OfficialReceipt">Official Receipt No.</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="or_number" id="or_number">
+                      </div>
+                    </div>  
                     <div class="form-group col-md-3 div-docdate">
                       <label for="docdate">Document Date</label>
                       <div class="input-group">
@@ -70,13 +76,7 @@
                         </div>
                         <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
                       </div>
-                    </div>
-                    <div class="form-group col-md-4">
-                      <label for="OfficialReceipt">Official Receipt No.</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" name="or_number" id="or_number">
-                      </div>
-                    </div>           
+                    </div>         
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
@@ -142,7 +142,7 @@
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
+                  <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
                 </div>
                 <!-- /.card-body -->
               </form>
@@ -208,7 +208,7 @@ $(document).ready(function () {
     { 
       $('#docdate-error').remove();
       $('#docdate').addClass('is-invalid');
-      $('#docdate').after('<span id="organization-error" class="error invalid-feedback"> Please enter a valid date</span>');
+      $('#docdate').after('<span id="docdate-error" class="error invalid-feedback"> Please enter a valid date</span>');
       // $('#docdate-error').remove();
       // $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
     }
@@ -625,43 +625,45 @@ $(document).ready(function () {
       $('#service-table-error').remove();
       $('.table-scrollable').append('<span id="service-table-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please add at least 1 service on the table</span>');
     }
-        
-    var data = $('#patientserviceform').serializeArray();
-    data.push({name: "_token", value: "{{ csrf_token() }}"});
-    data.push({name: "grand_total", value: $('.service-grand-total').text()});
+    else
+    {
+      var data = $('#patientserviceform').serializeArray();
+      data.push({name: "_token", value: "{{ csrf_token() }}"});
+      data.push({name: "grand_total", value: $('.service-grand-total').text()});
 
-    $.ajax({
-        url: "{{ route('patientservice.store') }}",
-        method: "POST",
-        data: data,
-        success: function(response){
+      $.ajax({
+          url: "{{ route('patientservice.store') }}",
+          method: "POST",
+          data: data,
+          success: function(response){
+              console.log(response);
+              if(response.success)
+              {   
+                $('#select2-patient-container').empty().append('Select Patient');
+                $('#patientserviceform')[0].reset();
+                Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Record has successfully added',
+                  showConfirmButton: false,
+                  timer: 2500
+                });  
+
+                $('.service-total-amount').each(function () { 
+                  $(this).empty().append("0.00");
+                });
+
+                $('.service-grand-total').empty().append('0.00');
+
+                $('#table-services tbody').empty();
+
+              }               
+          },
+          error: function(response){
             console.log(response);
-            if(response.success)
-            {   
-              $('#select2-patient-container').empty().append('Select Patient');
-              $('#patientserviceform')[0].reset();
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-              });  
-
-              $('.service-total-amount').each(function () { 
-                $(this).empty().append("0.00");
-              });
-
-              $('.service-grand-total').empty().append('0.00');
-
-              $('#table-services tbody').empty();
-
-            }               
-        },
-        error: function(response){
-          console.log(response);
-        }
-    });
+          }
+      });
+    }
   
   });
 

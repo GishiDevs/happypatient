@@ -39,7 +39,7 @@
                   <div class="form-group col-md-4">
                     <label>Filter Date From:</label>
                     <div class="input-group date" id="filter-date-from" data-target-input="nearest">
-                      <input type="text" id="date-from" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" data-target="#filter-date-from" value="{{ date('m-d-Y') }}" readonly/>
+                      <input type="text" id="date-from" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" data-target="#filter-date-from" value="{{ date('m/d/Y') }}" readonly/>
                       <div class="input-group-append" data-target="#filter-date-from" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
@@ -48,45 +48,46 @@
                   <div class="form-group col-md-4">
                     <label>Filter Date To:</label>
                     <div class="input-group date" id="filter-date-to" data-target-input="nearest">
-                      <input type="text" id="date-to" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" data-target="#filter-date-to" value="{{ date('m-d-Y') }}" readonly/>
+                      <input type="text" id="date-to" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" data-target="#filter-date-to" value="{{ date('m/d/Y') }}" readonly/>
                         <div class="input-group-append" data-target="#filter-date-to" data-toggle="datetimepicker">
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
                     </div>
                   </div>
                 </div>
-                
-                <div class="table-scrollable col-md-12">
-                  <table id="transactions-table" class="table table-bordered table-striped">
-                    <thead>
-                      <tr>
-                        <th width="40px">#</th>
-                        <th>Document Date</th>
-                        <th>Patient/Organization</th>
-                        <th>Service</th>
-                        <th>Procedure</th>
-                        <th>Amount (PHP)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <!-- @foreach($transactions as $index => $transaction)
-                      <tr>
-                        <td>{{ $index+1 }}</td>
-                        <td>{{ $transaction->docdate }}</td>
-                        <td>{{ $transaction->name }}</td>
-                        <td>{{ $transaction->service }}</td>
-                        <td>{{ $transaction->procedure }}</td>
-                        <td>{{ $transaction->total_amount }}</td>
-                      </tr>
-                      @endforeach -->
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th colspan="5">Grand Total:</th>
-                        <th> <span id="grand_total">0.00</span> </th>
-                      </tr>
-                    </tfoot>
-                  </table>
+                <div class="row">
+                  <div class="table-scrollable col-md-12">
+                    <table id="transactions-table" class="table table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th width="40px">#</th>
+                          <th>Document Date</th>
+                          <th>Patient/Organization</th>
+                          <th>Service</th>
+                          <th>Procedure</th>
+                          <th>Amount (PHP)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- @foreach($transactions as $index => $transaction)
+                        <tr>
+                          <td>{{ $index+1 }}</td>
+                          <td>{{ $transaction->docdate }}</td>
+                          <td>{{ $transaction->name }}</td>
+                          <td>{{ $transaction->service }}</td>
+                          <td>{{ $transaction->procedure }}</td>
+                          <td>{{ $transaction->total_amount }}</td>
+                        </tr>
+                        @endforeach -->
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <th colspan="5">Grand Total:</th>
+                          <th> <span id="grand_total">0.00</span> </th>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
                 </div>
               </div>
               <!-- /.card-body -->
@@ -108,6 +109,8 @@
 
   $(document).ready(function() {
 
+    // get_transactions();
+    
     $('.select2').select2();
     
     var table =  $('#transactions-table').DataTable();
@@ -123,18 +126,69 @@
         // $.each(column_amounts, function(index, value){
         //   alert(value.textContent);
         // });
-
         get_transactions();
     });
 
 
-    $("#filter-date-to, #filter-date-from").on("change.datetimepicker", function(e){
+    $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
       get_transactions();
     });
 
-    $('#date_from, #date_to').keyup(function(e){
-      get_transactions();
+    // $('#date_from, #date_to').keyup(function(e){
+    //   // get_transactions();
+    // });
+
+    
+
+    // $.fn.dataTable.ext.search.push(
+    // function (settings, data, dataIndex) {
+    //     var FilterStart = $('#date_from').val();
+    //     var FilterEnd = $('#date_to').val();
+    //     var DataTableStart = data[1].trim();
+    //     var DataTableEnd = data[1].trim();
+    //     if (FilterStart == '' || FilterEnd == '') {
+    //         return true;
+    //     }
+    //     if (DataTableStart >= FilterStart && DataTableEnd <= FilterEnd)
+    //     {
+    //         return true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+        
+    // });
+
+     $('#transactions-table').DataTable({
+        "responsive": true,
+        "autoWidth": false,
+		    "processing": true,
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bDestroy": true,
+        "order": [],
+        "columnDefs": [{
+                          "targets": [0, 1, 2, 3, 4,5],
+                          "orderable": false
+                        },] 
     });
+
+    $('#filter-date-from').datetimepicker({
+        format: 'L',
+        useCurrent: false,
+        ignoreReadonly: true
+        
+    });
+
+    $('#filter-date-to').datetimepicker({
+        format: 'L',
+        useCurrent: false,
+        ignoreReadonly: true
+    });
+
+    $('[data-mask]').inputmask();
+
 
     function get_transactions()
     { 
@@ -189,55 +243,6 @@
           }
       });
     }
-
-    // $.fn.dataTable.ext.search.push(
-    // function (settings, data, dataIndex) {
-    //     var FilterStart = $('#date_from').val();
-    //     var FilterEnd = $('#date_to').val();
-    //     var DataTableStart = data[1].trim();
-    //     var DataTableEnd = data[1].trim();
-    //     if (FilterStart == '' || FilterEnd == '') {
-    //         return true;
-    //     }
-    //     if (DataTableStart >= FilterStart && DataTableEnd <= FilterEnd)
-    //     {
-    //         return true;
-    //     }
-    //     else {
-    //         return false;
-    //     }
-        
-    // });
-
-     $('#transactions-table').DataTable({
-        "responsive": true,
-        "autoWidth": false,
-		    "processing": true,
-        "searching": false,
-        "bPaginate": false,
-        "bLengthChange": false,
-        "bDestroy": true,
-        "order": [],
-        "columnDefs": [{
-                          "targets": [0, 1, 2, 3, 4,5],
-                          "orderable": false
-                        },] 
-    });
-
-    $('#filter-date-from').datetimepicker({
-        format: 'L',
-        useCurrent: false,
-        ignoreReadonly: true
-        
-    });
-
-    $('#filter-date-to').datetimepicker({
-        format: 'L',
-        useCurrent: false,
-        ignoreReadonly: true
-    });
-
-    $('[data-mask]').inputmask();
         
 	});
 

@@ -38,7 +38,7 @@ class TransactionController extends Controller
 
     public function gettransactions(Request $request)
     {   
-
+        // return $request;
         $services = Service::all();
         
         $serviceid = $request->get('serviceid');

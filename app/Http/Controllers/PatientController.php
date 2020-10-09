@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use DataTables;
 use Auth;
 use DB;
+use App\Service;
 
 class PatientController extends Controller
 {
@@ -25,7 +26,8 @@ class PatientController extends Controller
 
     public function create()
     {   
-        return view('pages.patient.create');
+        $services = Service::all();
+        return view('pages.patient.create', compact('services'));
     }
 
     public function getpatientrecord()
@@ -157,7 +159,7 @@ class PatientController extends Controller
         $patient->barangay = $request->get('barangay');
         $patient->save();
 
-        return response()->json(['success' => 'Record has successfully added'], 200);
+        return response()->json(['success' => 'Record has successfully added', 'patientid' => $patient->id], 200);
     }
 
     public function edit($patientid)
