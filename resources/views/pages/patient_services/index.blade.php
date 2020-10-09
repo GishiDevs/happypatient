@@ -41,7 +41,7 @@
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>OR Number</th>
-                      <th>Patient Name</th>
+                      <th>Patient/Organization</th>
                       <th width="50px">Cancelled</th>
                       <th width="70px" class="no-sort">Action</th>
                     </tr>
@@ -90,7 +90,7 @@
                     { "data": "id"},
 		    		        { "data": "docdate"},
                     { "data": "or_number"},
-		    		        { "data": "patientname"},
+		    		        { "data": "name"},
                     { "data": "cancelled"},
                     { "data": "action"}
 		    ],

@@ -1,1 +1,1 @@
-{{ $patient_service->patientname }}
+{{ $patient_service->name }}

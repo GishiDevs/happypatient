@@ -32,7 +32,7 @@
                 <h3 class="card-title">Add Patient </h3>
               </div>
               <!-- /.card-header -->
-              <!-- form start -->
+              <!-- patient form start -->
               <form role="form" id="patientform">
                 <div class="card-body">
                   <div class="row">
@@ -164,8 +164,97 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="submit" class="btn btn-primary">Next</button>
                 </div>
+              </form>
+
+              <!-- service form start -->
+              <form role="form" id="patientserviceform" hidden>
+                <div class="card-body">
+                  <div class="row"> 
+                    <div class="form-group col-md-3 div-docdate">
+                      <label for="docdate">Document Date</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="OfficialReceipt">Official Receipt No.</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="or_number" id="or_number">
+                      </div>
+                    </div>           
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="bloodpressure">Blood Pressure</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="temperature">Temperature</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="temperature" id="temperature" placeholder="00.0">
+                        <div class="input-group-append">
+                          <span class="input-group-text">°C</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="weight">Weight</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">
+                        <div class="input-group-append">
+                          <span class="input-group-text">Kg</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="table-scrollable col-md-12 table-responsive">
+                      <table class="table table-striped table-bordered table-hover" id="table-services">
+                        <thead>
+                          <th>Services</th>
+                          <th>Procedure</th>
+                          <th width="150px">Price (PHP)</th>
+                          <th width="150px">Discount (%)</th>
+                          <th width="150px">Discount (PHP)</th>
+                          <th width="170px">Total Amount (PHP)</th>
+                          <th width="130px">Action</th>
+                        </thead>
+                        <tbody>												
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <td colspan="5">
+                              <strong><span class="pull-right">Grand Total :</span></strong>
+                            </td>
+                            <td><strong><span class="service-grand-total">0.00</span></strong></td>
+                            <td><a href="" class="btn btn-sm btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    </div>						
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="Notes">Notes</label>
+                      <div class="input-group">
+                        <textarea class="form-control" name="note" id="note" style="resize: none;"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                <button type="submit" id="btn-previous" class="btn btn-primary">Previous</button> <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
+                </div>
+                <!-- /.card-body -->
               </form>
             </div>
             <!-- /.card -->
@@ -358,7 +447,9 @@ $(document).ready(function () {
       $(element).removeClass('is-invalid');
     },
     submitHandler: function(e){
-
+      // e.preventDefault();
+      // $('#patientserviceform').removeAttr('hidden');
+      // $('#patientform').attr('hidden', true);
       var data = $('#patientform').serializeArray();
       data.push({name: "_token", value: "{{ csrf_token() }}"});
       
@@ -392,6 +483,11 @@ $(document).ready(function () {
       });
 
     }
+  });
+
+  $('#btn-previous').click(function(e){
+    $('#patientserviceform').attr('hidden', true);
+    $('#patientsform').removeAttr('hidden');
   });
 
   $('#age').inputmask('integer', {

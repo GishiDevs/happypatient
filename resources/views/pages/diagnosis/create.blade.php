@@ -37,7 +37,7 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="patient">Patient: </label>
-                      <h5>{{ $patient_service->patientname }}</h5>
+                      <h5>{{ $patient_service->name }}</h5>
                     </div>
                     <div class="form-group col-md-4">
                     <label for="docdate">Diagnose Date</label>

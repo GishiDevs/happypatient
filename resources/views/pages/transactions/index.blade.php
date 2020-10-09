@@ -62,7 +62,7 @@
                       <tr>
                         <th width="40px">#</th>
                         <th>Document Date</th>
-                        <th>Patient Name</th>
+                        <th>Patient/Organization</th>
                         <th>Service</th>
                         <th>Procedure</th>
                         <th>Amount (PHP)</th>
@@ -73,7 +73,7 @@
                       <tr>
                         <td>{{ $index+1 }}</td>
                         <td>{{ $transaction->docdate }}</td>
-                        <td>{{ $transaction->patientname }}</td>
+                        <td>{{ $transaction->name }}</td>
                         <td>{{ $transaction->service }}</td>
                         <td>{{ $transaction->procedure }}</td>
                         <td>{{ $transaction->total_amount }}</td>
@@ -83,7 +83,7 @@
                     <tfoot>
                       <tr>
                         <th colspan="5">Grand Total:</th>
-                        <th> <span id="grand_total">{{ number_format($grand_total, 2, '.','') }}</span> </th>
+                        <th> <span id="grand_total">0.00</span> </th>
                       </tr>
                     </tfoot>
                   </table>
@@ -154,20 +154,15 @@
             { 
               $('#grand_total').empty().append(parseFloat(response.grand_total).toFixed(2));
 
-              var index = 0;
-              var odd_even = '';
-
               $('#transactions-table tbody').empty();
 
               $.each(response.transactions, function(index, value){
-
                 index++;
-
                 $('#transactions-table tbody').append(
                   '<tr>'+
                     '<td>'+index+'</td>'+
                     '<td>'+value.docdate+'</td>'+
-                    '<td>'+value.patientname+'</td>'+
+                    '<td>'+value.name+'</td>'+
                     '<td>'+value.service+'</td>'+
                     '<td>'+value.procedure+'</td>'+
                     '<td>'+value.total_amount+'</td>'+
@@ -185,7 +180,7 @@
 
             if(response.transactions.length == 0)
             {
-              $('#transactions-table tbody').append('<tr><td class="dataTables_empty" colspan="6">No matching records found</td></tr>');
+              $('#transactions-table tbody').append('<tr><td class="dataTables_empty" colspan="6">No data available in table</td></tr>');
             }
 
           },

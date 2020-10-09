@@ -36,7 +36,18 @@
               <form role="form" id="patientserviceform">
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-4 div-patient">
+                    <div class="form-group col-md-2">
+                      <label for="type">Type</label>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="type" id="radio-individual" value="individual" checked>
+                        <label class="form-check-label" for="individual">Individual</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="type" id="radio-group" value="group">
+                        <label class="form-check-label" for="group">Group</label>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-3 div-patient">
                       <label for="patient">Patient</label>
                       <select class="form-control select2" name="patient" id="patient" style="width: 100%;">
                         <option selected="selected" value="" disabled>Select Patient</option>
@@ -45,7 +56,13 @@
                         @endforeach
                       </select>
                     </div>
-                    <div class="form-group col-md-4 div-docdate">
+                    <div class="form-group col-md-3 div-organization" hidden>
+                      <label for="organization">Organization</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="organization" id="organization">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-3 div-docdate">
                       <label for="docdate">Document Date</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
@@ -112,13 +129,16 @@
                           </tr>
                         </tfoot>
                       </table>
-                    </div>
+                    </div>						
+                  </div>
+                  <hr>
+                  <div class="row">
                     <div class="form-group col-md-4">
                       <label for="Notes">Notes</label>
                       <div class="input-group">
                         <textarea class="form-control" name="note" id="note" style="resize: none;"></textarea>
                       </div>
-                    </div>						
+                    </div>
                   </div>
                 </div>
                 <div class="card-footer">
@@ -140,6 +160,35 @@
 
 $(document).ready(function () {
   
+
+  $('[name="type"]').click(function(){
+    if($(this).val() == 'group')
+    {
+      $('.div-patient').attr('hidden', true);
+      $('.div-organization').removeAttr('hidden');
+    }
+    else
+    {
+      $('.div-organization').attr('hidden', true);
+      $('.div-patient').removeAttr('hidden');
+    }
+  });
+  
+  $('#organization').keyup(function(e){
+
+    if(!$(this).val())
+    {
+      $('#organization-error').remove();
+      $('#organization').addClass('is-invalid');
+      $('#organization').after('<span id="organization-error" class="error invalid-feedback"> Please enter organization name</span>');
+    }
+    else
+    {
+      $(this).removeClass('is-invalid');
+    }
+
+  });
+
   //Remove error label when patient dropdown has value
   $('#patient').on('change', function(e){
     $("[aria-labelledby='select2-patient-container']").removeAttr('style');
@@ -158,11 +207,15 @@ $(document).ready(function () {
     if(docdate == 'Invalid Date')
     { 
       $('#docdate-error').remove();
-      $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
+      $('#docdate').addClass('is-invalid');
+      $('#docdate').after('<span id="organization-error" class="error invalid-feedback"> Please enter a valid date</span>');
+      // $('#docdate-error').remove();
+      // $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
     }
     else
     {
-      $('#docdate-error').remove();
+      // $('#docdate-error').remove();
+      $(this).removeClass('is-invalid');
     }
     
   });
@@ -534,6 +587,14 @@ $(document).ready(function () {
 
     e.preventDefault();
     
+    //organization validation error
+    if(!$('#organization').val())
+    { 
+      $('#organization-error').remove();
+      $('#organization').addClass('is-invalid');
+      $('#organization').after('<span id="organization-error" class="error invalid-feedback"> Please enter organization name</span>');
+    }
+
     //patient validation error
     if(!$('#patient').val())
     { 
@@ -595,7 +656,7 @@ $(document).ready(function () {
 
               $('#table-services tbody').empty();
 
-            }                 
+            }               
         },
         error: function(response){
           console.log(response);

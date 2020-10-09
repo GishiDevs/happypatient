@@ -92,7 +92,7 @@
                     { "data": "DT_RowIndex"},
                     { "data": "ps_items_id"},
 		    		        { "data": "docdate"},
-		    		        { "data": "patientname"},
+		    		        { "data": "name"},
 		    		        { "data": "service"},
                     { "data": "procedure"},
                     { "data": "status"},

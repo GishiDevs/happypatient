@@ -15,8 +15,10 @@ class CreatePatientServicesTable extends Migration
     {
         Schema::create('patient_services', function (Blueprint $table) {
             $table->id();
-            $table->integer('patientid');
-            $table->string('patientname');
+            $table->string('type');
+            $table->integer('patientid')->nullable();
+            $table->string('name')->nullable();
+            $table->string('organization')->nullable();
             $table->date('docdate');
             $table->string('bloodpressure')->nullable();
             $table->decimal('temperature', 8, 1)->nullable();

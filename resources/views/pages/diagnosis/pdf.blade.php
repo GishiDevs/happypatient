@@ -36,7 +36,7 @@
                         <td style="width: 25%;border-style: none;"><strong style="font-size: 10PX;"><em>FILE #:&nbsp;</em></strong><span style="font-size: 10PX;">{{ $patient_service->file_no }}</span></td>
                     </tr>
                     <tr>
-                        <td style="font-size: 12PX;width: 10%;" colspan="4"><strong><em>NAME OF PATIENT:&nbsp;</em></strong><span style="font-size: 12PX;">{{ $patient_service->patientname }}</span></td>
+                        <td style="font-size: 12PX;width: 10%;" colspan="4"><strong><em>NAME OF PATIENT:&nbsp;</em></strong><span style="font-size: 12PX;">{{ $patient_service->name }}</span></td>
                     </tr>
                     <tr style="border-style: none;border-color: rgb(255,255,255);border-top-style: none;">
                         <td class="text-right" style="border-style: none;border-color: rgb(255,255,255);"><strong style="font-size: 10PX;"><em>AGE:&nbsp;</em></strong><span style="font-size: 10PX;" id="age"></span></td>

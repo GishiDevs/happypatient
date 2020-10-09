@@ -38,11 +38,17 @@
                 <div class="card-body">
                   <div class="row"> 
                     <div class="form-group col-md-4 div-patient">
-                      <label for="patient">Patient:</label>
-                      <h5>{{ $patientservice->patientname }}</h5>
+                      <label for="patient">@if($patientservice->type == 'individual') Patient @else Organization @endif</label>  
+                      @if($patientservice->type == 'individual') 
+                      <h5>{{ $patientservice->name }}</h5>
+                      @else  
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="organization" id="organization" value="{{ $patientservice->name }}">
+                      </div>
+                      @endif
                     </div>
                     <div class="form-group col-md-4 div-docdate">
-                      <label for="selectPatient">Document Date: </label>
+                      <label for="selectPatient">Document Date </label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
@@ -94,7 +100,9 @@
                           <th>Discount (%)</th>
                           <th>Discount (PHP)</th>
                           <th>Total Amount (PHP)</th>
+                          @if($patientservice->type == 'individual')
                           <th>Status</th>
+                          @endif
                           <th width="180px">Actions</th>
                         </thead>
                         <tbody>			
@@ -106,6 +114,7 @@
                           <td><span id="span-discount-{{ $services->id }}">{{ $services->discount }}</span><input type="text" class="form-control" name="discount" id="discount-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount }}" hidden> </td>
                           <td><span id="span-discount_amt-{{ $services->id }}">{{ $services->discount_amt }}</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount_amt }}"  hidden> </td>
                           <td><span class="service-total-amount" id="span-total_amount-{{ $services->id }}">{{ $services->total_amount }}</span></td>
+                          @if($services->type == 'individual')
                           <td>
                               @if($services->status == 'diagnosed')
                                 <span class="badge bg-success">{{ $services->status }}</span>
@@ -115,11 +124,12 @@
                                 <span class="badge bg-danger">{{ $services->status }}</span>
                               @endif
                           </td>
+                          @endif
                           <td>
-                              <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}" @if($services->docdate != date('Y-m-d')) hidden @endif><i class="fa fa-edit"></i> Edit {{date('Y-m-d')}} {{$services->docdate}}</a> 
-                              @if($services->status == 'diagnosed')
+                              <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}" @if($services->docdate != date('Y-m-d')) hidden @endif><i class="fa fa-edit"></i> Edit</a> 
+                              @if($services->status == 'diagnosed' && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
-                              @elseif($services->status == 'pending')
+                              @elseif($services->status == 'pending' && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
                               @endif 
                           </td>
@@ -135,13 +145,16 @@
                           </tr>
                         </tfoot>
                       </table>
-                    </div>
+                    </div>						
+                  </div>
+                  <hr>
+                  <div class="row">
                     <div class="form-group col-md-4">
                       <label for="Notes">Notes</label>
                       <div class="input-group">
                         <textarea class="form-control" name="note" id="note" style="resize: none;">{{ $patientservice->note }}</textarea>
                       </div>
-                    </div>						
+                    </div>
                   </div>
                 </div>
                 <div class="card-footer">

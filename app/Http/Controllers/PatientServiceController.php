@@ -25,7 +25,7 @@ class PatientServiceController extends Controller
     public function serviceslist()
     {   
         $patientservices =  DB::table('patient_services')
-                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number', 'patient_services.patientname', 'patient_services.cancelled')
+                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number', 'patient_services.name', 'patient_services.cancelled')
                  ->orderBy('patient_services.id', 'Asc')
                  ->get();
 
@@ -83,10 +83,11 @@ class PatientServiceController extends Controller
                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                 ->join('diagnoses', 'patient_service_items.id' , '=', 'diagnoses.ps_items_id')
                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 
-                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'patient_services.patientname', 'services.service', 
+                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'patient_services.name', 'services.service', 
                          'service_procedures.procedure', 'patient_service_items.status')
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
+                ->where('patient_services.type', '=', 'individual')
                 ->where('patient_service_items.status', '=', 'diagnosed')
                 ->where('diagnoses.docdate', '=', Carbon::now()->format('Y-m-d'));
  
@@ -97,9 +98,10 @@ class PatientServiceController extends Controller
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 
-                          DB::raw("'' as diagnose_date"), 'patient_services.patientname', 'services.service', 'service_procedures.procedure', 'patient_service_items.status')
+                          DB::raw("'' as diagnose_date"), 'patient_services.name', 'services.service', 'service_procedures.procedure', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
+                 ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
                  ->union($diagnosed)
                  ->get();
@@ -130,16 +132,28 @@ class PatientServiceController extends Controller
         // return $request;
         $rules = [
             'patient.required' => 'Please select patient',
+            'organization.required' => 'Please enter organization name',
             'docdate.required' => 'Please enter document date',
             'docdate.date' => 'Please enter a valid date',
             'services.required' => 'Please select at least 1 service'
         ];
 
-        $validator = Validator::make($request->all(),[
-            'patient' => 'required',
+        $valid_fields = [
             'docdate' => 'required|date',
             'services' => 'required'
-        ], $rules);
+        ];
+
+        //if service type is individual or group
+        if($request->get('type') == 'individual')
+        {
+            $valid_fields['patient'] = 'required';
+        }
+        else
+        {
+            $valid_fields['organization'] = 'required';
+        }
+
+        $validator = Validator::make($request->all(), $valid_fields, $rules);
 
         if($validator->fails())
         {
@@ -148,15 +162,27 @@ class PatientServiceController extends Controller
 
         $patient = Patient::find($request->get('patient'));
 
+        $name;
         //if record is empty then display error page
-        if(empty($patient->id))
-        {
-            return abort(404, 'Not Found');
+        if($request->get('type') == 'individual')
+        {   
+            $name = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
+
+            if(empty($patient->id))
+            {
+                return abort(404, 'Not Found');
+            }
         }
+        else
+        {
+            $name = $request->get('organization');
+        }
+        
 
         $patientservice  = new PatientService();
+        $patientservice->type = $request->get('type');
         $patientservice->patientid = $request->get('patient');
-        $patientservice->patientname = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
+        $patientservice->name = $name;
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
         $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->temperature = $request->get('temperature');
@@ -286,7 +312,7 @@ class PatientServiceController extends Controller
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                  ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.procedure',
-                          'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate')
+                          'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type')
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
@@ -304,7 +330,9 @@ class PatientServiceController extends Controller
         {
             return abort(404, 'Not Found');
         }
+        
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
+        $patientservice->name = $request->get('organization');
         $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->temperature = $request->get('temperature');
         $patientservice->weight = $request->get('weight');
