@@ -77,6 +77,10 @@
                       <h5>{{ $patient_service->service }}</h5>
                     </div>
                     <div class="form-group col-md-4">
+                      <label for="procedure">Procedure: </label>
+                      <h5>{{ $patient_service->procedure }}</h5>
+                    </div>
+                    <div class="form-group col-md-4">
                       <label for="file#">File #: </label>
                       <h5>{{ $patient_service->file_no }}</h5>
                     </div>

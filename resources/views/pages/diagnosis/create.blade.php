@@ -97,6 +97,10 @@
                       <h5>{{ $patient_service->service }}</h5>
                     </div>
                     <div class="form-group col-md-3">
+                      <label for="procedure">Procedure: </label>
+                      <h5>{{ $patient_service->procedure }}</h5>
+                    </div>
+                    <div class="form-group col-md-3">
                       <label for="file#">File #: </label>
                       <h5>{{ $file_no }} <input type="text" name="file_no" value="{{ $file_no }}" hidden></h5>
                     </div>
@@ -114,7 +118,7 @@
                     <div class="form-group col-md-4">
                       <label for="title">Title</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title">
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" value='{{ $patient_service->procedure }}'>
                       </div>
                     </div>
                   </div> 
