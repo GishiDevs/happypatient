@@ -8,11 +8,15 @@ use DB;
 use DataTables;
 use Carbon\Carbon; 
 use App\Service;
+use App\Events\EventNotification;
 
 class TransactionController extends Controller
 {
     public function index()
     {   
+
+        // event(new EventNotification('view-transaction', 'transactions'));
+
         $services = Service::all();
 
         $transactions =  DB::table('patient_services')

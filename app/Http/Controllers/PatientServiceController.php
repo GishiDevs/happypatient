@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Auth;
 use DB;
 use DataTables;
+use App\Events\EventNotification;
 
 class PatientServiceController extends Controller
 {   
@@ -249,6 +250,9 @@ class PatientServiceController extends Controller
 
             $serviceitem->save();
         }
+
+        //PUSHER - send data/message if patient services is created
+        event(new EventNotification('create-patient-services', 'patient_services'));
 
         return response()->json(['success' => 'Record has successfully added'], 200);
 

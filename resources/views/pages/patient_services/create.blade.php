@@ -640,7 +640,9 @@ $(document).ready(function () {
               if(response.success)
               {   
                 $('#select2-patient-container').empty().append('Select Patient');
+
                 $('#patientserviceform')[0].reset();
+
                 Swal.fire({
                   position: 'center',
                   icon: 'success',
@@ -656,6 +658,14 @@ $(document).ready(function () {
                 $('.service-grand-total').empty().append('0.00');
 
                 $('#table-services tbody').empty();
+
+                $('.div-organization').attr('hidden', true);
+
+                $('.div-patient').removeAttr('hidden');
+
+                $("[aria-labelledby='select2-patient-container']").removeAttr('style');
+                
+                $('#patient-error').remove();
 
               }               
           },

@@ -56,7 +56,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="table-scrollable col-md-12">
+                  <div class="table-scrollable col-md-12 table-responsive">
                     <table id="transactions-table" class="table table-bordered table-striped">
                       <thead>
                         <tr>
@@ -113,7 +113,7 @@
     
     $('.select2').select2();
     
-    var table =  $('#transactions-table').DataTable();
+    // var table =  $('#transactions-table').DataTable();
     
     $('#service').on('change', function () {
 
@@ -159,20 +159,20 @@
         
     // });
 
-     $('#transactions-table').DataTable({
-        "responsive": true,
-        "autoWidth": false,
-		    "processing": true,
-        "searching": false,
-        "bPaginate": false,
-        "bLengthChange": false,
-        "bDestroy": true,
-        "order": [],
-        "columnDefs": [{
-                          "targets": [0, 1, 2, 3, 4,5],
-                          "orderable": false
-                        },] 
-    });
+    //  $('#transactions-table').DataTable({
+    //     "responsive": true,
+    //     "autoWidth": false,
+		//     "processing": true,
+    //     "searching": false,
+    //     "bPaginate": false,
+    //     "bLengthChange": false,
+    //     "bDestroy": true,
+    //     "order": [],
+    //     "columnDefs": [{
+    //                       "targets": [0, 1, 2, 3, 4,5],
+    //                       "orderable": false
+    //                     },] 
+    // });
 
     $('#filter-date-from').datetimepicker({
         format: 'L',
@@ -243,10 +243,34 @@
           }
       });
     }
+
+    // PUSHER
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher( "{{ env('PUSHER_APP_KEY') }}" , {
+      cluster: 'ap1',
+      encrypted: true
+    });
+
+    // Subscribe to the channel we specified in our Laravel Event
+    var channel = pusher.subscribe('happypatient-event');
+
+    // Bind a function to a Event (the full Laravel class)
+    channel.bind('App\\Events\\EventNotification', function(data) {
+
+      console.log(data.action);
+      
+      //PUSHER - refresh data when patient services is created
+      if(data.action == 'create-patient-services')
+      {
+        get_transactions();
+      }
+
+    });
         
 	});
-
-  
 
 </script>
 @endsection

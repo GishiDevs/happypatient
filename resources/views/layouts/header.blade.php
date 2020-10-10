@@ -49,6 +49,7 @@
   <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   
   <!-- Datatables Paginate button -->
   <style>
