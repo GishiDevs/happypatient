@@ -36,7 +36,7 @@
               <form role="form" id="patientserviceform">
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-2">
                       <label for="type">Type</label>
                       <div class="form-check">
                         <input class="form-check-input" type="radio" name="type" id="radio-individual" value="individual" checked>
@@ -62,7 +62,7 @@
                         <input type="text" class="form-control" name="organization" id="organization">
                       </div>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                       <label for="OfficialReceipt">Official Receipt No.</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="or_number" id="or_number">
