@@ -262,8 +262,8 @@
 
       console.log(data.action);
       
-      //PUSHER - refresh data when patient services is created
-      if(data.action == 'create-patient-services')
+      //PUSHER - refresh data when table patient_services or patient_service_items has changes
+      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' || data.action == 'edit-service-amount')
       {
         get_transactions();
       }

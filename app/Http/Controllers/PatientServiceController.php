@@ -344,6 +344,9 @@ class PatientServiceController extends Controller
         $patientservice->note = $request->get('note');
         $patientservice->save();
 
+        //PUSHER - send data/message if patient services is updated from table patient_services
+        event(new EventNotification('edit-patient-services', 'patient_services'));
+
         return redirect('patientservice/index');
 
     }
@@ -385,6 +388,9 @@ class PatientServiceController extends Controller
 
         $patientservice->save();
 
+        //PUSHER - send data/message if service procedure price is updated
+        event(new EventNotification('edit-service-amount', 'patient_service_items'));
+
         return response()->json(['success' => 'Record has been updated'], 200);
 
     }
@@ -404,6 +410,9 @@ class PatientServiceController extends Controller
         $patientservice->cancelled = 'Y';
         $patientservice->canceldate = Carbon::now()->format('Y-m-d');
         $patientservice->save();
+
+        //PUSHER - send data/message if transaction/services is cancelled
+        event(new EventNotification('cancel-patient-services', 'patient_services'));
 
         return redirect('patientservice/index');
 

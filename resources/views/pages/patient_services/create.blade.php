@@ -56,7 +56,7 @@
                         @endforeach
                       </select>
                     </div>
-                    <div class="form-group col-md-3 div-organization" hidden>
+                    <div class="form-group col-md-4 div-organization" hidden>
                       <label for="organization">Organization</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="organization" id="organization">
