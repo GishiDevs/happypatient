@@ -14,6 +14,7 @@ use DataTables;
 use Auth;
 use DB;
 use App\Service;
+use App\Events\EventNotification;
 
 class PatientController extends Controller
 {
@@ -159,6 +160,9 @@ class PatientController extends Controller
         $patient->barangay = $request->get('barangay');
         $patient->save();
 
+        //PUSHER - send data/message if patients is created
+        event(new EventNotification('create-patient', 'patients'));
+
         return response()->json(['success' => 'Record has successfully added', 'patientid' => $patient->id], 200);
     }
 
@@ -249,6 +253,9 @@ class PatientController extends Controller
         $patient->barangay = $request->get('barangay');
         $patient->save();
 
+        //PUSHER - send data/message if patients is updated
+        event(new EventNotification('edit-patient', 'patients'));
+
         return redirect('patient/index');
     }
 
@@ -263,6 +270,9 @@ class PatientController extends Controller
         }
 
         $patient->delete();
+
+        //PUSHER - send data/message if patients is deleted
+        event(new EventNotification('delete-patient', 'patients'));
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }
