@@ -145,6 +145,32 @@
         // "bSort" : false 
     });
 
+      // PUSHER
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher( "{{ env('PUSHER_APP_KEY') }}" , {
+      cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+      encrypted: true
+    });
+
+    // Subscribe to the channel we specified in our Laravel Event
+    var channel = pusher.subscribe('happypatient-event');
+
+    // Bind a function to a Event (the full Laravel class)
+    channel.bind('App\\Events\\EventNotification', function(data) {
+
+      console.log(data.action);
+      
+      //PUSHER - refresh data when table patient_services or patient_service_items has changes or diagnosis has created
+      if(data.action == 'create-patient' || data.action == 'edit-patient' || data.action == 'delete-patient' || data.action == 'create-diagnosis')
+      {
+        $('#patient-table').DataTable().ajax.reload()
+      }
+
+    });
+
 	});
 
 </script>

@@ -9,6 +9,7 @@ use DataTables;
 use Validator;
 use DB;
 use Auth;
+use App\Events\EventNotification;
 
 class RoleController extends Controller
 {
@@ -75,6 +76,9 @@ class RoleController extends Controller
         $role->save();
         $role->syncPermissions($request->get('permission'));
 
+        //PUSHER - send data/message if role is created
+        event(new EventNotification('create-role', 'roles'));
+
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
@@ -133,6 +137,9 @@ class RoleController extends Controller
 
         $role->syncPermissions($request->get('permission'));
 
+        //PUSHER - send data/message if role is updated
+        event(new EventNotification('edit-role', 'roles'));
+
         return response()->json(['success' => 'Record has been updated']);
     }
 
@@ -155,6 +162,9 @@ class RoleController extends Controller
         }
 
         $role->delete();
+
+        //PUSHER - send data/message if role is deleted
+        event(new EventNotification('delete-role', 'roles'));
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

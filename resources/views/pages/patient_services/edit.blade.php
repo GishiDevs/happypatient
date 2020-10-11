@@ -103,7 +103,7 @@
                           @if($patientservice->type == 'individual')
                           <th>Status</th>
                           @endif
-                          <th width="180px">Actions</th>
+                          <th width="180px" id="th-actions">Actions</th>
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
@@ -125,8 +125,10 @@
                               @endif
                           </td>
                           @endif
-                          <td>
-                              <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}" @if($services->docdate != date('Y-m-d')) hidden @endif><i class="fa fa-edit"></i> Edit</a> 
+                          <td id="td-actions">
+                              @if($services->docdate == date('Y-m-d'))
+                                <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}"><i class="fa fa-edit"></i> Edit</a> 
+                              @endif
                               @if($services->status == 'diagnosed' && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending' && $services->type == 'individual')

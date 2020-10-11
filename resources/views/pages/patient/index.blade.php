@@ -196,7 +196,7 @@
 
       console.log(data.action);
       
-      //PUSHER - refresh data when table patient_services or patient_service_items has changes
+      //PUSHER - refresh data when table patient has changes
       if(data.action == 'create-patient' || data.action == 'edit-patient' || data.action == 'delete-patient')
       {
         $('#patient-table').DataTable().ajax.reload()

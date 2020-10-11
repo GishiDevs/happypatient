@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use DataTables;
 use Auth;
+use App\Events\EventNotification;
 
 class ServiceController extends Controller
 {
@@ -70,6 +71,9 @@ class ServiceController extends Controller
         $service->status = $request->get('status');
         $service->save();
 
+        //PUSHER - send data/message if service is created
+        event(new EventNotification('create-service', 'services'));
+
         return response()->json(['success' => 'Record has successfully added', 'service' => $service], 200);
     }
 
@@ -122,6 +126,9 @@ class ServiceController extends Controller
         $service->status = $request->get('status');
         $service->save();
 
+        //PUSHER - send data/message if service is updated
+        event(new EventNotification('edit-service', 'services'));
+
         return response()->json(['success' => 'Record has been updated']);
     }
 
@@ -138,6 +145,9 @@ class ServiceController extends Controller
         }
 
         $service->delete();
+
+        //PUSHER - send data/message if service is deleted
+        event(new EventNotification('delete-service', 'services'));
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

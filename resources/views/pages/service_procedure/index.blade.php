@@ -297,6 +297,32 @@
     });
 
 
+    // PUSHER
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher( "{{ env('PUSHER_APP_KEY') }}" , {
+      cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+      encrypted: true
+    });
+
+    // Subscribe to the channel we specified in our Laravel Event
+    var channel = pusher.subscribe('happypatient-event');
+
+    // Bind a function to a Event (the full Laravel class)
+    channel.bind('App\\Events\\EventNotification', function(data) {
+
+      console.log(data.action);
+      
+      //PUSHER - refresh data when table service_procedures has changes
+      if(data.action == 'create-procedure' || data.action == 'edit-procedure' || data.action == 'delete-procedure')
+      {
+        $('#procedure-table').DataTable().ajax.reload()
+      }
+
+    });
+
   });
 </script>
 @endsection

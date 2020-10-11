@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
 use Auth;
+use App\Events\EventNotification;
 
 class UserController extends Controller
 {
@@ -100,6 +101,9 @@ class UserController extends Controller
 
         $user->assignRole($request->get('roles'));
 
+        //PUSHER - send data/message if user is created
+        event(new EventNotification('create-user', 'users'));
+
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
@@ -166,6 +170,9 @@ class UserController extends Controller
         
         $user->assignRole($request->get('roles'));
 
+        //PUSHER - send data/message if user is updated
+        event(new EventNotification('edit-user', 'users'));
+
         return redirect('/user/index');
     }
 
@@ -180,6 +187,9 @@ class UserController extends Controller
         }
 
         $user->delete();
+
+        //PUSHER - send data/message if user is deleted
+        event(new EventNotification('delete-user', 'users'));
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

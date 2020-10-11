@@ -9,6 +9,7 @@ use Validator;
 use Auth;
 use DB;
 use DataTables;
+use App\Events\EventNotification;
 
 class ServiceProcedureController extends Controller
 {   
@@ -90,6 +91,9 @@ class ServiceProcedureController extends Controller
 
         }
 
+        //PUSHER - send data/message if service procedure is created
+        event(new EventNotification('create-procedure', 'service_procedures'));
+
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
@@ -122,6 +126,9 @@ class ServiceProcedureController extends Controller
         $procedure->price = $request->get('price');
         $procedure->save();
 
+        //PUSHER - send data/message if service procedure is updated
+        event(new EventNotification('edit-procedure', 'service_procedures'));
+
         return response()->json(['success' => 'Record has been updated'], 200);
     }
 
@@ -137,6 +144,9 @@ class ServiceProcedureController extends Controller
         }
 
         $procedure->delete();
+
+        //PUSHER - send data/message if service procedure is deleted
+        event(new EventNotification('delete-procedure', 'service_procedures'));
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

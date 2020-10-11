@@ -12,6 +12,7 @@ use Validator;
 use PDF;
 use Carbon\Carbon;
 use Session;
+use App\Events\EventNotification;
 
 class DiagnosisController extends Controller
 {
@@ -120,6 +121,36 @@ class DiagnosisController extends Controller
 
     public function store(Request $request, $ps_item_id)
     {   
+
+        $year_now = date('Y');
+
+        $patient_service = DB::table('patient_service_items')
+                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                                  ->select(DB::raw('services.id as service_id'))
+                                  ->where('patient_service_items.id', '=', $ps_item_id)
+                                  ->first();
+        
+        //if record is empty then display error page
+        if(empty($patient_service->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        //list of diagnosis per service (used to count the rows for creating file_no)
+        $dianosis_list_per_service = DB::table('patients')
+                                  ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
+                                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                                  ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                                  ->select('diagnoses.id')
+                                  ->where('services.id', '=', $patient_service->service_id)
+                                  ->where(DB::raw('year(patient_services.docdate)'), '=', $year_now)
+                                  ->get();
+        
+        //number of patient of current for the selected service. (for create file #)
+        $diagnosis_ctr = count($dianosis_list_per_service) + 1;
+        $file_no = date('y') . '-' . sprintf('%05d', $diagnosis_ctr);
+
         // return $request;
         $rules = [
             'physician.required' => 'Please enter physician',
@@ -152,7 +183,7 @@ class DiagnosisController extends Controller
 
         $diagnosis = new Diagnosis();
         $diagnosis->ps_items_id = $ps_item_id;
-        $diagnosis->file_no = $request->get('file_no');
+        $diagnosis->file_no = $file_no;
         $diagnosis->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
         $diagnosis->physician = $request->get('physician');
         // $diagnosis->bloodpressure = $request->get('bloodpressure');
@@ -162,6 +193,9 @@ class DiagnosisController extends Controller
        
         //create session for download pdf
         Session::flash('download_pdf', $ps_item_id);
+
+        //PUSHER - send data/message if diagnosis is created
+        event(new EventNotification('create-diagnosis', 'diagnoses'));
 
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
@@ -308,6 +342,9 @@ class DiagnosisController extends Controller
         $diagnosis->title = $request->get('title');
         $diagnosis->content = $request->get('content');
         $diagnosis->save();
+
+        //PUSHER - send data/message if diagnosis is updated
+        event(new EventNotification('edit-diagnosis', 'diagnoses'));
         
         return response()->json(['success' => 'Record has been updated'], 200);
     }
