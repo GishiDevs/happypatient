@@ -127,12 +127,16 @@
                           @endif
                           <td id="td-actions">
                               @if($services->docdate == date('Y-m-d'))
+                                @can('amount-edit')
                                 <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}"><i class="fa fa-edit"></i> Edit</a> 
+                                @endcan
                               @endif
                               @if($services->status == 'diagnosed' && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending' && $services->type == 'individual')
+                                @can('diagnosis-create')
                                 <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
+                                @endif
                               @endif 
                           </td>
                         </tr>
@@ -160,7 +164,9 @@
                   </div>
                 </div>
                 <div class="card-footer">
+                  @can('patientservices-edit')
                   <button type="submit" id="btn-update" class="btn btn-primary" disabled>Update</button>
+                  @endcan
                   @if($patientservice->cancelled == 'N')
                     @can('patientservices-cancel')
                     <button type="submit" id="btn-cancel" class="btn btn-danger float-right">Cancel</button>

@@ -131,11 +131,15 @@
             "render": function ( data, type, object ) {
                 // console.log(object);
                 if(object.status == 'pending')
-                {
-                  return data;
+                { 
+                  @can('diagnosis-create')
+                    return data;
+                  @else
+                    return '';
+                  @endcan
                 }
                 else
-                {
+                { 
                   return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-sm btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
                 }                 
               }

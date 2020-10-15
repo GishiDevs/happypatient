@@ -50,6 +50,9 @@ class PermissionSeeder extends Seeder
             'patientservices-list-xray',
             'patientservices-list-package',
             'patientservices-list-profile',
+            'diagnosis-create',
+            'diagnosis-edit',
+            'amount-edit',
          ];
  
  

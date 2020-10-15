@@ -139,7 +139,9 @@
                               @if($services->status == 'diagnosed')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending')
+                                @can('diagnosis-create')
                                 <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
+                                @endcan
                               @endif 
                           </td>
                         </tr>

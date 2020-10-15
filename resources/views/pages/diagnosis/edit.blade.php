@@ -117,7 +117,9 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-footer">
+                  @can('diagnosis-edit')
                   <button type="submit" id="btn-update" class="btn btn-primary" disabled>Update & Preview</button>
+                  @endcan
                   <button type="submit" id="btn-preview" class="btn btn-primary">Preview</button>
                 </div>
               </div>
