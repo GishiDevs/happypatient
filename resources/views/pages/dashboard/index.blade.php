@@ -164,8 +164,10 @@
       console.log(data.action);
       
       //PUSHER - refresh data when table patient_services or patient_service_items has changes or diagnosis has created
-      if(data.action == 'create-patient' || data.action == 'edit-patient' || data.action == 'delete-patient' || data.action == 'create-diagnosis')
-      {
+      if(data.action == 'create-patient' || data.action == 'edit-patient' || data.action == 'delete-patient' || data.action == 'create-diagnosis' ||
+         data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' || 
+         data.action == 'edit-service-amount')
+      { 
         $('#patient-table').DataTable().ajax.reload()
       }
 
