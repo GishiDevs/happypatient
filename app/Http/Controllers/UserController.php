@@ -80,12 +80,19 @@ class UserController extends Controller
             'password.same' => 'Password and Confirm Password did not match'
         ];
 
-        $validator = Validator::make($request->all(), [
+        $valid_fields = [
             'name' => 'required|string|max:255',
-            'email' => 'string|email|max:255',
+            // 'email' => 'string|email|max:255',
             'username' => 'required|string|max:255|unique:users,username',
             'password' => 'required|string|min:8|same:confirm_password',
-        ], $rules);
+        ];
+
+        if($request->get('email'))
+        {
+            $valid_fields['email'] = 'email';
+        }
+
+        $validator = Validator::make($request->all(), $valid_fields, $rules);
 
         if($validator->fails())
         {   
