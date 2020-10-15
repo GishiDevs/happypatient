@@ -18,7 +18,7 @@ class CreateDiagnosesTable extends Migration
             $table->integer('ps_items_id');  
             $table->string('file_no');  
             $table->date('docdate'); 
-            $table->string('physician'); 
+            $table->string('physician')->nullable(); 
             $table->string('bloodpressure')->nullable(); 
             $table->string('title');
             $table->text('content', 65,535);

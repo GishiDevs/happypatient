@@ -177,9 +177,9 @@ $(document).ready(function () {
     //Patient Form Validation
     $('#diagnosisform').validate({
       rules: {
-        physician: {
-          required: true,
-        },
+        // physician: {
+        //   required: true,
+        // },
         bloodpressure: {
           required: true,
         },
@@ -188,9 +188,9 @@ $(document).ready(function () {
         },
       },
       messages: {
-        physician: {
-          required: "Please enter physician",
-        },
+        // physician: {
+        //   required: "Please enter physician",
+        // },
         bloodpressure: {
           required: "Please enter blood pressure",
         },
