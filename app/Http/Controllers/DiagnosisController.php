@@ -131,7 +131,7 @@ class DiagnosisController extends Controller
                                   ->first();
         
         //if record is empty then display error page
-        if(empty($patient_service->id))
+        if(empty($patient_service->service_id))
         {
             return abort(404, 'Not Found');
         }
