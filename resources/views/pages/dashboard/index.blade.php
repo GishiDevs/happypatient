@@ -127,7 +127,7 @@
               }
           },
           {
-            "targets": 7,
+            "targets": 8,
             "render": function ( data, type, object ) {
                 // console.log(object);
                 if(object.status == 'pending')
@@ -136,7 +136,7 @@
                 }
                 else
                 {
-                  return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-sm btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View Diagnosis</a>';
+                  return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-sm btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
                 }                 
               }
           }
