@@ -14,6 +14,7 @@ use DataTables;
 use Auth;
 use DB;
 use App\Service;
+use App\ServiceProcedure;
 use App\Events\EventNotification;
 
 class PatientController extends Controller
@@ -28,7 +29,8 @@ class PatientController extends Controller
     public function create()
     {   
         $services = Service::all();
-        return view('pages.patient.create', compact('services'));
+        $procedures = ServiceProcedure::all();
+        return view('pages.patient.create', compact('services', 'procedures'));
     }
 
     public function getpatientrecord()

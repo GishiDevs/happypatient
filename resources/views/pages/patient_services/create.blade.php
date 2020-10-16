@@ -313,22 +313,38 @@ $(document).ready(function () {
       //   $('#add-item').addClass('disabled');    
       // }
 
-      $.ajax({
-        url: "{{ route('serviceprocedures') }}",
-        method: "POST",
-        data: {_token: "{{ csrf_token() }}", service_id: service_id},
-        success: function(response){
+      // $.ajax({
+      //   url: "{{ route('serviceprocedures') }}",
+      //   method: "POST",
+      //   data: {_token: "{{ csrf_token() }}", service_id: service_id},
+      //   success: function(response){
 
-          console.log(response);
+      //     console.log(response);
           
-          $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
-          $.each(response.procedures, function( index, value ) {
-            $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
-          }); 
+      //     $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
+      //     $.each(response.procedures, function( index, value ) {
+      //       $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
+      //     }); 
 
-        },
-        error: function(response){
-          console.log(response);
+      //   },
+      //   error: function(response){
+      //     console.log(response);
+      //   }
+      // });
+      
+      var procedures = new Array();
+        
+      @foreach($procedures as $procedure)
+        procedures.push({id: "{{ $procedure->id }}", procedure: "{{ $procedure->procedure }}", price: "{{ $procedure->price }}", serviceid: "{{ $procedure->serviceid }}"});
+      @endforeach
+      
+      $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
+      
+      //append procedures
+      $.each(procedures, function(index, value){
+        if(service_id == value.serviceid)
+        { 
+          $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
         }
       });
 

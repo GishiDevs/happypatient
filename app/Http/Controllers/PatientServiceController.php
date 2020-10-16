@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\PatientService;
 use App\PatientServiceItem;
 use App\Service;
+use App\ServiceProcedure;
 use App\Patient;
 use Illuminate\Http\Request;
 use Validator;
@@ -124,8 +125,9 @@ class PatientServiceController extends Controller
     public function create()
     {   
         $services = Service::all();
+        $procedures = ServiceProcedure::all();
         $patients = Patient::all();
-        return view('pages.patient_services.create', compact('services', 'patients'));
+        return view('pages.patient_services.create', compact('services', 'patients', 'procedures'));
     }
 
     public function store(Request $request)
