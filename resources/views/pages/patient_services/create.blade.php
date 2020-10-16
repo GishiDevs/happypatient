@@ -332,22 +332,18 @@ $(document).ready(function () {
       //   }
       // });
       
-      var procedures = new Array();
-        
+ 
+      $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
+
       @foreach($procedures as $procedure)
-        procedures.push({id: "{{ $procedure->id }}", procedure: "{{ $procedure->procedure }}", price: "{{ $procedure->price }}", serviceid: "{{ $procedure->serviceid }}"});
+
+        if(service_id == "{{ $procedure->serviceid }}")
+        { 
+          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->serviceid }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->procedure }}</option>');
+        }
+
       @endforeach
       
-      $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
-      
-      //append procedures
-      $.each(procedures, function(index, value){
-        if(service_id == value.serviceid)
-        { 
-          $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
-        }
-      });
-
     });
 
 
