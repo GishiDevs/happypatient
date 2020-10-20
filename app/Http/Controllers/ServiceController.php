@@ -8,6 +8,7 @@ use Validator;
 use DataTables;
 use Auth;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class ServiceController extends Controller
 {
@@ -74,6 +75,16 @@ class ServiceController extends Controller
         //PUSHER - send data/message if service is created
         event(new EventNotification('create-service', 'services'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $service->id;
+        $activity_log->table_name = 'services';
+        $activity_log->description = 'Create Service';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has successfully added', 'service' => $service], 200);
     }
 
@@ -129,6 +140,16 @@ class ServiceController extends Controller
         //PUSHER - send data/message if service is updated
         event(new EventNotification('edit-service', 'services'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $service->id;
+        $activity_log->table_name = 'services';
+        $activity_log->description = 'Update Service';
+        $activity_log->action = 'update';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has been updated']);
     }
 
@@ -149,6 +170,16 @@ class ServiceController extends Controller
         //PUSHER - send data/message if service is deleted
         event(new EventNotification('delete-service', 'services'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $service->id;
+        $activity_log->table_name = 'services';
+        $activity_log->description = 'Delete Service';
+        $activity_log->action = 'delete';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+        
         return response()->json(['success' => 'Record has been deleted'], 200);
     }
 }

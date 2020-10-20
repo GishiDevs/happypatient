@@ -18,6 +18,7 @@ Route::get('/', 'DashboardController@index')->name('dashboard.index')->middlewar
 Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
 Route::get('/transactions', 'TransactionController@index')->name('transactions.index')->middleware('auth');
 Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions')->middleware('auth');
+Route::get('/logs', 'ActivityLogController@index')->name('logs')->middleware('activity_log');
 Auth::routes();
 
 // Route::group(['prefix' => '/', 'middleware' => ['auth','dashboard']], function(){
@@ -330,3 +331,4 @@ Route::get('/diagnosis/pdf', function(){
     // return $pdf->download('invoice.pdf');
     return view('pages.diagnosis.pdf');
 });
+

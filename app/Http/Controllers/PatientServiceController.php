@@ -14,6 +14,7 @@ use Auth;
 use DB;
 use DataTables;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class PatientServiceController extends Controller
 {   
@@ -259,6 +260,15 @@ class PatientServiceController extends Controller
         //PUSHER - send data/message if patient services is created
         event(new EventNotification('create-patient-services', 'patient_services'));
 
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patientservice->id;
+        $activity_log->table_name = 'patient_services';
+        $activity_log->description = 'Create Patient Services';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has successfully added'], 200);
 
     }
@@ -356,6 +366,15 @@ class PatientServiceController extends Controller
         //PUSHER - send data/message if patient services is updated from table patient_services
         event(new EventNotification('edit-patient-services', 'patient_services'));
 
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patientservice->id;
+        $activity_log->table_name = 'patient_services';
+        $activity_log->description = 'Update Patient Services';
+        $activity_log->action = 'update';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return redirect('patientservice/index');
 
     }
@@ -400,6 +419,15 @@ class PatientServiceController extends Controller
         //PUSHER - send data/message if service procedure price is updated
         event(new EventNotification('edit-service-amount', 'patient_service_items'));
 
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patientserviceitem->id;
+        $activity_log->table_name = 'patient_service_items';
+        $activity_log->description = 'Update Service Amount';
+        $activity_log->action = 'udpate';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has been updated'], 200);
 
     }
@@ -422,6 +450,15 @@ class PatientServiceController extends Controller
 
         //PUSHER - send data/message if transaction/services is cancelled
         event(new EventNotification('cancel-patient-services', 'patient_services'));
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patientservice->id;
+        $activity_log->table_name = 'patient_services';
+        $activity_log->description = 'Cancel Patient Services';
+        $activity_log->action = 'cancel';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
 
         return redirect('patientservice/index');
 

@@ -10,6 +10,7 @@ use Auth;
 use DB;
 use DataTables;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class ServiceProcedureController extends Controller
 {   
@@ -89,6 +90,16 @@ class ServiceProcedureController extends Controller
             $service->price = $price[$x];
             $service->save();
 
+            //Activity Log
+            $activity_log = new ActivityLog();
+            $activity_log->object_id = $service->id;
+            $activity_log->table_name = 'service_procedures';
+            $activity_log->description = 'Create Service Procedures';
+            $activity_log->action = 'create';
+            $activity_log->userid = auth()->user()->id;
+            $activity_log->save();
+
+
         }
 
         //PUSHER - send data/message if service procedure is created
@@ -129,6 +140,16 @@ class ServiceProcedureController extends Controller
         //PUSHER - send data/message if service procedure is updated
         event(new EventNotification('edit-procedure', 'service_procedures'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $service->id;
+        $activity_log->table_name = 'service_procedures';
+        $activity_log->description = 'Update Service Procedures';
+        $activity_log->action = 'update';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has been updated'], 200);
     }
 
@@ -147,6 +168,16 @@ class ServiceProcedureController extends Controller
 
         //PUSHER - send data/message if service procedure is deleted
         event(new EventNotification('delete-procedure', 'service_procedures'));
+
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $service->id;
+        $activity_log->table_name = 'service_procedures';
+        $activity_log->description = 'Delete Service Procedures';
+        $activity_log->action = 'delete';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

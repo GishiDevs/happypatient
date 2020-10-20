@@ -9,6 +9,7 @@ use DataTables;
 use Validator;
 use Auth;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class PermissionController extends Controller
 {
@@ -67,6 +68,16 @@ class PermissionController extends Controller
         //PUSHER - send data/message if permission is created
         event(new EventNotification('create-permission', 'permissions'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $permission->id;
+        $activity_log->table_name = 'permissions';
+        $activity_log->description = 'Create Permission';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
@@ -122,6 +133,16 @@ class PermissionController extends Controller
         //PUSHER - send data/message if permission is updated
         event(new EventNotification('edit-permission', 'permissions'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $permission->id;
+        $activity_log->table_name = 'permissions';
+        $activity_log->description = 'Update Permission';
+        $activity_log->action = 'update';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has been updated']);
     }
 
@@ -141,6 +162,16 @@ class PermissionController extends Controller
 
         //PUSHER - send data/message if permission is deleted
         event(new EventNotification('delete-permission', 'permissions'));
+
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $permission->id;
+        $activity_log->table_name = 'permissions';
+        $activity_log->description = 'Delete Permission';
+        $activity_log->action = 'delete';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

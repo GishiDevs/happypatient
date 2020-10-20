@@ -13,6 +13,7 @@ use PDF;
 use Carbon\Carbon;
 use Session;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class DiagnosisController extends Controller
 {
@@ -197,6 +198,16 @@ class DiagnosisController extends Controller
         //PUSHER - send data/message if diagnosis is created
         event(new EventNotification('create-diagnosis', 'diagnoses'));
 
+        
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $diagnosis->id;
+        $activity_log->table_name = 'diagnoses';
+        $activity_log->description = 'Create Diagnosis';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
@@ -259,6 +270,16 @@ class DiagnosisController extends Controller
 
         // $pdf = PDF::loadView('pages.diagnosis.pdf', compact('patient_service'));
         // return $pdf->download(Carbon::now()->timestamp.'-'.$patient_service->service.'.pdf');
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $diagnosis->id;
+        $activity_log->table_name = '';
+        $activity_log->description = 'Print Diagnosis';
+        $activity_log->action = 'print';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return view('pages.diagnosis.pdf', compact('patient_service'));;
     }
 
@@ -345,6 +366,16 @@ class DiagnosisController extends Controller
 
         //PUSHER - send data/message if diagnosis is updated
         event(new EventNotification('edit-diagnosis', 'diagnoses'));
+
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $diagnoses_id;
+        $activity_log->table_name = 'diagnoses';
+        $activity_log->description = 'Update Diagnosis';
+        $activity_log->action = 'update';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
         
         return response()->json(['success' => 'Record has been updated'], 200);
     }

@@ -332,6 +332,14 @@
             </ul>
           </li>
           @endcanany
+          <li class="nav-item">
+            <a href="/" class="nav-link {{ (request()->is('/logs')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Activity Logs
+              </p>
+            </a>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

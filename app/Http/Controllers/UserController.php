@@ -12,6 +12,7 @@ use DB;
 use Hash;
 use Auth;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class UserController extends Controller
 {
@@ -111,6 +112,16 @@ class UserController extends Controller
         //PUSHER - send data/message if user is created
         event(new EventNotification('create-user', 'users'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $user->id;
+        $activity_log->table_name = 'users';
+        $activity_log->description = 'Create User';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
@@ -180,6 +191,16 @@ class UserController extends Controller
         //PUSHER - send data/message if user is updated
         event(new EventNotification('edit-user', 'users'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $user->id;
+        $activity_log->table_name = 'users';
+        $activity_log->description = 'Update Service Procedures';
+        $activity_log->action = 'update';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return redirect('/user/index');
     }
 
@@ -197,6 +218,15 @@ class UserController extends Controller
 
         //PUSHER - send data/message if user is deleted
         event(new EventNotification('delete-user', 'users'));
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $user->id;
+        $activity_log->table_name = 'users';
+        $activity_log->description = 'Delete Service Procedures';
+        $activity_log->action = 'delete';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

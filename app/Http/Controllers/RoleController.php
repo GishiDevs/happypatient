@@ -10,6 +10,7 @@ use Validator;
 use DB;
 use Auth;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class RoleController extends Controller
 {
@@ -79,6 +80,16 @@ class RoleController extends Controller
         //PUSHER - send data/message if role is created
         event(new EventNotification('create-role', 'roles'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $role->id;
+        $activity_log->table_name = 'roles';
+        $activity_log->description = 'Create Role';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has successfully added'], 200);
     }
 
@@ -140,6 +151,16 @@ class RoleController extends Controller
         //PUSHER - send data/message if role is updated
         event(new EventNotification('edit-role', 'roles'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $role->id;
+        $activity_log->table_name = 'roles';
+        $activity_log->description = 'Update Role';
+        $activity_log->action = 'update';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has been updated']);
     }
 
@@ -165,6 +186,16 @@ class RoleController extends Controller
 
         //PUSHER - send data/message if role is deleted
         event(new EventNotification('delete-role', 'roles'));
+
+        
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $role->id;
+        $activity_log->table_name = 'roles';
+        $activity_log->description = 'Delete Role';
+        $activity_log->action = 'delete';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }

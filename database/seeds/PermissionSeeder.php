@@ -53,6 +53,7 @@ class PermissionSeeder extends Seeder
             'diagnosis-create',
             'diagnosis-edit',
             'amount-edit',
+            'activity-log',
          ];
  
  

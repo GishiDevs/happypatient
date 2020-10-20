@@ -16,6 +16,7 @@ use DB;
 use App\Service;
 use App\ServiceProcedure;
 use App\Events\EventNotification;
+use App\ActivityLog;
 
 class PatientController extends Controller
 {
@@ -165,6 +166,16 @@ class PatientController extends Controller
         //PUSHER - send data/message if patients is created
         event(new EventNotification('create-patient', 'patients'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patient->id;
+        $activity_log->table_name = 'patients';
+        $activity_log->description = 'Create Patient';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Record has successfully added', 'patientid' => $patient->id], 200);
     }
 
@@ -258,6 +269,16 @@ class PatientController extends Controller
         //PUSHER - send data/message if patients is updated
         event(new EventNotification('edit-patient', 'patients'));
 
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patient->id;
+        $activity_log->table_name = 'patients';
+        $activity_log->description = 'Create Patient';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return redirect('patient/index');
     }
 
@@ -275,6 +296,15 @@ class PatientController extends Controller
 
         //PUSHER - send data/message if patients is deleted
         event(new EventNotification('delete-patient', 'patients'));
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patient->id;
+        $activity_log->table_name = 'patients';
+        $activity_log->description = 'Delete Patient';
+        $activity_log->action = 'delete';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }
