@@ -20,6 +20,7 @@ class TransactionController extends Controller
         $services = Service::all();
 
         $transactions =  DB::table('patient_services')
+                            ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                             ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
@@ -63,6 +64,7 @@ class TransactionController extends Controller
         }
 
         $transactions =  DB::table('patient_services')
+                            ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                             ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
