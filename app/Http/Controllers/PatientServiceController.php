@@ -28,7 +28,7 @@ class PatientServiceController extends Controller
     public function serviceslist()
     {   
         $patientservices =  DB::table('patient_services')
-                 ->join('patients', 'patient_services.patientid', '=', 'patients.id')
+                //  ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                  ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number', 'patient_services.name', 'patient_services.cancelled')
                  ->orderBy('patient_services.id', 'Asc')
                  ->get();
@@ -82,7 +82,7 @@ class PatientServiceController extends Controller
 
         //diagnosed patients
         $diagnosed =  DB::table('patient_services')
-                ->join('patients', 'patient_services.patientid', '=', 'patients.id')
+                // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
@@ -99,7 +99,7 @@ class PatientServiceController extends Controller
 
         //pending patients
         $patientservices =  DB::table('patient_services')
-                 ->join('patients', 'patient_services.patientid', '=', 'patients.id')
+                //  ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')

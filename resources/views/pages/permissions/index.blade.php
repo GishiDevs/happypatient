@@ -234,6 +234,8 @@
     },
     submitHandler: function(e){
       
+      $('#btn-save').attr('disabled', true);
+
       if(action_type == 'add')
       {
         addpermission();
@@ -271,6 +273,7 @@
             });
             $('#permission-table').DataTable().ajax.reload();
             $('#modal-permission').modal('toggle');
+            $('#btn-save').removeAttr('disabled');
           }
           else
           {
@@ -306,6 +309,7 @@
                                 timer: 2500
                               });  
                     $('#modal-permission').modal('toggle');
+                    
                 }   
                 else
                 {
@@ -313,6 +317,7 @@
                     $('#permission').after('<span id="permission-error" class="error invalid-feedback">'+ response.permission +'</span>');
                 }
                 console.log(response);
+                $('#btn-save').removeAttr('disabled');
             },
             error: function(response){
                 console.log(response);

@@ -223,6 +223,8 @@ $(document).ready(function () {
       },
       submitHandler: function(e){
 
+        $('#btn-add').attr('disabled', true);
+
         var data = $('#diagnosisform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         
@@ -250,6 +252,8 @@ $(document).ready(function () {
               window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
               $(location).attr('href', "{{ route('dashboard.index')}}");
             }
+
+            $('#btn-add').removeAttr('disabled');
           },
           error: function(response){
             console.log(response);

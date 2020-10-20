@@ -259,7 +259,9 @@
       $(element).removeClass('is-invalid');
     },
     submitHandler: function(e){
-      
+
+      $('#btn-save').attr('disabled', true);
+
       if(action_type == 'add')
       {
         addservice();
@@ -297,12 +299,15 @@
             });
             $('#service-table').DataTable().ajax.reload();
             $('#modal-service').modal('toggle');
+            
           }
           else
           {
             $('#service').addClass('is-invalid');
             $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
           }
+
+          $('#btn-save').removeAttr('disabled');
 
         },
         error: function(response){

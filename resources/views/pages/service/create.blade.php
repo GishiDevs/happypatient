@@ -187,6 +187,8 @@ $(document).ready(function () {
   // Add Services with Stepper
   $('#btn-add').click(function(e){
 
+    $('#btn-add').attr('disabled', true);
+
     e.preventDefault();
     
     //count table tbody rows
@@ -220,14 +222,16 @@ $(document).ready(function () {
               });  
 
               $('#table-services tbody').empty();
-
+            
             }
             else
             { 
               $('#service-error').remove();
               $('#service').addClass('is-invalid');
               $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
-            }                
+            }  
+            
+            $('#btn-add').removeAttr('disabled');              
         },
         error: function(response){
           console.log(response);

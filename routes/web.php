@@ -19,6 +19,7 @@ Route::get('/patient-information', 'DashboardController@getpatientlists')->name(
 Route::get('/transactions', 'TransactionController@index')->name('transactions.index')->middleware('auth');
 Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions')->middleware('auth');
 Route::get('/logs', 'ActivityLogController@index')->name('logs')->middleware('activity_log');
+Route::get('/getlogs', 'ActivityLogController@getlogs')->name('getlogs')->middleware('activity_log');
 Auth::routes();
 
 // Route::group(['prefix' => '/', 'middleware' => ['auth','dashboard']], function(){

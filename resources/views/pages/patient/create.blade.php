@@ -857,6 +857,8 @@ $(document).ready(function () {
   // Add Services with Stepper
   $('#btn-add').click(function(e){
 
+    $('#btn-add').attr('disabled', true);
+
     var docdate = new Date($('#docdate').val());
 
     e.preventDefault();
@@ -941,7 +943,9 @@ $(document).ready(function () {
                         $('#patientform').removeAttr('hidden');
                         $('#patientserviceform').attr('hidden', true);
 
-                      }               
+                      }   
+
+                      $('#btn-add').removeAttr('disabled');            
                   },
                   error: function(response){
                     console.log(response);

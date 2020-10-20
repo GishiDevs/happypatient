@@ -16,7 +16,7 @@ class ActivityLog
      */
     public function handle($request, Closure $next)
     {
-        if($request->is('logs'))
+        if($request->is('logs') || $request->is('getlogs'))
         {
             if(Auth::user()->can('activity-log'))
             {

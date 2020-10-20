@@ -291,6 +291,8 @@ $(document).ready(function () {
   // Add Services with Stepper
   $('#btn-add').click(function(e){
 
+    $('#btn-add').attr('disabled', true);
+
     e.preventDefault();
     
     //patient validation error
@@ -332,8 +334,8 @@ $(document).ready(function () {
               });  
               $('#select2-service-container').empty().append('Select Patient');
               $('#table-services tbody').empty();
-
-            }               
+            }  
+            $('#btn-add').removeAttr('disabled');            
         },
         error: function(response){
           console.log(response);

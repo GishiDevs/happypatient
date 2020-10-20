@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ActivityLog;
+use DataTables;
+use DB;
 
 class ActivityLogController extends Controller
 {
@@ -14,70 +16,49 @@ class ActivityLogController extends Controller
      */
     public function index()
     {
-        return ActivityLog::all();
+        return view('pages.activity_log.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function getlogs()
+    {
+        $activity_logs = DB::table('activity_logs')
+                           ->join('users', 'activity_logs.userid', '=', 'users.id')
+                           ->select('activity_logs.object_id', DB::raw("DATE_FORMAT(activity_logs.created_at, '%m/%d/%Y - %H:%i')  as created_at"), 'activity_logs.table_name', 'activity_logs.description', 'activity_logs.action', 'users.username')
+                           ->get();
+
+        return DataTables::of($activity_logs)->addIndexColumn()->make();
+    }
+   
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         //

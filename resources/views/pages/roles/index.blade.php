@@ -266,7 +266,7 @@
     },
     submitHandler: function(e){
       
-      
+      $('#btn-save').attr('disabled', true);
 
       if(action_type == 'add')
       {
@@ -307,12 +307,15 @@
             });
             $('#role-table').DataTable().ajax.reload();
             $('#modal-role').modal('toggle');
+            
           }
           else
           {
             $('#role').addClass('is-invalid');
             $('#role').after('<span id="role-error" class="error invalid-feedback">'+ response.role +'</span>');
           }
+
+          $('#btn-save').removeAttr('disabled');
 
         },
         error: function(response){
@@ -342,6 +345,7 @@
                                 timer: 2500
                               });  
                     $('#modal-role').modal('toggle');
+                    $('#btn-save').removeAttr('disabled');
                 }   
                 else
                 {

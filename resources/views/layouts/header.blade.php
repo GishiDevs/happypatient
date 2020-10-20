@@ -332,14 +332,16 @@
             </ul>
           </li>
           @endcanany
+          @can('activity-log')
           <li class="nav-item">
-            <a href="/" class="nav-link {{ (request()->is('/logs')) ? 'active' : '' }}">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+            <a href="{{ route('logs') }}" class="nav-link {{ (request()->is('logs')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-history"></i>
               <p>
                 Activity Logs
               </p>
             </a>
           </li>
+          @endcan
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

@@ -78,7 +78,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Add</button>
+                  <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
                 </div>
               </form>
             </div>
@@ -147,6 +147,8 @@ $(document).ready(function () {
     },
     submitHandler: function(e){
 
+      $('#btn-add').attr('disabled', true);
+
       var data = $('#userform').serializeArray();
       data.push({name: "_token", value: "{{ csrf_token() }}"});
       
@@ -169,6 +171,8 @@ $(document).ready(function () {
               timer: 2500
             });
           }
+
+          $('#btn-save').removeAttr('disabled');
         },
         error: function(response){
           console.log(response);

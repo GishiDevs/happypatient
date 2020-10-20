@@ -94,11 +94,10 @@ class ServiceProcedureController extends Controller
             $activity_log = new ActivityLog();
             $activity_log->object_id = $service->id;
             $activity_log->table_name = 'service_procedures';
-            $activity_log->description = 'Create Service Procedures';
+            $activity_log->description = 'Create Service Procedure';
             $activity_log->action = 'create';
             $activity_log->userid = auth()->user()->id;
             $activity_log->save();
-
 
         }
 
@@ -143,9 +142,9 @@ class ServiceProcedureController extends Controller
 
         //Activity Log
         $activity_log = new ActivityLog();
-        $activity_log->object_id = $service->id;
+        $activity_log->object_id = $procedure->id;
         $activity_log->table_name = 'service_procedures';
-        $activity_log->description = 'Update Service Procedures';
+        $activity_log->description = 'Update Service Procedure';
         $activity_log->action = 'update';
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
@@ -169,12 +168,11 @@ class ServiceProcedureController extends Controller
         //PUSHER - send data/message if service procedure is deleted
         event(new EventNotification('delete-procedure', 'service_procedures'));
 
-
         //Activity Log
         $activity_log = new ActivityLog();
-        $activity_log->object_id = $service->id;
+        $activity_log->object_id = $procedure->id;
         $activity_log->table_name = 'service_procedures';
-        $activity_log->description = 'Delete Service Procedures';
+        $activity_log->description = 'Delete Service Procedure';
         $activity_log->action = 'delete';
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
