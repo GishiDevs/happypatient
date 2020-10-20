@@ -103,7 +103,9 @@
                           @if($patientservice->type == 'individual')
                           <th>Status</th>
                           @endif
+                          @if($patientservice->cancelled == 'N')
                           <th width="180px" id="th-actions">Actions</th>
+                          @endif
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
@@ -125,6 +127,7 @@
                               @endif
                           </td>
                           @endif
+                          @if($patientservice->cancelled == 'N')
                           <td id="td-actions">
                               @if($services->docdate == date('Y-m-d'))
                                 @can('amount-edit')
@@ -139,6 +142,7 @@
                                 @endif
                               @endif 
                           </td>
+                          @endif
                         </tr>
                         @endforeach									
                         </tbody>
@@ -164,10 +168,10 @@
                   </div>
                 </div>
                 <div class="card-footer">
-                  @can('patientservices-edit')
-                  <button type="submit" id="btn-update" class="btn btn-primary" disabled>Update</button>
-                  @endcan
                   @if($patientservice->cancelled == 'N')
+                    @can('patientservices-edit')
+                    <button type="submit" id="btn-update" class="btn btn-primary" disabled>Update</button>
+                    @endcan
                     @can('patientservices-cancel')
                     <button type="submit" id="btn-cancel" class="btn btn-danger float-right">Cancel</button>
                     @endcan

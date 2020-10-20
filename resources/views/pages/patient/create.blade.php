@@ -601,7 +601,7 @@ $(document).ready(function () {
 
         if(service_id == "{{ $procedure->serviceid }}")
         { 
-          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->serviceid }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->procedure }}</option>');
+          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->procedure }}</option>');
         }
 
       @endforeach

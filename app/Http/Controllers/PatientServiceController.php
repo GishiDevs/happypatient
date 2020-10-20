@@ -338,7 +338,10 @@ class PatientServiceController extends Controller
         }
         
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
-        $patientservice->name = $request->get('organization');
+        if($patientservice->type == 'group')
+        {
+            $patientservice->name = $request->get('organization');
+        }
         $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->temperature = $request->get('temperature');
         $patientservice->weight = $request->get('weight');
