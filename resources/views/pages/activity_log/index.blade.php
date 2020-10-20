@@ -29,8 +29,8 @@
                         <tr>
                           <th class="no-sort" width="40px">#</th>
                           <th>Date</th>
-                          <th>Object ID</th>
-                          <th>Table Name</th>
+                          <!-- <th>Object ID</th>
+                          <th>Table Name</th> -->
                           <th>Activity</th>
                           <th>User</th>
                         </tr>
@@ -71,8 +71,8 @@
 		    "columns": [
           {"data": "DT_RowIndex"},
           {'data': 'created_at'},
-          {'data': 'object_id'},
-          {'data': 'table_name'},
+          // {'data': 'object_id'},
+          // {'data': 'table_name'},
           {'data': 'description'},
           {'data': 'username'},
         ],
