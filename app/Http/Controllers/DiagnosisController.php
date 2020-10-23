@@ -273,7 +273,7 @@ class DiagnosisController extends Controller
 
         //Activity Log
         $activity_log = new ActivityLog();
-        $activity_log->object_id = $diagnosis->id;
+        $activity_log->object_id = $patient_service->diagnoses_id;
         $activity_log->table_name = '';
         $activity_log->description = 'Print Diagnosis';
         $activity_log->action = 'print';
