@@ -79,7 +79,7 @@
                 <!-- /.card-body -->
               </form>
               <div class="card-footer">
-                <button type="submit" id="btn-add" class="btn btn-primary" disabled>Add</button>
+                <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
               </div>
             </div>
             <!-- /.card -->
@@ -210,7 +210,7 @@ $(document).ready(function () {
     $('#add-item').addClass('disabled');
 
     //disable btn-add button by default
-    $('#btn-add').attr('disabled', true);
+    // $('#btn-add').attr('disabled', true);
 
     $('#service-table-error').remove();
 
@@ -228,7 +228,7 @@ $(document).ready(function () {
       {
         $('#add-item').addClass('disabled');
 
-        $('#btn-add').attr('disabled', true);
+        // $('#btn-add').attr('disabled', true);
       }
 
     });
@@ -246,7 +246,7 @@ $(document).ready(function () {
       {
         $('#add-item').addClass('disabled');
 
-        $('#btn-add').attr('disabled', true);
+        // $('#btn-add').attr('disabled', true);
       }
 
     });
@@ -264,16 +264,7 @@ $(document).ready(function () {
       //delete row
       $('#row-'+linenum).remove();   
 
-      //scan if there is a dropdown on a table
-      $('#table-services tbody tr td').find('select').each(function(){
-         //$(this)   //select box of same row
-         hasDropDown = true
-      });
-      // alert(hasDropDown);
-      if(hasDropDown == false)
-      {
-        $('#add-item').removeClass('disabled');
-      }
+      $('#add-item').removeClass('disabled');
 
     });
 
@@ -335,12 +326,17 @@ $(document).ready(function () {
               $('#select2-service-container').empty().append('Select Service');
               // $('#service option[value=""]').prop('selected', 'selected').change();
               $('#table-services tbody').empty();
-              $('#btn-add').attr('disabled' ,true);
+              $('#service-table-error').remove();
+              // $('#btn-add').attr('disabled' ,true);
             }
-            else
+
+            if(response.procedures)
             {
-              $('#btn-add').removeAttr('disabled');
-            }  
+              $('#service-table-error').remove();
+              $('.table-scrollable').append('<span id="service-table-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">'+ response.procedures +'</span>');
+            }
+
+            $('#btn-add').removeAttr('disabled');
                         
         },
         error: function(response){

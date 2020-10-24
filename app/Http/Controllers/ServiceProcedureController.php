@@ -66,11 +66,13 @@ class ServiceProcedureController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'service.required' => 'Please enter service'
+            'service.required' => 'Please enter service',   
+            'procedure.required' => 'Please add at least 1 service procedure on the table'
         ];
 
         $validator = Validator::make($request->all(),[
-            'service' => 'required'
+            'service' => 'required',
+            'procedure' => 'required'
         ], $rules);
 
         if($validator->fails())
@@ -81,6 +83,29 @@ class ServiceProcedureController extends Controller
         $ctr = count($request->get('procedure'));
         $procedure = $request->get('procedure');
         $price = $request->get('price');
+        $procedureIsNull = false;
+        $priceIsNull = false;
+
+        //Validate procedure and price if null
+        for($x=0; $x < $ctr; $x++)
+        {
+            if(empty($procedure[$x]))
+            {
+                $procedureIsNull = true;
+            }
+
+            if(empty($price[$x]))
+            {
+                $priceIsNull = true;
+            }
+
+        }
+
+        //validated if procedure or price is null
+        if($procedureIsNull == true || $priceIsNull == true)
+        {
+            return response()->json(['procedures' => 'Procedure and Price is required'], 200);
+        }
 
         for($x=0; $x < $ctr; $x++)
         {
