@@ -43,6 +43,18 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
+                      <label for="description">Description</label>
+                      <textarea class="form-control" rows="3" placeholder="Enter description" name="description" id="description"></textarea>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="license">License</label>
+                      <input type="text" id="license" type="text" class="form-control" name="license" placeholder="Enter license">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
                       <label for="email">Email</label>
                       <input id="email" type="email" class="form-control" name="email" placeholder="Enter email">
                     </div>

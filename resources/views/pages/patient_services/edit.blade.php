@@ -136,9 +136,9 @@
                               @endif
                               @if($services->status == 'diagnosed' && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
-                              @elseif($services->status == 'pending' && $services->type == 'individual')
+                              @elseif($services->status == 'pending' && $services->type == 'individual' && $services->service)
                                 @can('diagnosis-create')
-                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
+                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> @if($services->service == 'Check-up') Receipt @else Diagnose @endif</a>
                                 @endif
                               @endif 
                           </td>

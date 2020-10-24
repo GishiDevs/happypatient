@@ -324,7 +324,7 @@ $(document).ready(function () {
             if(response.success)
             {   
 
-              $('#serviceform')[0].reset();
+              $('#serviceprocedureform')[0].reset();
               Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -332,10 +332,16 @@ $(document).ready(function () {
                 showConfirmButton: false,
                 timer: 2500
               });  
-              $('#select2-service-container').empty().append('Select Patient');
+              $('#select2-service-container').empty().append('Select Service');
+              // $('#service option[value=""]').prop('selected', 'selected').change();
               $('#table-services tbody').empty();
+              $('#btn-add').attr('disabled' ,true);
+            }
+            else
+            {
+              $('#btn-add').removeAttr('disabled');
             }  
-            $('#btn-add').removeAttr('disabled');            
+                        
         },
         error: function(response){
           console.log(response);

@@ -374,7 +374,11 @@
                     colspan="2"
                     >
                     <span style="font-size: 8px; color: rgb(51, 43, 142)"
-                        >Doctor Details</span
+                        >{{ Auth::user()->description }}</span
+                    >
+                    <br>
+                    <span style="font-size: 8px; color: rgb(51, 43, 142)"
+                        >{{ Auth::user()->license }}</span
                     >
                     </td>
                     <td

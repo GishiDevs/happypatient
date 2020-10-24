@@ -102,6 +102,8 @@ class UserController extends Controller
 
         $user = new User();
         $user->name = $request->get('name');
+        $user->description = $request->get('description');
+        $user->license = $request->get('license');
         $user->email = $request->get('email');
         $user->username = $request->get('username');
         $user->password = Hash::make($request->get('password'));
@@ -177,6 +179,8 @@ class UserController extends Controller
         }
 
         $user->name = $request->get('name');
+        $user->description = $request->get('description');
+        $user->license = $request->get('license');
         $user->email = $request->get('email');
         if(!empty($request->get('password')))
         {

@@ -133,7 +133,15 @@
                 if(object.status == 'pending')
                 { 
                   @can('diagnosis-create')
-                    return data;
+                    if(object.service == 'Check-up')
+                    {
+                      return '<a href="diagnosis/create/'+object.ps_items_id+'"class="btn btn-sm btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Receipt</a>';
+                    }
+                    else
+                    {
+                      return data;
+                    }
+                    
                   @else
                     return '';
                   @endcan
