@@ -77,7 +77,7 @@
  
     // if session has request to download pdf
     @if(Session::has('download_pdf'))
-      $(location).attr('href', "{{ route('diagnosis.print', session()->get('download_pdf'))}}");
+      // $(location).attr('href', "{{ route('diagnosis.print', session()->get('download_pdf'))}}");
     @endif
 
 			// $('#tax-table').DataTable();
