@@ -148,8 +148,17 @@ Route::group(['prefix' => 'serviceprocedure', 'middleware' => ['auth','service_p
         'uses' => 'ServiceProcedureController@delete',
         'as' => 'serviceprocedure.delete',
     ]);
+    Route::get('/content/create/{id}', [
+        'uses' => 'ServiceProcedureController@content_create',
+        'as' => 'content.create',
+    ]);
+    Route::post('/content/update', [
+        'uses' => 'ServiceProcedureController@content_update',
+        'as' => 'content.update',
+    ]);
 
 });
+
 
 //Patient Services
 Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_service']], function(){

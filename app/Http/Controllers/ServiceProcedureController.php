@@ -29,7 +29,8 @@ class ServiceProcedureController extends Controller
                                ->get();
         return DataTables::of($serviceprocedures)
             ->addColumn('action',function($serviceprocedures){
-
+                
+                $add = '<a href="'.route('content.create', $serviceprocedures->id).'" class="btn btn-sm btn-primary" data-procedureid="'.$serviceprocedures->id.'" data-action="add" id="btn-add-content"><i class="fa fa-edit"></i> Template</a>';
                 $edit = '';
                 $delete = '';
 
@@ -43,7 +44,7 @@ class ServiceProcedureController extends Controller
                     $delete = '<a href="" class="btn btn-sm btn-danger" data-procedureid="'.$serviceprocedures->id.'" data-action="delete" id="btn-delete-procedure"><i class="fa fa-trash"></i> Delete</a>';
                 }
                 
-                return $edit . ' ' . $delete;
+                return $add . ' ' . $edit . ' ' . $delete;
             })
             ->addIndexColumn()
             ->make();
@@ -204,4 +205,16 @@ class ServiceProcedureController extends Controller
 
         return response()->json(['success' => 'Record has been deleted'], 200);
     }
+
+
+    public function content_create($procedure_id)
+    {
+        return view('pages.template_content.create');
+    }
+
+    public function content_update(Request $request)
+    {
+        return response()->json(['success' => 'Record has been updated'], 200);
+    }
+
 }

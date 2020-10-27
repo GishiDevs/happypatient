@@ -29,7 +29,7 @@ class ServiceProcedureRecordMaintenance
             }
         }
 
-        if($request->is('serviceprocedure/create') || $request->is('serviceprocedure/store'))
+        if($request->is('serviceprocedure/create') || $request->is('serviceprocedure/store') || $request->is('serviceprocedure/content/create/*') || $request->is('serviceprocedure/content/update'))
         {
             if(Auth::user()->can('serviceprocedure-create'))
             {

@@ -44,7 +44,7 @@
                       <th>Procedure</th>
                       <th>Price</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
-                      <th width="140px" class="no-sort">Actions</th>
+                      <th width="250px" class="no-sort">Actions</th>
                       @endcan
                     </tr>
                   </thead>
