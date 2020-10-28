@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Add Template Content')
+@section('title', 'Template Content')
 @section('main_content')                                
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -14,7 +14,7 @@
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
               <li class="breadcrumb-item"><a href="{{ route('serviceprocedure.index') }}">Service Procedure Record</a></li>
-              <li class="breadcrumb-item active">Add Template Content</li>
+              <li class="breadcrumb-item active">Template Content</li>
             </ol>
           </div>
         </div>
@@ -32,18 +32,20 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add Template Content </h3>
+                  <h3 class="card-title">Template Content </h3>
                 </div>
                 <div class="card-body pad col-md-12">
                   <label for="content">Content</label>
                   <div class="mb-3 div-content"> 
                     <textarea name="content" id="content" class="textarea" placeholder="Place some text here"
-                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+                      {{ $template_content->content }}                
+                    </textarea>
                   </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-footer">
-                  <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
+                  <button type="submit" id="btn-save" class="btn btn-primary">Save</button>
                   <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
                 </div>
               </div>
@@ -67,22 +69,19 @@
 
 $(document).ready(function () {
 
- 
+  $('#btn-save').click(function(e){
 
-  $('#btn-add').click(function(e){
-
-    // e.preventDefault();
+      e.preventDefault();
         
         $.ajax({
-          url: "",
+          url: "{{ route('content.update', $template_content->procedureid) }}",
           method: "POST",
-          data: data,
+          data: { _token: "{{ csrf_token() }}", content: $('#content').val() },
           success: function(response){
             console.log(response);
 
             if(response.success)
             {
-              $('#diagnosisform')[0].reset();
               
               // Sweet Alert
               Swal.fire({
@@ -92,6 +91,8 @@ $(document).ready(function () {
                 showConfirmButton: false,
                 timer: 2500
               });
+
+              $(location).attr('href', "{{ route('serviceprocedure.index')}}");
             }
 
           },

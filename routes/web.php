@@ -152,7 +152,7 @@ Route::group(['prefix' => 'serviceprocedure', 'middleware' => ['auth','service_p
         'uses' => 'ServiceProcedureController@content_create',
         'as' => 'content.create',
     ]);
-    Route::post('/content/update', [
+    Route::post('/content/update/{id}', [
         'uses' => 'ServiceProcedureController@content_update',
         'as' => 'content.update',
     ]);
