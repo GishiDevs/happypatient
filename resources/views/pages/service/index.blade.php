@@ -39,7 +39,7 @@
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Service</th>
                       <th>Status</th>
                       @canany(['service-edit','service-delete'])
@@ -50,7 +50,7 @@
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Service</th>
                       <th>Status</th>
                       @canany(['service-edit','service-delete'])
@@ -125,7 +125,7 @@
     var action_type;
     var serviceid;
     var columns = [{ "data": "DT_RowIndex"},
-                   { "data": "id"},
+                  //  { "data": "id"},
                    { "data": "service"},
                    { "data": "status"}];
 

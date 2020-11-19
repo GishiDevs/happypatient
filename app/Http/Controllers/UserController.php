@@ -155,8 +155,13 @@ class UserController extends Controller
 
         $valid_fields = [
             'name' => 'required|string|max:255',
-            'email' => 'string|email|max:255',
         ];
+
+        if($request->get('email'))
+        {
+            $valid_fields['email'] = 'email';
+        }
+
         if(!empty($request->get('password')))
         {
             $valid_fields['password'] = 'string|min:8|same:confirm_password';

@@ -38,7 +38,7 @@
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Lastname</th>
                       <th>Firstname</th>
                       <th>Middlename</th>
@@ -54,7 +54,7 @@
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Lastname</th>
                       <th>Firstname</th>
                       <th>Middlename</th>
@@ -89,7 +89,7 @@
 
   $(document).ready(function() {
     var columns = [{ "data": "DT_RowIndex"},
-                   { "data": "id"},
+                  //  { "data": "id"},
                    { "data": "lastname"},
                    { "data": "firstname"},
                    { "data": "middlename"},
@@ -111,7 +111,7 @@
 		    "ajax": "{{ route('getpatientrecord') }}",
 		    "bDestroy": true,
 		    "columns": columns,
-        "order": [ 1, "asc" ],
+        // "order": [ 1, "asc" ],
         "columnDefs": [{
                           "targets": "no-sort",
                           "orderable": false

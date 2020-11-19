@@ -162,7 +162,21 @@ $(document).ready(function () {
   var getdocdate = $('#docdate').val().split('/');
   var documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
   var docdate = moment(documentdate, 'YYYY-MM-DD');
-  var age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+  var year_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+  var month_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'month');
+  var day_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'day');
+  var age = year_old;
+
+  if(year_old == 0)
+  { 
+    age = month_old + ' MOS.'
+
+    if(month_old == 0)
+    {
+      age = day_old + ' DAYS'
+    }
+
+  }
 
   $('#age').val(age);
   $('.age').empty().append(age);
@@ -171,7 +185,21 @@ $(document).ready(function () {
     getdocdate = $('#docdate').val().split('/');
     documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
     docdate = moment(documentdate, 'YYYY-MM-DD');
-    age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+    year_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+    month_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'month');
+    day_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'day');
+
+    if(year_old == 0)
+    { 
+      age = month_old + ' MOS.'
+
+      if(month_old == 0)
+      {
+        age = day_old + ' DAYS'
+      }
+
+    }
+
     $('#age').val(age);
     $('.age').empty().append(age);
   });

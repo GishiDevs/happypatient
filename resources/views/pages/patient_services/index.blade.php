@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Document Date</th>
                       <th>OR Number</th>
                       <th>Patient/Organization</th>
@@ -49,7 +49,7 @@
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Document Date</th>
                       <th>OR Number</th>
                       <th>Patient Name</th>
@@ -87,7 +87,7 @@
 		    "bDestroy": true,
 		    "columns": [
                     { "data": "DT_RowIndex"},
-                    { "data": "id"},
+                    // { "data": "id"},
 		    		        { "data": "docdate"},
                     { "data": "or_number"},
 		    		        { "data": "name"},

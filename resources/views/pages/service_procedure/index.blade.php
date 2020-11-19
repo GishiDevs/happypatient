@@ -39,8 +39,9 @@
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Service</th>
+                      <th>Code Name</th>
                       <th>Procedure</th>
                       <th>Price</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
@@ -51,8 +52,9 @@
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Service</th>
+                      <th>Code Name</th>
                       <th>Procedure</th>
                       <th>Price</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
@@ -104,6 +106,12 @@
           </div>
           <div class="row">
             <div class="form-group col-md-12">
+              <label for="code">Code Name</label>
+              <input type="text" name="code" class="form-control" id="code" placeholder="Enter code name">
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
               <label for="procedure">Procedure</label>
               <input type="text" name="procedure" class="form-control" id="procedure" placeholder="Enter procedure">
             </div>
@@ -132,8 +140,9 @@
   $(document).ready(function() {
     var procedure_id;
     var columns = [{ "data": "DT_RowIndex"},
-                   { "data": "id"},
+                  //  { "data": "id"},
                    { "data": "service"},
+                   { "data": "code"},
                    { "data": "procedure"},
                    { "data": "price"}];
 

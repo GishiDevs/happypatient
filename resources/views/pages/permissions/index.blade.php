@@ -38,7 +38,7 @@
                   <thead>
                     <tr> 
                       <th width="30px" class="no-sort">#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Permission</th>
                       @role('Admin')
                       <th width="140px" class="no-sort">Actions</th>
@@ -48,7 +48,7 @@
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Permission</th>
                       @role('Admin')
                       <th>Actions</th>
@@ -111,7 +111,7 @@
     var action_type;
     var permissionid;
     var columns = [{ "data": "DT_RowIndex"},
-                   { "data": "id"},
+                  //  { "data": "id"},
                    { "data": "name"}];
 
     //If This user has an 'Admin' role then show actions(edit/delete)

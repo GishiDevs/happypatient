@@ -37,7 +37,7 @@
                   <thead>
                     <tr>
                         <th width="30px" class="no-sort">#</th>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Role</th>
                         @canany(['role-edit','role-delete'])
                         <th width="140px" class="no-sort">Actions</th>
@@ -47,7 +47,7 @@
                   <tfoot>
                     <tr>
                         <th>#</th>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Role</th>
                         @canany(['role-edit','role-delete'])
                         <th>Actions</th>
@@ -127,7 +127,7 @@
     var action_type;
     var roleid;
     var columns = [{ "data": "DT_RowIndex"},
-                   { "data": "id"},
+                  //  { "data": "id"},
                    { "data": "name"}];
                   
     @canany(['role-edit','role-delete'])

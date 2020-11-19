@@ -38,7 +38,7 @@
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Name</th>
                       <th>Username</th>
                       <th>Email</th>
@@ -51,7 +51,7 @@
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <th>ID</th>
+                      <!-- <th>ID</th> -->
                       <th>Name</th>
                       <th>Username</th>
                       <th>Email</th>
@@ -83,7 +83,7 @@
 
   $(document).ready(function() {
     var columns = [{ "data": "DT_RowIndex"},
-                   { "data": "id"},
+                  //  { "data": "id"},
 		    		       { "data": "name"},
 		    		       { "data": "username"},
 		    		       { "data": "email"},

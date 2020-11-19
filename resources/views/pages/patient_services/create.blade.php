@@ -121,7 +121,7 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="5">
+                            <td class="text-right" colspan="5">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">0.00</span></strong></td>
@@ -339,7 +339,7 @@ $(document).ready(function () {
 
         if(service_id == "{{ $procedure->serviceid }}")
         { 
-          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->procedure }}</option>');
+          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
       @endforeach
@@ -350,6 +350,7 @@ $(document).ready(function () {
     $('#table-services').on('change', 'tbody td [name="procedure"]', function(e){ 
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
+      var code = $(this).find(':selected').data('code');
       var procedure = $(this).find(':selected').data('procedure');
       var price = $(this).find(':selected').data('price');
       var procedure_id = $(this).val();
@@ -357,7 +358,7 @@ $(document).ready(function () {
       $('#procedures-linenum-'+linenum).val(procedure_id);
       $('#price-linenum-'+linenum).val(price);
 
-      $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+procedure+'</span>')
+      $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+code+'</span>')
       $('.div-procedure').remove();
 
       if($(this).val())

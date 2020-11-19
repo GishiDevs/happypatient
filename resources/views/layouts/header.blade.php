@@ -287,6 +287,32 @@
             </ul>
           </li>
           @endcanany
+          <li class="nav-item has-treeview {{ (request()->is('certificate/template/create') || request()->is('certificate/template/index') || request()->is('certificate/template/edit/*')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('certificate/template/create') || request()->is('certificate/template/index') || request()->is('certificate/template/edit/*')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-book-medical"></i>
+              <p>
+                Medical Certificate
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              
+              <li class="nav-item">
+                <a href="{{ route('certificate.template.create') }}" class="nav-link {{ (request()->is('certificate/template/create')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create Template</p>
+                </a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="{{ route('certificate.template.index') }}" class="nav-link {{ (request()->is('certificate/template/index')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Template List</p>
+                </a> 
+              </li>
+              
+            </ul>
+          </li>
           @canany(['service-list','service-create','serviceprocedure-list','serviceprocedure-create','permission-list','permission-create','role-list','role-create'])
           <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">

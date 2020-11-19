@@ -26,7 +26,7 @@ class ServiceProcedureController extends Controller
     {
         $serviceprocedures = DB::table('services')
                                ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
-                               ->select('service_procedures.id', 'services.service', 'service_procedures.procedure', 'service_procedures.price')
+                               ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price')
                                ->get();
         return DataTables::of($serviceprocedures)
             ->addColumn('action',function($serviceprocedures){
@@ -66,7 +66,8 @@ class ServiceProcedureController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
+
         $rules = [
             'service.required' => 'Please enter service',   
             'procedure.required' => 'Please add at least 1 service procedure on the table'
@@ -83,14 +84,22 @@ class ServiceProcedureController extends Controller
         }
 
         $ctr = count($request->get('procedure'));
+        $code = $request->get('code');
         $procedure = $request->get('procedure');
         $price = $request->get('price');
+        $codeIsNull = false;
         $procedureIsNull = false;
         $priceIsNull = false;
 
         //Validate procedure and price if null
         for($x=0; $x < $ctr; $x++)
         {
+            
+            if(empty($procedure[$x]))
+            {
+                $codeIsNull = true;
+            }
+            
             if(empty($procedure[$x]))
             {
                 $procedureIsNull = true;
@@ -113,6 +122,7 @@ class ServiceProcedureController extends Controller
         {
             $service = new ServiceProcedure();
             $service->serviceid = $request->get('service');
+            $service->code = $code[$x];
             $service->procedure = $procedure[$x];
             $service->price = $price[$x];
             $service->save();
@@ -166,6 +176,7 @@ class ServiceProcedureController extends Controller
 
         $procedure = ServiceProcedure::find($procedure_id);
         $procedure->serviceid = $request->get('service');
+        $procedure->code = $request->get('code');
         $procedure->procedure = $request->get('procedure');
         $procedure->price = $request->get('price');
         $procedure->save();
@@ -225,16 +236,23 @@ class ServiceProcedureController extends Controller
             return abort(404, 'Not Found');
         }
 
-
-        return view('pages.template_content.create', compact('template_content'));
+        return view('pages.template_content.procedure.create', compact('template_content'));
     }
 
     public function content_update(Request $request, $procedure_id)
     {   
         
-        TemplateContent::where('procedureid', '=', $procedure_id)
-                       ->update(['content' => $request->get('content')]);
+        $template_content = TemplateContent::where('procedureid', '=', $procedure_id)
+                                            ->update(['content' => $request->get('content')]);
         
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $template_content->id;
+        $activity_log->table_name = 'template_contents';
+        $activity_log->description = 'Create Service Procedure Template';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
 
         return response()->json(['success' => 'Record has been updated'], 200);
     }

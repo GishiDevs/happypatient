@@ -148,7 +148,7 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="5">
+                            <td class="text-right" colspan="5">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">{{ $patientservice->grand_total}}</span></strong></td>

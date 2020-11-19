@@ -27,7 +27,7 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" id="diagnosisform">
+            <form role="form" id="procedure-template-form">
               <!-- @csrf -->
               <!-- jquery validation -->
               <div class="card card-primary">

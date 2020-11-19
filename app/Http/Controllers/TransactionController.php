@@ -25,8 +25,8 @@ class TransactionController extends Controller
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                             ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),
-                                     'patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'patient_service_items.price', 'patient_service_items.discount', 
-                                     'patient_service_items.discount_amt', 'patient_service_items.total_amount')
+                                     'patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.code','service_procedures.procedure',
+                                     'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount')
                             ->where('patient_services.cancelled', '=', 'N')
                             // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
                             ->get();
@@ -69,8 +69,8 @@ class TransactionController extends Controller
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                             ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),
-                                     'patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'patient_service_items.price', 'patient_service_items.discount', 
-                                     'patient_service_items.discount_amt', 'patient_service_items.total_amount')
+                                     'patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'service_procedures.code', 
+                                     'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount')
                             ->where('patient_services.cancelled', '=', 'N')
                             ->whereIn('services.id', $service_arr)
                             ->whereDate('patient_services.docdate', '>=', $date_from)

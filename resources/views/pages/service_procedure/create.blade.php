@@ -57,9 +57,10 @@
                   </div>
                   <hr>
                   <div class="row">
-                    <div class="table-scrollable col-md-6 table-responsive">
+                    <div class="table-scrollable col-md-10 table-responsive">
                       <table class="table table-striped table-bordered table-hover no-footer-border" id="table-services">
                         <thead>
+                          <th width="300px">Code Name</th>
                           <th>Procedure</th>
                           <th width="150px">Price (PHP)</th>
                           <th width="130px">Action</th>
@@ -68,7 +69,7 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="2" style="border: none;"></td>
+                            <td colspan="3" style="border: none;"></td>
                             <td style="border: none;"><a href="" class="btn btn-sm btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
                           </tr>
                         </tfoot>
@@ -197,6 +198,9 @@ $(document).ready(function () {
   
     $('#table-services tbody').append('<tr id="row-'+linenum+'">'+
                                         '<td>'+
+                                          '<input class="form-control input-small affect-total" type="text" name="code[]" id="code-linenum-'+linenum+'" data-linenum="'+linenum+'">'+
+                                        '</td>'+
+                                        '<td>'+
                                           '<input class="form-control input-small affect-total" type="text" name="procedure[]" id="procedure-linenum-'+linenum+'" data-linenum="'+linenum+'">'+
                                         '</td>'+
                                         '<td>'+
@@ -214,11 +218,28 @@ $(document).ready(function () {
 
     $('#service-table-error').remove();
 
+    $('#table-services').on('keyup', 'tbody td [name="code[]"]', function(e){ 
+      var linenum = $(this).data('linenum');
+
+      if($(this).val() && $('#procedure-linenum-'+ linenum).val() && $('#price-linenum-'+ linenum).val())
+      {
+        $('#add-item').removeClass('disabled');
+
+        $('#btn-add').removeAttr('disabled');
+      }
+      else
+      {
+        $('#add-item').addClass('disabled');
+
+        // $('#btn-add').attr('disabled', true);
+      }
+
+    });
     
     $('#table-services').on('keyup', 'tbody td [name="procedure[]"]', function(e){ 
       var linenum = $(this).data('linenum');
 
-      if($(this).val() && $('#price-linenum-'+ linenum).val())
+      if($(this).val() && $('#code-linenum-'+ linenum).val() && $('#price-linenum-'+ linenum).val())
       {
         $('#add-item').removeClass('disabled');
 
@@ -236,7 +257,7 @@ $(document).ready(function () {
     $('#table-services').on('keyup', 'tbody td [name="price[]"]', function(e){ 
       var linenum = $(this).data('linenum');
 
-      if($(this).val() && $('#procedure-linenum-'+ linenum).val())
+      if($(this).val() && $('#code-linenum-'+ linenum).val() && $('#procedure-linenum-'+ linenum).val())
       {
         $('#add-item').removeClass('disabled');
         

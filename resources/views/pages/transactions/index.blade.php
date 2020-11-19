@@ -64,6 +64,7 @@
                           <th>Document Date</th>
                           <th>Patient/Organization</th>
                           <th>Service</th>
+                          <th>Code Name</th>
                           <th>Procedure</th>
                           <th>Amount (PHP)</th>
                         </tr>
@@ -82,7 +83,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th colspan="5">Grand Total:</th>
+                          <th class="text-right" colspan="6">Grand Total:</th>
                           <th> <span id="grand_total">0.00</span> </th>
                         </tr>
                       </tfoot>
@@ -202,7 +203,7 @@
           method: "POST",
           data: { _token: "{{ csrf_token() }}", serviceid: serviceid, date_from: date_from, date_to: date_to  },
           success: function(response){
-            console.log(response);
+            // console.log(response);
 
             if(response.transactions)
             { 
@@ -218,6 +219,7 @@
                     '<td>'+value.docdate+'</td>'+
                     '<td>'+value.name+'</td>'+
                     '<td>'+value.service+'</td>'+
+                    '<td>'+value.code+'</td>'+
                     '<td>'+value.procedure+'</td>'+
                     '<td>'+value.total_amount+'</td>'+
                   '</tr>'
