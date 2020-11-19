@@ -190,7 +190,7 @@
       //PUSHER - refresh data when table users has changes
       if(data.action == 'create-user' || data.action == 'edit-user' || data.action == 'delete-user')
       {
-        $('#procedure-table').DataTable().ajax.reload()
+        $('#user-table').DataTable().ajax.reload()
       }
 
     });
