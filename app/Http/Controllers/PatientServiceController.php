@@ -48,7 +48,7 @@ class PatientServiceController extends Controller
     public function servicesperuser()
     {   
 
-        $services;
+        $services = [];
 
         if(Auth::user()->can('patientservices-list-ultrasound'))
         {
