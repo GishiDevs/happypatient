@@ -37,6 +37,19 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="form-group col-md-4">
+                      <label for="type">Options</label>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="option" id="option1" value="option1" checked>
+                        <label class="form-check-label" for="option1">Patient Information</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="option" id="option2" value="option2">
+                        <label class="form-check-label" for="option2">Patient Information and Services</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
                       <label for="lastname">Lastname</label> <span class="text-danger">*</span>
                       <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Enter lastname">
                     </div>
@@ -164,7 +177,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Next</button>
+                  <button type="submit" class="btn btn-primary" id="btn-next">Add</button>
                 </div>
               </form>
 
@@ -273,6 +286,23 @@
 $(document).ready(function () {
 
   $('[data-mask]').inputmask();
+
+  var option = 'option1';
+
+  $('[name="option"]').click(function(){
+
+    if($(this).val() == 'option1')
+    {
+      $('#btn-next').empty().append('Add');
+    }
+    else
+    {
+      $('#btn-next').empty().append('Next');
+    }
+
+    option = $(this).val();
+
+  });
 
   $('#city').empty().attr('disabled',true);
   $('#barangay').empty().attr('disabled',true);
@@ -449,9 +479,58 @@ $(document).ready(function () {
     },
     submitHandler: function(e){
       // e.preventDefault();
-      $('#patientserviceform').removeAttr('hidden');
-      $('#patientform').attr('hidden', true);
 
+      //if option is equal to 'option1' then insert Personal Information without Patient Services 
+      if(option == 'option1')
+      { 
+
+        var data_patient = $('#patientform').serializeArray();
+        data_patient.push({name: "_token", value: "{{ csrf_token() }}"});
+
+        //store patient information  
+        $.ajax({
+            url: "{{ route('patient.store') }}",
+            method: "POST",
+            data: data_patient,
+            success: function(response){
+              console.log(response);
+
+              if(response.success)
+              { 
+        
+                Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Record has successfully added',
+                  showConfirmButton: false,
+                  timer: 2500
+                });
+
+                $('#patientform')[0].reset();
+                getprovinces();
+                // $('#province option:eq(0)').prop('selected', true);
+                $('#city').empty().attr('disabled',true);
+                $('#barangay').empty().attr('disabled',true);
+
+                //set default option variable value into "option1"
+                option = 'option1';
+
+                //set default text
+                $('#btn-next').empty().append('Add');
+                
+              }
+            },
+            error: function(response){
+              console.log(response);
+            }
+        });
+      }
+      else
+      {
+        $('#patientserviceform').removeAttr('hidden');
+        $('#patientform').attr('hidden', true);
+      }
+    
     }
   });
 
@@ -601,7 +680,7 @@ $(document).ready(function () {
 
         if(service_id == "{{ $procedure->serviceid }}")
         { 
-          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->procedure }}</option>');
+          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
       @endforeach
@@ -612,6 +691,7 @@ $(document).ready(function () {
     $('#table-services').on('change', 'tbody td [name="procedure"]', function(e){ 
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
+      var code = $(this).find(':selected').data('code');
       var procedure = $(this).find(':selected').data('procedure');
       var price = $(this).find(':selected').data('price');
       var procedure_id = $(this).val();
@@ -619,7 +699,7 @@ $(document).ready(function () {
       $('#procedures-linenum-'+linenum).val(procedure_id);
       $('#price-linenum-'+linenum).val(price);
 
-      $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+procedure+'</span>')
+      $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-code="'+code+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+code+'</span>')
       $('.div-procedure').remove();
 
       if($(this).val())
@@ -912,7 +992,7 @@ $(document).ready(function () {
               data_services.push({name: "grand_total", value: $('.service-grand-total').text()});
               data_services.push({name: "type", value: "individual"});
               data_services.push({name: "patient", value: patient});
-
+              
               //store patient services
               $.ajax({
                   url: "{{ route('patientservice.store') }}",
@@ -942,6 +1022,12 @@ $(document).ready(function () {
 
                         $('#patientform').removeAttr('hidden');
                         $('#patientserviceform').attr('hidden', true);
+
+                        //set default option variable value into "option1"
+                        option = 'option1';
+
+                        //set default text
+                        $('#btn-next').empty().append('Add');
 
                       }   
 
