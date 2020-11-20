@@ -111,7 +111,7 @@
                         @foreach($patientserviceitems as $services)
                         <tr>
                           <td>{{ $services->service }}</td>
-                          <td>{{ $services->procedure }}</td>
+                          <td>{{ $services->code }}</td>
                           <td><span id="span-price-{{ $services->id }}">{{ $services->price }}</span><input type="text" class="form-control" name="price" id="price-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->price }}" hidden> </td>
                           <td><span id="span-discount-{{ $services->id }}">{{ $services->discount }}</span><input type="text" class="form-control" name="discount" id="discount-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount }}" hidden> </td>
                           <td><span id="span-discount_amt-{{ $services->id }}">{{ $services->discount_amt }}</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount_amt }}"  hidden> </td>

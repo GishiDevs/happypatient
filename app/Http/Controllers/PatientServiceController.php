@@ -331,7 +331,7 @@ class PatientServiceController extends Controller
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                  ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
                  ->join('patients', 'patient_services.patientid', '=', 'patients.id')
-                 ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.procedure',
+                 ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
                           'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type')
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
