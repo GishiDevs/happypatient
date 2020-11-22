@@ -190,6 +190,10 @@ class PatientServiceController extends Controller
         $patientservice->type = $request->get('type');
         $patientservice->patientid = $request->get('patient');
         $patientservice->name = $name;
+        if($request->get('type') == 'group')
+        {
+            $patientservice->organization = $request->get('organization');
+        }
         $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
         $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->temperature = $request->get('temperature');
@@ -330,7 +334,6 @@ class PatientServiceController extends Controller
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                  ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
-                 ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.procedure',
                           'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type')
                  ->whereIn('services.service', $services)
