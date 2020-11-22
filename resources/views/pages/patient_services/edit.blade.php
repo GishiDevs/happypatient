@@ -36,6 +36,13 @@
               <form role="form" id="patientserviceform" method="POST">
                 @csrf
                 <div class="card-body">
+                  @if($patientservice->cancelled == 'Y')
+                  <div class="row  mb-3">
+                    <div class="col-md">
+                      <span class="float-right"><strong>Status: <span class="badge bg-danger">CANCELLED</span></strong></span>
+                    </div>
+                  </div>
+                  @endif
                   <div class="row"> 
                     <div class="form-group col-md-4 div-patient">
                       <label for="patient">@if($patientservice->type == 'individual') Patient @else Organization @endif</label>  
