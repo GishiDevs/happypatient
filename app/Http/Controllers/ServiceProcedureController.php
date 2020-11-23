@@ -236,7 +236,7 @@ class ServiceProcedureController extends Controller
             return abort(404, 'Not Found');
         }
 
-        return view('pages.template_content.procedure.create', compact('template_content'));
+        return view('pages.template_content.service_procedure.create', compact('template_content'));
     }
 
     public function content_update(Request $request, $procedure_id)
