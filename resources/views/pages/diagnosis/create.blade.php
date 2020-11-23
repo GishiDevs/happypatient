@@ -56,7 +56,7 @@
                       <input type="text" class="form-control" name="age" id="age" hidden>
                     </div>
                     <div class="form-group col-md-4">
-                      <label for="gender">Gender</label>
+                      <label for="gender">Gender:</label>
                       <h5>{{ $patient_service->gender }}</h5>
                     </div>
                   </div>
