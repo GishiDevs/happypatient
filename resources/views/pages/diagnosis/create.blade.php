@@ -281,6 +281,12 @@ $(document).ready(function () {
               // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
               window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
               $(location).attr('href', "{{ route('dashboard.index')}}");
+              $('#content-error').remove();
+            }
+            else if(response.content)
+            {
+              $('#content-error').remove();
+              $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
             }
 
             $('#btn-add').removeAttr('disabled');
