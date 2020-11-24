@@ -547,12 +547,13 @@ $(document).ready(function () {
       //scan if there is a dropdown on a table
       $('#table-services tbody tr td').find('select').each(function(){
          //$(this)   //select box of same row
-         hasDropDown = true
+         hasDropDown = true;
       });
       // alert(hasDropDown);
       if(hasDropDown == false)
       {
         $('#add-item').removeClass('disabled');
+        $('#btn-add').removeAttr('disabled');
       }
       
       //call function getGrandTotal

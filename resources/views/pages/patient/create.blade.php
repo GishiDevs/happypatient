@@ -894,6 +894,7 @@ $(document).ready(function () {
       if(hasDropDown == false)
       {
         $('#add-item').removeClass('disabled');
+        $('#btn-add').removeAttr('disabled');
       }
       
       //call function getGrandTotal
