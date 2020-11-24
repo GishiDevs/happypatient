@@ -27,7 +27,7 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" action="{{ route('diagnosis.update', $patient_service->diagnoses_id) }}" method="POST" id="diagnosisform">
+            <form role="form"  method="POST" id="diagnosisform">
               @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
@@ -221,50 +221,42 @@ $(document).ready(function () {
       },
       submitHandler: function(e){
 
-        // Sweet Alert
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'Record has been updated',
-          showConfirmButton: false,
-          imer: 2500
+
+        var data = $('#diagnosisform').serializeArray();
+        data.push({name: "_token", value: "{{ csrf_token() }}"});
+        $.ajax({
+          url: "{{ route('diagnosis.update', $patient_service->diagnoses_id) }}",
+          method: "POST",
+          data: data,
+          success: function(response){
+            console.log(response);
+
+            if(response.success)
+            {
+              // Sweet Alert
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Record has been updated',
+                showConfirmButton: false,
+                timer: 2500
+              });
+
+              //download pdf
+              // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+              window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
+              $('#content-error').remove();
+            }
+            else if(response.content)
+            {
+              $('#content-error').remove();
+              $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
+            }
+          },
+          error: function(response){
+            console.log(response);
+          }
         });
-
-        window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
-        $(location).attr('href', "{{ url()->previous() }}");
-
-
-        // var data = $('#diagnosisform').serializeArray();
-        // data.push({name: "_token", value: "{{ csrf_token() }}"});
-        
-        // $.ajax({
-        //   url: "{{ route('diagnosis.update', $patient_service->diagnoses_id) }}",
-        //   method: "POST",
-        //   data: data,
-        //   success: function(response){
-        //     console.log(response);
-
-        //     if(response.success)
-        //     {
-        //       // Sweet Alert
-        //       Swal.fire({
-        //         position: 'center',
-        //         icon: 'success',
-        //         title: 'Record has been updated',
-        //         showConfirmButton: false,
-        //         timer: 2500
-        //       });
-
-        //       //download pdf
-        //       // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
-        //       window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
-
-        //     }
-        //   },
-        //   error: function(response){
-        //     console.log(response);
-        //   }
-        // });
         
 
       }

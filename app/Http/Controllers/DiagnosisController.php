@@ -124,7 +124,6 @@ class DiagnosisController extends Controller
 
     public function store(Request $request, $ps_item_id)
     {   
-
         $year_now = date('Y');
 
         $patient_service = DB::table('patient_service_items')
@@ -211,6 +210,8 @@ class DiagnosisController extends Controller
         $activity_log->save();
 
         return response()->json(['success' => 'Record has successfully added'], 200);
+
+        // return redirect('/');
     }
 
  

@@ -26,7 +26,7 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" action="{{ route('diagnosis.store', $patient_service->ps_items_id) }}" method="POST" id="diagnosisform">
+            <form role="form" id="diagnosisform">
               @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
@@ -253,57 +253,42 @@ $(document).ready(function () {
       },
       submitHandler: function(e){
 
-        $('#diagnosisform')[0].reset();
-              
-        // Sweet Alert
-         Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'Record has successfully added',
-          showConfirmButton: false,
-          imer: 2500
-        });
+        $('#btn-add').attr('disabled', true);
 
-        window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
-        $(location).attr('href', "{{ route('dashboard.index')}}");
-
-
-        // $('#btn-add').attr('disabled', true);
-
-        // var data = $('#diagnosisform').serializeArray();
-        // data.push({name: "_token", value: "{{ csrf_token() }}"});
+        var data = $('#diagnosisform').serializeArray();
+        data.push({name: "_token", value: "{{ csrf_token() }}"});
         
-        // $.ajax({
-        //   url: "{{ route('diagnosis.store', $patient_service->ps_items_id) }}",
-        //   method: "POST",
-        //   data: data,
-        //   success: function(response){
-        //     console.log(response);
+        $.ajax({
+          url: "{{ route('diagnosis.store', $patient_service->ps_items_id) }}",
+          method: "POST",
+          data: data,
+          success: function(response){
+            console.log(response);
 
-        //     if(response.success)
-        //     {
-        //       $('#diagnosisform')[0].reset();
+            if(response.success)
+            {
+              $('#diagnosisform')[0].reset();
               
-        //       // Sweet Alert
-        //       Swal.fire({
-        //         position: 'center',
-        //         icon: 'success',
-        //         title: 'Record has successfully added',
-        //         showConfirmButton: false,
-        //         timer: 2500
-        //       });
+              // Sweet Alert
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Record has successfully added',
+                showConfirmButton: false,
+                timer: 2500
+              });
 
-        //       // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
-        //       window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
-        //       $(location).attr('href', "{{ route('dashboard.index')}}");
-        //     }
+              // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+              window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
+              $(location).attr('href', "{{ route('dashboard.index')}}");
+            }
 
-        //     $('#btn-add').removeAttr('disabled');
-        //   },
-        //   error: function(response){
-        //     console.log(response);
-        //   }
-        // });
+            $('#btn-add').removeAttr('disabled');
+          },
+          error: function(response){
+            console.log(response);
+          }
+        });
         
 
       }
