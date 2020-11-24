@@ -27,8 +27,8 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" id="certificate-template-form">
-              <!-- @csrf -->
+            <form role="form" action="{{ route('certificate.template.store') }}" method="POST" id="certificate-template-form">
+              @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
@@ -45,9 +45,8 @@
                     <div class="col-md-12">
                       <label for="content">Content</label>
                       <div class="mb-3 div-content"> 
-                        <textarea name="content" id="content" class="textarea" placeholder="Place some text here"
-                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">             
-                        </textarea>
+                        <textarea name="content" id="content" placeholder="Place some text here"
+                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                       </div>
                     </div>
                   </div>
@@ -78,59 +77,71 @@
 
 $(document).ready(function () {
 
+  let content;
+
+  //CKeditor
+  ClassicEditor.create( document.querySelector( '#content' ) )
+               .then( newContent => {
+                content = newContent;
+               })
+               .catch( error => {
+                  console.error( error );
+               });
+
+  $('#template_name').keyup(function(){
+    if($(this).val())
+    {
+      $('#template_name').removeClass('is-invalid');
+      $('#template_name-error').remove();
+    }
+  });
+
   $('#btn-save').click(function(e){
 
     e.preventDefault();
 
-    if($('#template_name').val() && $('[name="content"]').val())
-    {
-       $.ajax({
-          url: "{{ route('certificate.template.store') }}",
-          method: "POST",
-          data: { _token: "{{ csrf_token() }}", template_name: $('#template_name').val(), content: $('#content').val() },
-          success: function(response){
-            console.log(response);
+    if($('#template_name').val())
+    { 
+      // console.log(content.getData());
+      // $('#certificate-template-form').submit();
 
-            if(response.success)
-            {
-              
-              // Sweet Alert
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-              });
+      // Sweet Alert
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Record has successfully added',
+        showConfirmButton: false,
+        timer: 2500
+      });
 
-              $(location).attr('href', "{{ route('certificate.template.index')}}");
-            }
-
-          },
-          error: function(response){
-            console.log(response);
-          }
-        });
+    }
+    else
+    { 
+      $('#template_name-error').remove();
+      $('#template_name').addClass('is-invalid');
+      $('#template_name').after('<span id="template_name-error" class="error invalid-feedback">Template Name is required</span>');
     }
 
   });
+
+  
 
   // $('.textarea').summernote();
-  $('.textarea').summernote({
-    callbacks: {
-    onKeyup: function(e) {
-      if(!$('[name="content"]').val())
-      { 
-        $('#content-error').remove();
-        $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
-      }
-      else
-      {
-        $('#content-error').remove();
-      }
-    }
-  }
-  });
+  // $('.textarea').summernote({
+  //   callbacks: {
+  //   onKeyup: function(e) {
+  //     if(!$('[name="content"]').val())
+  //     { 
+  //       $('#content-error').remove();
+  //       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
+  //     }
+  //     else
+  //     {
+  //       $('#content-error').remove();
+  //     }
+  //   }
+  // }
+  // });
 
 });
 </script>
