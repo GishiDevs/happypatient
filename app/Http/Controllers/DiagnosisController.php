@@ -302,7 +302,7 @@ class DiagnosisController extends Controller
                                   ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw('patients.id as patient_id'), DB::raw('diagnoses.id as diagnoses_id'), 
                                             DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', 'services.service', DB::raw('services.id as service_id'), 
                                             'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),
-                                            'diagnoses.physician', 'diagnoses.bloodpressure', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', 'service_procedures.procedure',
+                                            'diagnoses.physician', 'diagnoses.bloodpressure', 'patient_services.temperature', 'patient_services.weight', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', 'service_procedures.procedure',
                                             DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')

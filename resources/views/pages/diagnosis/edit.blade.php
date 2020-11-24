@@ -27,8 +27,8 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" id="diagnosisform">
-              <!-- @csrf -->
+            <form role="form" action="{{ route('diagnosis.update', $patient_service->diagnoses_id) }}" method="POST" id="diagnosisform">
+              @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
@@ -71,16 +71,31 @@
                       <h5>{{ $patient_service->address }}</h5>
                     </div>
                   </div>
+                  <hr>
                   <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                      <label for="bloodpressure">Blood Pressure:</label>
+                      <h5>{{ $patient_service->bloodpressure }}</h5>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="temperature">Temperature (°C):</label>
+                      <h5>{{ $patient_service->temperature }}</h5>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="weight">Weight (Kg):</label>
+                      <h5>{{ $patient_service->weight }}</h5>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-3">
                       <label for="service">Service: </label>
                       <h5>{{ $patient_service->service }}</h5>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                       <label for="procedure">Procedure: </label>
                       <h5>{{ $patient_service->procedure }}</h5>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                       <label for="file#">File #: </label>
                       <h5>{{ $patient_service->file_no }}</h5>
                     </div>
@@ -93,14 +108,7 @@
                         <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician" value="{{ $patient_service->physician }}">
                       </div>
                     </div>
-                    <div class="form-group col-md-4">
-                      <label for="title">Blood Pressure</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" placeholder="Enter blood pressure" value="{{ $patient_service->bloodpressure }}">
-                      </div>
-                    </div>
                   </div> 
-                  <hr> 
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="title">Title</label>
@@ -111,14 +119,14 @@
                   </div> 
                   <label for="content">Content</label>
                   <div class="mb-3 div-content"> 
-                    <textarea name="content" id="content" class="textarea" placeholder="Place some text here"
+                    <textarea name="content" id="content" placeholder="Place some text here"
                                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
                   </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-footer">
                   @can('diagnosis-edit')
-                  <button type="submit" id="btn-update" class="btn btn-primary" disabled>Update & Preview</button>
+                  <button type="submit" id="btn-update" class="btn btn-primary">Update & Preview</button>
                   @endcan
                   <button type="submit" id="btn-preview" class="btn btn-primary">Preview</button>
                 </div>
@@ -213,65 +221,83 @@ $(document).ready(function () {
       },
       submitHandler: function(e){
 
-        var data = $('#diagnosisform').serializeArray();
-        data.push({name: "_token", value: "{{ csrf_token() }}"});
-        
-        $.ajax({
-          url: "{{ route('diagnosis.update', $patient_service->diagnoses_id) }}",
-          method: "POST",
-          data: data,
-          success: function(response){
-            console.log(response);
-
-            if(response.success)
-            {
-              // Sweet Alert
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has been updated',
-                showConfirmButton: false,
-                timer: 2500
-              });
-
-              //download pdf
-              // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
-              window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
-
-            }
-          },
-          error: function(response){
-            console.log(response);
-          }
+        // Sweet Alert
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Record has been updated',
+          showConfirmButton: false,
+          imer: 2500
         });
+
+        window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
+        $(location).attr('href', "{{ url()->previous() }}");
+
+
+        // var data = $('#diagnosisform').serializeArray();
+        // data.push({name: "_token", value: "{{ csrf_token() }}"});
+        
+        // $.ajax({
+        //   url: "{{ route('diagnosis.update', $patient_service->diagnoses_id) }}",
+        //   method: "POST",
+        //   data: data,
+        //   success: function(response){
+        //     console.log(response);
+
+        //     if(response.success)
+        //     {
+        //       // Sweet Alert
+        //       Swal.fire({
+        //         position: 'center',
+        //         icon: 'success',
+        //         title: 'Record has been updated',
+        //         showConfirmButton: false,
+        //         timer: 2500
+        //       });
+
+        //       //download pdf
+        //       // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+        //       window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
+
+        //     }
+        //   },
+        //   error: function(response){
+        //     console.log(response);
+        //   }
+        // });
         
 
       }
     });
   });
 
+  //CKeditor
+  ClassicEditor.create( document.querySelector( '#content' ) )
+               .catch( error => {
+                  console.error( error );
+               });
   // $('.textarea').summernote();
-  $('.textarea').summernote({
-    callbacks: {
-    onKeyup: function(e) {
-      if(!$('[name="content"]').val())
-      { 
-        $('#content-error').remove();
-        $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
-      }
-      else
-      {
-        $('#content-error').remove();
-      }
-    }
-  }
-  });
+  // $('.textarea').summernote({
+  //   callbacks: {
+  //   onKeyup: function(e) {
+  //     if(!$('[name="content"]').val())
+  //     { 
+  //       $('#content-error').remove();
+  //       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
+  //     }
+  //     else
+  //     {
+  //       $('#content-error').remove();
+  //     }
+  //   }
+  // }
+  // });
 
-  $('#diagnosisform').on('change input',function(e){
+  // $('#diagnosisform').on('change input',function(e){
 
-    $('#btn-update').attr('disabled', false);
+  //   $('#btn-update').attr('disabled', false);
    
-  });
+  // });
 
 
 });

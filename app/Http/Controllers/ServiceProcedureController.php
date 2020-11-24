@@ -241,20 +241,23 @@ class ServiceProcedureController extends Controller
 
     public function content_update(Request $request, $procedure_id)
     {   
+        // return $request->all();
         
         $template_content = TemplateContent::where('procedureid', '=', $procedure_id)
                                             ->update(['content' => $request->get('content')]);
         
         //Activity Log
         $activity_log = new ActivityLog();
-        $activity_log->object_id = $template_content->id;
+        $activity_log->object_id = $template_content;
         $activity_log->table_name = 'template_contents';
         $activity_log->description = 'Create Service Procedure Template';
         $activity_log->action = 'create';
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
 
-        return response()->json(['success' => 'Record has been updated'], 200);
+        // return response()->json(['success' => 'Record has been updated'], 200);
+
+        return redirect('/serviceprocedure/index');
     }
 
 }

@@ -50,6 +50,7 @@
   <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+  <script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
   
   <!-- Datatables Paginate button -->
   <style>

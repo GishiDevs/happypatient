@@ -26,8 +26,8 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" id="diagnosisform">
-              <!-- @csrf -->
+            <form role="form" action="{{ route('diagnosis.store', $patient_service->ps_items_id) }}" method="POST" id="diagnosisform">
+              @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
@@ -124,7 +124,7 @@
                   </div> 
                   <label for="content">Content</label>
                   <div class="mb-3 div-content"> 
-                    <textarea name="content" id="content" class="textarea" placeholder="Place some text here"
+                    <textarea name="content" id="content" placeholder="Place some text here"
                                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
                       {{ $patient_service->content }}
                     </textarea>
@@ -253,64 +253,85 @@ $(document).ready(function () {
       },
       submitHandler: function(e){
 
-        $('#btn-add').attr('disabled', true);
-
-        var data = $('#diagnosisform').serializeArray();
-        data.push({name: "_token", value: "{{ csrf_token() }}"});
-        
-        $.ajax({
-          url: "{{ route('diagnosis.store', $patient_service->ps_items_id) }}",
-          method: "POST",
-          data: data,
-          success: function(response){
-            console.log(response);
-
-            if(response.success)
-            {
-              $('#diagnosisform')[0].reset();
+        $('#diagnosisform')[0].reset();
               
-              // Sweet Alert
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-              });
-
-              // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
-              window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
-              $(location).attr('href', "{{ route('dashboard.index')}}");
-            }
-
-            $('#btn-add').removeAttr('disabled');
-          },
-          error: function(response){
-            console.log(response);
-          }
+        // Sweet Alert
+         Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Record has successfully added',
+          showConfirmButton: false,
+          imer: 2500
         });
+
+        window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
+        $(location).attr('href', "{{ route('dashboard.index')}}");
+
+
+        // $('#btn-add').attr('disabled', true);
+
+        // var data = $('#diagnosisform').serializeArray();
+        // data.push({name: "_token", value: "{{ csrf_token() }}"});
+        
+        // $.ajax({
+        //   url: "{{ route('diagnosis.store', $patient_service->ps_items_id) }}",
+        //   method: "POST",
+        //   data: data,
+        //   success: function(response){
+        //     console.log(response);
+
+        //     if(response.success)
+        //     {
+        //       $('#diagnosisform')[0].reset();
+              
+        //       // Sweet Alert
+        //       Swal.fire({
+        //         position: 'center',
+        //         icon: 'success',
+        //         title: 'Record has successfully added',
+        //         showConfirmButton: false,
+        //         timer: 2500
+        //       });
+
+        //       // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
+        //       window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
+        //       $(location).attr('href', "{{ route('dashboard.index')}}");
+        //     }
+
+        //     $('#btn-add').removeAttr('disabled');
+        //   },
+        //   error: function(response){
+        //     console.log(response);
+        //   }
+        // });
         
 
       }
     });
   });
 
+   //CKeditor
+   ClassicEditor.create( document.querySelector( '#content' ) )
+               .catch( error => {
+                  console.error( error );
+               });
+
   // $('.textarea').summernote();
-  $('.textarea').summernote({
-    callbacks: {
-    onKeyup: function(e) {
-      if(!$('[name="content"]').val())
-      { 
-        $('#content-error').remove();
-        $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
-      }
-      else
-      {
-        $('#content-error').remove();
-      }
-    }
-  }
-  });
+  // $('.textarea').summernote({
+  //   callbacks: {
+  //   onKeyup: function(e) {
+  //     if(!$('[name="content"]').val())
+  //     { 
+  //       $('#content-error').remove();
+  //       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
+  //     }
+  //     else
+  //     {
+  //       $('#content-error').remove();
+  //     }
+  //   }
+  // }
+  // });
 
   $('[data-mask]').inputmask();
 

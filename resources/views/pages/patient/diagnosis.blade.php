@@ -107,7 +107,7 @@
                   </div> 
                   <label for="content">Content</label>
                   <div class="mb-3 div-content"> 
-                    <textarea name="content" id="content" class="textarea" placeholder="Place some text here"
+                    <textarea name="content" id="content" placeholder="Place some text here"
                                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
                   </div>
                 </div>
@@ -218,22 +218,28 @@ $(document).ready(function () {
     });
   });
 
+  //CKeditor
+  ClassicEditor.create( document.querySelector( '#content' ) )
+               .catch( error => {
+                  console.error( error );
+               });
+
   // $('.textarea').summernote();
-  $('.textarea').summernote({
-    callbacks: {
-    onKeyup: function(e) {
-      if(!$('[name="content"]').val())
-      { 
-        $('#content-error').remove();
-        $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
-      }
-      else
-      {
-        $('#content-error').remove();
-      }
-    }
-  }
-  });
+  // $('.textarea').summernote({
+  //   callbacks: {
+  //   onKeyup: function(e) {
+  //     if(!$('[name="content"]').val())
+  //     { 
+  //       $('#content-error').remove();
+  //       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
+  //     }
+  //     else
+  //     {
+  //       $('#content-error').remove();
+  //     }
+  //   }
+  // }
+  // });
 
   $('#diagnosisform').on('change input',function(e){
     

@@ -27,8 +27,8 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" id="procedure-template-form">
-              <!-- @csrf -->
+            <form role="form" action="{{ route('content.update', $template_content->procedureid) }}" method="POST" id="procedure-template-form">
+              @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
@@ -37,7 +37,7 @@
                 <div class="card-body pad col-md-12">
                   <label for="content">Content</label>
                   <div class="mb-3 div-content"> 
-                    <textarea name="content" id="content" class="textarea" placeholder="Place some text here"
+                    <textarea name="content" id="content" placeholder="Place some text here"
                                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
                       {{ $template_content->content }}                
                     </textarea>
@@ -70,55 +70,75 @@
 $(document).ready(function () {
 
   $('#btn-save').click(function(e){
-
+       
       e.preventDefault();
-        
-        $.ajax({
-          url: "{{ route('content.update', $template_content->procedureid) }}",
-          method: "POST",
-          data: { _token: "{{ csrf_token() }}", content: $('#content').val() },
-          success: function(response){
-            console.log(response);
+      
+      $('#procedure-template-form').submit();
 
-            if(response.success)
-            {
+      // Sweet Alert
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Record has successfully added',
+        showConfirmButton: false,
+        timer: 2500
+      });
+
+      // var data = $('#procedure-template-form').serializeArray();
+      // data.push({name: "_token", value: "{{ csrf_token() }}"});
+
+      //   $.ajax({
+      //     url: "{{ route('content.update', $template_content->procedureid) }}",
+      //     method: "POST",
+      //     data: data,
+      //     success: function(response){
+      //       console.log(response);
+
+      //       if(response.success)
+      //       {
               
-              // Sweet Alert
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-              });
+      //         // Sweet Alert
+      //         Swal.fire({
+      //           position: 'center',
+      //           icon: 'success',
+      //           title: 'Record has successfully added',
+      //           showConfirmButton: false,
+      //           timer: 2500
+      //         });
 
-              $(location).attr('href', "{{ route('serviceprocedure.index')}}");
-            }
+      //         $(location).attr('href', "{{ route('serviceprocedure.index')}}");
+      //       }
 
-          },
-          error: function(response){
-            console.log(response);
-          }
-        });
+      //     },
+      //     error: function(response){
+      //       console.log(response);
+      //     }
+      //   });
 
   });
+  
 
+  //CKeditor
+  ClassicEditor.create( document.querySelector( '#content' ) )
+               .catch( error => {
+                  console.error( error );
+               });
   // $('.textarea').summernote();
-  $('.textarea').summernote({
-    callbacks: {
-    onKeyup: function(e) {
-      if(!$('[name="content"]').val())
-      { 
-        $('#content-error').remove();
-        $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
-      }
-      else
-      {
-        $('#content-error').remove();
-      }
-    }
-  }
-  });
+  // $('.textarea').summernote({
+  //   callbacks: {
+  //   onKeyup: function(e) {
+  //     if(!$('[name="content"]').val())
+  //     { 
+  //       $('#content-error').remove();
+  //       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
+  //     }
+  //     else
+  //     {
+  //       $('#content-error').remove();
+  //     }
+  //   }
+  // }
+  // });
 
 });
 </script>

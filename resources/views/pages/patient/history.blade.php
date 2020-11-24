@@ -81,11 +81,13 @@
                     </div>      
                   </div>
                   <hr>
-                  <div class="row"> 
-                    <div class="form-group col-md-3">
+                  <div class="row">
+                    <div class="form-group col-md-6">
                       <label for="address">Address:</label>
                       <h5>{{ $patient->address }}</h5>
                     </div>  
+                  </div>
+                  <div class="row"> 
                     <div class="form-group col-md-3">
                       <label for="provice">Province:</label>
                       <h5>{{ $patient->province }}</h5>
