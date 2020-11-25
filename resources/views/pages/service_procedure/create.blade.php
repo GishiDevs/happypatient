@@ -63,13 +63,14 @@
                           <th width="300px">Code Name</th>
                           <th>Procedure</th>
                           <th width="150px">Price (PHP)</th>
+                          <th width="150px">To Diagnose</th>
                           <th width="130px">Action</th>
                         </thead>
                         <tbody>												
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="3" style="border: none;"></td>
+                            <td colspan="4" style="border: none;"></td>
                             <td style="border: none;"><a href="" class="btn btn-sm btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
                           </tr>
                         </tfoot>
@@ -206,6 +207,13 @@ $(document).ready(function () {
                                         '<td>'+
                                           '<input class="form-control input-small affect-total" type="text" name="price[]" id="price-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="" data-serviceid="" data-linenum="'+linenum+'">'+
                                         '</td>'+
+                                        '<td style="text-align:center;">'+
+                                          '<div class="custom-control custom-checkbox">'+
+                                            '<input class="custom-control-input" name="to-diagnose" type="checkbox" id="check-to-diagnose-'+linenum+'" value="Y" data-linenum="'+linenum+'">'+
+                                            '<label for="check-to-diagnose-'+linenum+'" class="custom-control-label"></label>'+
+                                          '</div>'+
+                                          '<input type="text" id="to-diagnose-linenum-'+linenum+'" name="to_diagnose[]" value="N" hidden>'+
+                                        '</td>'+
                                         '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Delete</a></td>'+
                                       '</tr>');
     linenum++;
@@ -269,6 +277,16 @@ $(document).ready(function () {
 
         // $('#btn-add').attr('disabled', true);
       }
+
+    });
+
+
+    $('#table-services').on('click', 'tbody td [name="to-diagnose"]', function(e){ 
+      var linenum = $(this).data('linenum');
+        
+      if($(this).is(":checked")) {
+        $('#to-diagnose-linenum-'+linenum).val('Y');
+      }  
 
     });
     

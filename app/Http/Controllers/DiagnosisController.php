@@ -128,7 +128,7 @@ class DiagnosisController extends Controller
 
         $patient_service = DB::table('patient_service_items')
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select(DB::raw('services.id as service_id'))
+                                  ->select(DB::raw('services.id as service_id'), 'services.service')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->first();
         
@@ -179,8 +179,16 @@ class DiagnosisController extends Controller
         {
             return abort(404, 'Not Found');
         }
-
-        $ps_item->status = 'diagnosed';
+        
+        if($patient_service == 'Check-up')
+        {
+            $ps_item->status = 'receipted';
+        }
+        else
+        {
+            $ps_item->status = 'diagnosed';
+        }
+        
         $ps_item->save();
 
         $diagnosis = new Diagnosis();

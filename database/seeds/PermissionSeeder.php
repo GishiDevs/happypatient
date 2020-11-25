@@ -52,6 +52,10 @@ class PermissionSeeder extends Seeder
             'patientservices-list-profile',
             'diagnosis-create',
             'diagnosis-edit',
+            'certificate-list',
+            'certificate-create',
+            'certificate-edit',
+            'certificate-delete',
             'amount-edit',
             'activity-log',
          ];

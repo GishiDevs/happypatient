@@ -95,7 +95,22 @@ class PatientServiceController extends Controller
                 ->where('patient_services.type', '=', 'individual')
                 ->where('patient_service_items.status', '=', 'diagnosed')
                 ->where('diagnoses.docdate', '=', Carbon::now()->format('Y-m-d'));
- 
+        
+        //pending patients with check-up services
+        $check_up =  DB::table('patient_services')
+                //  ->join('patients', 'patient_services.patientid', '=', 'patients.id')
+                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 
+                          DB::raw("'' as diagnose_date"), 'patient_services.name', 'services.service', 'service_procedures.procedure', 'patient_service_items.status')
+                 ->whereIn('services.service', $services)
+                 ->where('patient_services.cancelled', '=', 'N')
+                 ->where('patient_services.type', '=', 'individual')
+                 ->where('patient_service_items.status', '=', 'pending')
+                 ->where('service_procedures.to_diagnose', '=', 'N')
+                 ->where('services.service', '=', 'Check-up')
+                 ->get();        
 
         //pending patients
         $patientservices =  DB::table('patient_services')
@@ -109,7 +124,8 @@ class PatientServiceController extends Controller
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
-                 ->union($diagnosed)
+                 ->where('service_procedures.to_diagnose', '=', 'Y')
+                 ->union($diagnosed, $check_up)
                  ->get();
 
             return DataTables::of($patientservices)

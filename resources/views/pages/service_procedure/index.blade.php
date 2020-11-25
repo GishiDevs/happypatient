@@ -44,6 +44,7 @@
                       <th>Code Name</th>
                       <th>Procedure</th>
                       <th>Price</th>
+                      <th>To Diagnose</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
                       <th width="250px" class="no-sort">Actions</th>
                       @endcan
@@ -57,6 +58,7 @@
                       <th>Code Name</th>
                       <th>Procedure</th>
                       <th>Price</th>
+                      <th>To Diagnose</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
                       <th>Actions</th>
                       @endcanany
@@ -122,6 +124,14 @@
               <input type="text" name="price" class="form-control" id="price" placeholder="0.00">
             </div>
           </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <div class="custom-control custom-checkbox">
+                <input class="custom-control-input" name="to_diagnose" type="checkbox" id="check-to-diagnose" value="Y">
+                <label for="check-to-diagnose" class="custom-control-label">To Diagnose</label>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /.card-body -->
         <div class="modal-footer">
@@ -144,7 +154,8 @@
                    { "data": "service"},
                    { "data": "code"},
                    { "data": "procedure"},
-                   { "data": "price"}];
+                   { "data": "price"},
+                   { "data": "to_diagnose"}];
 
     @canany(['serviceprocedure-edit', 'serviceprocedure-delete'])
       columns.push({data: "action"});
@@ -184,6 +195,15 @@
           $('#code').val(response.procedure.code);
           $('#procedure').val(response.procedure.procedure);
           $('#price').val(response.procedure.price);
+
+          if(response.procedure.to_diagnose == 'Y')
+          {
+            $('#check-to-diagnose').prop('checked', true);
+          }
+          else
+          {
+            $('#check-to-diagnose').prop('checked', false);
+          }
           
           // $('#service').find('option').each(function(){
           //     $(this).removeAttr('selected');

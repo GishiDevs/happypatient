@@ -31,7 +31,7 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Template Content </h3>
+                  <h3 class="card-title">Update Template Content </h3>
                 </div>
                 <div class="card-body pad col-md-12">
                   <div class="row">

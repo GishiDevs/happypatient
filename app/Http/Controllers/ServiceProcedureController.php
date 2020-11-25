@@ -26,7 +26,7 @@ class ServiceProcedureController extends Controller
     {
         $serviceprocedures = DB::table('services')
                                ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
-                               ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price')
+                               ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose')
                                ->get();
         return DataTables::of($serviceprocedures)
             ->addColumn('action',function($serviceprocedures){
@@ -68,6 +68,8 @@ class ServiceProcedureController extends Controller
     public function store(Request $request)
     {   
 
+        // return $request->all();
+
         $rules = [
             'service.required' => 'Please enter service',   
             'procedure.required' => 'Please add at least 1 service procedure on the table'
@@ -87,6 +89,7 @@ class ServiceProcedureController extends Controller
         $code = $request->get('code');
         $procedure = $request->get('procedure');
         $price = $request->get('price');
+        $to_diagnose = $request->get('to_diagnose');
         $codeIsNull = false;
         $procedureIsNull = false;
         $priceIsNull = false;
@@ -125,6 +128,7 @@ class ServiceProcedureController extends Controller
             $service->code = $code[$x];
             $service->procedure = $procedure[$x];
             $service->price = $price[$x];
+            $service->to_diagnose = $to_diagnose[$x];
             $service->save();
 
 
@@ -157,7 +161,7 @@ class ServiceProcedureController extends Controller
 
         $procedure = DB::table('services')
                        ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
-                       ->select('service_procedures.id', 'service_procedures.serviceid', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price')
+                       ->select('service_procedures.id', 'service_procedures.serviceid', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose')
                        ->where('service_procedures.id', '=', $procedure_id)
                        ->first();
 
@@ -179,6 +183,14 @@ class ServiceProcedureController extends Controller
         $procedure->code = $request->get('code');
         $procedure->procedure = $request->get('procedure');
         $procedure->price = $request->get('price');
+        if($request->get('to_diagnose'))
+        {
+            $procedure->to_diagnose = $request->get('to_diagnose');
+        }
+        else
+        {
+            $procedure->to_diagnose = 'N';
+        }
         $procedure->save();
 
         //PUSHER - send data/message if service procedure is updated

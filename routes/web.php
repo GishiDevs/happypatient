@@ -345,9 +345,15 @@ Route::get('/diagnosis/pdf', function(){
 
 //Medical Certificate Template Route
 Route::group(['prefix' => 'certificate/template', 'middleware' => ['auth']], function(){
+
     Route::get('/index', [
         'uses' => 'MedicalCertificateController@index',
         'as' => 'certificate.template.index',
+    ]);
+
+    Route::get('/certificate_templates', [
+        'uses' => 'MedicalCertificateController@gettemplatelist',
+        'as' => 'gettemplatelist',
     ]);
     
     Route::get('/create', [
@@ -371,7 +377,7 @@ Route::group(['prefix' => 'certificate/template', 'middleware' => ['auth']], fun
     ]);
 
     Route::post('/delete', [
-        'uses' => 'MedicalCertificateController@update',
+        'uses' => 'MedicalCertificateController@delete',
         'as' => 'certificate.template.delete',
     ]);
 
