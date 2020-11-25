@@ -15,6 +15,8 @@ class CreateMedicalCertificatesTable extends Migration
     {
         Schema::create('medical_certificates', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('content', 65,535)->nullable();
             $table->timestamps();
         });
     }

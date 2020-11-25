@@ -157,7 +157,7 @@ class ServiceProcedureController extends Controller
 
         $procedure = DB::table('services')
                        ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
-                       ->select('service_procedures.id', 'service_procedures.serviceid', 'services.service', 'service_procedures.procedure', 'service_procedures.price')
+                       ->select('service_procedures.id', 'service_procedures.serviceid', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price')
                        ->where('service_procedures.id', '=', $procedure_id)
                        ->first();
 

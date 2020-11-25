@@ -181,6 +181,7 @@
         success: function(response){
           console.log(response);
 
+          $('#code').val(response.procedure.code);
           $('#procedure').val(response.procedure.procedure);
           $('#price').val(response.procedure.price);
 
