@@ -184,14 +184,30 @@
           $('#code').val(response.procedure.code);
           $('#procedure').val(response.procedure.procedure);
           $('#price').val(response.procedure.price);
+          
+          // $('#service').find('option').each(function(){
+          //     $(this).removeAttr('selected');
+          // });
 
-          $('#service').find('option').each(function(){
-            if($(this).val() == response.procedure.serviceid)
+          // $('#service').find('option').each(function(){
+
+          //   if($(this).val() == response.procedure.serviceid)
+          //   { 
+          //     $('#select2-service-container').empty().append(response.procedure.service);
+          //     $(this).attr('selected', 'selected');
+          //   }
+          // });
+
+          $('#service').empty().append('<option selected="selected" value="" disabled>Select Service</option>');
+
+          @foreach($services as $service)
+
+            if('{{ $service->id }}' == response.procedure.serviceid)
             { 
-              $('#select2-service-container').empty().append(response.procedure.service);
-              $(this).attr('selected', 'selected');
+              $('#service').append('<option value="{{ $service->id }}" data-service="{{ $service->service }}" selected> {{ $service->service }}</option>');
             }
-          });
+
+          @endforeach
 
         },
         error: function(response){
@@ -245,7 +261,7 @@
     });
 
     $('#btn-save').click(function(e){
-
+ 
       var data = $('#serviceprocedureform').serializeArray();
       data.push({name: "_token", value: "{{ csrf_token() }}"});
       data.push({name: "procedure_id", value: procedure_id});
