@@ -11,6 +11,17 @@
     {{-- <link rel="stylesheet" href="assets/css/styles.css"> --}}
     <!-- Moment Plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+
+    <style>
+        figure table {
+        border-collapse: collapse !important;
+        }
+
+        figure table td{
+        border: 1px solid black !important;
+        }
+    </style>
+    
 </head>
 
 <body>
