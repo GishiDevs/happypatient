@@ -13,6 +13,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('certificate.template.index') }}">Template Lists</a></li>
               <li class="breadcrumb-item active">Medical Certificate Content</li>
             </ol>
           </div>
@@ -26,7 +27,7 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" action="{{ route('certificate.template.store') }}" method="POST" id="certificate-template-form">
+            <form role="form" action="{{ route('certificate.template.update', $certificate->id) }}" method="POST" id="certificate-template-form">
               @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
@@ -37,7 +38,7 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="lastname">Template Name</label> <span class="text-danger">*</span>
-                      <input type="text" name="template_name" class="form-control" id="template_name" placeholder="Enter template name">
+                      <input type="text" name="template_name" class="form-control" id="template_name" placeholder="Enter template name" value="{{ $certificate->name }}">
                     </div>
                   </div>
                   <div class="row">
@@ -45,7 +46,7 @@
                       <label for="content">Content</label>
                       <div class="mb-3 div-content"> 
                         <textarea name="content" id="content" placeholder="Place some text here"
-                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{!! $certificate->content !!}</textarea>
                       </div>
                     </div>
                   </div>

@@ -104,6 +104,48 @@
                         }] 
     });
 
+    //Delete Patient
+    $('#certificate-table').on('click', 'tbody td #btn-delete-certificate', function(e){
+
+      e.preventDefault();
+
+      var certificateid = $(this).data('certificateid');
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Delete record!'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+            url: "{{ route('certificate.template.delete') }}",
+            method: "POST",
+            data: {_token: "{{ csrf_token() }}", certificateid: certificateid},
+            success: function(response){
+              console.log(response);
+              if(response.success)
+              {
+                Swal.fire(
+                  'Deleted!',
+                  'Record has been deleted.',
+                  'success'
+                );
+                $('#certificate-table').DataTable().ajax.reload();
+              }
+            },
+            error: function(response){
+              console.log(response);
+            }
+          });
+
+        }
+      });
+      });
+
       
     // PUSHER
 

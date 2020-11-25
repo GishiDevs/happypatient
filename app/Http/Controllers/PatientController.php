@@ -275,7 +275,7 @@ class PatientController extends Controller
         $activity_log->object_id = $patient->id;
         $activity_log->table_name = 'patients';
         $activity_log->description = 'Update Patient';
-        $activity_log->action = 'create';
+        $activity_log->action = 'update';
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
 

@@ -127,14 +127,14 @@
 
     });
 
-    //Edit Patient
-    $('#patient-table').on('click', 'tbody td #btn-edit-patient', function(e){
+    // //Edit Patient
+    // $('#patient-table').on('click', 'tbody td #btn-edit-patient', function(e){
       
-      var patientid = $(this).data('patientid');
-      $('#edit-text-patientid').val(patientid);
-      $('#form-editpatient').submit();
+    //   var patientid = $(this).data('patientid');
+    //   $('#edit-text-patientid').val(patientid);
+    //   $('#form-editpatient').submit();
 
-    });
+    // });
 
     //Delete Patient
     $('#patient-table').on('click', 'tbody td #btn-delete-patient', function(e){

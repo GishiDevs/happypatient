@@ -39,11 +39,11 @@
                     <div class="form-group col-md-4">
                       <label for="type">Options</label>
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="option" id="option1" value="option1" checked>
+                        <input class="form-check-input" type="radio" name="option" id="option1" value="option1">
                         <label class="form-check-label" for="option1">Patient Information</label>
                       </div>
                       <div class="form-check">
-                        <input class="form-check-input" type="radio" name="option" id="option2" value="option2">
+                        <input class="form-check-input" type="radio" name="option" id="option2" value="option2" checked>
                         <label class="form-check-label" for="option2">Patient Information and Services</label>
                       </div>
                     </div>
@@ -177,7 +177,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary" id="btn-next">Add</button>
+                  <button type="submit" class="btn btn-primary" id="btn-next">Next</button>
                 </div>
               </form>
 
@@ -287,7 +287,7 @@ $(document).ready(function () {
 
   $('[data-mask]').inputmask();
 
-  var option = 'option1';
+  var option = 'option2';
 
   $('[name="option"]').click(function(){
 
