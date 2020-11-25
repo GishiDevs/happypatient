@@ -21,12 +21,25 @@
         border: 1px solid black !important;
         }
     </style>
-    
+
 </head>
 
 <body>
     <div class="container-fluid">
-        <img class="img-fluid" src="{{ asset('dist/img/docsHeader/docsHeader.png') }}">
+        {{-- <img class="img-fluid" src="{{ asset('dist/img/docsHeader/docsHeader.png') }}"> --}}
+
+        <div class="d-flex flex-row justify-content-center justify-content-xl-center align-items-xl-start">
+            <div><img src="{{ asset('dist/img/docsHeader/hpdc_logo.png') }}" style="height: 160px;" /></div>
+            <div class="mt-2"><img src="{{ asset('dist/img/docsHeader/separator.png') }}" /></div>
+            <div class="d-flex flex-column align-items-xl-start mt-3 ml-3">
+                <div><img src="{{ asset('dist/img/docsHeader/hpdc_description.png') }}" /></div>
+                <div class="mt-2"><img src="{{ asset('dist/img/docsHeader/hpdc_address.png') }}" /></div>
+                <div class="d-flex justify-content-xl-center align-items-xl-center w-100 mt-3 bg-light text-blue"
+                    style="height: 50px;">
+                    <h2>{{ $patient_service->service }} Report</h2>
+                </div>
+            </div>
+        </div>
 
 
         {{-- <div class="table-responsive" style="border-style: none;">
@@ -164,18 +177,18 @@
                         border-color: rgb(255, 255, 255);
                     "
                     >
-                    <strong style="font-size: 14px"><em>DATE:&nbsp;</em></strong
-                    ><span style="font-size: 14px">{{ $patient_service->docdate }}</span>
+                    <strong style="font-size: 18px"><em>DATE:&nbsp;</em></strong
+                    ><span style="font-size: 18px">{{ $patient_service->docdate }}</span>
                     </td>
                     <td style="width: 25%; border-style: none">
-                    <strong style="font-size: 14px"><em>FILE #:&nbsp;</em></strong
-                    ><span style="font-size: 14px">{{ $patient_service->file_no }}</span>
+                    <strong style="font-size: 18px"><em>FILE #:&nbsp;</em></strong
+                    ><span style="font-size: 18px">{{ $patient_service->file_no }}</span>
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-size: 12px; width: 10%" colspan="4">
+                    <td style="font-size: 18px; width: 10%" colspan="4">
                     <strong><em>NAME OF PATIENT:&nbsp;</em></strong
-                    ><span style="font-size: 12px">{{ $patient_service->name }}</span>
+                    ><span style="font-size: 18px">{{ $patient_service->name }}</span>
                     </td>
                 </tr>
                 <tr
@@ -189,19 +202,19 @@
                     class="text-right"
                     style="border-style: none; border-color: rgb(255, 255, 255)"
                     >
-                    <strong style="font-size: 14px"><em>AGE:&nbsp;</em></strong
-                    ><span style="font-size: 14px" id="age"></span>
+                    <strong style="font-size: 18px"><em>AGE:&nbsp;</em></strong
+                    ><span style="font-size: 18px" id="age"></span>
                     </td>
                     <td
                     class="text-center"
                     style="border-style: none; border-color: rgb(255, 255, 255)"
                     >
-                    <strong style="font-size: 14px"><em>GENDER:&nbsp;</em></strong
-                    ><span style="font-size: 14px">{{ $patient_service->gender }}</span>
+                    <strong style="font-size: 18px"><em>GENDER:&nbsp;</em></strong
+                    ><span style="font-size: 18px">{{ $patient_service->gender }}</span>
                     </td>
                     <td style="border-style: none">
-                    <strong style="font-size: 14px"><em>C.S.&nbsp;</em></strong
-                    ><span style="font-size: 14px"
+                    <strong style="font-size: 18px"><em>C.S.&nbsp;</em></strong
+                    ><span style="font-size: 18px"
                         >{{ $patient_service->civilstatus }}</span
                     >
                     </td>
@@ -217,7 +230,7 @@
                     class="text-right"
                     style="border-style: none; border-color: rgb(255, 255, 255)"
                     >
-                    <strong style="font-size: 14px"><em>ADDRESS :</em></strong>
+                    <strong style="font-size: 18px"><em>ADDRESS :</em></strong>
                     </td>
                     <td
                     class="text-left"
@@ -229,7 +242,7 @@
                     "
                     colspan="3"
                     >
-                    <span style="font-size: 14px">{{ $patient_service->address }}</span>
+                    <span style="font-size: 18px">{{ $patient_service->address }}</span>
                     </td>
                 </tr>
                 <tr
@@ -243,7 +256,7 @@
                     class="text-right"
                     style="border-style: none; border-color: rgb(255, 255, 255)"
                     >
-                    <strong style="font-size: 14px"
+                    <strong style="font-size: 18px"
                         ><em>REFERRING PHYSICIAN:&nbsp;</em></strong
                     >
                     </td>
@@ -257,7 +270,7 @@
                     "
                     colspan="3"
                     >
-                    <span style="font-size: 14px">{{ $patient_service->physician }}</span>
+                    <span style="font-size: 18px">{{ $patient_service->physician }}</span>
                     </td>
                 </tr>
                 <tr></tr>
@@ -278,7 +291,7 @@
                 <tr>
                     <td
                     class="text-uppercase text-center text-danger"
-                    style="font-size: 16px; text-align: center"
+                    style="font-size: 18px; text-align: center"
                     colspan="4"
                     >
                     <strong>{{ $patient_service->title }}</strong>
@@ -326,7 +339,7 @@
                                         </ul>
                                     </td>
                                 </tr> -->
-                <tr>
+                {{-- <tr>
                     <td
                     class="text-uppercase text-center"
                     style="
@@ -353,8 +366,8 @@
                     {{ Auth::user()->name }}
                     </h1>
                     </td>
-                </tr>
-                <tr>
+                </tr> --}}
+                {{-- <tr>
                     <td
                     class="text-uppercase text-center"
                     style="
@@ -406,9 +419,20 @@
                         font-weight: normal;
                     "
                     ></td>
-                </tr>
+                </tr> --}}
                 </tbody>
             </table>
+        </div>
+
+
+        <div class="d-flex flex-column justify-content-center align-items-center">
+            <div class="text-nowrap">
+                <h6 class="my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">{{ Auth::user()->name }}</h6>
+            </div>
+            <div class="text-break text-center" style="width: 250px;color: #7030a0;">
+                <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->description }}</p>
+                <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->license }}</p>
+            </div>
         </div>
 
 
