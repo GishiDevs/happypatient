@@ -200,12 +200,19 @@
 
           $('#service').empty().append('<option selected="selected" value="" disabled>Select Service</option>');
 
+          var selected = '';  
+
           @foreach($services as $service)
 
             if('{{ $service->id }}' == response.procedure.serviceid)
             { 
-              $('#service').append('<option value="{{ $service->id }}" data-service="{{ $service->service }}" selected> {{ $service->service }}</option>');
+              selected = 'selected';
             }
+            else
+            {
+              selected = '';
+            }
+            $('#service').append('<option value="{{ $service->id }}" data-service="{{ $service->service }}" '+selected+'> {{ $service->service }}</option>');
 
           @endforeach
 
