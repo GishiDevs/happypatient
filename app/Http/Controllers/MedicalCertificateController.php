@@ -31,7 +31,7 @@ class MedicalCertificateController extends Controller
 
                 if(Auth::user()->can('certificate-edit'))
                 {
-                    $edit = '<a href="'.route("certificate.template.edit",$certificates->id).'" class="btn btn-sm btn-info" data-certificateid="'.$certificates->id.'" data-action="edit" id="btn-edit-certificate"><i class="fa fa-edit">Edit</i></a>';
+                    $edit = '<a href="'.route("certificate.template.edit",$certificates->id).'" class="btn btn-sm btn-info" data-certificateid="'.$certificates->id.'" data-action="edit" id="btn-edit-certificate"><i class="fa fa-edit"></i> Edit</a>';
                 }
 
                 if(Auth::user()->can('certificate-delete'))
