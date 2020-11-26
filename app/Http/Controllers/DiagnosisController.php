@@ -39,7 +39,7 @@ class DiagnosisController extends Controller
                                   ->join('template_contents', 'service_procedures.id', '=', 'template_contents.procedureid')
                                   ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),  
                                            'patient_services.bloodpressure', 'patient_services.name', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus',
-                                           'patients.age', 'patients.gender', 'patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),
+                                           'patients.age', 'patients.gender', 'patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.temperature', 'patient_services.weight', 'service_procedures.procedure',
                                            'template_contents.content')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
@@ -236,7 +236,7 @@ class DiagnosisController extends Controller
                                   ->select(DB::raw('patients.id as patient_id') ,DB::raw('patient_services.id as patient_services_id'), DB::raw('patient_service_items.id as ps_items_id'), DB::raw('patients.id as patient_id'), 
                                            DB::raw('diagnoses.id as diagnoses_id'), DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', 'services.service',  
                                            DB::raw('services.id as service_id'), 'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', 
-                                           DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),'diagnoses.physician', 
+                                           'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),'diagnoses.physician', 
                                            'patient_services.bloodpressure', 'patient_services.temperature', 'patient_services.weight', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', 
                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)
@@ -310,7 +310,7 @@ class DiagnosisController extends Controller
                                   ->join('service_procedures', 'patient_service_items.procedureid', 'service_procedures.id')
                                   ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw('patients.id as patient_id'), DB::raw('diagnoses.id as diagnoses_id'), 
                                             DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', 'services.service', DB::raw('services.id as service_id'), 
-                                            'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', DB::raw("CONCAT(patients.address, ', ',barangays.name, ', ', cities.name,', ', provinces.name) as address"),
+                                            'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                             'diagnoses.physician', 'diagnoses.bloodpressure', 'patient_services.temperature', 'patient_services.weight', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', 'service_procedures.procedure',
                                             DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
                                   ->where('patient_service_items.id', '=', $ps_item_id)

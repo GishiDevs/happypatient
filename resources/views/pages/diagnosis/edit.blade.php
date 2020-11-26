@@ -68,7 +68,7 @@
                   <div class="row">
                     <div class="form-group col-md-6">
                       <label for="mobile">Address: </label>
-                      <h5>{{ $patient_service->address }}</h5>
+                      <h5>{{ $patient_service->address . ' ' . $patient_service->location}}</h5>
                     </div>
                   </div>
                   <hr>

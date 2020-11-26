@@ -242,7 +242,7 @@
                     "
                     colspan="3"
                     >
-                    <span style="font-size: 18px">{{ $patient_service->address }}</span>
+                    <span style="font-size: 18px">{{ $patient_service->address . ' ' . $patient_service->location}}</span>
                     </td>
                 </tr>
                 <tr
