@@ -111,7 +111,7 @@
           {
             "targets": 6,
             "render": function ( data ) {
-                if(data == 'diagnosed')
+                if(data == 'diagnosed' || data == 'receipted')
                 {
                   return '<span class="badge bg-success">'+data+'</span>';
                 }
