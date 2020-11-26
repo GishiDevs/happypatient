@@ -46,12 +46,20 @@
                       <label for="birthdate">Birthdate:</label>
                       <h5>{{ $patient->birthdate}}</h5>
                     </div>   
-                    <div class="form-group col-md-3">
+                    <!-- <div class="form-group col-md-3">
                       <label for="age">Age:</label>
                       <h5>{{ $patient->age}}</h5>
-                    </div>      
+                    </div>       -->
+                    <div class="form-group col-md-3">
+                      <label for="gender">Gender:</label>
+                      <h5>{{ $patient->gender }}</h5>
+                    </div>  
+                    <div class="form-group col-md-3">
+                      <label for="civilstatus">Civil Status:</label>
+                      <h5>{{ $patient->civilstatus }}</h5>
+                    </div>
                   </div>
-                  <div class="row"> 
+                  <!-- <div class="row"> 
                     <div class="form-group col-md-3">
                       <label for="gender">Gender:</label>
                       <h5>{{ $patient->gender }}</h5>
@@ -64,7 +72,7 @@
                       <label for="weight">Weight (Kg):</label>
                       <h5>{{ $patient->weight}}</h5>
                     </div>      
-                  </div>
+                  </div> -->
                   <hr>
                   <div class="row"> 
                     <div class="form-group col-md-3">

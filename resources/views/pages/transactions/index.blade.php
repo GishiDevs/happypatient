@@ -236,7 +236,7 @@
 
             if(response.transactions.length == 0)
             {
-              $('#transactions-table tbody').append('<tr><td class="dataTables_empty text-center" colspan="6">No data available in table</td></tr>');
+              $('#transactions-table tbody').append('<tr><td class="dataTables_empty text-center" colspan="7">No data available in table</td></tr>');
             }
 
           },
