@@ -33,7 +33,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" id="patientserviceform" method="POST">
+              <form role="form" id="patientserviceform" action='{{ route("patientservice.cancel",$patientservice->id) }}' method="POST">
                 @csrf
                 <div class="card-body">
                   @if($patientservice->cancelled == 'Y')
@@ -219,8 +219,8 @@ $(document).ready(function () {
 
     $('#btn-cancel').click(function(e){
 
-      $('#patientserviceform').attr('action', '{{ route("patientservice.cancel",$patientservice->id) }}');
-
+      //$('#patientserviceform').attr('action', '{{ route("patientservice.cancel",$patientservice->id) }}');
+      e.preventDefault();
       Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
