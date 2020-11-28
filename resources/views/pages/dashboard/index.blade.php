@@ -31,28 +31,28 @@
                 <table id="patient-table" class="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th width="30px" class="no-sort">#</th>
-                      <th>ID</th>
-                      <th>Document Date</th>
-                      <th>Patient Name</th>
-                      <th>Service</th>
-                      <th>Procedure</th>
-                      <th width="50px">Status</th>
-                      <th>Diagnose Date</th>
-                      <th width="100px" class="no-sort">Actions</th>
+                      <th></th>
+                      <th class="no-sort">ID</th>
+                      <th class="no-sort">Document Date</th>
+                      <th class="no-sort">Patient Name</th>
+                      <th class="no-sort">Service</th>
+                      <!-- <th class="no-sort">Procedure</th>
+                      <th width="50px" class="no-sort">Status</th>
+                      <th class="no-sort">Diagnose Date</th>
+                      <th width="100px" class="no-sort">Actions</th> -->
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <th>#</th>
+                      <th></th>
                       <th>ID</th>
                       <th>Document Date</th>
                       <th>Patient Name</th>
                       <th>Service</th>
-                      <th>Procedure</th>
+                      <!-- <th>Procedure</th>
                       <th>Status</th>
                       <th>Diagnose Date</th>
-                      <th>Actions</th>
+                      <th>Actions</th> -->
                     </tr>
                   </tfoot>
                 </table>
@@ -72,16 +72,16 @@
   </div>
 
   <script>
-
-  $(document).ready(function() {
- 
+  
+  $(document).ready(function() {   
+    
     // if session has request to download pdf
     @if(Session::has('download_pdf'))
       // $(location).attr('href', "{{ route('diagnosis.print', session()->get('download_pdf'))}}");
     @endif
 
 			// $('#tax-table').DataTable();
-	  $('#patient-table').DataTable({
+    var dt = $('#patient-table').DataTable({
         "responsive": true,
         "autoWidth": false,
 		    "processing": true,
@@ -89,73 +89,140 @@
 		    "ajax": "{{ route('patientservice.servicesperuser') }}",
 		    "bDestroy": true,
 		    "columns": [
-                    { "data": "DT_RowIndex"},
-                    { "data": "ps_items_id"},
+                    {
+                          'className':      'details-control',
+                          'orderable':      false,
+                          'data':           null,
+                          'defaultContent': ''
+                      },
+                    // { "data": "DT_RowIndex"},
+                    { "data": "id"},
 		    		        { "data": "docdate"},
 		    		        { "data": "name"},
 		    		        { "data": "service"},
-                    { "data": "procedure"},
-                    { "data": "status"},
-                    { "data": "diagnose_date"},
-                    { "data": "action"}
+        //             { "data": "procedure"},
+        //             { "data": "status"},
+        //             { "data": "diagnose_date"},
+        //             { "data": "action"}
 		    ],
-        "order": [[ 6, "desc" ],
-                  [ 2, "asc" ], 
-                  [ 4, "asc" ], 
-                  [ 1, "asc" ]
-        ],
-
+        // "order": [[ 6, "desc" ],
+        //           [ 2, "asc" ], 
+        //           [ 4, "asc" ], 
+        //           [ 1, "asc" ],
+        //           [ 5, "asc" ],
+        //           [ 3, "asc" ]
+        // ],
+        "order": [[ 1, "desc" ]],
         "columnDefs": [
           { "visible": false, "targets": 1 },
           { "targets": "no-sort","orderable": false },
-          {
-            "targets": 6,
-            "render": function ( data ) {
-                if(data == 'diagnosed' || data == 'receipted')
-                {
-                  return '<span class="badge bg-success">'+data+'</span>';
-                }
-                else if(data == 'pending')
-                {
-                  return '<span class="badge bg-warning">'+data+'</span>';
-                }
-                else if(data == 'cancelled')
-                {
-                  return '<span class="badge bg-danger">'+data+'</span>';
-                }
-                              
-              }
-          },
-          {
-            "targets": 8,
-            "render": function ( data, type, object ) {
-                // console.log(object);
-                if(object.status == 'pending')
-                { 
-                  @can('diagnosis-create')
-                    if(object.service == 'Check-up')
-                    {
-                      return '<a href="diagnosis/create/'+object.ps_items_id+'"class="btn btn-sm btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Receipt</a>';
-                    }
-                    else
-                    {
-                      return data;
-                    }
-                    
-                  @else
-                    return '';
-                  @endcan
-                }
-                else
-                { 
-                  return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-sm btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
-                }                 
-              }
-          }
-
         ]
+        // "columnDefs": [
+        //   { "visible": false, "targets": 1 },
+        //   { "targets": "no-sort","orderable": false },
+        //   {
+        //     "targets": 6,
+        //     "render": function ( data ) {
+        //         if(data == 'diagnosed' || data == 'receipted')
+        //         {
+        //           return '<span class="badge bg-success">'+data+'</span>';
+        //         }
+        //         else if(data == 'pending')
+        //         {
+        //           return '<span class="badge bg-warning">'+data+'</span>';
+        //         }
+        //         else if(data == 'cancelled')
+        //         {
+        //           return '<span class="badge bg-danger">'+data+'</span>';
+        //         }
+                              
+        //       }
+        //   },
+        //   {
+        //     "targets": 8,
+        //     "render": function ( data, type, object ) {
+        //         // console.log(object);
+        //         if(object.status == 'pending')
+        //         { 
+        //           @can('diagnosis-create')
+        //             if(object.service == 'Check-up')
+        //             {
+        //               return '<a href="diagnosis/create/'+object.ps_items_id+'"class="btn btn-sm btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Receipt</a>';
+        //             }
+        //             else
+        //             {
+        //               return data;
+        //             }
+                    
+        //           @else
+        //             return '';
+        //           @endcan
+        //         }
+        //         else
+        //         { 
+        //           return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-sm btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
+        //         }                 
+        //       }
+        //   }
+
+        // ]
         // "bSort" : false 
     });
+
+    // Array to track the ids of the details displayed rows
+    var detailRows = [];
+ 
+    $('#patient-table tbody').on( 'click', 'tr td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = dt.row( tr );
+        var idx = $.inArray( tr.attr('id'), detailRows );
+ 
+        if ( row.child.isShown() ) {
+            tr.removeClass( 'details' );
+            row.child.hide();
+        }
+        else {
+            tr.addClass( 'details' );
+            // row.child( get_services( row.data() ) ).show();
+
+            var ps_id = row.data().id;
+            var service_id = row.data().service_id;
+            $.ajax({
+              url: "/patientservices/"+ps_id+"/"+service_id,
+              method: "GET",
+              success: function(response){
+
+                var procedures
+
+                $.each(response, function(index, value){
+                  procedures += '<tr style="background: white;" >'+
+                                  '<td style="border:none" width="400px"><strong>Procedure: '+value.procedure+'</strong>'+
+                                  '<a href="diagnosis/create/'+value.ps_items_id+'" class="btn btn-xs btn-success ml-5" data-ps_items_id="'+value.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a></td>'+
+                                '</tr>';
+                  
+                });
+
+                row.child( procedures ).show();  
+                
+              },
+              error: function(response){
+                console.log(response);
+              }      
+            });
+ 
+            // Add to the 'open' array
+            if ( idx === -1 ) {
+                detailRows.push( tr.attr('id') );
+            }
+        }
+    } );
+ 
+    // On each draw, loop over the `detailRows` array and show any child rows
+    // dt.on( 'draw', function () {
+    //     $.each( detailRows, function ( i, id ) {
+    //         $('#'+id+' td.details-control').trigger( 'click' );
+    //     } );
+    // } );
 
       // PUSHER
 

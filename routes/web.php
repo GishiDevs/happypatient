@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'DashboardController@index')->name('dashboard.index')->middleware('auth');
 Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
+Route::get('/patientservices/{ps_id}/{service_id}', 'DashboardController@getpatientservices')->name('patientservices')->middleware('auth');
 Route::get('/transactions', 'TransactionController@index')->name('transactions.index')->middleware('auth');
 Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions')->middleware('auth');
 Route::get('/logs', 'ActivityLogController@index')->name('logs')->middleware('activity_log');
