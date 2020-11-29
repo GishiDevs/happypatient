@@ -62,12 +62,18 @@
                         <input type="text" class="form-control" name="organization" id="organization">
                       </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <!-- <div class="form-group col-md-3">
                       <label for="OfficialReceipt">Official Receipt No.</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="or_number" id="or_number">
                       </div>
-                    </div>  
+                    </div>   -->
+                    <div class="form-group col-md-3">
+                      <label for="bloodpressure">Blood Pressure</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
+                      </div>
+                    </div>
                     <div class="form-group col-md-3 div-docdate">
                       <label for="docdate">Document Date</label>
                       <div class="input-group">
@@ -80,9 +86,12 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
-                      <label for="bloodpressure">Blood Pressure</label>
+                      <label for="weight">Weight</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
+                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">
+                        <div class="input-group-append">
+                          <span class="input-group-text">Kg</span>
+                        </div>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -95,12 +104,35 @@
                       </div>
                     </div>
                     <div class="form-group col-md-4">
-                      <label for="weight">Weight</label>
+                      <label for="o2_sat">O2 Sat</label>
                       <div class="input-group">
-                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">
+                        <input class="form-control" type="text" name="o2_sat" id="o2_sat" placeholder="0.00">
                         <div class="input-group-append">
-                          <span class="input-group-text">Kg</span>
+                          <span class="input-group-text">%</span>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="title">Referring Physician</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="pulserate">Pulse Rate</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="pulserate" id="pulserate" placeholder="0">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="pulserate">LMP</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="lmp" id="lmp" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy">
                       </div>
                     </div>
                   </div>
@@ -262,7 +294,7 @@ $(document).ready(function () {
                                         '</div>'+
                                         '</td>'+
                                         '<td><span class="service-total-amount" id="total-linenum-'+linenum+'">0.00</span></td>'+
-                                        '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Delete</a></td>'+
+                                        '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Remove</a></td>'+
                                       '</tr>');
     linenum++;
         
@@ -722,13 +754,29 @@ $(document).ready(function () {
       allowMinus:false
         
     });
-    $('#temperature').inputmask('decimal', {
+
+  $('#temperature').inputmask('decimal', {
       rightAlign: true,
       integerDigits:3,
       digits:1,
       allowMinus:false
         
     });
+
+  $('#o2_sat').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:2,
+      allowMinus:false
+        
+    });
+
+  $('#pulserate').inputmask('integer', {
+      rightAlign: true,
+      integerDigits:3,
+      allowMinus:false
+        
+    });  
 
 });
 </script>

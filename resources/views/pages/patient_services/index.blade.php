@@ -40,7 +40,7 @@
                       <th width="30px" class="no-sort">#</th>
                       <th>ID</th>
                       <th>Document Date</th>
-                      <th>OR Number</th>
+                      <!-- <th>OR Number</th> -->
                       <th>Patient/Organization</th>
                       <th width="50px">Cancelled</th>
                       <th width="70px" class="no-sort">Action</th>
@@ -51,7 +51,7 @@
                       <th>#</th>
                       <th>ID</th>
                       <th>Document Date</th>
-                      <th>OR Number</th>
+                      <!-- <th>OR Number</th> -->
                       <th>Patient Name</th>
                       <th>Cancelled</th>
                       <th>Action</th>
@@ -89,7 +89,7 @@
                     { "data": "DT_RowIndex"},
                     { "data": "id"},
 		    		        { "data": "docdate"},
-                    { "data": "or_number"},
+                    // { "data": "or_number"},
 		    		        { "data": "name"},
                     { "data": "cancelled"},
                     { "data": "action"}

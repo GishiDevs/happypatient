@@ -124,18 +124,20 @@
                             <i class="fa fa-phone"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="landline" id="landline" value="{{ $patient->landline }}" data-inputmask='"mask": "(999)999-9999"' data-mask>
+                        <!-- <input class="form-control" type="text" name="landline" id="landline" value="{{ $patient->landline }}" data-inputmask='"mask": "(999)999-9999"' data-mask> -->
+                        <input class="form-control" type="text" name="landline" id="landline" value="{{ $patient->landline }}">
                       </div>
                     </div>
                     <div class="form-group col-md-4">
-                      <label for="mobile">Mobile No.</label>
+                      <label for="mobile">Mobile No.</label><span class="text-danger">*</span>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text">
                             <i class="fa fa-mobile"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="mobile" id="mobile" value="{{ $patient->mobile }}" data-inputmask='"mask": "(+63)999-9999-999"' data-mask>
+                        <!-- <input class="form-control" type="text" name="mobile" id="mobile" value="{{ $patient->mobile }}" data-inputmask='"mask": "(+63)999-9999-999"' data-mask> -->
+                        <input class="form-control" type="text" name="mobile" id="mobile" value="{{ $patient->mobile }}">
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -386,9 +388,9 @@ $(document).ready(function () {
       // landline: {
       //   number: true,
       // },
-      // mobile: {
-      //   number: true,
-      // },
+      mobile: {
+        required: true,
+      },
       email: {
         email: true
       },
@@ -415,6 +417,9 @@ $(document).ready(function () {
       },
       email: {
         email: "Please enter a valid email"
+      },
+      mobile: {
+        required: "Please enter a mobile number"
       }
     },
     errorElement: 'span',

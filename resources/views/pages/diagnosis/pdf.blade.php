@@ -228,7 +228,7 @@
                 <tr>
                     <td style="font-size: 18px; width: 10%" colspan="4">
                     <strong><em>NAME OF PATIENT:&nbsp;</em></strong
-                    ><span style="font-size: 18px">{{ $patient_service->name }}</span>
+                    ><span style="font-size: 18px">{{ strtoupper($patient_service->name) }}</span>
                     </td>
                 </tr>
                 <tr
@@ -250,12 +250,12 @@
                     style="border-style: none; border-color: rgb(255, 255, 255)"
                     >
                     <strong style="font-size: 18px"><em>GENDER:&nbsp;</em></strong
-                    ><span style="font-size: 18px">{{ $patient_service->gender }}</span>
+                    ><span style="font-size: 18px">{{ strtoupper($patient_service->gender) }}</span>
                     </td>
                     <td style="border-style: none">
                     <strong style="font-size: 18px"><em>C.S.&nbsp;</em></strong
                     ><span style="font-size: 18px"
-                        >{{ $patient_service->civilstatus }}</span
+                        >{{ strtoupper($patient_service->civilstatus) }}</span
                     >
                     </td>
                 </tr>
@@ -310,7 +310,7 @@
                     "
                     colspan="3"
                     >
-                    <span style="font-size: 18px">{{ $patient_service->physician }}</span>
+                    <span style="font-size: 18px">{{ strtoupper($patient_service->physician) }}</span>
                     </td>
                 </tr>
                 <tr></tr>

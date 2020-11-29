@@ -131,18 +131,20 @@
                             <i class="fa fa-phone"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="landline" id="landline" data-inputmask='"mask": "(999)999-9999"' data-mask>
+                        <!-- <input class="form-control" type="text" name="landline" id="landline" data-inputmask='"mask": "(999)999-9999"' data-mask> -->
+                        <input class="form-control" type="text" name="landline" id="landline">
                       </div>
                     </div>
                     <div class="form-group col-md-4">
-                      <label for="mobile">Mobile No.</label>
+                      <label for="mobile">Mobile No.</label><span class="text-danger">*</span>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text">
                             <i class="fa fa-mobile"></i>
                           </span>
                         </div>
-                        <input class="form-control" type="text" name="mobile" id="mobile" data-inputmask='"mask": "(+63)999-9999-999"' data-mask>
+                        <!-- <input class="form-control" type="text" name="mobile" id="mobile" data-inputmask='"mask": "(+63)999-9999-999"' data-mask> -->
+                        <input class="form-control" type="text" name="mobile" id="mobile">
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -185,13 +187,37 @@
               <form role="form" id="patientserviceform" hidden>
                 <div class="card-body">
                   <div class="row"> 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
+                      <label for="bloodpressure">Blood Pressure</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="weight">Weight</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">
+                        <div class="input-group-append">
+                          <span class="input-group-text">Kg</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="form-group col-md-4">
                       <label for="OfficialReceipt">Official Receipt No.</label>
                       <div class="input-group">
                         <input type="text" class="form-control" name="or_number" id="or_number">
                       </div>
-                    </div> 
-                    <div class="form-group col-md-4 div-docdate">
+                    </div>  -->
+                    <div class="form-group col-md-3">
+                      <label for="temperature">Temperature</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="temperature" id="temperature" placeholder="00.0">
+                        <div class="input-group-append">
+                          <span class="input-group-text">°C</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-3 div-docdate">
                       <label for="docdate">Document Date</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
@@ -202,28 +228,34 @@
                     </div>          
                   </div>
                   <div class="row">
-                    <div class="form-group col-md-4">
-                      <label for="bloodpressure">Blood Pressure</label>
+                    <div class="form-group col-md-3">
+                      <label for="title">Referring Physician</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="bloodpressure" id="bloodpressure">
+                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician">
                       </div>
                     </div>
-                    <div class="form-group col-md-4">
-                      <label for="temperature">Temperature</label>
+                    <div class="form-group col-md-3">
+                      <label for="pulserate">Pulse Rate</label>
                       <div class="input-group">
-                        <input class="form-control" type="text" name="temperature" id="temperature" placeholder="00.0">
+                        <input class="form-control" type="text" name="pulserate" id="pulserate" placeholder="0">
+                      </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="o2_sat">O2 Sat</label>
+                      <div class="input-group">
+                        <input class="form-control" type="text" name="o2_sat" id="o2_sat" placeholder="0.00">
                         <div class="input-group-append">
-                          <span class="input-group-text">°C</span>
+                          <span class="input-group-text">%</span>
                         </div>
                       </div>
                     </div>
-                    <div class="form-group col-md-4">
-                      <label for="weight">Weight</label>
+                    <div class="form-group col-md-3">
+                      <label for="pulserate">LMP</label>
                       <div class="input-group">
-                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00">
-                        <div class="input-group-append">
-                          <span class="input-group-text">Kg</span>
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         </div>
+                        <input type="text" class="form-control" name="lmp" id="lmp" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy">
                       </div>
                     </div>
                   </div>
@@ -256,7 +288,7 @@
                   </div>
                   <hr>
                   <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                       <label for="Notes">Notes</label>
                       <div class="input-group">
                         <textarea class="form-control" name="note" id="note" style="resize: none;"></textarea>
@@ -431,9 +463,9 @@ $(document).ready(function () {
       // landline: {
       //   minlength: 2,
       // },
-      // mobile: {
-      //   number: true,
-      // },
+      mobile: {
+        required: true,
+      },
       email: {
         email: true
       },
@@ -460,7 +492,11 @@ $(document).ready(function () {
       },
       email: {
         email: "Please enter a valid email"
+      },
+      mobile: {
+        required: "Please enter a mobile number"
       }
+      
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
@@ -554,6 +590,29 @@ $(document).ready(function () {
         
     });
 
+  $('#temperature').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:1,
+      allowMinus:false
+        
+    });
+
+  $('#o2_sat').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:2,
+      allowMinus:false
+        
+    });
+
+  $('#pulserate').inputmask('integer', {
+      rightAlign: true,
+      integerDigits:3,
+      allowMinus:false
+        
+    });  
+
 
   //patient services
 
@@ -618,7 +677,7 @@ $(document).ready(function () {
                                         '</div>'+
                                         '</td>'+
                                         '<td><span class="service-total-amount" id="total-linenum-'+linenum+'">0.00</span></td>'+
-                                        '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Delete</a></td>'+
+                                        '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Remove</a></td>'+
                                       '</tr>');
     linenum++;
         

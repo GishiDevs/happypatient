@@ -38,7 +38,7 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="patient">Patient: </label>
-                      <div>{{ $patient_service->name }}</div>
+                      <div>{{ strtoupper($patient_service->name) }}</div>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="date">Diagnose Date: </label>
@@ -52,13 +52,13 @@
                     </div>
                     <div class="form-group col-md-4">
                       <label for="gender">Gender:</label>
-                      <div>{{ $patient_service->gender }}</div>
+                      <div>{{ strtoupper($patient_service->gender) }}</div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="civil">Civil Status: </label>
-                      <div>{{ $patient_service->civilstatus }}</div>
+                      <div>{{ strtoupper($patient_service->civilstatus) }}</div>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="mobile">Mobile #: </label>
