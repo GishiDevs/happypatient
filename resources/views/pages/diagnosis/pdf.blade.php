@@ -44,7 +44,7 @@
                 <div class="mt-2"><img src="{{ asset('dist/img/docsHeader/hpdc_address.png') }}" /></div>
                 <div class="d-flex justify-content-sm-center align-items-sm-center w-100 mt-3 bg-darkk text-primary text-uppercase"
                     style="height: 50px;">
-                    <h2>{{ $patient_service->service }} Report</h2>
+                    <h2 class="my-0">{{ $patient_service->service }} Report</h2>
                 </div>
             </div>
         </div>
@@ -56,18 +56,18 @@
                     <p class="my-0">File#: {{ $patient_service->file_no }}</p>
                 </div>
                 <div class="d-flex flex-row justify-content-lg-start align-items-lg-center">
-                    <p class="my-0">Name of patient: {{ $patient_service->name }}</p>
+                    <p class="my-0">Name of patient: {{ strtoupper($patient_service->name) }}</p>
                 </div>
                 <div class="d-flex flex-column justify-content-lg-start align-items-lg-start pl-5 ml-5 mt-3">
                     <div class="d-flex justify-content-between" style="width: 400px;">
                         <p class="my-0">Age:
                             <span style="font-size: 18px" id="age"></span>
                         </p>
-                        <p class="my-0">Gender: {{ $patient_service->gender }}</p>
-                        <p class="my-0">C.S.: {{ $patient_service->civilstatus }}</p>
+                        <p class="my-0">Gender: {{ strtoupper($patient_service->gender) }}</p>
+                        <p class="my-0">C.S.: {{ strtoupper($patient_service->civilstatus) }}</p>
                     </div>
                     <p class="my-0">Address: {{ $patient_service->address . ' ' . $patient_service->location}}</p>
-                    <p class="my-0">referring physician: {{ $patient_service->physician }}</p>
+                    <p class="my-0">referring physician: {{ strtoupper($patient_service->physician) }}</p>
                 </div>
             </div>
         </div>
@@ -362,16 +362,44 @@
             </table>
         </div> --}}
 
+        {{-- @if ($patient_service->service === "Laboratory")
+            Hi
+        @else
+            goodbye
+        @endif --}}
 
-        <div class="d-flex flex-column justify-content-center align-items-center">
+        <div class="container d-flex justify-content-sm-around align-items-sm-center">
+            <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
+                <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/geraldine.png') }}" /></div>
+                <div class="text-nowrap">
+                    <h6 class="my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">GERALDINE M. AGPES, MD, FPSP</h6>
+                </div>
+                <div class="text-break text-center" style="width: 250px;color: #7030a0;">
+                    <p class="text-center my-0" style="font-size: 12px;">Pathologist</p>
+                    <p class="text-center my-0" style="font-size: 12px;">License# : 0093398</p>
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+                <div class="text-nowrap">
+                    <h6 class="my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">{{ Auth::user()->name }}</h6>
+                </div>
+                <div class="text-break text-center" style="width: 250px;color: #7030a0;">
+                    <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->description }}</p>
+                    <p class="text-center my-0" style="font-size: 12px;">License# : {{ Auth::user()->license }}</p>
+                </div>
+            </div>
+        </div>
+
+
+        {{-- <div class="d-flex flex-column justify-content-center align-items-center">
             <div class="text-nowrap">
                 <h6 class="my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">{{ Auth::user()->name }}</h6>
             </div>
             <div class="text-break text-center" style="width: 250px;color: #7030a0;">
                 <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->description }}</p>
-                <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->license }}</p>
+                <p class="text-center my-0" style="font-size: 12px;">License# : {{ Auth::user()->license }}</p>
             </div>
-        </div>
+        </div> --}}
 
 
 
