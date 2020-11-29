@@ -50,17 +50,17 @@ class PatientController extends Controller
 
                 if(Auth::user()->can('patient-edit'))
                 {
-                    $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-sm btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>';
+                    $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-xs btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>';
                 }
 
                 if(Auth::user()->can('patient-delete'))
                 {
-                    $delete = '<a href="" class="btn btn-sm btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i></a>';
+                    $delete = '<a href="" class="btn btn-xs btn-danger" data-patientid="'.$patient->id.'" data-action="delete" id="btn-delete-patient"><i class="fa fa-trash"></i></a>';
                 }
 
                 if(Auth::user()->can('patient-history'))
                 {
-                    $view = '<a href="'.route("patient.history",$patient->id).'" class="btn btn-sm btn-primary" data-patientid="'.$patient->id.'" data-action="history" id="btn-history"><i class="fa fa-eye"></i></a>';
+                    $view = '<a href="'.route("patient.history",$patient->id).'" class="btn btn-xs btn-primary" data-patientid="'.$patient->id.'" data-action="history" id="btn-history"><i class="fa fa-eye"></i></a>';
                 }
                 
                 return $edit .' '. $delete .' '. $view;

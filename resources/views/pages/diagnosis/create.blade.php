@@ -37,7 +37,7 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="patient">Patient: </label>
-                      <h5>{{ $patient_service->name }}</h5>
+                      <div>{{ $patient_service->name }}</div>
                     </div>
                     <div class="form-group col-md-4">
                     <label for="docdate">Diagnose Date</label>
@@ -52,59 +52,68 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="age">Age: </label>
-                      <h5 class='age'></h5>
+                      <div class='age'></div>
                       <input type="text" class="form-control" name="age" id="age" hidden>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="gender">Gender:</label>
-                      <h5>{{ $patient_service->gender }}</h5>
+                      <div>{{ $patient_service->gender }}</div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="civil">Civil Status: </label>
-                      <h5>{{ $patient_service->civilstatus }}</h5>
+                      <div>{{ $patient_service->civilstatus }}</div>
                     </div>
                     <div class="form-group col-md-4">
                       <label for="mobile">Mobile #: </label>
-                      <h5>{{ $patient_service->mobile }}</h5>
+                      <div>{{ $patient_service->mobile }}</div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-6">
                       <label for="mobile">Address: </label>
-                      <h5>{{ $patient_service->address . ' ' . $patient_service->location}}</h5>
+                      <div>{{ $patient_service->address . ' ' . $patient_service->location}}</div>
                     </div>
                   </div>
                   <hr>
                   <div class="row">
                     <div class="form-group col-md-3">
                       <label for="bloodpressure">Blood Pressure:</label>
-                      <h5>{{ $patient_service->bloodpressure }}</h5>
+                      <div>{{ $patient_service->bloodpressure }}</div>
                     </div>
                     <div class="form-group col-md-3">
                       <label for="temperature">Temperature (°C):</label>
-                      <h5>{{ $patient_service->temperature }}</h5>
+                      <div>{{ $patient_service->temperature }}</div>
                     </div>
                     <div class="form-group col-md-3">
                       <label for="weight">Weight (Kg):</label>
-                      <h5>{{ $patient_service->weight }}</h5>
+                      <div>{{ $patient_service->weight }}</div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-3">
                       <label for="service">Service: </label>
-                      <h5>{{ $patient_service->service }}</h5>
+                      <div>{{ $patient_service->service }}</div>
                     </div>
                     <div class="form-group col-md-3">
                       <label for="procedure">Procedure: </label>
-                      <h5>{{ $patient_service->procedure }}</h5>
+                      <div>{{ $patient_service->procedure }}</div>
                     </div>
                     <div class="form-group col-md-3">
                       <label for="file#">File #: </label>
-                      <h5>{{ $file_no }} <input type="text" name="file_no" value="{{ $file_no }}" hidden></h5>
+                      <div>{{ $file_no }} <input type="text" name="file_no" value="{{ $file_no }}" hidden></div>
                     </div>
-                  </div>                   
+                  </div>    
+                  <hr>
+                  <div class="row">
+                    <div class="form-group col-md-6">
+                      <label for="notes">Notes:</label>
+                      <div class="input-group">
+                        <div>{{ $patient_service->note }}</div>
+                      </div>
+                    </div>
+                  </div>               
                   <hr> 
                   <div class="row">
                     <div class="form-group col-md-4">

@@ -34,11 +34,11 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="patient-table" class="table table-bordered table-striped">
+                <table id="patient-table" class="table table-striped table-hover">
                 <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
-                      <!-- <th>ID</th> -->
+                      <th>ID</th>
                       <th>Document Date</th>
                       <th>OR Number</th>
                       <th>Patient/Organization</th>
@@ -49,7 +49,7 @@
                   <tfoot>
                     <tr>
                       <th>#</th>
-                      <!-- <th>ID</th> -->
+                      <th>ID</th>
                       <th>Document Date</th>
                       <th>OR Number</th>
                       <th>Patient Name</th>
@@ -87,18 +87,19 @@
 		    "bDestroy": true,
 		    "columns": [
                     { "data": "DT_RowIndex"},
-                    // { "data": "id"},
+                    { "data": "id"},
 		    		        { "data": "docdate"},
                     { "data": "or_number"},
 		    		        { "data": "name"},
                     { "data": "cancelled"},
                     { "data": "action"}
 		    ],
-        "order": [ 1, "asc" ],
+        "order": [ 1, "desc" ],
         "columnDefs": [{
                           "targets": "no-sort",
                           "orderable": false
                         },
+                        { "visible": false, "targets": 1 },
                         // {
                         //   "targets": 6,
                         //   // "data": "status",

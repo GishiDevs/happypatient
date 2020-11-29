@@ -34,7 +34,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="permission-table" class="table table-bordered table-striped">
+                <table id="permission-table" class="table table-striped table-hover">
                   <thead>
                     <tr> 
                       <th width="30px" class="no-sort">#</th>

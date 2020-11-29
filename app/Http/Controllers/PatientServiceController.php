@@ -38,7 +38,7 @@ class PatientServiceController extends Controller
                      ->addColumn('action',function($patientservices){
  
                         // return '<a href="'.route('patientservice.edit',$patientservices->id).'">'.$patientservices->id.'</a>';
-                        return '<a href="'.route('patientservice.edit',$patientservices->id).'" class="btn btn-sm btn-info" data-psid="'.$patientservices->id.'" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
+                        return '<a href="'.route('patientservice.edit',$patientservices->id).'" class="btn btn-xs btn-info" data-psid="'.$patientservices->id.'" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
    
                      })
                     //  ->rawColumns(['action'])
@@ -111,8 +111,7 @@ class PatientServiceController extends Controller
                  ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
                  ->where('service_procedures.to_diagnose', '=', 'N')
-                 ->where('services.service', '=', 'Check-up')
-                 ->get();        
+                 ->where('services.service', '=', 'Check-up');    
 
         //pending patients
         $patientservices =  DB::table('patient_services')
@@ -128,7 +127,7 @@ class PatientServiceController extends Controller
                  ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
                  ->where('service_procedures.to_diagnose', '=', 'Y')
-                 ->union($diagnosed, $check_up)
+                 ->union($check_up)
                  ->groupBy('patient_services.id', 'patient_services.name', 'services.id', 'services.service', 'patient_services.docdate')
                  ->get();
 

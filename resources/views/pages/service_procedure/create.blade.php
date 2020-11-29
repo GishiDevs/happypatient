@@ -143,6 +143,9 @@ $(document).ready(function () {
   //Add Service
   $('#btn-save').click(function(e){
     e.preventDefault();
+
+    $(this).attr('disabled', true);
+
     var data = $('#serviceform').serializeArray();
     data.push({name: "_token", value: "{{ csrf_token() }}"});
 
@@ -174,6 +177,8 @@ $(document).ready(function () {
             $('#service-text-modal').addClass('is-invalid');
             $('#service-text-modal').after('<span id="service-text-modal-error" class="error invalid-feedback">'+ response.service +'</span>');
           }
+
+          $(this).removeAttr('disabled');
 
         },
         error: function(response){

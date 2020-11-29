@@ -35,7 +35,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @can('service-list')
-                <table id="procedure-table" class="table table-bordered table-striped">
+                <table id="procedure-table" class="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
@@ -288,7 +288,9 @@
     });
 
     $('#btn-save').click(function(e){
- 
+      
+      $(this).attr('disabled', true);
+
       var data = $('#serviceprocedureform').serializeArray();
       data.push({name: "_token", value: "{{ csrf_token() }}"});
       data.push({name: "procedure_id", value: procedure_id});
@@ -315,6 +317,8 @@
                       });  
             $('#modal-procedure').modal('toggle');
           }
+
+          $(this).removeAttr('disabled');
 
         },
         error: function(response){

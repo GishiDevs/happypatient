@@ -32,12 +32,12 @@ class RoleController extends Controller
 
                 if(Auth::user()->can('role-edit'))
                 {   
-                    $edit = '<a href="" class="btn btn-sm btn-info" data-roleid="'.$role->id.'" data-action="edit" id="btn-edit-role" data-toggle="modal" data-target="#modal-role"><i class="fa fa-edit"></i> Edit</a>';     
+                    $edit = '<a href="" class="btn btn-xs btn-info" data-roleid="'.$role->id.'" data-action="edit" id="btn-edit-role" data-toggle="modal" data-target="#modal-role"><i class="fa fa-edit"></i> Edit</a>';     
                 }
                 
                 if(Auth::user()->can('role-delete'))
                 {   
-                    $delete = '<a href="" class="btn btn-sm btn-danger" data-roleid="'.$role->id.'" data-action="delete" id="btn-delete-role"><i class="fa fa-trash"></i> Delete</a>';
+                    $delete = '<a href="" class="btn btn-xs btn-danger" data-roleid="'.$role->id.'" data-action="delete" id="btn-delete-role"><i class="fa fa-trash"></i> Delete</a>';
                     
                 }
                 return $edit . ' ' . $delete;

@@ -33,7 +33,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form role="form" id="patientserviceform" action='{{ route("patientservice.cancel",$patientservice->id) }}' method="POST">
+              <form role="form" id="patientserviceform" method="POST">
                 @csrf
                 <div class="card-body">
                   @if($patientservice->cancelled == 'Y')
@@ -166,7 +166,7 @@
                   </div>
                   <hr>
                   <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                       <label for="Notes">Notes</label>
                       <div class="input-group">
                         <textarea class="form-control" name="note" id="note" style="resize: none;">{{ $patientservice->note }}</textarea>
@@ -203,6 +203,8 @@ $(document).ready(function () {
   
     $('#btn-update').click(function(e){ 
 
+      e.preventDefault();
+
       $('#patientserviceform').attr('action', '{{ route("patientservice.update",$patientservice->id) }}');
 
       Swal.fire({
@@ -219,8 +221,10 @@ $(document).ready(function () {
 
     $('#btn-cancel').click(function(e){
 
-      //$('#patientserviceform').attr('action', '{{ route("patientservice.cancel",$patientservice->id) }}');
       e.preventDefault();
+
+      $('#patientserviceform').attr('action', '{{ route("patientservice.cancel",$patientservice->id) }}');
+
       Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -245,9 +249,9 @@ $(document).ready(function () {
 
     $('#patientserviceform').on('change input',function(e){
     
-    $('#btn-update').attr('disabled', false);
-   
-  });
+      $('#btn-update').attr('disabled', false);
+    
+    });
 
   $('#table-services').on('click', 'tbody td #btn-edit', function(e){
     e.preventDefault();

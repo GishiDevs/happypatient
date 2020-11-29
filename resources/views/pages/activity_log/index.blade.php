@@ -24,7 +24,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="table-scrollable col-md-12 table-responsive">
-                    <table id="activity-logs-table" class="table table-bordered table-striped">
+                    <table id="activity-logs-table" class="table table-striped table-hover">
                       <thead>
                         <tr>
                           <th class="no-sort" width="40px">#</th>
@@ -76,7 +76,7 @@
           {'data': 'description'},
           {'data': 'username'},
         ],
-        "order": [ 1, "asc" ],
+        "order": [ 1, "desc" ],
         "columnDefs": [{
                           "targets": "no-sort",
                           "orderable": false

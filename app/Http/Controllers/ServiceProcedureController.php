@@ -37,12 +37,12 @@ class ServiceProcedureController extends Controller
 
                 if(Auth::user()->can('serviceprocedure-edit'))
                 {
-                    $edit = '<a href="" class="btn btn-sm btn-info" data-procedureid="'.$serviceprocedures->id.'" data-action="edit" id="btn-edit-procedure"><i class="fa fa-edit"></i> Edit</a>';
+                    $edit = '<a href="" class="btn btn-xs btn-info" data-procedureid="'.$serviceprocedures->id.'" data-action="edit" id="btn-edit-procedure"><i class="fa fa-edit"></i> Edit</a>';
                 }
 
                 if(Auth::user()->can('serviceprocedure-delete'))
                 {
-                    $delete = '<a href="" class="btn btn-sm btn-danger" data-procedureid="'.$serviceprocedures->id.'" data-action="delete" id="btn-delete-procedure"><i class="fa fa-trash"></i> Delete</a>';
+                    $delete = '<a href="" class="btn btn-xs btn-danger" data-procedureid="'.$serviceprocedures->id.'" data-action="delete" id="btn-delete-procedure"><i class="fa fa-trash"></i> Delete</a>';
                 }
                 
                 return $add . ' ' . $edit . ' ' . $delete;

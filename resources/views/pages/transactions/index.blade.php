@@ -57,7 +57,7 @@
                 </div>
                 <div class="row">
                   <div class="table-scrollable col-md-12 table-responsive">
-                    <table id="transactions-table" class="table table-bordered table-striped">
+                    <table id="transactions-table" class="table table-striped table-hover">
                       <thead>
                         <tr>
                           <th width="40px">#</th>

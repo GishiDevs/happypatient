@@ -133,7 +133,7 @@
                   </div>
                   <hr>
                   <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                       <label for="Notes">Notes</label>
                       <div class="input-group">
                         <textarea class="form-control" name="note" id="note" style="resize: none;"></textarea>

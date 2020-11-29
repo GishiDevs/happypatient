@@ -41,7 +41,7 @@ class DiagnosisController extends Controller
                                            'patient_services.bloodpressure', 'patient_services.name', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus',
                                            'patients.age', 'patients.gender', 'patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.temperature', 'patient_services.weight', 'service_procedures.procedure',
-                                           'template_contents.content')
+                                           'template_contents.content', 'patient_services.note')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
@@ -180,7 +180,7 @@ class DiagnosisController extends Controller
             return abort(404, 'Not Found');
         }
         
-        if($patient_service == 'Check-up')
+        if($patient_service->service == 'Check-up')
         {
             $ps_item->status = 'receipted';
         }
@@ -312,7 +312,7 @@ class DiagnosisController extends Controller
                                             DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', 'services.service', DB::raw('services.id as service_id'), 
                                             'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                             'diagnoses.physician', 'diagnoses.bloodpressure', 'patient_services.temperature', 'patient_services.weight', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', 'service_procedures.procedure',
-                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"))
+                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.note')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')

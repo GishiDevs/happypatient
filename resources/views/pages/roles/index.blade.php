@@ -33,7 +33,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @can('role-list')
-                <table id="role-table" class="table table-bordered table-striped">
+                <table id="role-table" class="table table-striped table-hover">
                   <thead>
                     <tr>
                         <th width="30px" class="no-sort">#</th>

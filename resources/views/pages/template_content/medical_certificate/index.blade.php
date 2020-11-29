@@ -35,7 +35,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 @can('certificate-list')
-                <table id="certificate-table" class="table table-bordered table-striped">
+                <table id="certificate-table" class="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
