@@ -362,12 +362,6 @@
             </table>
         </div> --}}
 
-        {{-- @if ($patient_service->service === "Laboratory")
-            Hi
-        @else
-            goodbye
-        @endif --}}
-
         <div class="container d-flex justify-content-sm-around align-items-sm-center">
             <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
                 <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/geraldine.png') }}" /></div>
@@ -389,19 +383,6 @@
                 </div>
             </div>
         </div>
-
-
-        {{-- <div class="d-flex flex-column justify-content-center align-items-center">
-            <div class="text-nowrap">
-                <h6 class="my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">{{ Auth::user()->name }}</h6>
-            </div>
-            <div class="text-break text-center" style="width: 250px;color: #7030a0;">
-                <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->description }}</p>
-                <p class="text-center my-0" style="font-size: 12px;">License# : {{ Auth::user()->license }}</p>
-            </div>
-        </div> --}}
-
-
 
 
     </div>
