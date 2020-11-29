@@ -34,7 +34,7 @@
             <div class="d-flex flex-column align-items-xl-start mt-3 ml-3">
                 <div><img src="{{ asset('dist/img/docsHeader/hpdc_description.png') }}" /></div>
                 <div class="mt-2"><img src="{{ asset('dist/img/docsHeader/hpdc_address.png') }}" /></div>
-                <div class="d-flex justify-content-xl-center align-items-xl-center w-100 mt-3 bg-light text-blue"
+                <div class="d-flex justify-content-sm-center align-items-sm-center w-100 mt-3 bg-light text-primary text-uppercase"
                     style="height: 50px;">
                     <h2>{{ $patient_service->service }} Report</h2>
                 </div>
