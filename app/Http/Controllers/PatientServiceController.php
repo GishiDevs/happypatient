@@ -127,7 +127,7 @@ class PatientServiceController extends Controller
                  ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
                  ->where('service_procedures.to_diagnose', '=', 'Y')
-                 ->union($check_up)
+                 ->union($diagnosed,$check_up)
                  ->groupBy('patient_services.id', 'patient_services.name', 'services.id', 'services.service', 'patient_services.docdate')
                  ->get();
 
