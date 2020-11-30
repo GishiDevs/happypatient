@@ -61,7 +61,7 @@
                 <div class="d-flex flex-column justify-content-lg-start align-items-lg-start pl-5 ml-5 mt-3">
                     <div class="d-flex justify-content-between" style="width: 400px;">
                         <p class="my-0">Age:
-                            <span style="font-size: 18px" id="age"></span>
+                            <span style="font-size: 17px" id="age"></span>
                         </p>
                         <p class="my-0">Gender: {{ strtoupper($patient_service->gender) }}</p>
                         <p class="my-0">C.S.: {{ strtoupper($patient_service->civilstatus) }}</p>
@@ -76,7 +76,7 @@
             <div class="text-center border-top border-bottom border-dark py-2">
                 <h4 class="text-break text-uppercase text-info my-0">{{ $patient_service->title }}</h4>
             </div>
-            <div style="font-size: 16px;">
+            <div style="font-size: 18px;">
                 {!! $patient_service->content !!}
             </div>
         </div>
@@ -362,7 +362,7 @@
             </table>
         </div> --}}
 
-        <div class="container d-flex justify-content-sm-around align-items-sm-center">
+        <div class="fixed-bottom container d-flex justify-content-sm-around align-items-sm-center">
             <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
                 <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/geraldine.png') }}" /></div>
                 <div class="text-nowrap">
