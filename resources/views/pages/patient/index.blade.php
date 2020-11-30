@@ -47,7 +47,7 @@
                       <th>Civil Status</th>
                       <th>Mobile</th>
                       @canany(['patient-edit','patient-delete'])
-                      <th class="no-sort" width="110px">Actions</th>
+                      <th class="no-sort" width="90px">Actions</th>
                       @endcanany
                     </tr>
                   </thead>

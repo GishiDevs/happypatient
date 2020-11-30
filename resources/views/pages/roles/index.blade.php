@@ -40,7 +40,7 @@
                         <!-- <th>ID</th> -->
                         <th>Role</th>
                         @canany(['role-edit','role-delete'])
-                        <th width="140px" class="no-sort">Actions</th>
+                        <th width="110px" class="no-sort">Actions</th>
                         @endcanany
                     </tr>
                   </thead>
@@ -276,8 +276,6 @@
       {
         updaterole();
       }
-
-      uncheckpermission();
       
     }
   });
@@ -307,6 +305,7 @@
             });
             $('#role-table').DataTable().ajax.reload();
             $('#modal-role').modal('toggle');
+            uncheckpermission();
             
           }
           else
@@ -346,6 +345,7 @@
                               });  
                     $('#modal-role').modal('toggle');
                     $('#btn-save').removeAttr('disabled');
+                    uncheckpermission();
                 }   
                 else
                 {

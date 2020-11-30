@@ -42,7 +42,7 @@
                       <!-- <th>ID</th> -->
                       <th>Template Name</th>
                       @canany(['certificate-edit','certificate-delete'])
-                      <th width="140px" class="no-sort">Actions</th>
+                      <th width="110px" class="no-sort">Actions</th>
                       @endcan
                     </tr>
                   </thead>

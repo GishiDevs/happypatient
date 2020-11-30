@@ -43,7 +43,7 @@
                       <!-- <th>OR Number</th> -->
                       <th>Patient/Organization</th>
                       <th width="50px">Cancelled</th>
-                      <th width="70px" class="no-sort">Action</th>
+                      <th width="50px" class="no-sort">Action</th>
                     </tr>
                   </thead>
                   <tfoot>

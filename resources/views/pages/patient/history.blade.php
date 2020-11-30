@@ -123,7 +123,7 @@
                           <th>Discount (PHP)</th>
                           <th>Total (PHP)</th>
                           <th>Status</th>
-                          <th width="120px"  class="no-sort">Action</th>
+                          <th width="100px"  class="no-sort">Action</th>
                         </thead>
                         <tbody>			
                         @foreach($patientservices as $services)
@@ -147,10 +147,10 @@
                           </td>
                           <td>
                               @if($services->status == 'diagnosed')
-                                <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
+                                <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending')
                                 @can('diagnosis-create')
-                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
+                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
                                 @endcan
                               @endif 
                           </td>

@@ -20,10 +20,14 @@ class CreatePatientServicesTable extends Migration
             $table->string('name')->nullable();
             $table->string('organization')->nullable();
             $table->date('docdate');
+            $table->string('physician')->nullable();
             $table->string('bloodpressure')->nullable();
             $table->decimal('temperature', 8, 1)->nullable();
             $table->decimal('weight', 8, 2)->nullable();
             $table->string('or_number')->nullable();
+            $table->decimal('o2_sat', 8, 2)->nullable();
+            $table->integer('pulserate')->nullable();
+            $table->date('lmp')->nullable();
             $table->text('note', 65,535)->nullable();
             $table->decimal('grand_total', 8, 2);
             $table->string('status');

@@ -173,7 +173,7 @@
     var detailRows = [];
  
     $('#patient-table tbody').on( 'click', 'tr td.details-control', function () {
-
+      
         var tr = $(this).closest('tr');
         var row = dt.row( tr );
         var idx = $.inArray( tr.attr('id'), detailRows );
@@ -189,8 +189,8 @@
             var ps_id = row.data().id;
             var service_id = row.data().service_id;
             var procedures = '';
+            
             @foreach($patient_service_items as $item)
-
 
               var btn_action_text = 'Diagnose';
               var diagnose_date = '{{ $item->diagnose_date }}';
@@ -201,7 +201,14 @@
               }
 
               var badge_class = 'bg-warning';
-              var action = '<a href="{{ route("diagnosis.create", $item->ps_items_id) }}" class="btn btn-xs btn-success" data-ps_items_id="{{ $item->ps_items_id }}" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> '+btn_action_text+'</a>';
+              var action = '';
+
+
+              //if use has permission
+              @can('diagnosis-create')
+                action = '<a href="{{ route("diagnosis.create", $item->ps_items_id) }}" class="btn btn-xs btn-success" data-ps_items_id="{{ $item->ps_items_id }}" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> '+btn_action_text+'</a>';
+              @endcan
+              
 
               if('{{ $item->status }}' == 'diagnosed' || '{{ $item->status }}' == 'receipted')
               { 

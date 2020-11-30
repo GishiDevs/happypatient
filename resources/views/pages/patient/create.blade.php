@@ -270,7 +270,7 @@
                           <th width="150px">Discount (%)</th>
                           <th width="150px">Discount (PHP)</th>
                           <th width="170px">Total Amount (PHP)</th>
-                          <th width="130px">Action</th>
+                          <th width="100px">Action</th>
                         </thead>
                         <tbody>												
                         </tbody>
@@ -280,7 +280,7 @@
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">0.00</span></strong></td>
-                            <td><a href="" class="btn btn-sm btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
+                            <td><a href="" class="btn btn-xs btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
                           </tr>
                         </tfoot>
                       </table>
@@ -677,7 +677,7 @@ $(document).ready(function () {
                                         '</div>'+
                                         '</td>'+
                                         '<td><span class="service-total-amount" id="total-linenum-'+linenum+'">0.00</span></td>'+
-                                        '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Remove</a></td>'+
+                                        '<td><a href="" class="btn btn-xs btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Remove</a></td>'+
                                       '</tr>');
     linenum++;
         

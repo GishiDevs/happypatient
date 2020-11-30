@@ -43,7 +43,7 @@
                       <th>Service</th>
                       <th>Status</th>
                       @canany(['service-edit','service-delete'])
-                      <th width="140px" class="no-sort">Actions</th>
+                      <th width="110px" class="no-sort">Actions</th>
                       @endcan
                     </tr>
                   </thead>

@@ -80,7 +80,7 @@
                     <div class="form-group col-md-4">
                       <label for="pulserate">Pulse Rate</label>
                       <div class="input-group">
-                        <input class="form-control" type="text" name="pulserate" id="pulserate" placeholder="0">
+                        <input class="form-control" type="text" name="pulserate" id="pulserate" placeholder="0" value="{{ $patientservice->pulserate }}">
                       </div>
                     </div>
                     <div class="form-group col-md-4">
@@ -106,26 +106,26 @@
                     <div class="form-group col-md-4">
                       <label for="title">Referring Physician</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician">
+                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician" value="{{ $patientservice->physician }}">
                       </div>
                     </div>
                     
                     <div class="form-group col-md-4">
                       <label for="o2_sat">O2 Sat</label>
                       <div class="input-group">
-                        <input class="form-control" type="text" name="o2_sat" id="o2_sat" placeholder="0.00">
+                        <input class="form-control" type="text" name="o2_sat" id="o2_sat" placeholder="0.00" value="{{ $patientservice->o2_sat }}">
                         <div class="input-group-append">
                           <span class="input-group-text">%</span>
                         </div>
                       </div>
                     </div>
                     <div class="form-group col-md-4">
-                      <label for="pulserate">LMP</label>
+                      <label for="lmp">LMP</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                         </div>
-                        <input type="text" class="form-control" name="lmp" id="lmp" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy">
+                        <input type="text" class="form-control" name="lmp" id="lmp" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" @if($patientservice->lmp)value="{{ date('m/d/Y', strtotime($patientservice->lmp)) }}" @endif>
                       </div>
                     </div>
                   </div>
@@ -144,7 +144,7 @@
                           <th>Status</th>
                           @endif
                           @if($patientservice->cancelled == 'N')
-                          <th width="180px" id="th-actions">Actions</th>
+                          <th width="150px" id="th-actions">Actions</th>
                           @endif
                         </thead>
                         <tbody>			
@@ -170,15 +170,22 @@
                           @if($patientservice->cancelled == 'N')
                           <td id="td-actions">
                               @if($services->docdate == date('Y-m-d'))
-                                @can('amount-edit')
-                                <a href="{{ route('patientservice.update_price') }}" class="btn btn-sm btn-info" id="btn-edit" data-id="{{ $services->id }}"><i class="fa fa-edit"></i> Edit</a> 
-                                @endcan
+                                
                               @endif
+                                @can('amount-edit')
+                                <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}"><i class="fa fa-edit"></i> Edit</a> 
+                                <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" hidden>Update</a> 
+                                <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" hidden>Cancel</a> 
+                                @endcan
                               @if($services->status == 'diagnosed' && $services->type == 'individual')
-                                <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-sm btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
+                                <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending' && $services->type == 'individual' && $services->service)
                                 @can('diagnosis-create')
-                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-sm btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> @if($services->service == 'Check-up') Receipt @else Diagnose @endif</a>
+                                  @if($services->service == 'Check-up')
+                                  <a href="{{ route('diagnosis.create',$services->id) }}" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Receipt</a>
+                                  @elseif($services->to_diagnose == 'Y')
+                                  <a href="{{ route('diagnosis.create',$services->id) }}" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>
+                                  @endif
                                 @endif
                               @endif 
                           </td>
@@ -286,14 +293,17 @@ $(document).ready(function () {
     
     });
 
-  $('#table-services').on('click', 'tbody td #btn-edit', function(e){
+  $('#table-services').on('click', 'tbody td .btn-edit-amount', function(e){
+
     e.preventDefault();
+
     var ps_item_id = $(this).data('id');
-    var price = $('#price-id-'+ps_item_id).val();
-    var discount = $('#discount-id-'+ps_item_id).val();
-    var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
-    var total_amount = $('#span-total_amount-'+ps_item_id).text();
-    var grand_total = $('.service-grand-total').text();
+    
+    $("#btn-update-"+ps_item_id).removeAttr('hidden');
+    $("#btn-cancel-"+ps_item_id).removeAttr('hidden');
+    $("#btn-edit-"+ps_item_id).attr('hidden', true);
+    $("#btn-view-"+ps_item_id).attr('hidden', true);
+    $("#btn-diagnose-"+ps_item_id).attr('hidden', true);
 
     $('#price-id-'+ps_item_id).removeAttr('hidden');
     $('#discount-id-'+ps_item_id).removeAttr('hidden');
@@ -303,8 +313,34 @@ $(document).ready(function () {
     $('#span-discount-'+ps_item_id).attr('hidden', true);
     $('#span-discount_amt-'+ps_item_id).attr('hidden', true);
 
-    if($(this).text() == 'Update')
-    {
+    
+
+    $("#btn-update-"+ps_item_id).click(function(e){
+
+      e.preventDefault();
+      
+      var ps_item_id = $(this).data('id');
+      var price = $('#price-id-'+ps_item_id).val();
+      var discount = $('#discount-id-'+ps_item_id).val();
+      var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
+      var total_amount = $('#span-total_amount-'+ps_item_id).text();
+      var grand_total = $('.service-grand-total').text();
+
+
+      if(!price)
+      {
+        price = 0.00;
+      }
+
+      if(!discount)
+      {
+        discount = 0.00;
+      }
+
+      if(!discount_amt)
+      {
+        discount_amt = 0.00;
+      }
 
       $.ajax({
         url: "{{ route('patientservice.update_price') }}",
@@ -326,23 +362,29 @@ $(document).ready(function () {
             Swal.fire({
               position: 'center',
               icon: 'success',
-              title: 'Record has been updated',
+              title: 'Amount has been updated',
               showConfirmButton: false,
               timer: 2500
             });
             
             
-            $('#price-id-'+ps_item_id).attr('hidden', true);
-            $('#discount-id-'+ps_item_id).attr('hidden', true);
-            $('#discount_amt-id-'+ps_item_id).attr('hidden', true);
+            $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
+            $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
+            $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
             
-            $('#span-price-'+ps_item_id).empty().append(price);
-            $('#span-discount-'+ps_item_id).empty().append(discount);
-            $('#span-discount_amt-'+ps_item_id).empty().append(discount_amt);
+            $('#span-price-'+ps_item_id).empty().append(parseFloat(price).toFixed(2));
+            $('#span-discount-'+ps_item_id).empty().append(parseFloat(discount).toFixed(2));
+            $('#span-discount_amt-'+ps_item_id).empty().append(parseFloat(discount_amt).toFixed(2));
 
             $('#span-price-'+ps_item_id).removeAttr('hidden');
             $('#span-discount-'+ps_item_id).removeAttr('hidden');
             $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
+
+            $("#btn-update-"+ps_item_id).attr('hidden', true);
+            $("#btn-cancel-"+ps_item_id).attr('hidden', true);
+            $("#btn-edit-"+ps_item_id).removeAttr('hidden');
+            $("#btn-view-"+ps_item_id).removeAttr('hidden');
+            $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
 
             getGrandTotal();
 
@@ -354,14 +396,55 @@ $(document).ready(function () {
         }
       });
 
-      $(this).empty().append('<i class="fa fa-edit"></i> Edit');
+    })
 
-    }
-    else
-    {
-      $(this).empty().append('Update');
-    }
+    $("#btn-cancel-"+ps_item_id).click(function(e){
+
+      e.preventDefault();
+
+      var ps_item_id = $(this).data('id');
+
+      reset(ps_item_id);
+
+    });
+
   });
+
+  // Reset row fields to default
+  function reset(ps_item_id)
+  {   
+      var price = $('#span-price-'+ps_item_id).text();
+      var discount = $('#span-discount-'+ps_item_id).text();
+      var discount_amt = $('#span-discount_amt-'+ps_item_id).text();
+
+      $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
+      $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
+      $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
+
+      $("#btn-update-"+ps_item_id).attr('hidden', true);
+      $("#btn-cancel-"+ps_item_id).attr('hidden', true);
+      $("#btn-edit-"+ps_item_id).removeAttr('hidden');
+      $("#btn-view-"+ps_item_id).removeAttr('hidden');
+      $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
+
+      $('#price-id-'+ps_item_id).attr('hidden', true);
+      $('#discount-id-'+ps_item_id).attr('hidden', true);
+      $('#discount_amt-id-'+ps_item_id).attr('hidden', true);
+
+      $('#span-price-'+ps_item_id).removeAttr('hidden');
+      $('#span-discount-'+ps_item_id).removeAttr('hidden');
+      $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
+
+      
+      var discount_amount = parseFloat(price) * (parseFloat(discount).toFixed(2) / 100);
+      var total = parseFloat(price) - parseFloat(discount_amount) - parseFloat(discount_amt);
+
+      //append total amount
+      $('#span-total_amount-'+ps_item_id).empty().append(parseFloat(total).toFixed(2));
+
+      //call function getGrandTotal
+      getGrandTotal();
+  }
 
   //price text change
   $('#table-services').on('keyup', 'tbody td input[name="price"]', function(e){

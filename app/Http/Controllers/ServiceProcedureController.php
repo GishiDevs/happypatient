@@ -31,7 +31,7 @@ class ServiceProcedureController extends Controller
         return DataTables::of($serviceprocedures)
             ->addColumn('action',function($serviceprocedures){
                 
-                $add = '<a href="'.route('content.create', $serviceprocedures->id).'" class="btn btn-sm btn-primary" data-procedureid="'.$serviceprocedures->id.'" data-action="add" id="btn-add-content"><i class="fa fa-edit"></i> Template</a>';
+                $add = '<a href="'.route('content.create', $serviceprocedures->id).'" class="btn btn-xs btn-primary" data-procedureid="'.$serviceprocedures->id.'" data-action="add" id="btn-add-content"><i class="fa fa-edit"></i> Template</a>';
                 $edit = '';
                 $delete = '';
 

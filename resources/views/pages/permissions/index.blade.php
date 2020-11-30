@@ -41,7 +41,7 @@
                       <!-- <th>ID</th> -->
                       <th>Permission</th>
                       @role('Admin')
-                      <th width="140px" class="no-sort">Actions</th>
+                      <th width="110px" class="no-sort">Actions</th>
                       @endrole
                     </tr>
                   </thead>

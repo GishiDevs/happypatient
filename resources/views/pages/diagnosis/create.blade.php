@@ -40,7 +40,7 @@
                       <div>{{ strtoupper($patient_service->name) }}</div>
                     </div>
                     <div class="form-group col-md-4">
-                    <label for="docdate">Diagnose Date</label>
+                      <label for="docdate">Diagnose Date</label>
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
@@ -119,7 +119,7 @@
                     <div class="form-group col-md-4">
                       <label for="title">Referring Physician</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician">
+                        <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician" value="{{ $patient_service->physician }}">
                       </div>
                     </div>
                   </div>
