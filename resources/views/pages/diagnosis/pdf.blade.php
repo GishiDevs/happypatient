@@ -13,6 +13,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
     <style>
+
+        @font-face {
+            font-family: "Candara";
+            src: url('{{ asset('dist/fonts/Candara.woff2') }}') format('woff2'),
+                    url('{{ asset('dist/fonts/Candara.woff') }}') format('woff');
+            font-style: normal;
+            font-weight: normal;
+        }
+
+        .font-candara {
+            font-family: 'Candara';
+        }
+
         * {
             -webkit-print-color-adjust: exact !important;   /* Chrome, Safari */
             color-adjust: exact !important;                 /*Firefox*/
@@ -49,7 +62,7 @@
             </div>
         </div>
 
-        <div class="text-uppercase font-weight-bold font-italic" style="font-size: 17px;">
+        <div class="font-candara text-uppercase font-weight-bold font-italic" style="font-size: 17px;">
             <div class="container">
                 <div class="d-flex d-sm-flex flex-row justify-content-sm-end">
                     <p class="my-0 mr-5">Date: {{ $patient_service->docdate }}</p>
@@ -76,7 +89,7 @@
             <div class="text-center border-top border-bottom border-dark py-2">
                 <h4 class="text-break text-uppercase text-info my-0">{{ $patient_service->title }}</h4>
             </div>
-            <div style="font-size: 18px;">
+            <div class="font-candara" style="font-size: 18px;">
                 {!! $patient_service->content !!}
             </div>
         </div>
