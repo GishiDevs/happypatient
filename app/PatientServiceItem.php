@@ -8,9 +8,22 @@ class PatientServiceItem extends Model
 {
     protected $fillable = ['psid', 'serviceid', 'price', 'discount', 'discount_amt', 'total_amount', 'status'];
 
-    public function PatientServiceItemNames()
+    public function patient_service()
+    {   
+        return $this->belongsTo('App\PatientService', 'psid','id');
+        //                 ( <Model>, <id_of_this_model>, <id_of_specified_Model> )
+    }
+
+    public function services()
     {
-        return $this->belongsTo('App\Service', 'serviceid', 'id');
+        return $this->hasOne('App\Service', 'id', 'serviceid');
+        //                 ( <Model>, <id_of_specified_Model>, <id_of_this_model> )
+    }
+
+    public function service_procedures()
+    {
+        return $this->hasOne('App\ServiceProcedure', 'id', 'procedureid');
+        //                 ( <Model>, <id_of_specified_Model>, <id_of_this_model> )
     }
 
 }

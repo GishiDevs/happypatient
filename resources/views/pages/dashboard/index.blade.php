@@ -28,31 +28,60 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="patient-table" class="table table-striped table-hover">
+                <table id="patient-table" class="table">
                   <thead>
                     <tr>
-                      <th></th>
+                      <!-- <th class="no-sort">#</th> -->
                       <th class="no-sort">ID</th>
                       <th class="no-sort">Patient Name</th>
-                      <th class="no-sort">Document Date</th>
                       <th class="no-sort">Service</th>
-                      <!-- <th class="no-sort">Procedure</th>
+                      <th class="no-sort">Service Procedure</th>
                       <th width="50px" class="no-sort">Status</th>
-                      <th class="no-sort">Diagnose Date</th>
-                      <th width="100px" class="no-sort">Actions</th> -->
+                      <th width="150px" class="no-sort">Document Date</th>
+                      <th width="150px" class="no-sort">Diagnose Date</th>
+                      <th width="100px" class="no-sort">Actions</th>
                     </tr>
                   </thead>
+                  <tbody>
+                    @foreach($patient_services as $index => $item)
+                    <tr>
+                      <!-- <td>{{ $index }}</td> -->
+                      <td>{{ $item->id }}</td>
+                      <td>{{ strtoupper($item->name) }}</td>
+                      <td>{{ $item->service }}</td>
+                      <td>{{ $item->procedure }}</td>
+                      <td>
+                          @if($item->status == 'pending') 
+                          <span class="badge bg-warning">
+                          @else
+                          <span class="badge bg-success">
+                          @endif
+                            {{ $item->status }}
+                          </span>
+                      </td>
+                      <td>{{ $item->docdate }}</td>
+                      <td>{{ $item->diagnose_date }}</td>
+                      <td>
+                          @if($item->status == 'pending')
+                          <a href="{{ route('diagnosis.create', $item->ps_items_id) }}"class="btn btn-xs btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> @if($item->status == 'Check-up') Receipt @else Diagnose @endif</a>
+                          @else
+                          <a href="{{ route('diagnosis.edit', $item->ps_items_id) }}" class="btn btn-xs btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>
+                          @endif 
+                      </td>
+                    </tr>
+                    @endforeach
+                  </tbody>
                   <tfoot>
                     <tr>
-                      <th></th>
+                      <!-- <th>#</th> -->
                       <th>ID</th>
                       <th>Patient Name</th>
-                      <th>Document Date</th>
                       <th>Service</th>
-                      <!-- <th>Procedure</th>
+                      <th>Service Procedure</th>
                       <th>Status</th>
+                      <th>Document Date</th>
                       <th>Diagnose Date</th>
-                      <th>Actions</th> -->
+                      <th>Actions</th>
                     </tr>
                   </tfoot>
                 </table>
@@ -82,29 +111,30 @@
 
 			// $('#tax-table').DataTable();
     var dt = $('#patient-table').DataTable({
+        "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
         "responsive": true,
         "autoWidth": false,
 		    "processing": true,
-		    "serverSide": true,
-		    "ajax": "{{ route('patientservice.servicesperuser') }}",
-		    "bDestroy": true,
-		    "columns": [
-                    {
-                      'className':      'details-control',
-                      'orderable':      false,
-                      'data':           null,
-                      'defaultContent': ''
-                    },
+		    // "serverSide": true,
+		    // "ajax": "{{ route('patientservice.servicesperuser') }}",
+		    // "bDestroy": true,
+		    // "columns": [
+                    // {
+                    //   'className':      'details-control',
+                    //   'orderable':      false,
+                    //   'data':           null,
+                    //   'defaultContent': ''
+                    // },
                     // { "data": "DT_RowIndex"},
-                    { "data": "id"},
-                    { "data": "name"},
-		    		        { "data": "docdate"},
-		    		        { "data": "service"},
+                    // { "data": "id"},
+                    // { "data": "name"},
+		    		        // { "data": "docdate"},
+		    		        // { "data": "service"},
         //             { "data": "procedure"},
         //             { "data": "status"},
         //             { "data": "diagnose_date"},
         //             { "data": "action"}
-		    ],
+		    // ],
         // "order": [[ 6, "desc" ],
         //           [ 2, "asc" ], 
         //           [ 4, "asc" ], 
@@ -112,11 +142,11 @@
         //           [ 5, "asc" ],
         //           [ 3, "asc" ]
         // ],
-        "order": [[ 1, "desc" ]],
-        "columnDefs": [
-          { "visible": false, "targets": 1 },
-          { "targets": "no-sort","orderable": false },
-        ]
+        // "order": [[ 1, "desc" ]],
+        // "columnDefs": [
+        //   { "visible": false, "targets": 1 },
+        //   { "targets": "no-sort","orderable": false },
+        // ]
         // "columnDefs": [
         //   { "visible": false, "targets": 1 },
         //   { "targets": "no-sort","orderable": false },
@@ -164,92 +194,31 @@
         //         }                 
         //       }
         //   }
-
         // ]
+        // "bSort" : false 
+        // order: [
+        //         [0, 'asc'],
+        //         [2, 'asc'],
+        //         [6, 'asc'],
+        //         [3, 'asc'],
+        //         [4, 'asc'],
+        //       ],
+        order: [],
+        rowGroup: {
+            dataSrc: [ 1, 2 ],
+        },
+        columnDefs: [ {
+            targets: [ 0, 1, 2 ],
+            visible: false
+          },
+          {
+            targets: 'no-sort', orderable : false 
+          }
+         ]
         // "bSort" : false 
     });
 
-    // Array to track the ids of the details displayed rows
-    var detailRows = [];
- 
-    $('#patient-table tbody').on( 'click', 'tr td.details-control', function () {
-      
-        var tr = $(this).closest('tr');
-        var row = dt.row( tr );
-        var idx = $.inArray( tr.attr('id'), detailRows );
- 
-        if ( row.child.isShown() ) {
-            tr.removeClass( 'details' );
-            row.child.hide();
-        }
-        else {
-            tr.addClass( 'details' );
-            // row.child( get_services( row.data() ) ).show();
-
-            var ps_id = row.data().id;
-            var service_id = row.data().service_id;
-            var procedures = '';
-            
-            @foreach($patient_service_items as $item)
-
-              var btn_action_text = 'Diagnose';
-              var diagnose_date = '{{ $item->diagnose_date }}';
-
-              if('{{ $item->service }}' == 'Check-up')
-              {
-                btn_action_text = 'Receipt';
-              }
-
-              var badge_class = 'bg-warning';
-              var action = '';
-
-
-              //if use has permission
-              @can('diagnosis-create')
-                action = '<a href="{{ route("diagnosis.create", $item->ps_items_id) }}" class="btn btn-xs btn-success" data-ps_items_id="{{ $item->ps_items_id }}" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> '+btn_action_text+'</a>';
-              @endcan
-              
-
-              if('{{ $item->status }}' == 'diagnosed' || '{{ $item->status }}' == 'receipted')
-              { 
-                badge_class = 'bg-success';
-                action = '<a href="{{ route("diagnosis.edit", $item->ps_items_id) }}" class="btn btn-xs btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
-              }   
-
-              if(!'{{ $item->diagnose_date }}')
-              {
-                diagnose_date = '';
-              }
-
-              if('{{ $item->id }}' == ps_id && '{{ $item->serviceid }}' == service_id)
-              {
-                procedures += '<tr style="background: white;" >'+
-                                '<td>{{ $item->procedure }}</td>'+
-                                '<td><span class="badge '+badge_class+'">{{ $item->status }}</span></td>'+
-                                '<td>'+diagnose_date+'</td>'+
-                                '<td>'+action+'</td>'+
-                              '</tr>';
-              }
-
-            @endforeach
-
-            row.child('<table class="table table-hover">'+
-                        '<thead>'+
-                          '<th>Procedure</th>'+
-                          '<th width="100px">Status</th>'+
-                          '<th width="100px">Date</th>'+
-                          '<th width="100px">Actions</th>'+
-                        '</thead>'+
-                        '<tbody>'+procedures+'</tbody>'+
-                      '</table>'
-                      ).show(); 
-
-            // Add to the 'open' array
-            if ( idx === -1 ) {
-                detailRows.push( tr.attr('id') );
-            }
-        }
-    } );
+    
  
     // On each draw, loop over the `detailRows` array and show any child rows
     // dt.on( 'draw', function () {

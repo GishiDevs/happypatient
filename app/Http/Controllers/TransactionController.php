@@ -8,12 +8,24 @@ use DB;
 use DataTables;
 use Carbon\Carbon; 
 use App\Service;
+use App\ServiceProcedure;
+use App\PatientService;
+use App\PatientServiceItem;
 use App\Events\EventNotification;
 
 class TransactionController extends Controller
 {
     public function index()
     {   
+        // $patient_services = PatientService::with('patient_service_items', 'patient_service_items.services', 'patient_service_items.service_procedures')
+        //                                   ->get();
+        // $patient_service_items = PatientServiceItem::with('patient_service')->get();
+
+        // $services = Service::with('service_procedures')->get();
+
+        // $service_procedures = ServiceProcedure::with('services')->get();
+
+        // return response()->json($patient_services);
 
         // event(new EventNotification('view-transaction', 'transactions'));
 

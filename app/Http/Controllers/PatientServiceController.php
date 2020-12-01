@@ -84,7 +84,8 @@ class PatientServiceController extends Controller
                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                 // ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
-                ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service')
+                ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
+                         DB::raw(" '' as diagnose_date"), 'service_procedures.procedure', 'patient_service_items.status')
                 ->distinct()
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
@@ -93,17 +94,32 @@ class PatientServiceController extends Controller
                 ->where('service_procedures.to_diagnose', '=', 'Y')
                 ->where('patient_service_items.status', '=', 'pending')
                 ->where('patient_services.docdate', '<', Carbon::now()->format('Y-m-d'));
+
+
+        //diagnosed this day
+        $diagnosed_today =  DB::table('patient_services')
+                ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
+                ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
+                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.procedure', 'patient_service_items.status')
+                ->whereIn('services.service', $services)
+                ->where('patient_services.cancelled', '=', 'N')
+                ->where('patient_services.type', '=', 'individual')
+                ->where('diagnoses.docdate', '=', Carbon::now()->format('Y-m-d'));        
         
         //pending patients with check-up services
         $check_up =  DB::table('patient_services')
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
-                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service')
-                 ->distinct()
+                 ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.procedure', 'patient_service_items.status')
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
-                 ->where('patient_service_items.status', '=', 'pending')
+                //  ->where('patient_service_items.status', '=', 'pending')
                  ->where('service_procedures.to_diagnose', '=', 'N')
                  ->where('services.service', '=', 'Check-up')
                  ->whereIn('services.service', $services);    
@@ -113,15 +129,22 @@ class PatientServiceController extends Controller
                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
-                 ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service')
-                 ->distinct()
+                 ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.procedure', 'patient_service_items.status')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
                  ->where('service_procedures.to_diagnose', '=', 'Y')
                  ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
-                 ->union($to_diagnose, $check_up)
-                 ->groupBy('patient_services.id', 'patient_services.name', 'services.id', 'services.service', 'patient_services.docdate')
+                 ->union($to_diagnose)
+                 ->union($check_up)
+                 ->union($diagnosed_today)
+                 ->orderBy('id', 'asc')
+                 ->orderBy('diagnose_date', 'asc')
+                 ->orderBy('service', 'asc')
+                 ->orderBy('procedure', 'asc')
+                //  ->groupBy('patient_services.id', 'patient_services.name', 'services.id', 'services.service', 'patient_services.docdate')
                  ->get();
 
             return DataTables::of($transaction_today)

@@ -8,8 +8,15 @@ class Service extends Model
 {
     protected $fillable = ['service', 'status'];
 
-    public function patientserviceitemnames()
+    public function patient_service_items()
     {
-        return $this->hasMany('App\PatientServiceItem', 'serviceid', 'id');
+        return $this->belongsTo('App\PatientServiceItem', 'id', 'serviceid');
+        //                 ( <Model>, <id_of_this_model>, <id_of_specified_Model> )
+    }
+
+    public function service_procedures()
+    {
+        return $this->hasMany('App\ServiceProcedure', 'serviceid', 'id');
+        //                 ( <Model>, <id_of_specified_Model>, <id_of_this_model> )
     }
 }

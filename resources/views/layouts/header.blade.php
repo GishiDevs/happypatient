@@ -49,6 +49,17 @@
   <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+
+  <!-- DataTables RowGroup -->
+
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-rowgroup/css/rowGroup.bootstrap4.css') }}">
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-rowgroup/css/rowGroup.bootstrap4.min.css') }}">
+
+  <script src="{{ asset('plugins/datatables-rowgroup/js/dataTables.rowGroup.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-rowgroup/js/dataTables.rowGroup.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-rowgroup/js/rowGroup.bootstrap4.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-rowgroup/js/rowGroup.bootstrap4.min.js') }}"></script>
+
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
   
@@ -101,12 +112,17 @@
         line-height: 1.428571429;
         border-radius: 15px;
     }
-    td.details-control {
+    /* td.details-control {
         background: url('{{ asset("img/details_open.png") }}') no-repeat center center;
         cursor: pointer;
     }
     tr.details td.details-control {
         background: url('{{ asset("img/details_close.png") }}') no-repeat center center;
+    } */
+
+    tr.odd td:first-child,
+    tr.even td:first-child {
+        padding-left: 5em;
     }
 
   </style>

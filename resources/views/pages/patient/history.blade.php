@@ -40,73 +40,73 @@
                   <div class="row"> 
                     <div class="form-group col-md-3">
                       <label for="patient">Patient Name:</label>
-                      <h5>{{ $patient->lastname . ',  ' . $patient->firstname . ' ' . $patient->middlename }}</h5>
+                      <div>{{ strtoupper($patient->lastname . ',  ' . $patient->firstname . ' ' . $patient->middlename) }}</div>
                     </div>  
                     <div class="form-group col-md-3">
                       <label for="birthdate">Birthdate:</label>
-                      <h5>{{ $patient->birthdate}}</h5>
+                      <div>{{ $patient->birthdate}}</div>
                     </div>   
                     <!-- <div class="form-group col-md-3">
                       <label for="age">Age:</label>
-                      <h5>{{ $patient->age}}</h5>
+                      <div>{{ $patient->age}}</div>
                     </div>       -->
                     <div class="form-group col-md-3">
                       <label for="gender">Gender:</label>
-                      <h5>{{ $patient->gender }}</h5>
+                      <div>{{ strtoupper($patient->gender) }}</div>
                     </div>  
                     <div class="form-group col-md-3">
                       <label for="civilstatus">Civil Status:</label>
-                      <h5>{{ $patient->civilstatus }}</h5>
+                      <div>{{ strtoupper($patient->civilstatus) }}</div>
                     </div>
                   </div>
                   <!-- <div class="row"> 
                     <div class="form-group col-md-3">
                       <label for="gender">Gender:</label>
-                      <h5>{{ $patient->gender }}</h5>
+                      <div>{{ $patient->gender }}</div>
                     </div>  
                     <div class="form-group col-md-3">
                       <label for="civilstatus">Civil Status:</label>
-                      <h5>{{ $patient->civilstatus }}</h5>
+                      <div>{{ $patient->civilstatus }}</div>
                     </div>   
                     <div class="form-group col-md-3">
                       <label for="weight">Weight (Kg):</label>
-                      <h5>{{ $patient->weight}}</h5>
+                      <div>{{ $patient->weight}}</div>
                     </div>      
                   </div> -->
                   <hr>
                   <div class="row"> 
                     <div class="form-group col-md-3">
                       <label for="landline">Landline:</label>
-                      <h5>{{ $patient->landline }}</h5>
+                      <div>{{ $patient->landline }}</div>
                     </div>  
                     <div class="form-group col-md-3">
                       <label for="mobile">Mobile:</label>
-                      <h5>{{ $patient->mobile }}</h5>
+                      <div>{{ $patient->mobile }}</div>
                     </div>   
                     <div class="form-group col-md-3">
                       <label for="email">Email:</label>
-                      <h5>{{ $patient->email}}</h5>
+                      <div>{{ $patient->email}}</div>
                     </div>      
                   </div>
                   <hr>
                   <div class="row">
                     <div class="form-group col-md-6">
                       <label for="address">Address:</label>
-                      <h5>{{ $patient->address }}</h5>
+                      <div>{{ $patient->address }}</div>
                     </div>  
                   </div>
                   <div class="row"> 
                     <div class="form-group col-md-3">
                       <label for="provice">Province:</label>
-                      <h5>{{ $patient->province }}</h5>
+                      <div>{{ $patient->province }}</div>
                     </div>   
                     <div class="form-group col-md-3">
                       <label for="city">City:</label>
-                      <h5>{{ $patient->city}}</h5>
+                      <div>{{ $patient->city}}</div>
                     </div>    
                     <div class="form-group col-md-3">
                       <label for="barangay">Barangay:</label>
-                      <h5>{{ $patient->barangay}}</h5>
+                      <div>{{ $patient->barangay}}</div>
                     </div>  
                   </div>
                   <hr>
@@ -114,7 +114,7 @@
                     <div class="table-scrollable col-md-12 table-responsive">
                       <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
-                          <th>Official Receipt No.</th>
+                          <!-- <th>Official Receipt No.</th> -->
                           <th>Document Date</th>
                           <th>Services</th>
                           <th>Procedures</th>
@@ -128,7 +128,7 @@
                         <tbody>			
                         @foreach($patientservices as $services)
                         <tr>
-                          <td>{{ $services->or_number }}</td>
+                          <!-- <td>{{ $services->or_number }}</td> -->
                           <td>{{ $services->docdate }}</td>
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->procedure }}</td>
@@ -137,16 +137,18 @@
                           <td>{{ $services->discount_amt }}</td>
                           <td>{{ $services->total_amount }}</td>
                           <td>
-                              @if($services->status == 'diagnosed')
-                                <span class="badge bg-success">{{ $services->status }}</span>
+                              @if($services->status == 'diagnosed' || $services->status == 'receipted')
+                              <span class="badge bg-success">
                               @elseif($services->status == 'pending')
-                                <span class="badge bg-warning">{{ $services->status }}</span>
+                              <span class="badge bg-warning">
                               @elseif($services->status == 'cancelled')
-                                <span class="badge bg-danger">{{ $services->status }}</span>
+                              <span class="badge bg-danger">
                               @endif
+                                {{ $services->status }}
+                              </span>
                           </td>
                           <td>
-                              @if($services->status == 'diagnosed')
+                              @if($services->status == 'diagnosed' || $services->status == 'receipted')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending')
                                 @can('diagnosis-create')

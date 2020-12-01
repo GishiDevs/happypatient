@@ -20,9 +20,10 @@ class PatientService extends Model
                            'cancelled',
                            'canceldate'];
 
-    public function PatientServiceItems()
+    public function patient_service_items()
     {
         return $this->hasMany('App\PatientServiceItem', 'psid', 'id');
+        //                 ( <Model>, <id_of_specified_Model>, <id_of_this_model> )
     }
     
 }
