@@ -48,7 +48,7 @@
                       <!-- <td>{{ $index }}</td> -->
                       <td>{{ $item->id }}</td>
                       <td>{{ strtoupper($item->name) }}</td>
-                      <td>{{ $item->service }}</td>
+                      <td><strong>{{ $item->service }}</strong></td>
                       <td>{{ $item->procedure }}</td>
                       <td>
                           @if($item->status == 'pending') 

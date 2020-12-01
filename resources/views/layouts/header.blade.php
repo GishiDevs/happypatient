@@ -122,7 +122,7 @@
 
     tr.odd td:first-child,
     tr.even td:first-child {
-        padding-left: 5em;
+        padding-left: 4em;
     }
 
   </style>
