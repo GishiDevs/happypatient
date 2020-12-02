@@ -244,44 +244,41 @@ class PatientServiceController extends Controller
         $service_id = $request->get('services');
         $procedure_id = $request->get('procedures');
         $price = $request->get('price');
+        $medicine_amt = $request->get('medicine_amt');
         $discount = $request->get('discount');
         $discount_amt = $request->get('discount_amt');
-        $service_price = 0.00;
-        $service_discount = 0.00;
-        $service_discount_amt = 0.00;
+        
         // return $discount[];
         for($x=0; $x < $ctr; $x++)
         {   
+            $service_price = 0.00;
+            $service_medicine_amt = 0.00;
+            $service_discount = 0.00;
+            $service_discount_amt = 0.00;
 
             if($price[$x])
             {
                 $service_price = $price[$x];
             }
-            else
+
+            if($medicine_amt[$x])
             {
-                $service_price = 0.00;
+                $service_medicine_amt = $medicine_amt[$x];
             }
 
             if($discount[$x])
             {
                 $service_discount = $discount[$x];
             }
-            else
-            {
-                $service_discount = 0.00;
-            }
 
             if($discount_amt[$x])
             {
                 $service_discount_amt = $discount_amt[$x];
             }
-            else
-            {
-                $service_discount_amt = 0.00;
-            }
+
 
             $discounted_price = ($price[$x] * ($service_discount / 100));
-            $total_amount = $price[$x] - $discounted_price - $discount_amt[$x];
+            $total_amount = $price[$x] + $medicine_amt[$x] - $discounted_price - $discount_amt[$x];
 
             $serviceitem = new PatientServiceItem();
             $serviceitem->psid = $patientservice->id;
@@ -289,7 +286,7 @@ class PatientServiceController extends Controller
             $serviceitem->procedureid = $procedure_id[$x];
             $serviceitem->status = "pending";
             $serviceitem->price = $service_price;
-            $serviceitem->medicine_amt = 0.00;
+            $serviceitem->medicine_amt = $service_medicine_amt;
             $serviceitem->discount = $service_discount;
             $serviceitem->discount_amt = $service_discount_amt;
             $serviceitem->total_amount = $total_amount;
@@ -372,7 +369,7 @@ class PatientServiceController extends Controller
                  ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
                           'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type',
-                          'service_procedures.to_diagnose')
+                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt')
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
@@ -452,6 +449,7 @@ class PatientServiceController extends Controller
         }
 
         $patientserviceitem->price = $request->get('price');
+        $patientserviceitem->medicine_amt = $request->get('medicine_amt');
         $patientserviceitem->discount = $request->get('discount');
         $patientserviceitem->discount_amt = $request->get('discount_amt');
         $patientserviceitem->total_amount = $request->get('total_amount');

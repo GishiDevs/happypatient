@@ -120,8 +120,8 @@
         background: url('{{ asset("img/details_close.png") }}') no-repeat center center;
     } */
 
-    tr.odd td:first-child,
-    tr.even td:first-child {
+    #dashboard tr.odd td:first-child,
+    #dashboard tr.even td:first-child {
         padding-left: 4em;
     }
 

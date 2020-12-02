@@ -137,6 +137,7 @@
                           <th>Services</th>
                           <th>Procedures</th>
                           <th>Price (PHP)</th>
+                          <th>Medicine (PHP)</th>
                           <th>Discount (%)</th>
                           <th>Discount (PHP)</th>
                           <th>Total Amount (PHP)</th>
@@ -153,6 +154,7 @@
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->code }}</td>
                           <td><span id="span-price-{{ $services->id }}">{{ $services->price }}</span><input type="text" class="form-control" name="price" id="price-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->price }}" hidden> </td>
+                          <td><span id="span-medicine_amt-{{ $services->id }}">{{ $services->medicine_amt }}</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->medicine_amt }}" hidden> </td>
                           <td><span id="span-discount-{{ $services->id }}">{{ $services->discount }}</span><input type="text" class="form-control" name="discount" id="discount-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount }}" hidden> </td>
                           <td><span id="span-discount_amt-{{ $services->id }}">{{ $services->discount_amt }}</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount_amt }}"  hidden> </td>
                           <td><span class="service-total-amount" id="span-total_amount-{{ $services->id }}">{{ $services->total_amount }}</span></td>
@@ -173,9 +175,9 @@
                                 
                               @endif
                                 @can('amount-edit')
-                                <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}"><i class="fa fa-edit"></i> Edit</a> 
-                                <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" hidden>Update</a> 
-                                <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" hidden>Cancel</a> 
+                                <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-edit"></i> Edit</a> 
+                                <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a> 
+                                <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Cancel</a> 
                                 @endcan
                               @if($services->status == 'diagnosed' && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
@@ -195,7 +197,7 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td class="text-right" colspan="5">
+                            <td class="text-right" colspan="6">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">{{ $patientservice->grand_total}}</span></strong></td>
@@ -298,6 +300,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     var ps_item_id = $(this).data('id');
+    var service = $(this).data('service')
     
     $("#btn-update-"+ps_item_id).removeAttr('hidden');
     $("#btn-cancel-"+ps_item_id).removeAttr('hidden');
@@ -308,6 +311,13 @@ $(document).ready(function () {
     $('#price-id-'+ps_item_id).removeAttr('hidden');
     $('#discount-id-'+ps_item_id).removeAttr('hidden');
     $('#discount_amt-id-'+ps_item_id).removeAttr('hidden');
+
+    if(service == 'Check-up')
+    {
+      $('#medicine_amt-id-'+ps_item_id).removeAttr('hidden');
+      $('#span-medicine_amt-'+ps_item_id).attr('hidden', true);
+    }
+    
 
     $('#span-price-'+ps_item_id).attr('hidden', true);
     $('#span-discount-'+ps_item_id).attr('hidden', true);
@@ -321,6 +331,7 @@ $(document).ready(function () {
       
       var ps_item_id = $(this).data('id');
       var price = $('#price-id-'+ps_item_id).val();
+      var medicine_amt = $('#medicine_amt-id-'+ps_item_id).val();
       var discount = $('#discount-id-'+ps_item_id).val();
       var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
       var total_amount = $('#span-total_amount-'+ps_item_id).text();
@@ -330,6 +341,11 @@ $(document).ready(function () {
       if(!price)
       {
         price = 0.00;
+      }
+
+      if(!medicine_amt)
+      {
+        medicine_amt = 0.00;
       }
 
       if(!discount)
@@ -349,6 +365,7 @@ $(document).ready(function () {
                 _token: "{{ csrf_token() }}", 
                 ps_item_id: ps_item_id, 
                 price: price, 
+                medicine_amt: medicine_amt,
                 discount: discount, 
                 discount_amt: discount_amt,
                 total_amount: total_amount
@@ -369,14 +386,17 @@ $(document).ready(function () {
             
             
             $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
+            $('#medicine_amt-id-'+ps_item_id).val(parseFloat(medicine_amt).toFixed(2)).attr('hidden', true);
             $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
             $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
             
             $('#span-price-'+ps_item_id).empty().append(parseFloat(price).toFixed(2));
+            $('#span-medicine_amt-'+ps_item_id).empty().append(parseFloat(medicine_amt).toFixed(2));
             $('#span-discount-'+ps_item_id).empty().append(parseFloat(discount).toFixed(2));
             $('#span-discount_amt-'+ps_item_id).empty().append(parseFloat(discount_amt).toFixed(2));
 
             $('#span-price-'+ps_item_id).removeAttr('hidden');
+            $('#span-medicine_amt-'+ps_item_id).removeAttr('hidden');
             $('#span-discount-'+ps_item_id).removeAttr('hidden');
             $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
 
@@ -414,10 +434,12 @@ $(document).ready(function () {
   function reset(ps_item_id)
   {   
       var price = $('#span-price-'+ps_item_id).text();
+      var medicine_amt = $('#span-medicine_amt-'+ps_item_id).text();
       var discount = $('#span-discount-'+ps_item_id).text();
       var discount_amt = $('#span-discount_amt-'+ps_item_id).text();
 
       $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
+      $('#medicine_amt-id-'+ps_item_id).val(parseFloat(medicine_amt).toFixed(2)).attr('hidden', true);
       $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
       $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
 
@@ -428,16 +450,18 @@ $(document).ready(function () {
       $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
 
       $('#price-id-'+ps_item_id).attr('hidden', true);
+      $('#medicine_amt-id-'+ps_item_id).attr('hidden', true);
       $('#discount-id-'+ps_item_id).attr('hidden', true);
       $('#discount_amt-id-'+ps_item_id).attr('hidden', true);
 
       $('#span-price-'+ps_item_id).removeAttr('hidden');
+      $('#span-medicine_amt-'+ps_item_id).removeAttr('hidden');
       $('#span-discount-'+ps_item_id).removeAttr('hidden');
       $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
 
       
       var discount_amount = parseFloat(price) * (parseFloat(discount).toFixed(2) / 100);
-      var total = parseFloat(price) - parseFloat(discount_amount) - parseFloat(discount_amt);
+      var total = parseFloat(price) + parseFloat(medicine_amt) - parseFloat(discount_amount) - parseFloat(discount_amt);
 
       //append total amount
       $('#span-total_amount-'+ps_item_id).empty().append(parseFloat(total).toFixed(2));
@@ -451,11 +475,82 @@ $(document).ready(function () {
     
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var ps_item_id = $(this).data('id');
+
+      //call function compute_amounts
+      compute_amounts(ps_item_id);  
+
+      //call function getGrandTotal
+      getGrandTotal();
+          
+  });
+
+  //medicine amount text change
+  $('#table-services').on('keyup', 'tbody td input[name="medicine_amt"]', function(e){
+
+    // alert($(this).closest('td').parent()[0].sectionRowIndex);
+    var ps_item_id = $(this).data('id');
+
+    //call function compute_amounts
+    compute_amounts(ps_item_id);  
+
+    //call function getGrandTotal
+    getGrandTotal();
+        
+  });
+
+  //discount text change
+  $('#table-services').on('keyup', 'tbody td input[name="discount"]', function(e){
+    
+    // alert($(this).closest('td').parent()[0].sectionRowIndex);
+    var ps_item_id = $(this).data('id');
+
+    //call function compute_amounts
+    compute_amounts(ps_item_id);
+
+    //call function getGrandTotal
+    getGrandTotal();
+        
+  });
+
+  //discount amount text change
+  $('#table-services').on('keyup', 'tbody td input[name="discount_amt"]', function(e){
+    
+    // alert($(this).closest('td').parent()[0].sectionRowIndex);
+    var ps_item_id = $(this).data('id');
+
+    //call function compute_amounts
+    compute_amounts(ps_item_id);
+
+    //call function getGrandTotal
+    getGrandTotal();
+        
+  });
+
+  function getGrandTotal()
+  {
+    var sum = 0.00;
+    var price = 0.00;
+    
+    //loop then sum each service total amount
+    $('.service-total-amount').each(function(){
+        price = parseFloat($(this).text()).toFixed(2);  
+        sum = parseFloat(sum)  + parseFloat(price);   
+    });
+
+    //append Grand Total
+    $('.service-grand-total').empty().append(parseFloat(sum).toFixed(2));
+
+  }
+
+  function compute_amounts(ps_item_id)
+  {
       var price = $('#price-id-'+ps_item_id).val();
+      var medicine_amt = $('#medicine_amt-id-'+ps_item_id).val();
       var discount = $('#discount-id-'+ps_item_id).val();
       var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
 
       var price_per_service;
+      var medicine_amt_per_service;
       var discount_per_service;
       var discount_amt_per_service;
 
@@ -467,6 +562,16 @@ $(document).ready(function () {
       else
       {
         price_per_service = 0;
+      }
+
+      //if medicine amount has value
+      if(medicine_amt)
+      {
+        medicine_amt_per_service = parseFloat(medicine_amt).toFixed(2);
+      }
+      else
+      {
+        medicine_amt_per_service = 0;
       }
 
       //if discount % has value
@@ -488,140 +593,13 @@ $(document).ready(function () {
       {
         discount_amt_per_service = 0.00;
       }
+
           
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
-      var total = parseFloat(price_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
+      var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
       //append total amount
       $('#span-total_amount-'+ps_item_id).empty().append(parseFloat(total).toFixed(2));
-
-      //call function getGrandTotal
-      getGrandTotal();
-          
-  });
-
-  //discount text change
-  $('#table-services').on('keyup', 'tbody td input[name="discount"]', function(e){
-    
-    // alert($(this).closest('td').parent()[0].sectionRowIndex);
-    var ps_item_id = $(this).data('id');
-    var price = $('#price-id-'+ps_item_id).val();
-    var discount = $('#discount-id-'+ps_item_id).val();
-    var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
-
-    var price_per_service;
-    var discount_per_service;
-    var discount_amt_per_service;
-
-    //if price has value
-    if(price)
-    {
-      price_per_service = parseFloat(price).toFixed(2);
-    }
-    else
-    {
-      price_per_service = 0;
-    }
-
-    //if discount % has value
-    if(discount)
-    {
-      discount_per_service = parseFloat(discount).toFixed(2) / 100;
-    }
-    else
-    {
-      discount_per_service = 0.00;
-    }
-
-    //if discount amount has value
-    if(discount_amt)
-    {
-      discount_amt_per_service = parseFloat(discount_amt).toFixed(2);
-    }
-    else
-    {
-      discount_amt_per_service = 0.00;
-    }
-        
-    var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
-    var total = parseFloat(price_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
-
-    //append total amount
-    $('#span-total_amount-'+ps_item_id).empty().append(parseFloat(total).toFixed(2));
-
-    //call function getGrandTotal
-    getGrandTotal();
-        
-  });
-
-  //discount amount text change
-  $('#table-services').on('keyup', 'tbody td input[name="discount_amt"]', function(e){
-    
-    // alert($(this).closest('td').parent()[0].sectionRowIndex);
-    var ps_item_id = $(this).data('id');
-    var price = $('#price-id-'+ps_item_id).val();
-    var discount = $('#discount-id-'+ps_item_id).val();
-    var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
-
-    var price_per_service;
-    var discount_per_service;
-    var discount_amt_per_service;
-
-    //if price has value
-    if(price)
-    {
-      price_per_service = parseFloat(price).toFixed(2);
-    }
-    else
-    {
-      price_per_service = 0;
-    }
-
-    //if discount % has value
-    if(discount)
-    {
-      discount_per_service = parseFloat(discount).toFixed(2) / 100;
-    }
-    else
-    {
-      discount_per_service = 0.00;
-    }
-
-    //if discount amount has value
-    if(discount_amt)
-    {
-      discount_amt_per_service = parseFloat(discount_amt).toFixed(2);
-    }
-    else
-    {
-      discount_amt_per_service = 0.00;
-    }
-        
-    var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
-    var total = parseFloat(price_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
-
-    //append total amount
-    $('#span-total_amount-'+ps_item_id).empty().append(parseFloat(total).toFixed(2));
-
-    //call function getGrandTotal
-    getGrandTotal();
-        
-  });
-
-  function getGrandTotal()
-  {
-    var sum = 0.00;
-    var price = 0.00;
-    
-    //loop then sum each service total amount
-    $('.service-total-amount').each(function(){
-        price = parseFloat($(this).text()).toFixed(2);  
-        sum = parseFloat(sum)  + parseFloat(price);   
-    });
-
-    //append Grand Total
-    $('.service-grand-total').empty().append(parseFloat(sum).toFixed(2));
-
   }
 
 
@@ -659,6 +637,11 @@ $(document).ready(function () {
     
     //table elements input masks
     $('[name="price"]').inputmask('decimal', {
+      rightAlign: true,
+      digits:2,
+      allowMinus:false
+    });
+    $('[name="medicine_amt"]').inputmask('decimal', {
       rightAlign: true,
       digits:2,
       allowMinus:false

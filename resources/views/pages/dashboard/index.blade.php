@@ -28,7 +28,6 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <button id="btn-load">Load</button>
                 <table id="dashboard" class="table">
                   <thead>
                     <tr>
@@ -192,7 +191,9 @@
                 else
                 { 
                   @can('diagnosis-edit')
-                  return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-xs btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
+                    return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-xs btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
+                  @else
+                    return '';
                   @endcan
                 }                 
               }
