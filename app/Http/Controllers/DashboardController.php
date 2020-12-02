@@ -109,9 +109,10 @@ class DashboardController extends Controller
                  ->union($check_up)
                  ->union($diagnosed_today)
                  ->orderBy('id', 'asc')
-                 ->orderBy('diagnose_date', 'asc')
                  ->orderBy('service', 'asc')
+                 ->orderBy('diagnose_date', 'asc')
                  ->orderBy('procedure', 'asc')
+                
                 //  ->groupBy('patient_services.id', 'patient_services.name', 'services.id', 'services.service', 'patient_services.docdate')
                  ->get();
 

@@ -28,7 +28,8 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="patient-table" class="table">
+                <button id="btn-load">Load</button>
+                <table id="dashboard" class="table">
                   <thead>
                     <tr>
                       <!-- <th class="no-sort">#</th> -->
@@ -43,33 +44,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($patient_services as $index => $item)
-                    <tr>
-                      <!-- <td>{{ $index }}</td> -->
-                      <td>{{ $item->id }}</td>
-                      <td>{{ strtoupper($item->name) }}</td>
-                      <td><strong>{{ $item->service }}</strong></td>
-                      <td>{{ $item->procedure }}</td>
-                      <td>
-                          @if($item->status == 'pending') 
-                          <span class="badge bg-warning">
-                          @else
-                          <span class="badge bg-success">
-                          @endif
-                            {{ $item->status }}
-                          </span>
-                      </td>
-                      <td>{{ $item->docdate }}</td>
-                      <td>{{ $item->diagnose_date }}</td>
-                      <td>
-                          @if($item->status == 'pending')
-                          <a href="{{ route('diagnosis.create', $item->ps_items_id) }}"class="btn btn-xs btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> @if($item->status == 'Check-up') Receipt @else Diagnose @endif</a>
-                          @else
-                          <a href="{{ route('diagnosis.edit', $item->ps_items_id) }}" class="btn btn-xs btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>
-                          @endif 
-                      </td>
-                    </tr>
-                    @endforeach
+                    
                   </tbody>
                   <tfoot>
                     <tr>
@@ -104,131 +79,129 @@
   
   $(document).ready(function() {   
     
+    
+
+    var patient_line_number = 0;
+    var pending_ctr = 0;
+    var diagnosed_ctr = 0;
+    var total_items = 0;
     // if session has request to download pdf
     @if(Session::has('download_pdf'))
       // $(location).attr('href', "{{ route('diagnosis.print', session()->get('download_pdf'))}}");
     @endif
 
-			// $('#tax-table').DataTable();
-    var dt = $('#patient-table').DataTable({
-        "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
-        "responsive": true,
-        "autoWidth": false,
-		    "processing": true,
-		    // "serverSide": true,
-		    // "ajax": "{{ route('patientservice.servicesperuser') }}",
-		    // "bDestroy": true,
-		    // "columns": [
-                    // {
-                    //   'className':      'details-control',
-                    //   'orderable':      false,
-                    //   'data':           null,
-                    //   'defaultContent': ''
-                    // },
-                    // { "data": "DT_RowIndex"},
-                    // { "data": "id"},
-                    // { "data": "name"},
-		    		        // { "data": "docdate"},
-		    		        // { "data": "service"},
-        //             { "data": "procedure"},
-        //             { "data": "status"},
-        //             { "data": "diagnose_date"},
-        //             { "data": "action"}
-		    // ],
-        // "order": [[ 6, "desc" ],
-        //           [ 2, "asc" ], 
-        //           [ 4, "asc" ], 
-        //           [ 1, "asc" ],
-        //           [ 5, "asc" ],
-        //           [ 3, "asc" ]
-        // ],
-        // "order": [[ 1, "desc" ]],
-        // "columnDefs": [
-        //   { "visible": false, "targets": 1 },
-        //   { "targets": "no-sort","orderable": false },
-        // ]
-        // "columnDefs": [
-        //   { "visible": false, "targets": 1 },
-        //   { "targets": "no-sort","orderable": false },
-        //   {
-        //     "targets": 6,
-        //     "render": function ( data ) {
-        //         if(data == 'diagnosed' || data == 'receipted')
-        //         {
-        //           return '<span class="badge bg-success">'+data+'</span>';
-        //         }
-        //         else if(data == 'pending')
-        //         {
-        //           return '<span class="badge bg-warning">'+data+'</span>';
-        //         }
-        //         else if(data == 'cancelled')
-        //         {
-        //           return '<span class="badge bg-danger">'+data+'</span>';
-        //         }
-                              
-        //       }
-        //   },
-        //   {
-        //     "targets": 8,
-        //     "render": function ( data, type, object ) {
-        //         // console.log(object);
-        //         if(object.status == 'pending')
-        //         { 
-        //           @can('diagnosis-create')
-        //             if(object.service == 'Check-up')
-        //             {
-        //               return '<a href="diagnosis/create/'+object.ps_items_id+'"class="btn btn-sm btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Receipt</a>';
-        //             }
-        //             else
-        //             {
-        //               return data;
-        //             }
-                    
-        //           @else
-        //             return '';
-        //           @endcan
-        //         }
-        //         else
-        //         { 
-        //           return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-sm btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
-        //         }                 
-        //       }
-        //   }
-        // ]
-        // "bSort" : false 
-        // order: [
-        //         [0, 'asc'],
-        //         [2, 'asc'],
-        //         [6, 'asc'],
-        //         [3, 'asc'],
-        //         [4, 'asc'],
-        //       ],
-        order: [],
-        rowGroup: {
-            dataSrc: [ 1, 2 ],
-        },
-        columnDefs: [ {
-            targets: [ 0, 1, 2 ],
-            visible: false
+    dashboard_datatable();
+
+		function dashboard_datatable()
+    {
+        var dt = $('#dashboard').DataTable({
+          "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
+          "responsive": true,
+          "autoWidth": false,
+          "processing": true,
+          "destroy": true,
+          "serverSide": true,
+          "ajax": "{{ route('patientservice.servicesperuser') }}",
+          "bDestroy": true,
+          "columns": [
+                      // {
+                      //   'className':      'details-control',
+                      //   'orderable':      false,
+                      //   'data':           null,
+                      //   'defaultContent': ''
+                      // },
+                      // { "data": "DT_RowIndex"},
+                      { "data": "id"},
+                      { "data": "name"},
+                      { "data": "service"},
+                      { "data": "procedure"},
+                      { "data": "status"},
+                      { "data": "docdate"},
+                      { "data": "diagnose_date"},
+                      { "data": null}
+          ],
+          order: [],
+          rowGroup: {
+              dataSrc: [ 'id' , 'name', 'service' ],
+
+              startRender: function(rows, group, group_index) {
+
+                var group_label = group;
+
+                if(group_index == 0)
+                { 
+                  group_label = rows.data()[0]['name'].toUpperCase() ;
+                }
+
+                $('.dtrg-level-1').remove();
+
+                return group_label.bold();
+
+              },
+
+              endRender: function(rows, group, group_index) {
+                // return null;
+              },
           },
-          {
-            targets: 'no-sort', orderable : false 
+          columnDefs: [ 
+            {
+              targets: [ 0, 1, 2 ],
+              visible: false
+            },
+            {
+              targets: 'no-sort', orderable : false 
+            },
+            {
+              targets: 4,
+              render: function ( data ) {
+                  if(data == 'diagnosed' || data == 'receipted')
+                  {
+                    return '<span class="badge bg-success">'+data+'</span>';
+                  }
+                  else if(data == 'pending')
+                  {
+                    return '<span class="badge bg-warning">'+data+'</span>';
+                  }
+                  else if(data == 'cancelled')
+                  {
+                    return '<span class="badge bg-danger">'+data+'</span>';
+                  }
+                                
+                }
+            },
+            {
+              targets: 7,
+              render: function ( data , type, object ) {
+                // console.log(object);
+                if(object.status == 'pending')
+                { 
+                  @can('diagnosis-create')
+                    if(object.service == 'Check-up')
+                    {
+                      return '<a href="diagnosis/create/'+object.ps_items_id+'"class="btn btn-xs btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Receipt</a>';
+                    }
+                    else
+                    {
+                      return '<a href="diagnosis/create/'+object.ps_items_id+'"class="btn btn-xs btn-success" data-ps_items_id="'+object.ps_items_id+'" data-action="create" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>';
+                    }
+                    
+                  @else
+                    return '';
+                  @endcan
+                }
+                else
+                { 
+                  @can('diagnosis-edit')
+                  return '<a href="diagnosis/edit/'+object.ps_items_id+'" class="btn btn-xs btn-info" data-action="view" id="btn-view"><i class="fa fa-eye"></i> View</a>';
+                  @endcan
+                }                 
+              }
           }
-         ]
-        // "bSort" : false 
-    });
-
+          ]
+          // "bSort" : false 
+      });
+    }
     
- 
-    // On each draw, loop over the `detailRows` array and show any child rows
-    // dt.on( 'draw', function () {
-    //     $.each( detailRows, function ( i, id ) {
-    //         $('#'+id+' td.details-control').trigger( 'click' );
-    //     } );
-    // } );
-
-      // PUSHER
-
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
@@ -248,9 +221,11 @@
       //PUSHER - refresh data when table patient_services or patient_service_items has changes or diagnosis has created
       if(data.action == 'create-patient' || data.action == 'edit-patient' || data.action == 'delete-patient' || data.action == 'create-diagnosis' ||
          data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' || 
-         data.action == 'edit-service-amount' || data.action == 'edit-procedure')
+         data.action == 'edit-service-amount' || data.action == 'edit-procedure' || data.action == 'create-role' || data.action == 'edit-role')
       { 
-        $('#patient-table').DataTable().ajax.reload()
+
+          $('#dashboard').DataTable().ajax.reload();
+
       }
 
     });
