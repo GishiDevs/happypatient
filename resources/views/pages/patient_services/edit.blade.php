@@ -160,7 +160,7 @@
                           <td><span class="service-total-amount" id="span-total_amount-{{ $services->id }}">{{ $services->total_amount }}</span></td>
                           @if($services->type == 'individual')
                           <td>
-                              @if($services->status == 'diagnosed')
+                              @if($services->status == 'diagnosed' || $services->status == 'receipted')
                                 <span class="badge bg-success">{{ $services->status }}</span>
                               @elseif($services->status == 'pending')
                                 <span class="badge bg-warning">{{ $services->status }}</span>
@@ -179,7 +179,7 @@
                                 <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a> 
                                 <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Cancel</a> 
                                 @endcan
-                              @if($services->status == 'diagnosed' && $services->type == 'individual')
+                              @if(($services->status == 'diagnosed' || $services->status == 'receipted') && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending' && $services->type == 'individual' && $services->service)
                                 @can('diagnosis-create')

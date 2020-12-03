@@ -87,7 +87,7 @@ class DashboardController extends Controller
                           DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.procedure', 'patient_service_items.status')
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
-                //  ->where('patient_service_items.status', '=', 'pending')
+                 ->where('patient_service_items.status', '=', 'pending')
                  ->where('service_procedures.to_diagnose', '=', 'N')
                  ->where('services.service', '=', 'Check-up')
                  ->whereIn('services.service', $services);    
