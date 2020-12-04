@@ -50,6 +50,9 @@
   <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
   <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
 
+  <!-- DataTables Date Filter -->
+  <script src="//cdn.datatables.net/plug-ins/1.10.22/filtering/row-based/range_dates.js"></script>
+
   <!-- DataTables RowGroup -->
 
   <link rel="stylesheet" href="{{ asset('plugins/datatables-rowgroup/css/rowGroup.bootstrap4.css') }}">
@@ -122,6 +125,11 @@
 
     #dashboard tr.odd td:first-child,
     #dashboard tr.even td:first-child {
+        padding-left: 4em;
+    }
+
+    #transactions tr.odd td:first-child,
+    #transactions tr.even td:first-child {
         padding-left: 4em;
     }
 

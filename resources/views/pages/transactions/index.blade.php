@@ -39,7 +39,7 @@
                   <div class="form-group col-md-4">
                     <label>Filter Date From:</label>
                     <div class="input-group date" id="filter-date-from" data-target-input="nearest">
-                      <input type="text" id="date-from" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" data-target="#filter-date-from" value="{{ date('m/d/Y') }}" readonly/>
+                      <input type="text" id="date-from" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="{{ date('m/d/Y') }}" data-target="#filter-date-from" readonly/>
                       <div class="input-group-append" data-target="#filter-date-from" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                       </div>
@@ -48,7 +48,7 @@
                   <div class="form-group col-md-4">
                     <label>Filter Date To:</label>
                     <div class="input-group date" id="filter-date-to" data-target-input="nearest">
-                      <input type="text" id="date-to" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" data-target="#filter-date-to" value="{{ date('m/d/Y') }}" readonly/>
+                      <input type="text" id="date-to" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="{{ date('m/d/Y') }}" data-target="#filter-date-to" readonly/>
                         <div class="input-group-append" data-target="#filter-date-to" data-toggle="datetimepicker">
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
@@ -57,16 +57,16 @@
                 </div>
                 <div class="row">
                   <div class="table-scrollable col-md-12 table-responsive">
-                    <table id="transactions-table" class="table table-striped table-hover">
+                    <table id="transactions" class="table table-hover">
                       <thead>
                         <tr>
-                          <th width="40px">#</th>
-                          <th>Document Date</th>
-                          <th>Patient/Organization</th>
-                          <th>Service</th>
-                          <th>Code Name</th>
-                          <th>Procedure</th>
-                          <th>Amount (PHP)</th>
+                          <th class="no-sort">ID</th>
+                          <th class="no-sort">Document Date</th>
+                          <th class="no-sort">Patient/Organization</th>
+                          <th class="no-sort">Service</th>
+                          <th class="no-sort">Name</th>
+                          <th class="no-sort">Procedure</th>
+                          <th class="no-sort">Amount (PHP)</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -110,70 +110,25 @@
 
   $(document).ready(function() {
 
-    // get_transactions();
-    
-    $('.select2').select2();
-    
-    // var table =  $('#transactions-table').DataTable();
-    
-    $('#service').on('change', function () {
+    $('.select2').select2();  
 
-        // table.columns(3).search( this.value ).draw();
-
-        // var column_amounts = table.columns(4).nodes()[0];
-        
-        // console.log(column_amounts);
-
-        // $.each(column_amounts, function(index, value){
-        //   alert(value.textContent);
-        // });
-        get_transactions();
-    });
-
+    get_transactions();
 
     $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
-      get_transactions();
+      var date_from = $('#date-from').val();
+      var date_to = $('#date-to').val();  
+
+      // if date-from or date-to texfield has value
+      if(date_from || date_to)
+      { 
+        get_transactions(); 
+      }
+      
     });
 
-    // $('#date_from, #date_to').keyup(function(e){
-    //   // get_transactions();
-    // });
-
-    
-
-    // $.fn.dataTable.ext.search.push(
-    // function (settings, data, dataIndex) {
-    //     var FilterStart = $('#date_from').val();
-    //     var FilterEnd = $('#date_to').val();
-    //     var DataTableStart = data[1].trim();
-    //     var DataTableEnd = data[1].trim();
-    //     if (FilterStart == '' || FilterEnd == '') {
-    //         return true;
-    //     }
-    //     if (DataTableStart >= FilterStart && DataTableEnd <= FilterEnd)
-    //     {
-    //         return true;
-    //     }
-    //     else {
-    //         return false;
-    //     }
-        
-    // });
-
-    //  $('#transactions-table').DataTable({
-    //     "responsive": true,
-    //     "autoWidth": false,
-		//     "processing": true,
-    //     "searching": false,
-    //     "bPaginate": false,
-    //     "bLengthChange": false,
-    //     "bDestroy": true,
-    //     "order": [],
-    //     "columnDefs": [{
-    //                       "targets": [0, 1, 2, 3, 4,5],
-    //                       "orderable": false
-    //                     },] 
-    // });
+    $('#service').on('change', function () {
+      get_transactions();
+    });
 
     $('#filter-date-from').datetimepicker({
         format: 'L',
@@ -190,60 +145,108 @@
 
     $('[data-mask]').inputmask();
 
-
+    
     function get_transactions()
     { 
 
       var serviceid = $('#service').find(':selected').data('serviceid'); 
       var date_from = $('#date-from').val();
       var date_to = $('#date-to').val();  
+      var grand_total = 0;
 
-      $.ajax({
-          url: "{{ route('gettransactions') }}",
-          method: "POST",
-          data: { _token: "{{ csrf_token() }}", serviceid: serviceid, date_from: date_from, date_to: date_to  },
-          success: function(response){
-            // console.log(response);
+      // if date-from or date-to texfield has no value
+      if(!date_to)
+      { 
+        date_to = "{{ date('m/d/Y') }}"; 
+      }
 
-            if(response.transactions)
-            { 
-              $('#grand_total').empty().append(parseFloat(response.grand_total).toFixed(2));
+      if(!date_from)
+      { 
+        date_from = "{{ date('m/d/Y') }}"; 
+      }
 
-              $('#transactions-table tbody').empty();
-
-              $.each(response.transactions, function(index, value){
-                index++;
-                $('#transactions-table tbody').append(
-                  '<tr>'+
-                    '<td>'+index+'</td>'+
-                    '<td>'+value.docdate+'</td>'+
-                    '<td>'+value.name+'</td>'+
-                    '<td>'+value.service+'</td>'+
-                    '<td>'+value.code+'</td>'+
-                    '<td>'+value.procedure+'</td>'+
-                    '<td>'+value.total_amount+'</td>'+
-                  '</tr>'
-                );
-
-              });
-
-            }
-            else
-            {
-              $('#grand_total').empty().append('{{ number_format($grand_total, 2, '.','') }}');
-            }
-
-
-            if(response.transactions.length == 0)
-            {
-              $('#transactions-table tbody').append('<tr><td class="dataTables_empty text-center" colspan="7">No data available in table</td></tr>');
-            }
-
+      var dt = $('#transactions').DataTable({
+          "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
+          "responsive": true,
+          "autoWidth": false,
+          "processing": true,
+          "destroy": true,
+          "serverSide": true,
+          "ajax": {
+            url: "{{ route('gettransactions') }}",
+            type: "POST",
+            data: { _token: "{{ csrf_token() }}", serviceid: serviceid, date_from: date_from, date_to: date_to  },
           },
-          error: function(response){
-            console.log(response);
-          }
+          "bDestroy": true,
+          "columns": [
+                      { "data": "id"},
+                      { "data": "docdate"},
+                      { "data": "name"},
+                      { "data": "service"},
+                      { "data": "code"},
+                      { "data": "procedure"},
+                      { "data": "total_amount"},
+                      
+          ],
+          order: [],
+          rowGroup: {
+              dataSrc: [ 'id' , 'name', 'service' ],
+
+              startRender: function(rows, group, group_index) {
+
+                var group_label = group;
+
+                if(group_index == 0)
+                { 
+                  group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
+                }
+
+                $('.dtrg-level-1').remove();
+
+                return group_label.bold();
+
+              },
+
+              endRender: function(rows, group, group_index) {
+                // return null;
+              },
+          },
+          columnDefs: [ 
+            {
+              targets: [ 0, 1, 2, 3 ],
+              visible: false
+            },
+            {
+              targets: 'no-sort', orderable : false 
+            },
+          ],
+          footerCallback: function ( row, data, start, end, display ) {
+
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+ 
+            // Total over this page
+            pageTotal = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 6 ).footer() ).html(pageTotal.toFixed(2));
+        }
+
       });
+
     }
 
     // PUSHER

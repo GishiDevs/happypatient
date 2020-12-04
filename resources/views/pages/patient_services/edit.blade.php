@@ -172,13 +172,12 @@
                           @if($patientservice->cancelled == 'N')
                           <td id="td-actions">
                               @if($services->docdate == date('Y-m-d'))
-                                
-                              @endif
                                 @can('amount-edit')
                                 <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-edit"></i> Edit</a> 
                                 <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a> 
                                 <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Cancel</a> 
                                 @endcan
+                              @endif
                               @if(($services->status == 'diagnosed' || $services->status == 'receipted') && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending' && $services->type == 'individual' && $services->service)

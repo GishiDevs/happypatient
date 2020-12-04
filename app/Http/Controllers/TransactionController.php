@@ -97,7 +97,9 @@ class TransactionController extends Controller
             $grand_total = $grand_total + $transaction->total_amount;
         }
         
-        return response()->json(['transactions' => $transactions, 'grand_total' => $grand_total], 200);
+        return DataTables::of($transactions)
+                        ->addIndexColumn()
+                        ->make();
     }
 
 

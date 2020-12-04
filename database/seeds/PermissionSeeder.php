@@ -57,6 +57,7 @@ class PermissionSeeder extends Seeder
             'certificate-edit',
             'certificate-delete',
             'amount-edit',
+            'patientservices-item-remove',
             'activity-log',
          ];
  

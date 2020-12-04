@@ -197,7 +197,7 @@ class PatientServiceController extends Controller
 
         $patient = Patient::find($request->get('patient'));
 
-        $name;
+        $name = '';
         //if record is empty then display error page
         if($request->get('type') == 'individual')
         {   
