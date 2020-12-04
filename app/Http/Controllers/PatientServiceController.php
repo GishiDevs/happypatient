@@ -313,7 +313,7 @@ class PatientServiceController extends Controller
     public function edit($psid)
     {   
 
-        $services;
+        $services = [];
 
         if(Auth::user()->can('patientservices-list-ultrasound'))
         {
@@ -374,8 +374,11 @@ class PatientServiceController extends Controller
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
                  ->get();
+
+        $services_all = Service::all();
+        $procedures_all = ServiceProcedure::all();         
         
-        return view('pages.patient_services.edit', compact('patientservice', 'patientserviceitems'));
+        return view('pages.patient_services.edit', compact('patientservice', 'patientserviceitems', 'services_all', 'procedures_all'));
     }   
 
     public function update(Request $request, $psid)
@@ -448,6 +451,7 @@ class PatientServiceController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
+  
         $patientserviceitem->price = $request->get('price');
         $patientserviceitem->medicine_amt = $request->get('medicine_amt');
         $patientserviceitem->discount = $request->get('discount');
@@ -521,6 +525,103 @@ class PatientServiceController extends Controller
 
         return redirect('patientservice/index');
 
+    }
+
+    public function add_item(Request $request, $psid)
+    {   
+
+        $rules = [
+            'new-service.required' => 'Please select service',   
+            'new-procedure.required' => 'Please select procedure',
+            'new-price.required' => 'Please enter price',
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'new-service' => 'required',
+            'new-procedure' => 'required',
+            'new-price' => 'required|numeric|between:0, 999999999999.999999999999',
+        ], $rules);
+
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 200);
+        }
+
+        
+        $price = 0.00;
+        $medicine_amt = 0.00;
+        $discount = 0.00;
+        $discount_amt = 0.00;
+
+        if($request->get('new-price'))
+        {
+            $price = $request->get('new-price');
+        }
+
+        if($request->get('new-medicine_amt'))
+        {
+            $medicine_amt = $request->get('new-medicine_amt');
+        }
+
+        if($request->get('new-discount'))
+        {
+            $discount = $request->get('new-discount');
+        }
+
+        if($request->get('new-discount_amt'))
+        {
+            $discount_amt = $request->get('new-discount_amt');
+        }
+
+        $patientserviceitem = new PatientServiceItem();
+        $patientserviceitem->psid = $psid;
+        $patientserviceitem->serviceid = $request->get('new-service');
+        $patientserviceitem->procedureid = $request->get('new-procedure');
+        $patientserviceitem->price = $price;
+        $patientserviceitem->medicine_amt = $medicine_amt;
+        $patientserviceitem->discount = $discount;
+        $patientserviceitem->discount_amt = $discount_amt;
+        $patientserviceitem->total_amount = $request->get('total_amount');
+        $patientserviceitem->status = 'pending';
+        $patientserviceitem->save();
+
+        $service_amounts = PatientServiceItem::where('psid', $psid)->get();
+        $grand_total = 0;
+
+        foreach($service_amounts as $service_amount)
+        {
+            $grand_total = $grand_total + $service_amount->total_amount;
+        }
+
+        $patientservice = PatientService::find($psid);
+
+        //if record is empty then display error page
+        if(empty($patientservice->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        $patientservice->grand_total = $grand_total;
+
+        $patientservice->save();
+
+        //PUSHER - send data/message if service procedure price is updated
+        event(new EventNotification('add-service-item', 'patient_service_items'));
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $patientserviceitem->id;
+        $activity_log->table_name = 'patient_service_items';
+        $activity_log->description = 'Add Service Item';
+        $activity_log->action = 'create';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
+        $service_item = PatientServiceItem::with('services', 'service_procedures')
+                                        ->where('id', $patientserviceitem->id)
+                                        ->get();
+
+        return response()->json(['success' => 'Record has been updated', 'service_item' => $service_item], 200);
     }
 
     public function destroy(PatientService $patientService)

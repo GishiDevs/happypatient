@@ -192,6 +192,10 @@ Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_ser
         'uses' => 'PatientServiceController@cancel',
         'as' => 'patientservice.cancel',
     ]);
+    Route::post('/add_item/{id}', [
+        'uses' => 'PatientServiceController@add_item',
+        'as' => 'patientservice.add_item',
+    ]);
     Route::get('/services-list-per-user', [
         'uses' => 'PatientServiceController@servicesperuser',
         'as' => 'patientservice.servicesperuser',

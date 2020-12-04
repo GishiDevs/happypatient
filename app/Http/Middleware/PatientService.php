@@ -29,7 +29,7 @@ class PatientService
             }
         }
 
-        if($request->is('patientservice/create') || $request->is('patientservice/store'))
+        if($request->is('patientservice/create') || $request->is('patientservice/store') || $request->is('patientservice/add_item/*'))
         {
             if(Auth::user()->can('patientservices-create'))
             {
@@ -74,6 +74,19 @@ class PatientService
         {   
 
             if(Auth::user()->can('patientservices-list-ultrasound') || Auth::user()->can('patientservices-list-ecg') || Auth::user()->can('patientservices-list-checkup') || Auth::user()->can('patientservices-list-laboratory') || Auth::user()->can('patientservices-list-physicaltherapy') || Auth::user()->can('patientservices-list-xray'))
+            {
+                return $next($request);
+            }
+            else
+            {
+                // return response()->json("You don't have permission!", 200);
+                return abort(401, 'Unauthorized');
+            }
+        }
+
+        if($request->is('patientservice/update_price'))
+        {
+            if(Auth::user()->can('amount-edit'))
             {
                 return $next($request);
             }
