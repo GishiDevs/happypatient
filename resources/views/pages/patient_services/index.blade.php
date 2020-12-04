@@ -142,7 +142,7 @@
       console.log(data.action);
       
       //PUSHER - refresh data when table patient_services has changes
-      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services')
+      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'add-service-item')
       {
         $('#patient-table').DataTable().ajax.reload()
       }
