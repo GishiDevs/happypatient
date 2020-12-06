@@ -223,7 +223,7 @@
       if(data.action == 'create-patient' || data.action == 'edit-patient' || data.action == 'delete-patient' || data.action == 'create-diagnosis' ||
          data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' || 
          data.action == 'edit-service-amount' || data.action == 'edit-procedure' || data.action == 'create-role' || data.action == 'edit-role' ||
-         data.action == 'add-service-item')
+         data.action == 'add-service-item' || data.action == 'remove-service-item')
       { 
 
           $('#dashboard').DataTable().ajax.reload();

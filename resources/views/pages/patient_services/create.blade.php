@@ -227,6 +227,29 @@ $(document).ready(function () {
   $('#patient').on('change', function(e){
     $("[aria-labelledby='select2-patient-container']").removeAttr('style');
     $('#patient-error').remove();
+
+    $.ajax({
+      url: "{{ route('check_patient_transaction') }}",
+      method: "POST",
+      data: { _token: "{{ csrf_token() }}", patient_id: $(this).val() },
+      success: function(response){
+        console.log(response);
+        
+        if(response.patient_service.length > 0)
+        {
+          Swal.fire({
+            title: 'Warning!',
+            text: "This Patient has an exisiting transaction!",
+            icon: 'warning',
+          });
+        }
+
+      },
+      error: function(response){
+        console.log(response);
+      }
+    });
+
   });
 
   // //Call serviceischecked function when service is checked

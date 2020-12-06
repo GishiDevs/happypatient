@@ -637,6 +637,38 @@ class PatientServiceController extends Controller
         $service_item = PatientServiceItem::find($ps_items_id);
         $service_item->delete();
 
+        $service_amounts = PatientServiceItem::where('psid', $service_item->psid)->get();
+        $grand_total = 0;
+
+        foreach($service_amounts as $service_amount)
+        {
+            $grand_total = $grand_total + $service_amount->total_amount;
+        }
+
+        $patientservice = PatientService::find($service_item->psid);
+
+        //if record is empty then display error page
+        if(empty($patientservice->id))
+        {
+            return abort(404, 'Not Found');
+        }
+
+        $patientservice->grand_total = $grand_total;
+
+        $patientservice->save();
+
+        //PUSHER - send data/message if service procedure price is updated
+        event(new EventNotification('remove-service-item', 'patient_service_items'));
+
+        //Activity Log
+        $activity_log = new ActivityLog();
+        $activity_log->object_id = $service_item->id;
+        $activity_log->table_name = 'patient_service_items';
+        $activity_log->description = 'Remove Service Item';
+        $activity_log->action = 'remove';
+        $activity_log->userid = auth()->user()->id;
+        $activity_log->save();
+
         return response()->json(['success' => 'Item has been removed'], 200);
 
     }

@@ -11,11 +11,15 @@ use DB;
 use Auth;
 use App\Events\EventNotification;
 use App\ActivityLog;
+use App\User;
+
 
 class RoleController extends Controller
 {
     public function index()
     {   
+        // $user_permissions =  Auth::user()->with('roles', 'roles.permissions')->get();
+        // return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no', 'user_permissions'));
         $roles = Role::all();
         $permissions = Permission::all();
         return view('pages.roles.index', compact('permissions'));

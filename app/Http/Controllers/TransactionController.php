@@ -102,5 +102,14 @@ class TransactionController extends Controller
                         ->make();
     }
 
+    public function check_patient_transaction(Request $request)
+    {
+        
+        $patient_service = PatientService::where('patientid', '=', $request->get('patient_id'))
+                                         ->where('docdate' ,'=', Carbon::now()->format('Y-m-d'))->get();   
+
+        return response()->json(['patient_service' => $patient_service], 200);
+    }
+
 
 }

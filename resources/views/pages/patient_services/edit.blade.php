@@ -378,302 +378,321 @@ $(document).ready(function () {
     
     });
 
-  $('#table-services').on('click', 'tbody td .btn-edit-amount', function(e){
-
-    e.preventDefault();
-
-    var ps_item_id = $(this).data('id');
-    var service = $(this).data('service')
-    
-    $("#btn-update-"+ps_item_id).removeAttr('hidden');
-    $("#btn-cancel-"+ps_item_id).removeAttr('hidden');
-    $("#btn-edit-"+ps_item_id).attr('hidden', true);
-    $("#btn-remove-item-"+ps_item_id).attr('hidden', true);
-    $("#btn-view-"+ps_item_id).attr('hidden', true);
-    $("#btn-diagnose-"+ps_item_id).attr('hidden', true);
-
-    $('#price-id-'+ps_item_id).removeAttr('hidden');
-    $('#discount-id-'+ps_item_id).removeAttr('hidden');
-    $('#discount_amt-id-'+ps_item_id).removeAttr('hidden');
-
-    if(service == 'Check-up')
-    {
-      $('#medicine_amt-id-'+ps_item_id).removeAttr('hidden');
-      $('#span-medicine_amt-'+ps_item_id).attr('hidden', true);
-    }
-    
-
-    $('#span-price-'+ps_item_id).attr('hidden', true);
-    $('#span-discount-'+ps_item_id).attr('hidden', true);
-    $('#span-discount_amt-'+ps_item_id).attr('hidden', true);
-
-    
-
-    $("#btn-update-"+ps_item_id).click(function(e){
-
-      e.preventDefault();
-      
-      var ps_item_id = $(this).data('id');
-      var price = $('#price-id-'+ps_item_id).val();
-      var medicine_amt = $('#medicine_amt-id-'+ps_item_id).val();
-      var discount = $('#discount-id-'+ps_item_id).val();
-      var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
-      var total_amount = $('#span-total_amount-'+ps_item_id).text();
-      var grand_total = $('.service-grand-total').text();
-
-
-      if(!price)
-      {
-        price = 0.00;
-      }
-
-      if(!medicine_amt)
-      {
-        medicine_amt = 0.00;
-      }
-
-      if(!discount)
-      {
-        discount = 0.00;
-      }
-
-      if(!discount_amt)
-      {
-        discount_amt = 0.00;
-      }
-
-      $.ajax({
-        url: "{{ route('patientservice.update_price') }}",
-        method: "POST",
-        data: {
-                _token: "{{ csrf_token() }}", 
-                ps_item_id: ps_item_id, 
-                price: price, 
-                medicine_amt: medicine_amt,
-                discount: discount, 
-                discount_amt: discount_amt,
-                total_amount: total_amount
-               },
-        success: function(response){
-          console.log(response);
-          
-          if(response.success)
-          {
-
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Amount has been updated',
-              showConfirmButton: false,
-              timer: 2500
-            });
-            
-            
-            $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
-            $('#medicine_amt-id-'+ps_item_id).val(parseFloat(medicine_amt).toFixed(2)).attr('hidden', true);
-            $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
-            $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
-            
-            $('#span-price-'+ps_item_id).empty().append(parseFloat(price).toFixed(2));
-            $('#span-medicine_amt-'+ps_item_id).empty().append(parseFloat(medicine_amt).toFixed(2));
-            $('#span-discount-'+ps_item_id).empty().append(parseFloat(discount).toFixed(2));
-            $('#span-discount_amt-'+ps_item_id).empty().append(parseFloat(discount_amt).toFixed(2));
-
-            $('#span-price-'+ps_item_id).removeAttr('hidden');
-            $('#span-medicine_amt-'+ps_item_id).removeAttr('hidden');
-            $('#span-discount-'+ps_item_id).removeAttr('hidden');
-            $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
-
-            $("#btn-update-"+ps_item_id).attr('hidden', true);
-            $("#btn-cancel-"+ps_item_id).attr('hidden', true);
-            $("#btn-edit-"+ps_item_id).removeAttr('hidden');
-            $("#btn-remove-item-"+ps_item_id).removeAttr('hidden');
-            $("#btn-view-"+ps_item_id).removeAttr('hidden');
-            $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
-
-            getGrandTotal();
-
-          }
-
-        },
-        error: function(response){
-          console.log(response);
-        }
-      });
-
-    });
-    
-    $("#btn-cancel-"+ps_item_id).click(function(e){
-
-      e.preventDefault();
-
-      var ps_item_id = $(this).data('id');
-
-      reset(ps_item_id);
-
-    });
-
-  });
-
-  $('#table-services').on('click', 'tbody td .btn-remove-item', function(e){
-
-      e.preventDefault();
-
-      var ps_items_id = $(this).data('id');
-
-      console.log(this);
-
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Remove!'
-      }).then((result) => {
-        if (result.value) {
-          
-          $.ajax({
-            url: "{{ route('patientservice.remove_item') }}",
-            method: "POST",
-            data: { _token: "{{ csrf_token() }}", ps_items_id: ps_items_id },
-            success: function(response){
-              console.log(response);
-
-              if(response.success)
-              { 
-                Swal.fire(
-                  'Removed!',
-                  'Item has been removed.',
-                  'success'
-                );
-                $('#row-id-'+ps_items_id).remove();
-                getGrandTotal();
-              }
-
-            },
-            error: function(response){
-              console.log(response);
-            }
-          });
-
-        }
-      });
-
-      
-    });
-
     $('#new-service-form').validate({
-    rules: {
-      "new-service": {
-        required: true,
+      rules: {
+        "new-service": {
+          required: true,
+        },
+        "new-procedure": {
+          required: true,
+        },
+        "new-price": {
+          number: true,
+          required: true,
+        },
       },
-      "new-procedure": {
-        required: true,
+      messages: {
+        "new-service": {
+          required: "Please select service",
+        },
+        "new-procedure": {
+          required: "Please select procedure",
+        },
+        "new-price": {
+          required: "Please enter a price",
+        },      
+        
       },
-      "new-price": {
-        number: true,
-        required: true,
+      errorElement: 'span',
+      errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+        if ($(element).hasClass('select2'))
+        { 
+          $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+        }
       },
-    },
-    messages: {
-      "new-service": {
-        required: "Please select service",
+      highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
       },
-      "new-procedure": {
-        required: "Please select procedure",
+      unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
       },
-      "new-price": {
-        required: "Please enter a price",
-      },      
-      
-    },
-    errorElement: 'span',
-    errorPlacement: function (error, element) {
-      error.addClass('invalid-feedback');
-      element.closest('.form-group').append(error);
-      if ($(element).hasClass('select2'))
-      { 
-        $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
-      }
-    },
-    highlight: function (element, errorClass, validClass) {
-      $(element).addClass('is-invalid');
-    },
-    unhighlight: function (element, errorClass, validClass) {
-      $(element).removeClass('is-invalid');
-    },
-    submitHandler: function(e){
+      submitHandler: function(e){
 
-      $(this).attr('disabled', true);
+        $(this).attr('disabled', true);
 
-      var data = $('#new-service-form').serializeArray();
-      data.push({ name: '_token', value: '{{ csrf_token() }}'});
-      data.push({ name: 'total_amount', value: $('#new-total_amount').text() });
-      
-      $.ajax({
-        url: "{{ route('patientservice.add_item', $patientservice->id) }}",
-        method: "POST",
-        data: data,
-        success: function(response){
-          console.log(response);
+        var data = $('#new-service-form').serializeArray();
+        data.push({ name: '_token', value: '{{ csrf_token() }}'});
+        data.push({ name: 'total_amount', value: $('#new-total_amount').text() });
+        
+        $.ajax({
+          url: "{{ route('patientservice.add_item', $patientservice->id) }}",
+          method: "POST",
+          data: data,
+          success: function(response){
+            console.log(response);
 
-          if(response.success)
-          { 
-            console.log(response);  
-            reset_modal();
+            if(response.success)
+            { 
+              console.log(response);  
+              reset_modal();
 
-            $('#modal-service').modal('toggle');
+              $('#modal-service').modal('toggle');
 
-            Swal.fire({
-                  position: 'center',
-                  icon: 'success',
-                  title: 'Record has successfully added',
-                  showConfirmButton: false,
-                  timer: 2500
-              });
+              Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Record has successfully added',
+                    showConfirmButton: false,
+                    timer: 2500
+                });
 
-            $('#table-services tbody').append(
-                          '<tr>'+
-                            '<td>'+response.service_item.service+'</td>'+
-                            '<td>'+response.service_item.code+'</td>'+
-                            '<td><span id="span-price-'+response.service_item.id+'">'+response.service_item.price+'</span><input type="text" class="form-control" name="price" id="price-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.price+'" hidden> </td>'+
-                            '<td><span id="span-medicine_amt-'+response.service_item.id+'">'+response.service_item.medicine_amt+'</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.medicine_amt+'" hidden> </td>'+
-                            '<td><span id="span-discount-'+response.service_item.id+'">'+response.service_item.discount+'</span><input type="text" class="form-control" name="discount" id="discount-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.discount+'" hidden> </td>'+
-                            '<td><span id="span-discount_amt-'+response.service_item.id+'">'+response.service_item.discount_amt+'</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.id+'"  hidden> </td>'+
-                            '<td><span class="service-total-amount" id="span-total_amount-'+response.service_item.id+'">'+response.service_item.total_amount+'</span></td>'+
-                            '<td>'+ (response.service_item.to_diagnose == "Y" ? '<span class="badge bg-warning">pending</span>' : '') +'</td>'+
-                            '<td id="td-actions">'+
-                              '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="{{ $services->id }}" data-service="{{ $services->service }}" style=" margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+ 
-                              '<a href="" class="btn btn-xs btn-primary" id="btn-update-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Update</a>'+
-                              '<a href="" class="btn btn-xs btn-secondary" id="btn-cancel-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Cancel</a>'+
-                              '<a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style="><i class="fa fa-trash"></i> Remove</a> '+
-                                @can('diagnosis-create')
-                                  (response.service_item.service == 'Check-up' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Receipt</a>': '') +
-                                  (response.service_item.service != 'Check-up' && response.service_item.to_diagnose == 'Y' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>': '') +
-                                @endcan
-                            '</td>'+
-                          '</tr>');  
-            // location.reload();
+              $('#table-services tbody').append(
+                            '<tr id="row-id-'+response.service_item.id+'">'+
+                              '<td>'+response.service_item.service+'</td>'+
+                              '<td>'+response.service_item.code+'</td>'+
+                              '<td><span id="span-price-'+response.service_item.id+'">'+response.service_item.price+'</span><input type="text" class="form-control" name="price" id="price-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.price+'" hidden> </td>'+
+                              '<td><span id="span-medicine_amt-'+response.service_item.id+'">'+response.service_item.medicine_amt+'</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.medicine_amt+'" hidden> </td>'+
+                              '<td><span id="span-discount-'+response.service_item.id+'">'+response.service_item.discount+'</span><input type="text" class="form-control" name="discount" id="discount-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.discount+'" hidden> </td>'+
+                              '<td><span id="span-discount_amt-'+response.service_item.id+'">'+response.service_item.discount_amt+'</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.discount_amt+'"  hidden> </td>'+
+                              '<td><span class="service-total-amount" id="span-total_amount-'+response.service_item.id+'">'+response.service_item.total_amount+'</span></td>'+
+                              '<td>'+ (response.service_item.to_diagnose == "Y" ? '<span class="badge bg-warning">pending</span>' : '') +'</td>'+
+                              '<td id="td-actions">'+
+                                '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style=" margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+ 
+                                '<a href="" class="btn btn-xs btn-primary" id="btn-update-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Update</a>'+
+                                '<a href="" class="btn btn-xs btn-secondary" id="btn-cancel-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Cancel</a>'+
+                                '<a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'"><i class="fa fa-trash"></i> Remove</a> '+
+                                  @can('diagnosis-create')
+                                    (response.service_item.service == 'Check-up' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-'+response.service_item.id+'" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Receipt</a>': '') +
+                                    (response.service_item.service != 'Check-up' && response.service_item.to_diagnose == 'Y' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-'+response.service_item.id+'" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>': '') +
+                                  @endcan
+                              '</td>'+
+                            '</tr>');  
+              // location.reload();
+              table_actions();  
+              getGrandTotal();
 
+            }
+
+            $('#btn-save-modal').removeAttr('disabled');
+
+          },
+          error: function(response){
+            console.log(response);
           }
 
-          $('#btn-save-modal').removeAttr('disabled');
+        });
+      }
+      
+    });  
 
-        },
-        error: function(response){
-          console.log(response);
+
+  table_actions();  
+
+  function table_actions()
+  {
+    $('#table-services').on('click', 'tbody td .btn-edit-amount', function(e){
+
+      e.preventDefault();
+
+      var ps_item_id = $(this).data('id');
+      var service = $(this).data('service');
+      
+      $("#btn-update-"+ps_item_id).removeAttr('hidden');
+      $("#btn-cancel-"+ps_item_id).removeAttr('hidden');
+      $("#btn-edit-"+ps_item_id).attr('hidden', true);
+      $("#btn-remove-item-"+ps_item_id).attr('hidden', true);
+      $("#btn-view-"+ps_item_id).attr('hidden', true);
+      $("#btn-diagnose-"+ps_item_id).attr('hidden', true);
+
+      $('#price-id-'+ps_item_id).removeAttr('hidden');
+      $('#discount-id-'+ps_item_id).removeAttr('hidden');
+      $('#discount_amt-id-'+ps_item_id).removeAttr('hidden');
+
+      if(service == 'Check-up')
+      {
+        $('#medicine_amt-id-'+ps_item_id).removeAttr('hidden');
+        $('#span-medicine_amt-'+ps_item_id).attr('hidden', true);
+      }
+      
+
+      $('#span-price-'+ps_item_id).attr('hidden', true);
+      $('#span-discount-'+ps_item_id).attr('hidden', true);
+      $('#span-discount_amt-'+ps_item_id).attr('hidden', true);
+
+      
+
+      $("#btn-update-"+ps_item_id).click(function(e){
+
+        e.preventDefault();
+        
+        var ps_item_id = $(this).data('id');
+        var price = $('#price-id-'+ps_item_id).val();
+        var medicine_amt = $('#medicine_amt-id-'+ps_item_id).val();
+        var discount = $('#discount-id-'+ps_item_id).val();
+        var discount_amt = $('#discount_amt-id-'+ps_item_id).val();
+        var total_amount = $('#span-total_amount-'+ps_item_id).text();
+        var grand_total = $('.service-grand-total').text();
+
+
+        if(!price)
+        {
+          price = 0.00;
         }
 
+        if(!medicine_amt)
+        {
+          medicine_amt = 0.00;
+        }
+
+        if(!discount)
+        {
+          discount = 0.00;
+        }
+
+        if(!discount_amt)
+        {
+          discount_amt = 0.00;
+        }
+
+        $.ajax({
+          url: "{{ route('patientservice.update_price') }}",
+          method: "POST",
+          data: {
+                  _token: "{{ csrf_token() }}", 
+                  ps_item_id: ps_item_id, 
+                  price: price, 
+                  medicine_amt: medicine_amt,
+                  discount: discount, 
+                  discount_amt: discount_amt,
+                  total_amount: total_amount
+                },
+          success: function(response){
+            console.log(response);
+            
+            if(response.success)
+            {
+
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Amount has been updated',
+                showConfirmButton: false,
+                timer: 2500
+              });
+              
+              
+              $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
+              $('#medicine_amt-id-'+ps_item_id).val(parseFloat(medicine_amt).toFixed(2)).attr('hidden', true);
+              $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
+              $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
+              
+              $('#span-price-'+ps_item_id).empty().append(parseFloat(price).toFixed(2));
+              $('#span-medicine_amt-'+ps_item_id).empty().append(parseFloat(medicine_amt).toFixed(2));
+              $('#span-discount-'+ps_item_id).empty().append(parseFloat(discount).toFixed(2));
+              $('#span-discount_amt-'+ps_item_id).empty().append(parseFloat(discount_amt).toFixed(2));
+
+              $('#span-price-'+ps_item_id).removeAttr('hidden');
+              $('#span-medicine_amt-'+ps_item_id).removeAttr('hidden');
+              $('#span-discount-'+ps_item_id).removeAttr('hidden');
+              $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
+
+              $("#btn-update-"+ps_item_id).attr('hidden', true);
+              $("#btn-cancel-"+ps_item_id).attr('hidden', true);
+              $("#btn-edit-"+ps_item_id).removeAttr('hidden');
+              $("#btn-remove-item-"+ps_item_id).removeAttr('hidden');
+              $("#btn-view-"+ps_item_id).removeAttr('hidden');
+              $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
+
+              getGrandTotal();
+
+            }
+
+          },
+          error: function(response){
+            console.log(response);
+          }
+        });
+
       });
-    }
+      
+      $("#btn-cancel-"+ps_item_id).click(function(e){
+
+        e.preventDefault();
+
+        var ps_item_id = $(this).data('id');
+
+        reset(ps_item_id);
+
+      });
+
+    });
+
+    $('#table-services').on('click', 'tbody td .btn-remove-item', function(e){
+
+        e.preventDefault();
+
+        var ps_items_id = $(this).data('id');
+
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Remove!'
+        }).then((result) => {
+          if (result.value) {
+            
+            $.ajax({
+              url: "{{ route('patientservice.remove_item') }}",
+              method: "POST",
+              data: { _token: "{{ csrf_token() }}", ps_items_id: ps_items_id },
+              success: function(response){
+                console.log(response);
+
+                if(response.success)
+                { 
+                  Swal.fire(
+                    'Removed!',
+                    'Item has been removed.',
+                    'success'
+                  );
+                  $('#row-id-'+ps_items_id).remove();
+                  getGrandTotal();
+                }
+
+              },
+              error: function(response){
+                console.log(response);
+              }
+            });
+
+          }
+        });
+
+        
+      });
     
-  });
-  
-  //price text change
-  $('#table-services').on('keyup', 'tbody td input[name="price"]', function(e){
-    
+    //price text change
+    $('#table-services').on('keyup', 'tbody td input[name="price"]', function(e){
+      
+        // alert($(this).closest('td').parent()[0].sectionRowIndex);
+        var ps_item_id = $(this).data('id');
+
+        //call function compute_amounts
+        compute_amounts(ps_item_id);  
+
+        //call function getGrandTotal
+        getGrandTotal();
+            
+    });
+
+    //medicine amount text change
+    $('#table-services').on('keyup', 'tbody td input[name="medicine_amt"]', function(e){
+
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var ps_item_id = $(this).data('id');
 
@@ -683,49 +702,61 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
           
-  });
+    });
 
-  //medicine amount text change
-  $('#table-services').on('keyup', 'tbody td input[name="medicine_amt"]', function(e){
+    //discount text change
+    $('#table-services').on('keyup', 'tbody td input[name="discount"]', function(e){
+      
+      // alert($(this).closest('td').parent()[0].sectionRowIndex);
+      var ps_item_id = $(this).data('id');
 
-    // alert($(this).closest('td').parent()[0].sectionRowIndex);
-    var ps_item_id = $(this).data('id');
+      //call function compute_amounts
+      compute_amounts(ps_item_id);
 
-    //call function compute_amounts
-    compute_amounts(ps_item_id);  
+      //call function getGrandTotal
+      getGrandTotal();
+          
+    });
 
-    //call function getGrandTotal
-    getGrandTotal();
+    //discount amount text change
+    $('#table-services').on('keyup', 'tbody td input[name="discount_amt"]', function(e){
+      
+      // alert($(this).closest('td').parent()[0].sectionRowIndex);
+      var ps_item_id = $(this).data('id');
+
+      //call function compute_amounts
+      compute_amounts(ps_item_id);
+
+      //call function getGrandTotal
+      getGrandTotal();
+          
+    });
+
+    //table elements input masks
+    $('[name="price"]').inputmask('decimal', {
+      rightAlign: true,
+      digits:2,
+      allowMinus:false
+    });
+    $('[name="medicine_amt"]').inputmask('decimal', {
+      rightAlign: true,
+      digits:2,
+      allowMinus:false
+    });
+    $('[name="discount"]').inputmask('decimal', {
+      rightAlign: true,
+      integerDigits:3,
+      digits:2,
+      allowMinus:false
         
-  });
-
-  //discount text change
-  $('#table-services').on('keyup', 'tbody td input[name="discount"]', function(e){
-    
-    // alert($(this).closest('td').parent()[0].sectionRowIndex);
-    var ps_item_id = $(this).data('id');
-
-    //call function compute_amounts
-    compute_amounts(ps_item_id);
-
-    //call function getGrandTotal
-    getGrandTotal();
-        
-  });
-
-  //discount amount text change
-  $('#table-services').on('keyup', 'tbody td input[name="discount_amt"]', function(e){
-    
-    // alert($(this).closest('td').parent()[0].sectionRowIndex);
-    var ps_item_id = $(this).data('id');
-
-    //call function compute_amounts
-    compute_amounts(ps_item_id);
-
-    //call function getGrandTotal
-    getGrandTotal();
-        
-  });
+    });
+    $('[name="discount_amt"]').inputmask('decimal', {
+      rightAlign: true,
+      digits:2,
+      allowMinus:false
+    });
+  
+  }
 
   $('#new-service').on('change', function(e){ 
 
@@ -812,6 +843,8 @@ $(document).ready(function () {
         price = parseFloat($(this).text()).toFixed(2);  
         sum = parseFloat(sum)  + parseFloat(price);   
     });
+
+    // alert(parseFloat(sum).toFixed(2));
 
     //append Grand Total
     $('.service-grand-total').empty().append(parseFloat(sum).toFixed(2));
@@ -1051,29 +1084,6 @@ $(document).ready(function () {
     }); 
 
     
-    //table elements input masks
-    $('[name="price"]').inputmask('decimal', {
-      rightAlign: true,
-      digits:2,
-      allowMinus:false
-    });
-    $('[name="medicine_amt"]').inputmask('decimal', {
-      rightAlign: true,
-      digits:2,
-      allowMinus:false
-    });
-    $('[name="discount"]').inputmask('decimal', {
-      rightAlign: true,
-      integerDigits:3,
-      digits:2,
-      allowMinus:false
-        
-    });
-    $('[name="discount_amt"]').inputmask('decimal', {
-      rightAlign: true,
-      digits:2,
-      allowMinus:false
-    });
     $('[name="new-price"]').inputmask('decimal', {
       rightAlign: true,
       digits:2,
