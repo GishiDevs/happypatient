@@ -139,7 +139,7 @@ class PatientServiceController extends Controller
                  ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
                  ->union($to_diagnose)
                  ->union($check_up)
-                 ->union($diagnosed_today)
+                //  ->union($diagnosed_today)
                  ->orderBy('id', 'asc')
                  ->orderBy('service', 'asc')
                  ->orderBy('diagnose_date', 'asc')
@@ -312,7 +312,7 @@ class PatientServiceController extends Controller
 
     public function edit($psid)
     {   
-
+        
         $services = [];
 
         if(Auth::user()->can('patientservices-list-ultrasound'))
@@ -534,6 +534,7 @@ class PatientServiceController extends Controller
             'new-service.required' => 'Please select service',   
             'new-procedure.required' => 'Please select procedure',
             'new-price.required' => 'Please enter price',
+            'new-price.numeric' => 'Enter a valid value',
         ];
 
         $validator = Validator::make($request->all(),[
@@ -617,15 +618,26 @@ class PatientServiceController extends Controller
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
 
-        $service_item = PatientServiceItem::with('services', 'service_procedures')
-                                        ->where('id', $patientserviceitem->id)
-                                        ->get();
+        $service_item =  DB::table('patient_services')
+                        ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                        ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                        ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                        ->select('patient_service_items.id', 'patient_services.type','patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.code','service_procedures.procedure',    
+                                'patient_service_items.price','patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'service_procedures.to_diagnose')
+                        ->where('patient_service_items.id', '=', $patientserviceitem->id)
+                        ->first();
 
         return response()->json(['success' => 'Record has been updated', 'service_item' => $service_item], 200);
     }
 
-    public function destroy(PatientService $patientService)
+    public function remove_item(Request $request)
     {
-        //
+        $ps_items_id = $request->get('ps_items_id');
+
+        $service_item = PatientServiceItem::find($ps_items_id);
+        $service_item->delete();
+
+        return response()->json(['success' => 'Item has been removed'], 200);
+
     }
 }

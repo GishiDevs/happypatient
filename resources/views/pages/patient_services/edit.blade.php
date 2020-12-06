@@ -140,17 +140,17 @@
                           <th>Medicine (PHP)</th>
                           <th>Discount (%)</th>
                           <th>Discount (PHP)</th>
-                          <th>Total Amount (PHP)</th>
+                          <th>Total (PHP)</th>
                           @if($patientservice->type == 'individual')
                           <th>Status</th>
                           @endif
                           @if($patientservice->cancelled == 'N')
-                          <th width="150px" id="th-actions">Actions</th>
+                          <th id="th-actions">Actions</th>
                           @endif
                         </thead>
                         <tbody>			
                         @foreach($patientserviceitems as $services)
-                        <tr>
+                        <tr id="row-id-{{$services->id}}">
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->code }}</td>
                           <td><span id="span-price-{{ $services->id }}">{{ $services->price }}</span><input type="text" class="form-control" name="price" id="price-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->price }}" hidden> </td>
@@ -177,6 +177,9 @@
                                 <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a> 
                                 <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Cancel</a> 
                                 @endcan
+                                @can('patientservices-item-remove')
+                                <a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-trash"></i> Remove</a> 
+                                @endcan
                               @endif
                               @if(($services->status == 'diagnosed' || $services->status == 'receipted') && $services->type == 'individual')
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
@@ -199,7 +202,10 @@
                             <td class="text-right" colspan="6">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
-                            <td colspan="2"><strong><span class="service-grand-total">{{ $patientservice->grand_total}}</span></strong></td>
+                            <td><strong><span class="service-grand-total">{{ $patientservice->grand_total}}</span></strong></td>
+                            @if($patientservice->type == 'individual')
+                            <td></td>
+                            @endif
                             <td><a href="" class="btn btn-xs btn-primary add-item" id="add-item" data-toggle="modal" data-target="#modal-service"><i class="fa fa-plus"></i> Add Item</a></td>
                           </tr>
                         </tfoot>
@@ -382,6 +388,7 @@ $(document).ready(function () {
     $("#btn-update-"+ps_item_id).removeAttr('hidden');
     $("#btn-cancel-"+ps_item_id).removeAttr('hidden');
     $("#btn-edit-"+ps_item_id).attr('hidden', true);
+    $("#btn-remove-item-"+ps_item_id).attr('hidden', true);
     $("#btn-view-"+ps_item_id).attr('hidden', true);
     $("#btn-diagnose-"+ps_item_id).attr('hidden', true);
 
@@ -480,6 +487,7 @@ $(document).ready(function () {
             $("#btn-update-"+ps_item_id).attr('hidden', true);
             $("#btn-cancel-"+ps_item_id).attr('hidden', true);
             $("#btn-edit-"+ps_item_id).removeAttr('hidden');
+            $("#btn-remove-item-"+ps_item_id).removeAttr('hidden');
             $("#btn-view-"+ps_item_id).removeAttr('hidden');
             $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
 
@@ -493,8 +501,8 @@ $(document).ready(function () {
         }
       });
 
-    })
-
+    });
+    
     $("#btn-cancel-"+ps_item_id).click(function(e){
 
       e.preventDefault();
@@ -507,94 +515,160 @@ $(document).ready(function () {
 
   });
 
+  $('#table-services').on('click', 'tbody td .btn-remove-item', function(e){
 
-  $('#btn-save-modal').click(function(e){
-    e.preventDefault();
+      e.preventDefault();
 
-    $(this).attr('disabled', true);
+      var ps_items_id = $(this).data('id');
 
-    var data = $('#new-service-form').serializeArray();
-    data.push({ name: '_token', value: '{{ csrf_token() }}'});
-    data.push({ name: 'total_amount', value: $('#new-total_amount').text() });
-    
-    $.ajax({
-      url: "{{ route('patientservice.add_item', $patientservice->id) }}",
-      method: "POST",
-      data: data,
-      success: function(response){
-        console.log(response);
+      console.log(this);
 
-        if(response.success)
-        { 
-         
-          reset_modal();
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Remove!'
+      }).then((result) => {
+        if (result.value) {
+          
+          $.ajax({
+            url: "{{ route('patientservice.remove_item') }}",
+            method: "POST",
+            data: { _token: "{{ csrf_token() }}", ps_items_id: ps_items_id },
+            success: function(response){
+              console.log(response);
 
-          $('#modal-service').modal('toggle');
+              if(response.success)
+              { 
+                Swal.fire(
+                  'Removed!',
+                  'Item has been removed.',
+                  'success'
+                );
+                $('#row-id-'+ps_items_id).remove();
+                getGrandTotal();
+              }
 
-          Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-            });
-
-          // $('#table-service tbody').append(
-          //               '<tr>'
-          //                 '<td>'+response.service_item.services.service+'</td>'+
-          //                 '<td>'+response.service_item.service_procedures.code+'</td>'+
-          //                 '<td><span id="span-price-'+response.service_item.id+'">'+response.service_item.price+'</span><input type="text" class="form-control" name="price" id="price-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.price+'" hidden> </td>'+
-          //                 '<td><span id="span-medicine_amt-'+response.service_item.id+'">'+response.service_item.medicine_amt+'</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.medicine_amt+'" hidden> </td>
-          //                 <td><span id="span-discount-{{ $services->id }}">{{ $services->discount }}</span><input type="text" class="form-control" name="discount" id="discount-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount }}" hidden> </td>
-          //                 <td><span id="span-discount_amt-{{ $services->id }}">{{ $services->discount_amt }}</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount_amt }}"  hidden> </td>
-          //                 <td><span class="service-total-amount" id="span-total_amount-{{ $services->id }}">{{ $services->total_amount }}</span></td>
-          //                 @if($services->type == 'individual')
-          //                 <td>
-          //                     @if($services->status == 'diagnosed' || $services->status == 'receipted')
-          //                       <span class="badge bg-success">{{ $services->status }}</span>
-          //                     @elseif($services->status == 'pending')
-          //                       <span class="badge bg-warning">{{ $services->status }}</span>
-          //                     @elseif($services->status == 'cancelled')
-          //                       <span class="badge bg-danger">{{ $services->status }}</span>
-          //                     @endif
-          //                 </td>
-          //                 @endif
-          //                 @if($patientservice->cancelled == 'N')
-          //                 <td id="td-actions">
-          //                     @if($services->docdate == date('Y-m-d'))
-          //                       @can('amount-edit')
-          //                       <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-edit"></i> Edit</a> 
-          //                       <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a> 
-          //                       <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Cancel</a> 
-          //                       @endcan
-          //                     @endif
-          //                     @if(($services->status == 'diagnosed' || $services->status == 'receipted') && $services->type == 'individual')
-          //                       <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
-          //                     @elseif($services->status == 'pending' && $services->type == 'individual' && $services->service)
-          //                       @can('diagnosis-create')
-          //                         @if($services->service == 'Check-up')
-          //                         <a href="{{ route('diagnosis.create',$services->id) }}" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Receipt</a>
-          //                         @elseif($services->to_diagnose == 'Y')
-          //                         <a href="{{ route('diagnosis.create',$services->id) }}" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>
-          //                         @endif
-          //                       @endif
-          //                     @endif 
-          //                 </td>
-          //                 @endif
-          //               </tr>
-          // );  
-          location.reload();
+            },
+            error: function(response){
+              console.log(response);
+            }
+          });
 
         }
+      });
 
-        $('#btn-save-modal').removeAttr('disabled');
-
-      },
-      error: function(response){
-        console.log(response);
-      }
+      
     });
 
+    $('#new-service-form').validate({
+    rules: {
+      "new-service": {
+        required: true,
+      },
+      "new-procedure": {
+        required: true,
+      },
+      "new-price": {
+        number: true,
+        required: true,
+      },
+    },
+    messages: {
+      "new-service": {
+        required: "Please select service",
+      },
+      "new-procedure": {
+        required: "Please select procedure",
+      },
+      "new-price": {
+        required: "Please enter a price",
+      },      
+      
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+      if ($(element).hasClass('select2'))
+      { 
+        $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+      }
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    },
+    submitHandler: function(e){
+
+      $(this).attr('disabled', true);
+
+      var data = $('#new-service-form').serializeArray();
+      data.push({ name: '_token', value: '{{ csrf_token() }}'});
+      data.push({ name: 'total_amount', value: $('#new-total_amount').text() });
+      
+      $.ajax({
+        url: "{{ route('patientservice.add_item', $patientservice->id) }}",
+        method: "POST",
+        data: data,
+        success: function(response){
+          console.log(response);
+
+          if(response.success)
+          { 
+            console.log(response);  
+            reset_modal();
+
+            $('#modal-service').modal('toggle');
+
+            Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Record has successfully added',
+                  showConfirmButton: false,
+                  timer: 2500
+              });
+
+            $('#table-services tbody').append(
+                          '<tr>'+
+                            '<td>'+response.service_item.service+'</td>'+
+                            '<td>'+response.service_item.code+'</td>'+
+                            '<td><span id="span-price-'+response.service_item.id+'">'+response.service_item.price+'</span><input type="text" class="form-control" name="price" id="price-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.price+'" hidden> </td>'+
+                            '<td><span id="span-medicine_amt-'+response.service_item.id+'">'+response.service_item.medicine_amt+'</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.medicine_amt+'" hidden> </td>'+
+                            '<td><span id="span-discount-'+response.service_item.id+'">'+response.service_item.discount+'</span><input type="text" class="form-control" name="discount" id="discount-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.discount+'" hidden> </td>'+
+                            '<td><span id="span-discount_amt-'+response.service_item.id+'">'+response.service_item.discount_amt+'</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.id+'"  hidden> </td>'+
+                            '<td><span class="service-total-amount" id="span-total_amount-'+response.service_item.id+'">'+response.service_item.total_amount+'</span></td>'+
+                            '<td>'+ (response.service_item.to_diagnose == "Y" ? '<span class="badge bg-warning">pending</span>' : '') +'</td>'+
+                            '<td id="td-actions">'+
+                              '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="{{ $services->id }}" data-service="{{ $services->service }}" style=" margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+ 
+                              '<a href="" class="btn btn-xs btn-primary" id="btn-update-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Update</a>'+
+                              '<a href="" class="btn btn-xs btn-secondary" id="btn-cancel-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Cancel</a>'+
+                              '<a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style="><i class="fa fa-trash"></i> Remove</a> '+
+                                @can('diagnosis-create')
+                                  (response.service_item.service == 'Check-up' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Receipt</a>': '') +
+                                  (response.service_item.service != 'Check-up' && response.service_item.to_diagnose == 'Y' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>': '') +
+                                @endcan
+                            '</td>'+
+                          '</tr>');  
+            // location.reload();
+
+          }
+
+          $('#btn-save-modal').removeAttr('disabled');
+
+        },
+        error: function(response){
+          console.log(response);
+        }
+
+      });
+    }
+    
   });
   
   //price text change
@@ -882,6 +956,7 @@ $(document).ready(function () {
       $("#btn-update-"+ps_item_id).attr('hidden', true);
       $("#btn-cancel-"+ps_item_id).attr('hidden', true);
       $("#btn-edit-"+ps_item_id).removeAttr('hidden');
+      $("#btn-remove-item-"+ps_item_id).removeAttr('hidden');
       $("#btn-view-"+ps_item_id).removeAttr('hidden');
       $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
 
@@ -906,9 +981,23 @@ $(document).ready(function () {
       getGrandTotal();
   }
 
-  $('#btn-cancel-modal').click(function(e){
+  $('#btn-cancel-modal, #add-item').click(function(e){
     e.preventDefault();
     reset_modal();
+  });
+
+  $('#new-service').on('change', function(e){
+
+    $("[aria-labelledby='select2-new-service-container']").removeAttr('style');
+    $('#new-service-error').remove();
+
+  });
+
+  $('#new-procedure').on('change', function(e){
+
+    $("[aria-labelledby='select2-new-procedure-container']").removeAttr('style');
+    $('#new-procedure-error').remove();
+
   });
 
   function reset_modal()
@@ -921,6 +1010,13 @@ $(document).ready(function () {
     $('#new-discount').attr('disabled', true);
     $('#new-discount_amt').attr('disabled', true);
     $('#new-total_amount').empty().append('0.00');
+
+    $("[aria-labelledby='select2-new-service-container']").removeAttr('style');
+    $('#new-service-error').remove();
+
+    $("[aria-labelledby='select2-new-procedure-container']").removeAttr('style');
+    $('#new-procedure-error').remove();
+
   }
 
   $('#weight').inputmask('decimal', {

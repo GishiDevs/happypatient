@@ -147,7 +147,7 @@
                           <th width="150px">Medicine (PHP)</th>
                           <th width="150px">Discount (%)</th>
                           <th width="150px">Discount (PHP)</th>
-                          <th width="170px">Total Amount (PHP)</th>
+                          <th width="150px">Total (PHP)</th>
                           <th width="100px">Action</th>
                         </thead>
                         <tbody>												
