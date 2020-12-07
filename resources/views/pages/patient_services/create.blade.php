@@ -35,7 +35,7 @@
               <!-- form start -->
               <form role="form" id="patientserviceform">
                 <div class="card-body">
-                  <div class="row"> 
+                  <div class="row">
                     <div class="form-group col-md-2">
                       <label for="type">Type</label>
                       <div class="form-check">
@@ -82,7 +82,7 @@
                         </div>
                         <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
                       </div>
-                    </div>         
+                    </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
@@ -150,7 +150,7 @@
                           <th width="150px">Total (PHP)</th>
                           <th width="100px">Action</th>
                         </thead>
-                        <tbody>												
+                        <tbody>
                         </tbody>
                         <tfoot>
                           <tr>
@@ -162,7 +162,7 @@
                           </tr>
                         </tfoot>
                       </table>
-                    </div>						
+                    </div>
                   </div>
                   <hr>
                   <div class="row">
@@ -193,7 +193,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-  
+
 
   $('[name="type"]').click(function(){
     if($(this).val() == 'group')
@@ -207,7 +207,7 @@ $(document).ready(function () {
       $('.div-patient').removeAttr('hidden');
     }
   });
-  
+
   $('#organization').keyup(function(e){
 
     if(!$(this).val())
@@ -236,18 +236,18 @@ $(document).ready(function () {
       data: { _token: "{{ csrf_token() }}", patient_id: patient_id },
       success: function(response){
         console.log(response);
-        
+
         var id = response.patient_service[0].id;
 
         if(response.patient_service.length > 0)
         {
           Swal.fire({
-            title: 'Warning!',
-            text: "This Patient has existing service(s)!",
-            icon: 'warning'
+            title: 'Information',
+            html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",
+            icon: 'info'
           }).then(function() {
               window.location = "/patientservice/edit/"+id;
-              
+
           });
         }
 
@@ -269,7 +269,7 @@ $(document).ready(function () {
     var docdate = new Date($(this).val());
     //Valide Document Date
     if(docdate == 'Invalid Date')
-    { 
+    {
       $('#docdate-error').remove();
       $('#docdate').addClass('is-invalid');
       $('#docdate').after('<span id="docdate-error" class="error invalid-feedback"> Please enter a valid date</span>');
@@ -281,7 +281,7 @@ $(document).ready(function () {
       // $('#docdate-error').remove();
       $(this).removeClass('is-invalid');
     }
-    
+
   });
 
   var linenum = 1;
@@ -290,7 +290,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     var x = linenum - 1
-  
+
       $('#table-services tbody').append('<tr id="row-'+linenum+'">'+
                                         '<td>'+
                                           '<div class="form-group div-service">'+
@@ -322,7 +322,7 @@ $(document).ready(function () {
                                             '<input class="form-control input-small affect-total" type="text" name="discount[]" id="discount-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="" data-serviceid="" data-linenum="'+linenum+'" disabled>'+
                                             '<div class="input-group-prepend"><span class="input-group-text">%</span></div>'+
                                         '</div>'+
-                                        '</td>'+   
+                                        '</td>'+
                                         '<td>'+
                                           '<div class="input-group">'+
                                             '<input class="form-control input-small affect-total" type="text" name="discount_amt[]" id="discount_amt-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask disabled data-service="" data-serviceid="" data-linenum="'+linenum+'">'+
@@ -332,14 +332,14 @@ $(document).ready(function () {
                                         '<td><a href="" class="btn btn-xs btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Remove</a></td>'+
                                       '</tr>');
     linenum++;
-        
+
     $('.select2').select2();
 
     //find services on table then remove them from the select option if exists
     // $('#table-services tbody tr td').find('.span-service').each(function(){
     //   var service = $(this).text();
     //   $('select').find('[data-service="'+service+'"]').remove();
-      
+
     // });
 
     //count service select option
@@ -356,12 +356,12 @@ $(document).ready(function () {
 
     $('#service-table-error').remove();
 
-    $('#table-services').on('change', 'tbody td [name="service"]', function(e){ 
+    $('#table-services').on('change', 'tbody td [name="service"]', function(e){
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var service = $(this).find(':selected').data('service');
       var service_id = $(this).val();
-      
+
       $('#services-linenum-'+linenum).val(service_id);
 
       $('.div-service').after('<span class="span-service" id="span-service-linenum-'+linenum+'" data-service="'+service+'" data-service_id="'+service_id+'">'+service+'</span>')
@@ -373,11 +373,11 @@ $(document).ready(function () {
         $('#procedure-linenum-'+ linenum).removeAttr('disabled');
       }
 
-            
+
       //if service select option has no more item
       // if(ctr == 2)
       // {
-      //   $('#add-item').addClass('disabled');    
+      //   $('#add-item').addClass('disabled');
       // }
 
       // $.ajax({
@@ -387,34 +387,34 @@ $(document).ready(function () {
       //   success: function(response){
 
       //     console.log(response);
-          
+
       //     $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
       //     $.each(response.procedures, function( index, value ) {
       //       $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
-      //     }); 
+      //     });
 
       //   },
       //   error: function(response){
       //     console.log(response);
       //   }
       // });
-      
- 
+
+
       $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
 
       @foreach($procedures as $procedure)
 
         if(service_id == "{{ $procedure->serviceid }}")
-        { 
+        {
           $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
       @endforeach
-      
+
     });
 
 
-    $('#table-services').on('change', 'tbody td [name="procedure"]', function(e){ 
+    $('#table-services').on('change', 'tbody td [name="procedure"]', function(e){
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var service = $('#span-service-linenum-'+linenum).text();
@@ -422,11 +422,11 @@ $(document).ready(function () {
       var procedure = $(this).find(':selected').data('procedure');
       var price = $(this).find(':selected').data('price');
       var procedure_id = $(this).val();
-      
+
       if(service == 'Check-up')
       {
         $('#medicine_amt-linenum-'+linenum).removeAttr('readonly');
-        
+
       }
 
       $('#procedures-linenum-'+linenum).val(procedure_id);
@@ -443,11 +443,11 @@ $(document).ready(function () {
         $('#discount_amt-linenum-'+ linenum).removeAttr('disabled');
       }
 
-      //Remove class disabled on Add Item Button 
-      $('#add-item').removeClass('disabled'); 
+      //Remove class disabled on Add Item Button
+      $('#add-item').removeClass('disabled');
 
       //Remove attribute disabled on button Add
-      $('#btn-add').removeAttr('disabled'); 
+      $('#btn-add').removeAttr('disabled');
 
       $('#total-linenum-'+linenum).empty().append(parseFloat(price).toFixed(2));
 
@@ -455,7 +455,7 @@ $(document).ready(function () {
       getGrandTotal();
 
     });
-    
+
     //service price text change
     $('#table-services').on('keyup', 'tbody td input[name="price[]"]', function(e){
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
@@ -471,7 +471,7 @@ $(document).ready(function () {
       if($(this).val())
       {
         price_per_service = parseFloat($(this).val()).toFixed(2);
-        
+
         $('#add-item').removeClass('disabled');
         // $('#btn-add').removeAttr('disabled');
       }
@@ -512,11 +512,11 @@ $(document).ready(function () {
       {
         discount_amt_per_service = 0.00;
       }
-          
+
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
-          
+
       //disable/enable discount textbox
       if(price_per_service > 0){
         $('#discount-linenum-'+ linenum).removeAttr('disabled');
@@ -533,7 +533,7 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
-          
+
     });
 
     //service medicine amount text change
@@ -575,7 +575,7 @@ $(document).ready(function () {
       {
         discount_amt_per_service = 0.00;
       }
-   
+
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
@@ -587,7 +587,7 @@ $(document).ready(function () {
 
     });
 
-    
+
     //service discount text change
     $('#table-services').on('keyup', 'tbody td input[name="discount[]"]', function(e){
       var linenum = $(this).data('linenum');
@@ -597,7 +597,7 @@ $(document).ready(function () {
       var medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+linenum).val()).toFixed(2);
       var discount_per_service = parseFloat($(this).val()).toFixed(2) / 100;
       var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
-      
+
       //if medicine amount has value
       if($('#medicine_amt-linenum-'+ linenum).val())
       {
@@ -627,14 +627,14 @@ $(document).ready(function () {
       {
         discount_amt_per_service = 0.00;
       }
-      
+
 
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
       //append total amount
       $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
-          
+
       //call function getGrandTotal
       getGrandTotal();
 
@@ -679,7 +679,7 @@ $(document).ready(function () {
       {
         discount_amt_per_service = 0.00;
       }
-   
+
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
@@ -701,7 +701,7 @@ $(document).ready(function () {
       var tr_length = $('#table-services tbody tr').length;
 
       //delete row
-      $('#row-'+linenum).remove();   
+      $('#row-'+linenum).remove();
 
       //scan if there is a dropdown on a table
       $('#table-services tbody tr td').find('select').each(function(){
@@ -714,7 +714,7 @@ $(document).ready(function () {
         $('#add-item').removeClass('disabled');
         $('#btn-add').removeAttr('disabled');
       }
-      
+
       //call function getGrandTotal
       getGrandTotal();
 
@@ -743,7 +743,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
     $('[name="discount_amt[]"]').inputmask('decimal', {
       rightAlign: true,
@@ -752,24 +752,24 @@ $(document).ready(function () {
     });
     $('#discount').inputmask('decimal', {
       rightAlign: true
-        
+
     });
 
   });
-  
+
 
   // Add Services with Stepper
   $('#btn-add').click(function(e){
 
     $(this).attr('disabled', true);
-    
+
     var docdate = new Date($('#docdate').val());
 
     e.preventDefault();
-    
+
     //organization validation error
     if(!$('#organization').val())
-    { 
+    {
       $('#organization-error').remove();
       $('#organization').addClass('is-invalid');
       $('#organization').after('<span id="organization-error" class="error invalid-feedback"> Please enter organization name</span>');
@@ -777,22 +777,22 @@ $(document).ready(function () {
 
     //patient validation error
     if(!$('#patient').val())
-    { 
+    {
       $('#patient-error').remove();
       $('.div-patient').append('<span id="patient-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please select patient</span>');
-      $(".div-patient").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+      $(".div-patient").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
     }
 
     if(!$('select [name="service"]').val())
-    { 
+    {
       $('#service-error').remove();
       $('.div-service').append('<span id="service-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please select service</span>');
-      $(".div-service").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+      $(".div-service").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
     }
 
     //Document Date validation error
     if(docdate == 'Invalid Date')
-    { 
+    {
       $('#docdate-error').remove();
       $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
     }
@@ -818,7 +818,7 @@ $(document).ready(function () {
           success: function(response){
               console.log(response);
               if(response.success)
-              { 
+              {
 
                 $('#select2-patient-container').empty().append('Select Patient');
 
@@ -830,9 +830,9 @@ $(document).ready(function () {
                   title: 'Record has successfully added',
                   showConfirmButton: false,
                   timer: 2500
-                });  
+                });
 
-                $('.service-total-amount').each(function () { 
+                $('.service-total-amount').each(function () {
                   $(this).empty().append("0.00");
                 });
 
@@ -845,19 +845,19 @@ $(document).ready(function () {
                 $('.div-patient').removeAttr('hidden');
 
                 $("[aria-labelledby='select2-patient-container']").removeAttr('style');
-                
+
                 $('#patient-error').remove();
 
-              }    
+              }
 
-              $('#btn-add').removeAttr('disabled');           
+              $('#btn-add').removeAttr('disabled');
           },
           error: function(response){
             console.log(response);
           }
       });
     }
-  
+
   });
 
   $('[data-mask]').inputmask();
@@ -867,11 +867,11 @@ $(document).ready(function () {
   {
     var sum = 0.00;
     var price = 0.00;
-    
+
     //loop then sum each service total amount
     $('.service-total-amount').each(function(){
-        price = parseFloat($(this).text()).toFixed(2);  
-        sum = parseFloat(sum)  + parseFloat(price);   
+        price = parseFloat($(this).text()).toFixed(2);
+        sum = parseFloat(sum)  + parseFloat(price);
     });
 
     //append Grand Total
@@ -884,7 +884,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
 
   $('#temperature').inputmask('decimal', {
@@ -892,7 +892,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:1,
       allowMinus:false
-        
+
     });
 
   $('#o2_sat').inputmask('decimal', {
@@ -900,15 +900,15 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
 
   $('#pulserate').inputmask('integer', {
       rightAlign: true,
       integerDigits:3,
       allowMinus:false
-        
-    });  
+
+    });
 
 });
 </script>
