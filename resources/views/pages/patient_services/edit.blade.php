@@ -206,7 +206,11 @@
                             @if($patientservice->type == 'individual')
                             <td></td>
                             @endif
-                            <td><a href="" class="btn btn-xs btn-primary add-item" id="add-item" data-toggle="modal" data-target="#modal-service"><i class="fa fa-plus"></i> Add Item</a></td>
+                            <td>
+                              @if($patientservice->docdate == date('Y-m-d'))
+                              <a href="" class="btn btn-xs btn-primary add-item" id="add-item" data-toggle="modal" data-target="#modal-service"><i class="fa fa-plus"></i> Add Item</a>
+                              @endif
+                            </td>
                           </tr>
                         </tfoot>
                       </table>
