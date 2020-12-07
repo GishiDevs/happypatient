@@ -206,11 +206,13 @@
                             @if($patientservice->type == 'individual')
                             <td></td>
                             @endif
+                            @if($patientservice->cancelled == 'N')
                             <td>
                               @if($patientservice->docdate == date('Y-m-d'))
                               <a href="" class="btn btn-xs btn-primary add-item" id="add-item" data-toggle="modal" data-target="#modal-service"><i class="fa fa-plus"></i> Add Item</a>
                               @endif
                             </td>
+                            @endif
                           </tr>
                         </tfoot>
                       </table>
