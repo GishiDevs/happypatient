@@ -239,7 +239,7 @@ $(document).ready(function () {
         {
           Swal.fire({
             title: 'Warning!',
-            text: "This Patient has an exisiting transaction!",
+            text: "This Patient has existing service(s)!",
             icon: 'warning',
           });
         }
