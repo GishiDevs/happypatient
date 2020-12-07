@@ -70,8 +70,22 @@ class PatientController extends Controller
     }
 
     public function getprovinces()
-    {
-        $provinces = Province::all()->sortBy('name')->values();
+    {   
+        $LU = Province::where('id' , '=', 3)
+                      ->select(DB::raw("'01' as grp"), DB::raw('provinces.*'));
+                    //   ->get();
+
+        $pangasinan = Province::where('id', '=', 4)
+                            ->select(DB::raw("'02' as grp"), DB::raw('provinces.*'));
+                            // ->get();
+        
+        $provinces = Province::whereNotIn('id', [3, 4])
+                             ->select(DB::raw("'03' as grp"), DB::raw('provinces.*'))
+                             ->union($LU) 
+                             ->union($pangasinan)    
+                             ->orderBy('grp', 'asc')  
+                             ->orderBy('name', 'asc')    
+                             ->get();
 
         return response()->json($provinces, 200);
     }
@@ -80,7 +94,24 @@ class PatientController extends Controller
     {   
         
         $province_id = $request->get('province_id');
+        
         $cities = City::where('province_id', $province_id)->get()->sortBy('name')->values();
+        
+        //Rosario La Union
+        if($province_id == '0133')
+        {
+            $rosario = City::where('name', 'Rosario')
+                       ->where('province_id', '0133')
+                       ->select(DB::raw("'01' as grp"), DB::raw('cities.*'));
+
+            $cities = City::where('province_id', $province_id)
+                        ->where('name', '!=', 'Rosario')
+                        ->select(DB::raw("'02' as grp"), DB::raw('cities.*'))
+                        ->union($rosario)
+                        ->orderBy('grp', 'asc')
+                        ->orderBy('name', 'asc')
+                        ->get();
+        }
 
         $city_id = $cities[0]->city_id;
         $barangays = Barangay::where('city_id', $city_id)->get()->sortBy('name')->values();
