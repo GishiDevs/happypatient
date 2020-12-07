@@ -228,19 +228,26 @@ $(document).ready(function () {
     $("[aria-labelledby='select2-patient-container']").removeAttr('style');
     $('#patient-error').remove();
 
+    var patient_id = $(this).val();
+
     $.ajax({
       url: "{{ route('check_patient_transaction') }}",
       method: "POST",
-      data: { _token: "{{ csrf_token() }}", patient_id: $(this).val() },
+      data: { _token: "{{ csrf_token() }}", patient_id: patient_id },
       success: function(response){
         console.log(response);
         
+        var id = response.patient_service[0].id;
+
         if(response.patient_service.length > 0)
         {
           Swal.fire({
             title: 'Warning!',
             text: "This Patient has existing service(s)!",
-            icon: 'warning',
+            icon: 'warning'
+          }).then(function() {
+              window.location = "/patientservice/edit/"+id;
+              
           });
         }
 
