@@ -35,7 +35,8 @@
                       <th class="no-sort">ID</th>
                       <th class="no-sort">Patient Name</th>
                       <th class="no-sort">Service</th>
-                      <th class="no-sort">Service Procedure</th>
+                      <th class="no-sort">Name</th>
+                      <th class="no-sort">Procedure</th>
                       <th width="50px" class="no-sort">Status</th>
                       <th width="150px" class="no-sort">Document Date</th>
                       <th width="150px" class="no-sort">Diagnose Date</th>
@@ -52,6 +53,7 @@
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th>Service Procedure</th>
+                      <th>Procedure</th>
                       <th>Status</th>
                       <th>Document Date</th>
                       <th>Diagnose Date</th>
@@ -114,6 +116,7 @@
                       { "data": "name"},
                       { "data": "service"},
                       { "data": "procedure"},
+                      { "data": "code"},
                       { "data": "status"},
                       { "data": "docdate"},
                       { "data": "diagnose_date"},
@@ -151,7 +154,13 @@
               targets: 'no-sort', orderable : false 
             },
             {
-              targets: 4,
+              targets: 3,
+              render: function( data ) {
+                return '';
+              }
+            },
+            {
+              targets: 5,
               render: function ( data ) {
                   if(data == 'diagnosed' || data == 'receipted')
                   {
@@ -169,7 +178,7 @@
                 }
             },
             {
-              targets: 7,
+              targets: 8,
               render: function ( data , type, object ) {
                 // console.log(object);
                 if(object.status == 'pending')
