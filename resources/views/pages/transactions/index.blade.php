@@ -84,8 +84,8 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th class="text-right" colspan="7">Grand Total:</th>
-                          <th> <span id="grand_total">0.00</span> </th>
+                          <th class="text-right" colspan="6">Grand Total:</th>
+                          <th colspan="2"> <span id="grand_total">0.00</span> </th>
                         </tr>
                       </tfoot>
                     </table>
