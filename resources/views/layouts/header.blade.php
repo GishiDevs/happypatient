@@ -65,7 +65,7 @@
 
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
-  
+
   <!-- Datatables Paginate button -->
   <style>
     .paginate_button{
@@ -107,8 +107,8 @@
         position: relative;
     }
     .btn-circle {
-        width: 30px;
-        height: 30px;
+        width: 20px;
+        height: 20px;
         text-align: center;
         padding: 6px 0;
         font-size: 12px;
@@ -122,6 +122,11 @@
     tr.details td.details-control {
         background: url('{{ asset("img/details_close.png") }}') no-repeat center center;
     } */
+
+    .subtitle {
+      font-size: 12px;
+      padding-left: 35px;
+    }
 
     #dashboard tr.odd td:first-child,
     #dashboard tr.even td:first-child {
@@ -168,14 +173,14 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      
+
       <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
           <i class="fas fa-th-large"></i>
         </a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link" href="{{ route('logout') }}"                
+        <a class="nav-link" href="{{ route('logout') }}"
           onclick="event.preventDefault();
           document.getElementById('logout-form').submit();">
           {{ __('Logout') }}
@@ -220,14 +225,16 @@
               <p>
                 Dashboard
               </p>
+
             </a>
           </li>
           <li class="nav-item">
             <a href="{{ route('transactions.index') }}" class="nav-link {{ (request()->is('transactions')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-dollar-sign"></i>
-              <p>
-                Transactions
-              </p>
+              <p>Transactions</p>
+              <div class="subtitle">
+                  <p>Logbook</p>
+              </div>
             </a>
           </li>
           @canany(['patient-list','patient-create'])
@@ -245,6 +252,7 @@
                 <a href="{{ route('patient.create') }}" class="nav-link {{ (request()->is('patient/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Add New</p>
+
                 </a>
               </li>
               @endcan
@@ -253,7 +261,10 @@
                 <a href="{{ route('patient.index') }}" class="nav-link {{ (request()->is('patient/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Patients Record</p>
-                </a> 
+                  <div class="subtitle">
+                      <p>View/History/Medical Record</p>
+                  </div>
+                </a>
               </li>
               @endcan
             </ul>
@@ -274,6 +285,9 @@
                 <a href="{{ route('patientservice.create') }}" class="nav-link {{ (request()->is('patientservice/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Create Services</p>
+                  <div class="subtitle">
+                      <p>Create/Add/Billing</p>
+                  </div>
                 </a>
               </li>
               @endcan
@@ -284,6 +298,9 @@
                 <a href="{{ route('patientservice.index') }}" class="nav-link {{ (request()->is('patientservice/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services List</p>
+                  <div class="subtitle">
+                      <p>View/Edit</p>
+                  </div>
                 </a>
               </li>
               @endcan
@@ -313,7 +330,7 @@
                 <a href="{{ route('user.index') }}" class="nav-link {{ (request()->is('user/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Users Record</p>
-                </a> 
+                </a>
               </li>
               @endcan
             </ul>
@@ -328,21 +345,21 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              
+
               <li class="nav-item">
                 <a href="{{ route('certificate.template.create') }}" class="nav-link {{ (request()->is('certificate/template/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Create Template</p>
                 </a>
               </li>
-              
+
               <li class="nav-item">
                 <a href="{{ route('certificate.template.index') }}" class="nav-link {{ (request()->is('certificate/template/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Template List</p>
-                </a> 
+                </a>
               </li>
-              
+
             </ul>
           </li> -->
           @canany(['service-list','service-create','serviceprocedure-list','serviceprocedure-create','certificate-list','certificate-create','permission-list','permission-create','role-list','role-create'])
@@ -360,7 +377,7 @@
                 <a href="{{ route('service.index') }}" class="nav-link {{ (request()->is('service/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Services</p>
-                </a> 
+                </a>
               </li>
               @endcanany
               @canany(['serviceprocedure-list','serviceprocedure-create'])
@@ -368,7 +385,7 @@
                 <a href="{{ route('serviceprocedure.index') }}" class="nav-link {{ (request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Service Procedures</p>
-                </a> 
+                </a>
               </li>
               @endcanany
               @canany(['certificate-list','certificate-create'])
@@ -376,7 +393,7 @@
                 <a href="{{ route('certificate.template.index') }}" class="nav-link {{ (request()->is('certificate/template/index') || request()->is('certificate/template/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Medical Certificate</p>
-                </a> 
+                </a>
               </li>
               @endcanany
               @role('Admin')
@@ -384,7 +401,7 @@
                 <a href="{{ route('permission.index') }}" class="nav-link {{ (request()->is('permission/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Permissions</p>
-                </a> 
+                </a>
               </li>
               @endrole
               @canany(['role-list','role-create'])
@@ -392,7 +409,7 @@
                 <a href="{{ route('role.index') }}" class="nav-link {{ (request()->is('role/index')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Roles</p>
-                </a> 
+                </a>
               </li>
               @endcanany
             </ul>
@@ -414,4 +431,4 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-  
+
