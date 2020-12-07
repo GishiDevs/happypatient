@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Dashboard')
+@section('title', 'Transactions')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -67,6 +67,7 @@
                           <th class="no-sort">Name</th>
                           <th class="no-sort">Procedure</th>
                           <th class="no-sort">Amount (PHP)</th>
+                          <th class="no-sort">Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -83,7 +84,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th class="text-right" colspan="6">Grand Total:</th>
+                          <th class="text-right" colspan="7">Grand Total:</th>
                           <th> <span id="grand_total">0.00</span> </th>
                         </tr>
                       </tfoot>
@@ -184,8 +185,9 @@
                       { "data": "name"},
                       { "data": "service"},
                       { "data": "code"},
-                      { "data": "procedure"},
+                      { "data": "code"},
                       { "data": "total_amount"},
+                      { "data": "status"},
                       
           ],
           order: [],
@@ -218,6 +220,30 @@
             },
             {
               targets: 'no-sort', orderable : false 
+            },
+            {
+              targets: 4,
+              render: function( data ) {
+                return '';
+              }
+            },
+            {
+              targets: 7,
+              render: function ( data ) {
+                  if(data == 'diagnosed' || data == 'receipted')
+                  {
+                    return '<span class="badge bg-success">'+data+'</span>';
+                  }
+                  else if(data == 'pending')
+                  {
+                    return '<span class="badge bg-warning">'+data+'</span>';
+                  }
+                  else if(data == 'cancelled')
+                  {
+                    return '<span class="badge bg-danger">'+data+'</span>';
+                  }
+                                
+                }
             },
           ],
           footerCallback: function ( row, data, start, end, display ) {
