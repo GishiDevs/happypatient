@@ -87,9 +87,12 @@ class TransactionController extends Controller
                                      'patient_service_items.status')
                             ->where('patient_services.cancelled', '=', 'N')
                             ->whereIn('services.id', $service_arr)
-                            ->whereDate('patient_services.docdate', '>=', $date_from)
-                            ->whereDate('patient_services.docdate', '<=', $date_to)
-                            // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
+                            // ->whereDate('patient_services.docdate', '>=', $date_from)
+                            // ->whereDate('patient_services.docdate', '<=', $date_to)
+                            ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
+                            ->orderBy('id', 'asc')
+                            ->orderBy('service', 'asc')
+                            ->orderBy('procedure', 'asc')
                             ->get();
         
         $grand_total = 0.00;

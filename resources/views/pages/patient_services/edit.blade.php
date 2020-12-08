@@ -468,11 +468,13 @@ $(document).ready(function () {
                                 '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style=" margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+ 
                                 '<a href="" class="btn btn-xs btn-primary" id="btn-update-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Update</a>'+
                                 '<a href="" class="btn btn-xs btn-secondary" id="btn-cancel-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Cancel</a>'+
-                                '<a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'"><i class="fa fa-trash"></i> Remove</a> '+
-                                  @can('diagnosis-create')
-                                    (response.service_item.service == 'Check-up' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-'+response.service_item.id+'" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Receipt</a>': '') +
-                                    (response.service_item.service != 'Check-up' && response.service_item.to_diagnose == 'Y' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-'+response.service_item.id+'" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>': '') +
-                                  @endcan
+                                @can('patientservices-item-remove')
+                                  '<a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'"><i class="fa fa-trash"></i> Remove</a> '+
+                                @endcan
+                                @can('diagnosis-create')
+                                  (response.service_item.service == 'Check-up' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-'+response.service_item.id+'" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Receipt</a>': '') +
+                                  (response.service_item.service != 'Check-up' && response.service_item.to_diagnose == 'Y' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-'+response.service_item.id+'" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>': '') +
+                                @endcan
                               '</td>'+
                             '</tr>');  
               // location.reload();

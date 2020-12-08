@@ -36,7 +36,7 @@
                       @endforeach
                     </select>
                   </div>
-                  <!-- <div class="form-group col-md-4">
+                  <div class="form-group col-md-4">
                     <label>Filter Date From:</label>
                     <div class="input-group date" id="filter-date-from" data-target-input="nearest">
                       <input type="text" id="date-from" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="{{ date('m/d/Y') }}" data-target="#filter-date-from" readonly/>
@@ -53,7 +53,7 @@
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
                     </div>
-                  </div> -->
+                  </div>
                 </div>
                 <div class="row">
                   <div class="table-scrollable col-md-12 table-responsive">
@@ -200,7 +200,8 @@
 
                 if(group_index == 0)
                 { 
-                  group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
+                  // group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
+                  group_label = rows.data()[0]['name'].toUpperCase() ;
                 }
 
                 $('.dtrg-level-1').remove();
@@ -294,7 +295,8 @@
       console.log(data.action);
       
       //PUSHER - refresh data when table patient_services or patient_service_items has changes
-      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' || data.action == 'edit-service-amount')
+      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' 
+         || data.action == 'edit-service-amount' || data.action == 'edit-service-amount')
       {
         get_transactions();
       }
