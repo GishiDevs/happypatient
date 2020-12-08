@@ -97,6 +97,7 @@
     {
         var dt = $('#dashboard').DataTable({
           "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
+          "searching": false,
           "responsive": true,
           "autoWidth": false,
           "processing": true,
