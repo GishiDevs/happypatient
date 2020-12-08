@@ -29,12 +29,25 @@
                 <div class="row">
                   <div class="form-group col-md-4">
                     <label for="">Filter by Service: </label>
+                  <!-- </div>
+                  <div class="form-group col-md-4"> -->
                     <select class="form-control select2" name="service" id="service" style="width: 100%;">
                       <option selected="selected" value="0">All Services</option>
                       @foreach($services as $service)
                       <option value="{{ $service->service }}" data-service="{{ $service->service }}" data-serviceid="{{ $service->id }}">{{ $service->service}}</option>
                       @endforeach
                     </select>
+                  </div>
+                  <div class="form-group col-md-8">
+                    <div class="btn-group float-right">
+                      <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                        <i class="fa fa-print"></i> Print Preview
+                      </button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" id="preview-all-services" data-param="All" href="">All Services</a>
+                        <a class="dropdown-item" id="preview-check-up" data-param="Check-up" href="">Check-up</a>
+                      </div>
+                    </div>
                   </div>
                   <!-- <div class="form-group col-md-4">
                     <label>Filter Date From:</label>
@@ -276,6 +289,12 @@
       });
 
     }
+
+    $('.btn-group a').click(function(e){
+      e.preventDefault();
+      var param = $(this).data('param');
+      window.location = '/transactions_preview/'+param;
+    });
 
     // PUSHER
 

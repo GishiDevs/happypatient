@@ -413,15 +413,39 @@
     </script>
     <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
     <script>
+        // var dob = '{{ $patient_service->birthdate }}';
+        // var birthdate = dob.split('/');
+        // var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
+        // var getdocdate = '{{ $patient_service->docdate }}'.split('/');
+        // var documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
+        // var docdate = moment(documentdate, 'YYYY-MM-DD');
+        // var age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+
+        // $('#age').append(age);
+
         var dob = '{{ $patient_service->birthdate }}';
         var birthdate = dob.split('/');
         var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
         var getdocdate = '{{ $patient_service->docdate }}'.split('/');
         var documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
         var docdate = moment(documentdate, 'YYYY-MM-DD');
-        var age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+        var year_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
+        var month_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'month');
+        var day_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'day');
+        var age = year_old;
 
-        $('#age').append(age);
+        if(year_old == 0)
+        { 
+            age = month_old + ' MOS.'
+
+            if(month_old == 0)
+            {
+            age = day_old + ' DAYS'
+            }
+
+        }
+
+        $('#age').empty().append(age);
 
     </script>
 
