@@ -16,6 +16,7 @@ use DB;
 use App\Service;
 use App\ServiceProcedure;
 use App\Events\EventNotification;
+use App\PatientService;
 use App\ActivityLog;
 
 class PatientController extends Controller
@@ -297,6 +298,12 @@ class PatientController extends Controller
         $patient->barangay = $request->get('barangay');
         $patient->save();
 
+        //update patient_services 'name' column
+        $name = $patient->lastname . ', ' . $patient->firstname . ' ' . $patient->middlename;
+        PatientService::where('patientid' , '=', $patientid)
+                      ->update(['name' => $name]);
+        
+        
         //PUSHER - send data/message if patients is updated
         event(new EventNotification('edit-patient', 'patients'));
 

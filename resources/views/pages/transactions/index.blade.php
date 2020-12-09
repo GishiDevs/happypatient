@@ -26,7 +26,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <div class="row">
+                <!-- <div class="row">
                   <div class="form-group col-md-12">
                     <div class="btn-group float-right">
                       <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown">
@@ -38,7 +38,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="row">
                   <!-- <div class="form-group col-md-4">
                     <label for="">Filter by Service: </label>
@@ -55,20 +55,20 @@
                         <h5 class="card-title m-0">Filter by Service</h5>
                       </div>
                       <div class="card-body">
-                      <div class="form-group col-md-12">
-                        <div class="form-group">
-                          <div class="row">
-                          @foreach($services as $service)               
-                            <div class="col-md-4">
-                              <div class="custom-control custom-checkbox">
-                                  <input class="custom-control-input" name="service[]" type="checkbox" id="checkbox-serviceid-{{ $service->id }}" value="{{ $service->id }}">
-                                <label for="checkbox-serviceid-{{ $service->id }}" class="custom-control-label">{{ $service->service }}</label>
+                        <div class="form-group col-md-12">
+                          <div class="form-group">
+                            <div class="row">
+                            @foreach($services as $service)               
+                              <div class="col-md-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input" name="service[]" type="checkbox" id="checkbox-serviceid-{{ $service->id }}" value="{{ $service->id }}">
+                                  <label for="checkbox-serviceid-{{ $service->id }}" class="custom-control-label">{{ $service->service }}</label>
+                                </div>
                               </div>
+                            @endforeach
                             </div>
-                          @endforeach
                           </div>
                         </div>
-                      </div>
                       </div>
                     </div>
                   </div>
@@ -197,6 +197,7 @@
       var date_to = $('#date-to').val();  
       var grand_total = 0;
       var services = [];
+      
       $.each($("input[name='service[]']:checked"), function(){
         services.push($(this).val());
       });
@@ -351,8 +352,8 @@
       console.log(data.action);
       
       //PUSHER - refresh data when table patient_services or patient_service_items has changes
-      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' 
-         || data.action == 'edit-service-amount' || data.action == 'edit-service-amount')
+      if(data.action == 'edit-patient' || data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' 
+         || data.action == 'edit-service-amount' || data.action == 'add-service-item' || data.action == 'remove-service-item')
       {
         get_transactions();
       }

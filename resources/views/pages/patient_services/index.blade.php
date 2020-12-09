@@ -33,6 +33,28 @@
                 @endcan
               </div>
               <!-- /.card-header -->
+              <div class="row">
+                <div class="col-md-12 d-flex justify-content-center mt-3">
+                  <div class="form-group mr-5">
+                    <label>Filter Date From:</label>
+                    <div class="input-group date" id="filter-date-from" data-target-input="nearest">
+                      <input type="text" id="date-from" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="MM/DD/YYYY" data-target="#filter-date-from" readonly/>
+                      <div class="input-group-append" data-target="#filter-date-from" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Filter Date To:</label>
+                    <div class="input-group date" id="filter-date-to" data-target-input="nearest">
+                      <input type="text" id="date-to" class="form-control datetimepicker-input" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="MM/DD/YYYY" data-target="#filter-date-to" readonly/>
+                        <div class="input-group-append" data-target="#filter-date-to" data-toggle="datetimepicker">
+                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="card-body">
                 <table id="patient-table" class="table table-striped table-hover">
                 <thead>
@@ -78,50 +100,93 @@
 <script>
 
   $(document).ready(function() {
-    $('#patient-table').DataTable({
-        "responsive": true,
-        "autoWidth": false,
-		    "processing": true,
-		    "serverSide": true,
-		    "ajax": "{{ route('patientservice.serviceslist') }}",
-		    "bDestroy": true,
-		    "columns": [
-                    { "data": "DT_RowIndex"},
-                    { "data": "id"},
-		    		        { "data": "docdate"},
-                    // { "data": "or_number"},
-		    		        { "data": "name"},
-                    { "data": "cancelled"},
-                    { "data": "action"}
-		    ],
-        "order": [ 1, "desc" ],
-        "columnDefs": [{
-                          "targets": "no-sort",
-                          "orderable": false
-                        },
-                        { "visible": false, "targets": 1 },
-                        // {
-                        //   "targets": 6,
-                        //   // "data": "status",
-                        //   "render": function ( data ) {
 
-                        //       if(data == 'diagnosed')
-                        //       {
-                        //         return '<span class="badge bg-success">'+data+'</span>';
-                        //       }
-                        //       else if(data == 'pending')
-                        //       {
-                        //         return '<span class="badge bg-warning">'+data+'</span>';
-                        //       }
-                        //       else if(data == 'cancelled')
-                        //       {
-                        //         return '<span class="badge bg-danger">'+data+'</span>';
-                        //       }
-                              
-                        //   }
-                        // }
-                        ],
+    $('#filter-date-from').datetimepicker({
+        format: 'L',
+        useCurrent: false,
+        ignoreReadonly: true
+        
     });
+
+    $('#filter-date-to').datetimepicker({
+        format: 'L',
+        useCurrent: false,
+        ignoreReadonly: true
+    });
+
+    $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
+
+      var date_from = $('#date-from').val();
+      var date_to = $('#date-to').val();  
+
+      // if date-from or date-to texfield has value
+      if(date_from || date_to)
+      { 
+        patient_services(); 
+      }
+      
+    });
+
+    patient_services();
+
+    function patient_services()
+    {
+      var date_from = $('#date-from').val();
+      var date_to = $('#date-to').val();  
+      
+      $('#patient-table').DataTable({
+          "responsive": true,
+          "autoWidth": false,
+          "processing": true,
+          "serverSide": true,
+          "ajax": {
+            url: "{{ route('patientservice.serviceslist') }}",
+            type: "POST",
+            data: { _token: "{{ csrf_token() }}", date_from: date_from, date_to: date_to  },
+            // success: function(response){
+            //   console.log(response);
+            // }
+          },
+          "bDestroy": true,
+          "columns": [
+                      { "data": "DT_RowIndex"},
+                      { "data": "id"},
+                      { "data": "docdate"},
+                      // { "data": "or_number"},
+                      { "data": "name"},
+                      { "data": "cancelled"},
+                      { "data": "action"}
+          ],
+          "order": [ 1, "desc" ],
+          "columnDefs": [{
+                            "targets": "no-sort",
+                            "orderable": false
+                          },
+                          { "visible": false, "targets": 1 },
+                          // {
+                          //   "targets": 6,
+                          //   // "data": "status",
+                          //   "render": function ( data ) {
+
+                          //       if(data == 'diagnosed')
+                          //       {
+                          //         return '<span class="badge bg-success">'+data+'</span>';
+                          //       }
+                          //       else if(data == 'pending')
+                          //       {
+                          //         return '<span class="badge bg-warning">'+data+'</span>';
+                          //       }
+                          //       else if(data == 'cancelled')
+                          //       {
+                          //         return '<span class="badge bg-danger">'+data+'</span>';
+                          //       }
+                                
+                          //   }
+                          // }
+                          ],
+      });
+
+    }
 
       // PUSHER
 
@@ -142,7 +207,7 @@
       console.log(data.action);
       
       //PUSHER - refresh data when table patient_services has changes
-      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'add-service-item')
+      if(data.action == 'edit-patient' || data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'add-service-item')
       {
         $('#patient-table').DataTable().ajax.reload()
       }

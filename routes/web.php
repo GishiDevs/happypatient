@@ -206,7 +206,7 @@ Route::group(['prefix' => 'patientservice', 'middleware' => ['auth','patient_ser
         'uses' => 'PatientServiceController@servicesperuser',
         'as' => 'patientservice.servicesperuser',
     ]);
-    Route::get('/services-list', [
+    Route::post('/services-list', [
         'uses' => 'PatientServiceController@serviceslist',
         'as' => 'patientservice.serviceslist',
     ]);

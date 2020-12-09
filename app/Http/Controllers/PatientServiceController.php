@@ -25,10 +25,29 @@ class PatientServiceController extends Controller
         return view('pages.patient_services.index');
     }
 
-    public function serviceslist()
+    public function serviceslist(Request $request)
     {   
+        // return $request;
+        $from = $request->get('date_from');
+        $to = $request->get('date_to');
+
+        if(!$request->get('date_from'))
+        {
+            $from = '1/1/1900';
+        }
+
+        if(!$request->get('date_to'))
+        {
+            $to = Carbon::now();
+        }
+
+        $date_from = Carbon::make($from)->format('Y-m-d');
+        $date_to = Carbon::make($to)->format('Y-m-d');
+
         $patientservices =  DB::table('patient_services')
                  ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number', 'patient_services.name', 'patient_services.cancelled')
+                 ->whereDate('patient_services.docdate', '>=', $date_from)
+                 ->whereDate('patient_services.docdate', '<=', $date_to)
                  ->orderBy('patient_services.id', 'Asc')
                  ->get();
 
