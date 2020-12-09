@@ -27,18 +27,7 @@
               <!-- /.card-header -->
               <div class="card-body">
                 <div class="row">
-                  <div class="form-group col-md-4">
-                    <label for="">Filter by Service: </label>
-                  <!-- </div>
-                  <div class="form-group col-md-4"> -->
-                    <select class="form-control select2" name="service" id="service" style="width: 100%;">
-                      <option selected="selected" value="0">All Services</option>
-                      @foreach($services as $service)
-                      <option value="{{ $service->service }}" data-service="{{ $service->service }}" data-serviceid="{{ $service->id }}">{{ $service->service}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  <div class="form-group col-md-8">
+                  <div class="form-group col-md-12">
                     <div class="btn-group float-right">
                       <button type="button" class="btn btn-primary dropdown-toggle dropdown-icon" data-toggle="dropdown">
                         <i class="fa fa-print"></i> Print Preview
@@ -46,6 +35,40 @@
                       <div class="dropdown-menu">
                         <a class="dropdown-item" id="preview-all-services" data-param="All" href="">All Services</a>
                         <a class="dropdown-item" id="preview-check-up" data-param="Check-up" href="">Check-up</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <!-- <div class="form-group col-md-4">
+                    <label for="">Filter by Service: </label>
+                    <select class="form-control select2" name="service" id="service" style="width: 100%;">
+                      <option selected="selected" value="0">All Services</option>
+                      @foreach($services as $service)
+                      <option value="{{ $service->service }}" data-service="{{ $service->service }}" data-serviceid="{{ $service->id }}">{{ $service->service}}</option>
+                      @endforeach
+                    </select>
+                  </div> -->
+                  <div class="col-md-12 d-flex justify-content-center">
+                    <div class="card">
+                      <div class="card-header d-flex justify-content-center">
+                        <h5 class="card-title m-0">Filter by Service</h5>
+                      </div>
+                      <div class="card-body">
+                      <div class="form-group col-md-12">
+                        <div class="form-group">
+                          <div class="row">
+                          @foreach($services as $service)               
+                            <div class="col-md-4">
+                              <div class="custom-control custom-checkbox">
+                                  <input class="custom-control-input" name="service[]" type="checkbox" id="checkbox-serviceid-{{ $service->id }}" value="{{ $service->id }}">
+                                <label for="checkbox-serviceid-{{ $service->id }}" class="custom-control-label">{{ $service->service }}</label>
+                              </div>
+                            </div>
+                          @endforeach
+                          </div>
+                        </div>
+                      </div>
                       </div>
                     </div>
                   </div>
@@ -126,47 +149,57 @@
 
     $('.select2').select2();  
 
+    // get_transactions();
+
+    // $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
+    //   var date_from = $('#date-from').val();
+    //   var date_to = $('#date-to').val();  
+
+    //   // if date-from or date-to texfield has value
+    //   if(date_from || date_to)
+    //   { 
+    //     get_transactions(); 
+    //   }
+      
+    // });
+
+    // $('#service').on('change', function () {
+    //   get_transactions();
+    // });
+    // $('#filter-date-from').datetimepicker({
+    //     format: 'L',
+    //     useCurrent: false,
+    //     ignoreReadonly: true
+        
+    // });
+
+    // $('#filter-date-to').datetimepicker({
+    //     format: 'L',
+    //     useCurrent: false,
+    //     ignoreReadonly: true
+    // });
+    
+    
+
     get_transactions();
 
-    $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
-      var date_from = $('#date-from').val();
-      var date_to = $('#date-to').val();  
-
-      // if date-from or date-to texfield has value
-      if(date_from || date_to)
-      { 
-        get_transactions(); 
-      }
-      
-    });
-
-    $('#service').on('change', function () {
+    $('.custom-checkbox [name="service[]"]').click(function(){
       get_transactions();
-    });
-
-    $('#filter-date-from').datetimepicker({
-        format: 'L',
-        useCurrent: false,
-        ignoreReadonly: true
-        
-    });
-
-    $('#filter-date-to').datetimepicker({
-        format: 'L',
-        useCurrent: false,
-        ignoreReadonly: true
     });
 
     $('[data-mask]').inputmask();
 
-    
-    function get_transactions()
+    function get_transactions(services)
     { 
 
       var serviceid = $('#service').find(':selected').data('serviceid'); 
       var date_from = $('#date-from').val();
       var date_to = $('#date-to').val();  
       var grand_total = 0;
+      var services = [];
+      $.each($("input[name='service[]']:checked"), function(){
+        services.push($(this).val());
+      });
 
       // if date-from or date-to texfield has no value
       if(!date_to)
@@ -190,7 +223,10 @@
           "ajax": {
             url: "{{ route('gettransactions') }}",
             type: "POST",
-            data: { _token: "{{ csrf_token() }}", serviceid: serviceid, date_from: date_from, date_to: date_to  },
+            data: { _token: "{{ csrf_token() }}", services: services, serviceid: serviceid, date_from: date_from, date_to: date_to  },
+            // success: function(response){
+            //   console.log(response);
+            // }
           },
           "bDestroy": true,
           "columns": [

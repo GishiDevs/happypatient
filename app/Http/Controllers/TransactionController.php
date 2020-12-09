@@ -29,7 +29,7 @@ class TransactionController extends Controller
 
         // event(new EventNotification('view-transaction', 'transactions'));
 
-        $services = Service::all();
+        $services = Service::whereNotIn('service', ['Physical Therapy', 'Package', 'Profile'])->get();
 
         $transactions =  DB::table('patient_services')
                             // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
@@ -57,24 +57,27 @@ class TransactionController extends Controller
     public function gettransactions(Request $request)
     {   
         // return $request;
-        $services = Service::all();
+        $service = Service::whereNotIn('service', ['Physical Therapy', 'Package', 'Profile'])->get();
         
+        $services = $request->get('services');
         $serviceid = $request->get('serviceid');
         $date_from = Carbon::make($request->get('date_from'))->format('Y-m-d');
         $date_to = Carbon::make($request->get('date_to'))->format('Y-m-d');
         $service_arr;
 
-        if(empty($serviceid))
+        if(empty($services))
         {   
-            foreach($services as $service)
+            foreach($service as $item)
             {
-                $service_arr[] = $service->id;
+                $service_arr[] = $item->id;
             }
         }
         else
         {
-            $service_arr[] = $request->get('serviceid');
+            $service_arr = $services;
         }
+
+        $service_arr;
 
         $transactions =  DB::table('patient_services')
                             // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
