@@ -51,12 +51,12 @@ class DiagnosisController extends Controller
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                                   ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                                   ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
+                                  ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
                                   ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
                                           'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type',
-                                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt')
+                                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt', DB::raw('diagnoses.id as diagnoses_id'))
                                 //   ->whereIn('services.service', $services)
                                   ->where('patient_services.patientid', '=', $patient_service->patientid)
-                                  ->where('patient_service_items.status', '!=', 'pending')
                                   ->orderBy('patient_services.id', 'Asc')
                                   ->orderBy('services.service', 'Asc')
                                   ->orderBy('service_procedures.code', 'Asc')

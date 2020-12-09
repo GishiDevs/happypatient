@@ -226,7 +226,7 @@
                               @endif
                           </td>
                           <td id="td-actions">
-                            <a href="" data-url="{{ route('diagnosis.print', $patient_service->id) }}" id="btn-view" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
+                            <a href="" data-url="{{ route('diagnosis.print', $services->id) }}" id="btn-view" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                           </td>
                         </tr>
                         @endforeach									
@@ -393,9 +393,9 @@ $(document).ready(function () {
   $('#table-services').on('click', 'tbody td #btn-view', function(e){
     e.preventDefault();
     
-    // var url = $(this).data('url');
+    var url = $(this).data('url');
 
-    // window.open(url, '_blank');  
+    window.open(url, '_blank');  
 
   });
 
