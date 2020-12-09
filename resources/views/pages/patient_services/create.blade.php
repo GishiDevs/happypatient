@@ -235,12 +235,12 @@ $(document).ready(function () {
       method: "POST",
       data: { _token: "{{ csrf_token() }}", patient_id: patient_id },
       success: function(response){
-        console.log(response);
-
-        var id = response.patient_service[0].id;
+        // console.log(response);
 
         if(response.patient_service.length > 0)
         {
+          var id = response.patient_service[0].id;
+
           Swal.fire({
             title: 'Information',
             html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",

@@ -41,11 +41,25 @@ class DiagnosisController extends Controller
                                            'patient_services.bloodpressure', 'patient_services.name', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus',
                                            'patients.age', 'patients.gender', 'patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.temperature', 'patient_services.weight', 'service_procedures.procedure',
-                                           'template_contents.content', 'patient_services.note', 'patient_services.physician')
+                                           'template_contents.content', 'patient_services.note', 'patient_services.physician', 'patient_services.patientid')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
                                   ->first();
+
+        $patient_service_history =  DB::table('patient_service_items')
+                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                                  ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
+                                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
+                                          'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type',
+                                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt')
+                                //   ->whereIn('services.service', $services)
+                                  ->where('patient_services.patientid', '=', $patient_service->patientid)
+                                  ->orderBy('patient_services.id', 'Asc')
+                                  ->orderBy('services.service', 'Asc')
+                                  ->orderBy('service_procedures.code', 'Asc')
+                                  ->get();
         
         //if record is empty then display error page
         if(empty($patient_service->id))
@@ -117,7 +131,7 @@ class DiagnosisController extends Controller
             }
         }
 
-        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no'));
+        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no', 'patient_service_history'));
         
     }
 
@@ -391,6 +405,24 @@ class DiagnosisController extends Controller
         return response()->json(['success' => 'Record has been updated'], 200);
     }
 
+    public function view_history($patient_id)
+    {
+        $patientservices =  DB::table('patient_service_items')
+                            ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                            ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                            ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
+                            ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
+                                    'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type',
+                                    'service_procedures.to_diagnose', 'patient_service_items.medicine_amt')
+                            ->whereIn('services.service', $services)
+                            ->where('patient_services.patientid', '=', $patient_id)
+                            ->orderBy('patient_services.id', 'Asc')
+                            ->orderBy('services.service', 'Asc')
+                            ->orderBy('service_procedures.code', 'Asc')
+                            ->get();
+
+        return response()->json(['patientservices' => $patientservices], 200);
+    }
 
     public function destroy(Diagnosis $diagnosis)
     {

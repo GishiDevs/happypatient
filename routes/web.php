@@ -339,6 +339,11 @@ Route::group(['prefix' => 'diagnosis', 'middleware' => ['auth', 'diagnosis']], f
         'as' => 'diagnosis.update',
     ]);
 
+    Route::post('/view_history/{id}', [
+        'uses' => 'DiagnosisController@update',
+        'as' => 'diagnosis.update',
+    ]);
+
     Route::get('/print/{id}', [
         'uses' => 'DiagnosisController@print',
         'as' => 'diagnosis.print',

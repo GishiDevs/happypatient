@@ -8,12 +8,23 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
+            @if($patient_service->service == 'Check-up')
+            <h1>Receipt</h1>
+            @else
             <h1>Patient Diagnosis</h1>
+            @endif
+            
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active">Add Diagnosis</li>
+              <li class="breadcrumb-item active">
+              @if($patient_service->service == 'Check-up')
+                Create Receipt
+              @else
+                Add Diagnosis
+              @endif
+              </li>
             </ol>
           </div>
         </div>
@@ -31,7 +42,13 @@
               <!-- jquery validation -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Add Diagnosis </h3>
+                  <h3 class="card-title">
+                  @if($patient_service->service == 'Check-up')
+                    Create Receipt
+                  @else
+                    Add Diagnosis
+                  @endif
+                  </h3>
                 </div>
                 <div class="card-body pad col-md-12">
                   <div class="row">
@@ -131,7 +148,12 @@
                       </div>
                     </div>
                   </div> 
-                  <label for="content">Content</label>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label for="content">Content</label>
+                      <button class="btn btn-sm btn-primary float-right mb-2" id="btn-view-history" data-toggle="modal" data-target="#modal-patient-history"> View History</button>
+                    </div>
+                  </div>
                   <div class="mb-3 div-content"> 
                     <textarea name="content" id="content" placeholder="Place some text here"
                                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
@@ -161,6 +183,64 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<div class="modal fade" id="modal-patient-history">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">History</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card-body">
+        <div class="row">
+                    <div class="table-scrollable col-md-12 table-responsive">
+                      <table class="table table-striped table-bordered table-hover" id="table-services">
+                        <thead>
+                          <th>Services</th>
+                          <th>Procedures</th>
+                          <th>Price (PHP)</th>
+                          <th>Medicine (PHP)</th>
+                          <th>Discount (%)</th>
+                          <th>Discount (PHP)</th>
+                          <th>Total (PHP)</th>
+                          <th>Status</th>
+                          <th id="th-actions">Actions</th>
+                        </thead>
+                        <tbody>			
+                        @foreach($patient_service_history as $services)
+                        <tr id="row-id-{{$services->id}}">
+                          <td>{{ $services->service }}</td>
+                          <td>{{ $services->code }}</td>
+                          <td><span id="span-price-{{ $services->id }}">{{ $services->price }}</span><input type="text" class="form-control" name="price" id="price-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->price }}" hidden> </td>
+                          <td><span id="span-medicine_amt-{{ $services->id }}">{{ $services->medicine_amt }}</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->medicine_amt }}" hidden> </td>
+                          <td><span id="span-discount-{{ $services->id }}">{{ $services->discount }}</span><input type="text" class="form-control" name="discount" id="discount-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount }}" hidden> </td>
+                          <td><span id="span-discount_amt-{{ $services->id }}">{{ $services->discount_amt }}</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount_amt }}"  hidden> </td>
+                          <td><span class="service-total-amount" id="span-total_amount-{{ $services->id }}">{{ $services->total_amount }}</span></td>
+                          <td>
+                              @if($services->status == 'diagnosed' || $services->status == 'receipted')
+                                <span class="badge bg-success">{{ $services->status }}</span>
+                              @elseif($services->status == 'pending')
+                                <span class="badge bg-warning">{{ $services->status }}</span>
+                              @endif
+                          </td>
+                          <td id="td-actions">
+                            <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
+                          </td>
+                        </tr>
+                        @endforeach									
+                        </tbody>
+                      </table>
+                    </div>						
+                  </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 <script type="text/javascript">
 
 $(document).ready(function () {
@@ -308,6 +388,10 @@ $(document).ready(function () {
 
       }
     });
+  });
+
+  $('#btn-view-history').click(function(e){
+    alert();
   });
 
    //CKeditor
