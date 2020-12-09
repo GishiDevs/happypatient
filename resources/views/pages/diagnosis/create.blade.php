@@ -184,7 +184,7 @@
 </div>
 <!-- /.content-wrapper -->
 <div class="modal fade" id="modal-patient-history">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">History</h4>
@@ -226,7 +226,7 @@
                               @endif
                           </td>
                           <td id="td-actions">
-                            <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
+                            <a href="" data-url="{{ route('diagnosis.print', $patient_service->id) }}" id="btn-view" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                           </td>
                         </tr>
                         @endforeach									
@@ -390,9 +390,19 @@ $(document).ready(function () {
     });
   });
 
-  $('#btn-view-history').click(function(e){
-    alert();
+  $('#table-services').on('click', 'tbody td #btn-view', function(e){
+    e.preventDefault();
+    
+    // var url = $(this).data('url');
+
+    // window.open(url, '_blank');  
+
   });
+
+  $('#btn-view-history').click(function(e){
+    e.preventDefault();
+  });
+
 
    //CKeditor
    ClassicEditor.create( document.querySelector( '#content' ) )

@@ -56,6 +56,7 @@ class DiagnosisController extends Controller
                                           'service_procedures.to_diagnose', 'patient_service_items.medicine_amt')
                                 //   ->whereIn('services.service', $services)
                                   ->where('patient_services.patientid', '=', $patient_service->patientid)
+                                  ->where('patient_service_items.status', '!=', 'pending')
                                   ->orderBy('patient_services.id', 'Asc')
                                   ->orderBy('services.service', 'Asc')
                                   ->orderBy('service_procedures.code', 'Asc')
