@@ -126,10 +126,28 @@
                       </div>
                     </div>
                   </div> 
-                  <label for="content">Content</label>
-                  <div class="mb-3 div-content"> 
-                    <textarea name="content" id="content" placeholder="Place some text here"
-                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label for="content">Content</label>
+                      <div class="mb-3 div-content"> 
+                        <textarea name="content" id="content" placeholder="Place some text here"
+                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <label for="content">Select Signatories:</label>
+                      @foreach($service_signatories as $item)
+                        <div class="col-md-4">
+                          <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" name="signatories[]" type="checkbox" id="checkbox-userid-{{ $item->userid }}" value="{{ $item->userid }}" @if(in_array($item->userid, $diagnosis_signatories)) checked @endif>
+                            <label for="checkbox-userid-{{ $item->userid }}" class="custom-control-label">{{ $item->users->name }}</label>
+                          </div>
+                        </div>
+                       @endforeach
+                    </div>
                   </div>
                 </div>
                 <!-- /.card-header -->

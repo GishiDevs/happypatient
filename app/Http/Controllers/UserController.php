@@ -13,6 +13,8 @@ use Hash;
 use Auth;
 use App\Events\EventNotification;
 use App\ActivityLog;
+use App\Service;
+use App\ServiceSignatory;
 
 class UserController extends Controller
 {
@@ -27,8 +29,9 @@ class UserController extends Controller
 
     public function create()
     {   
+        $services = Service::all();
         $roles = Role::all();
-        return view('pages.user.create', compact('roles'));
+        return view('pages.user.create', compact('roles', 'services'));
     }
 
     public function getuserrecord()
@@ -111,6 +114,21 @@ class UserController extends Controller
 
         $user->assignRole($request->get('roles'));
 
+        $services = $request->get('services');
+
+        if($services)
+        {
+            for($x=0; $x < count($services); $x++)
+            {
+                $service_signatory = new ServiceSignatory();
+                $service_signatory->userid = $user->id;
+                $service_signatory->serviceid = $services[$x];
+                $service_signatory->save();
+
+            }
+        }
+
+
         //PUSHER - send data/message if user is created
         event(new EventNotification('create-user', 'users'));
 
@@ -130,16 +148,16 @@ class UserController extends Controller
     public function edit($userid)
     {
         $user = User::find($userid);
-
+        $service_signatories = ServiceSignatory::where('userid', $userid)->pluck('serviceid', 'serviceid')->all();
         //if record is empty then display error page
         if(empty($user->id))
         {
             return abort(404, 'Not Found');
         }
-
+        $services = Service::all();
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
-        return view('pages.user.edit', compact('user', 'roles', 'userRole'));
+        return view('pages.user.edit', compact('user', 'roles', 'userRole', 'services', 'service_signatories'));
     }
 
     public function update(Request $request, $userid)
@@ -200,6 +218,38 @@ class UserController extends Controller
         //PUSHER - send data/message if user is updated
         event(new EventNotification('edit-user', 'users'));
 
+        $services = $request->get('services');
+
+        if($services)
+        {   
+            ServiceSignatory::where('userid', $userid)
+                            ->whereNotIn('serviceid', $services)
+                            ->delete();
+
+            for($x=0; $x < count($services); $x++)
+            {   
+                
+                $signatory_exists = ServiceSignatory::where('userid', $userid)
+                                ->where('serviceid', $services[$x])
+                                ->first();
+
+                if(!$signatory_exists)
+                {
+                    $service_signatory = new ServiceSignatory();
+                    $service_signatory->userid = $user->id;
+                    $service_signatory->serviceid = $services[$x];
+                    $service_signatory->save();
+                }
+                
+
+            }
+            
+        }
+        else
+        {   
+            ServiceSignatory::where('userid', $userid)
+                            ->delete();
+        }
 
         //Activity Log
         $activity_log = new ActivityLog();

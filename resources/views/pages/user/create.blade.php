@@ -87,6 +87,16 @@
                       </select>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="form-group col-md-4">
+                      <label for="role">Signatory of:</label>
+                      <select multiple class="custom-select" name="services[]" id="services">
+                        @foreach($services as $service)
+                        <option value="{{ $service->id }}">{{ $service->service }}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

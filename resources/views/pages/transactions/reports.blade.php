@@ -168,8 +168,8 @@
 
       var services = [];
 
-      dataSrc = [];
-      columnTarget = [];
+      // dataSrc = [];
+      // columnTarget = [];
 
       $.each($("input[name='service[]']:checked"), function(){
         services.push($(this).val());
