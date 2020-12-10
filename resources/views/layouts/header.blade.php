@@ -228,6 +228,7 @@
 
             </a>
           </li>
+          @can('transactions')
           <li class="nav-item">
             <a href="{{ route('transactions.index') }}" class="nav-link {{ (request()->is('transactions')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-dollar-sign"></i>
@@ -237,6 +238,7 @@
               </div>
             </a>
           </li>
+          @endcan
           @canany(['patient-list','patient-create'])
           <li class="nav-item has-treeview {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*') || request()->is('patient/history/*')) ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ (request()->is('patient/create') || request()->is('patient/index') || request()->is('patient/edit/*') || request()->is('patient/history/*')) ? 'active' : '' }}">
@@ -363,8 +365,8 @@
             </ul>
           </li> -->
           @canany(['service-list','service-create','serviceprocedure-list','serviceprocedure-create','certificate-list','certificate-create','permission-list','permission-create','role-list','role-create'])
-          <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('serviceprocedure/content/create/*') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('serviceprocedure/content/create/*') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Settings
@@ -382,7 +384,7 @@
               @endcanany
               @canany(['serviceprocedure-list','serviceprocedure-create'])
               <li class="nav-item">
-                <a href="{{ route('serviceprocedure.index') }}" class="nav-link {{ (request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create')) ? 'active' : '' }}">
+                <a href="{{ route('serviceprocedure.index') }}" class="nav-link {{ (request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('serviceprocedure/content/create/*')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Service Procedures</p>
                 </a>
@@ -421,6 +423,16 @@
               <i class="nav-icon fas fa-history"></i>
               <p>
                 Activity Logs
+              </p>
+            </a>
+          </li>
+          @endcan
+          @can('reports')
+          <li class="nav-item">
+            <a href="{{ route('reports') }}" class="nav-link {{ (request()->is('reports')) ? 'active' : '' }}">
+              <i class="nav-icon fas fa-file-alt"></i>
+              <p>
+                Reports
               </p>
             </a>
           </li>

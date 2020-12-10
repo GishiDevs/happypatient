@@ -14,14 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', 'DashboardController@index')->name('dashboard.index')->middleware('auth');
-Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
-Route::get('/transactions', 'TransactionController@index')->name('transactions.index')->middleware('auth');
-Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions')->middleware('auth');
-Route::get('/transactions_preview/{param}', 'TransactionController@transactions_preview')->name('transactions_preview')->middleware('auth');
-Route::post('/check_patient_transaction', 'TransactionController@check_patient_transaction')->name('check_patient_transaction')->middleware('auth');
-Route::get('/logs', 'ActivityLogController@index')->name('logs')->middleware('activity_log');
-Route::get('/getlogs', 'ActivityLogController@getlogs')->name('getlogs')->middleware('activity_log');
+
+
+
 Auth::routes();
 
 // Route::group(['prefix' => '/', 'middleware' => ['auth','dashboard']], function(){
@@ -34,6 +29,20 @@ Auth::routes();
 //         'as' => 'dashboard.getpatientrecord',
 //     ]);
 // });
+
+Route::get('/', 'DashboardController@index')->name('dashboard.index')->middleware('auth');
+Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
+
+Route::post('/check_patient_transaction', 'TransactionController@check_patient_transaction')->name('check_patient_transaction')->middleware('auth');
+Route::get('/transactions_preview/{param}', 'TransactionController@transactions_preview')->name('transactions_preview')->middleware('auth');;
+
+
+Route::group(['prefix' => 'transactions', 'middleware' => ['auth', 'transactions']], function(){
+    Route::get('/', 'TransactionController@index')->name('transactions.index');
+    Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions');
+    Route::get('/reports', 'TransactionController@reports')->name('reports');
+});
+
 
 //Patient Route
 Route::group(['prefix' => 'patient', 'middleware' => ['auth','patient_crud']], function(){
@@ -397,3 +406,10 @@ Route::group(['prefix' => 'certificate/template', 'middleware' => ['auth']], fun
     ]);
 
 });
+
+Route::group(['prefix' => 'logs', 'middleware' => ['auth', 'activity_log']], function(){
+    Route::get('/', 'ActivityLogController@index')->name('logs');
+    Route::get('/getlogs', 'ActivityLogController@getlogs')->name('getlogs');
+});
+
+

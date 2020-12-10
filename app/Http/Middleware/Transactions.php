@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 
-class ActivityLog
+class Transactions
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,9 @@ class ActivityLog
      */
     public function handle($request, Closure $next)
     {
-        if($request->is('logs') || $request->is('logs/getlogs'))
-        {
-            if(Auth::user()->can('activity-log'))
-            {
-                return $next($request);
+        if($request->is('transactions') || $request->is('transactions/gettransactions') || $request->is('transactions/reports')){
+            if(Auth::user()->can('transactions')){
+                return $next($request); 
             }
             else
             {

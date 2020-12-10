@@ -61,9 +61,19 @@ class TransactionController extends Controller
         
         $services = $request->get('services');
         $serviceid = $request->get('serviceid');
-        $date_from = Carbon::make($request->get('date_from'))->format('Y-m-d');
-        $date_to = Carbon::make($request->get('date_to'))->format('Y-m-d');
+        $date_from = Carbon::now()->format('Y-m-d');
+        $date_to = Carbon::now()->format('Y-m-d');
         $service_arr;
+
+        if($request->get('date_from'))
+        {
+            $date_from = Carbon::make($request->get('date_from'))->format('Y-m-d');
+        }
+
+        if($request->get('date_to'))
+        {
+            $date_to = Carbon::make($request->get('date_to'))->format('Y-m-d');
+        }
 
         if(empty($services))
         {   
@@ -86,18 +96,18 @@ class TransactionController extends Controller
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                             ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),
                                      'patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'service_procedures.code', 
-                                     'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount',
-                                     'patient_service_items.status')
+                                     'patient_service_items.price', 'patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt',
+                                     'patient_service_items.total_amount', 'patient_service_items.status')
                             ->where('patient_services.cancelled', '=', 'N')
                             ->whereIn('services.id', $service_arr)
-                            // ->whereDate('patient_services.docdate', '>=', $date_from)
-                            // ->whereDate('patient_services.docdate', '<=', $date_to)
-                            ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
+                            ->whereDate('patient_services.docdate', '>=', $date_from)
+                            ->whereDate('patient_services.docdate', '<=', $date_to)
+                            // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
                             ->orderBy('id', 'asc')
                             ->orderBy('service', 'asc')
                             ->orderBy('procedure', 'asc')
                             ->get();
-        
+
         $grand_total = 0.00;
 
         foreach($transactions as $transaction)
@@ -171,5 +181,11 @@ class TransactionController extends Controller
         return view('pages.transactions.preview', compact('service'));
     }
 
+    public function reports()
+    {   
+        $services = Service::whereNotIn('service', ['Physical Therapy', 'Package', 'Profile'])->get();
+
+        return view('pages.transactions.reports', compact('services'));
+    }
 
 }

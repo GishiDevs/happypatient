@@ -73,6 +73,7 @@ class Kernel extends HttpKernel
         'dashboard' => \App\Http\Middleware\Dashboard::class,
         'diagnosis' => \App\Http\Middleware\Diagnosis::class,
         'activity_log' => \App\Http\Middleware\ActivityLog::class,
+        'transactions' => \App\Http\Middleware\Transactions::class,
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         

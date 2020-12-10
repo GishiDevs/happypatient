@@ -198,29 +198,23 @@
                     <div class="table-scrollable col-md-12 table-responsive">
                       <table class="table table-striped table-bordered table-hover" id="table-services">
                         <thead>
+                          <th>Doc. Date</th>
                           <th>Services</th>
+                          <th>Code Name</th>
                           <th>Procedures</th>
-                          <th>Price (PHP)</th>
-                          <th>Medicine (PHP)</th>
-                          <th>Discount (%)</th>
-                          <th>Discount (PHP)</th>
-                          <th>Total (PHP)</th>
                           <th>Status</th>
                           <th id="th-actions">Actions</th>
                         </thead>
                         <tbody>			
                         @foreach($patient_service_history as $services)
                         <tr id="row-id-{{$services->id}}">
+                          <td>{{ $services->docdate }}</td>
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->code }}</td>
-                          <td><span id="span-price-{{ $services->id }}">{{ $services->price }}</span><input type="text" class="form-control" name="price" id="price-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->price }}" hidden> </td>
-                          <td><span id="span-medicine_amt-{{ $services->id }}">{{ $services->medicine_amt }}</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->medicine_amt }}" hidden> </td>
-                          <td><span id="span-discount-{{ $services->id }}">{{ $services->discount }}</span><input type="text" class="form-control" name="discount" id="discount-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount }}" hidden> </td>
-                          <td><span id="span-discount_amt-{{ $services->id }}">{{ $services->discount_amt }}</span><input type="text" class="form-control" name="discount_amt" id="discount_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount_amt }}"  hidden> </td>
-                          <td><span class="service-total-amount" id="span-total_amount-{{ $services->id }}">{{ $services->total_amount }}</span></td>
+                          <td>{{ $services->procedure }}</td>
                           <td>
                               @if($services->status == 'diagnosed' || $services->status == 'receipted')
-                                <span class="badge bg-success">{{ $services->status }}</span>
+                                <span class="badge bg-success">done</span>
                               @elseif($services->status == 'pending')
                                 <span class="badge bg-warning">{{ $services->status }}</span>
                               @endif

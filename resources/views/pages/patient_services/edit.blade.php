@@ -161,7 +161,7 @@
                           @if($services->type == 'individual')
                           <td>
                               @if($services->status == 'diagnosed' || $services->status == 'receipted')
-                                <span class="badge bg-success">{{ $services->status }}</span>
+                                <span class="badge bg-success">done</span>
                               @elseif($services->status == 'pending')
                                 <span class="badge bg-warning">{{ $services->status }}</span>
                               @elseif($services->status == 'cancelled')

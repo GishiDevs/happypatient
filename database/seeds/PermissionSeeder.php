@@ -59,6 +59,8 @@ class PermissionSeeder extends Seeder
             'amount-edit',
             'patientservices-item-remove',
             'activity-log',
+            'reports',
+            'transactions',
          ];
  
  

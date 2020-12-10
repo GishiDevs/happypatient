@@ -138,14 +138,12 @@
                           <td>{{ $services->total_amount }}</td>
                           <td>
                               @if($services->status == 'diagnosed' || $services->status == 'receipted')
-                              <span class="badge bg-success">
+                              <span class="badge bg-success">done</span>
                               @elseif($services->status == 'pending')
-                              <span class="badge bg-warning">
+                              <span class="badge bg-warning">{{ $services->status }}</span>
                               @elseif($services->status == 'cancelled')
-                              <span class="badge bg-danger">
+                              <span class="badge bg-danger">{{ $services->status }}</span>
                               @endif
-                                {{ $services->status }}
-                              </span>
                           </td>
                           <td>
                               @if($services->status == 'diagnosed' || $services->status == 'receipted')

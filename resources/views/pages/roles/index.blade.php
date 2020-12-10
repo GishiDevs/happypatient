@@ -73,7 +73,7 @@
 </div>
 <!-- /.content-wrapper -->
 <div class="modal fade" id="modal-role">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title"></h4>
@@ -96,7 +96,7 @@
               <div class="form-group">
                 <div class="row">
                 @foreach($permissions as $permission)               
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <div class="custom-control custom-checkbox">
                         <input class="custom-control-input" name="permission[]" type="checkbox" id="checkbox-permissionid-{{ $permission->id }}" value="{{ $permission->id }}">
                       <label for="checkbox-permissionid-{{ $permission->id }}" class="custom-control-label">{{ $permission->name }}</label>
