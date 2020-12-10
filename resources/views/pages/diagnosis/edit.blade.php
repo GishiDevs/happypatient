@@ -128,18 +128,9 @@
                   </div>
                   <label for="content">Content</label>
                   <div class="mb-3 div-content">
-                    <textarea name="content" id="content" placeholder="Place some text here"
-                                    style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
+                    <textarea name="content" id="content" placeholder="Place some text here"> {!! $patient_service->content !!}</textarea>
                   </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <label for="content">Content</label>
-                      <div class="mb-3 div-content">
-                        <textarea name="content" id="content" placeholder="Place some text here"
-                                        style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
-                      </div>
-                    </div>
-                  </div>
+
                   <hr>
                   <div class="row">
                     <div class="col-md-12">
