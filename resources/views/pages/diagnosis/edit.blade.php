@@ -1,7 +1,7 @@
 
 @extends('layouts.main')
 @section('title', 'Diagnosis')
-@section('main_content')                                
+@section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -108,7 +108,7 @@
                         <div>{{ $patient_service->note }}</div>
                       </div>
                     </div>
-                  </div>  
+                  </div>
                   <hr>
                   <div class="row">
                     <div class="form-group col-md-4">
@@ -117,7 +117,7 @@
                         <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician" value="{{ $patient_service->physician }}">
                       </div>
                     </div>
-                  </div> 
+                  </div>
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="title">Title</label>
@@ -125,9 +125,9 @@
                         <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" value="{{ $patient_service->title }}">
                       </div>
                     </div>
-                  </div> 
+                  </div>
                   <label for="content">Content</label>
-                  <div class="mb-3 div-content"> 
+                  <div class="mb-3 div-content">
                     <textarea name="content" id="content" placeholder="Place some text here"
                                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"> {!! $patient_service->content !!}</textarea>
                   </div>
@@ -151,10 +151,13 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+
+<script type="text/javascript" src="{{ asset('dist/js/ckeditor_style.js') }}"></script>
+
 <script type="text/javascript">
 
 $(document).ready(function () {
-  
+
   var dob = '{{ $patient_service->birthdate }}';
   var birthdate = dob.split('/');
   var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
@@ -181,18 +184,18 @@ $(document).ready(function () {
     // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
     window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
   });
-  
+
   $('#btn-update').click(function(e){
 
     // e.preventDefault();
 
     if(!$('[name="content"]').val())
-    { 
+    {
       $('#content-error').remove();
       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
     }
-  
-    
+
+
     //Patient Form Validation
     $('#diagnosisform').validate({
       rules: {
@@ -266,39 +269,14 @@ $(document).ready(function () {
             console.log(response);
           }
         });
-        
+
 
       }
     });
   });
 
   //CKeditor
-  ClassicEditor.create( document.querySelector( '#content' ) )
-               .catch( error => {
-                  console.error( error );
-               });
-  // $('.textarea').summernote();
-  // $('.textarea').summernote({
-  //   callbacks: {
-  //   onKeyup: function(e) {
-  //     if(!$('[name="content"]').val())
-  //     { 
-  //       $('#content-error').remove();
-  //       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
-  //     }
-  //     else
-  //     {
-  //       $('#content-error').remove();
-  //     }
-  //   }
-  // }
-  // });
 
-  // $('#diagnosisform').on('change input',function(e){
-
-  //   $('#btn-update').attr('disabled', false);
-   
-  // });
 
 
 });

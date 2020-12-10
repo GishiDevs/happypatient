@@ -57,7 +57,7 @@ $(function () {
         bodyClass: 'document-editor',
 
         // Reduce the list of block elements listed in the Format dropdown to the most commonly used.
-        format_tags: 'p;h1;h2;h3;pre',
+        //format_tags: 'p;h1;h2;h3;pre',
 
         // Simplify the Image and Link dialog windows. The "Advanced" tab is not needed in most cases.
         removeDialogTabs: 'image:advanced;link:advanced',
