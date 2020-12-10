@@ -58,7 +58,7 @@
                         <div class="form-group col-md-12">
                           <div class="form-group">
                             <div class="row">
-                            @foreach($services as $service)               
+                            @foreach($services as $service)
                               <div class="col-md-4">
                                 <div class="custom-control custom-checkbox">
                                     <input class="custom-control-input" name="service[]" type="checkbox" id="checkbox-serviceid-{{ $service->id }}" value="{{ $service->id }}">
@@ -147,20 +147,20 @@
 
   $(document).ready(function() {
 
-    $('.select2').select2();  
+    $('.select2').select2();
 
     // get_transactions();
 
     // $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
     //   var date_from = $('#date-from').val();
-    //   var date_to = $('#date-to').val();  
+    //   var date_to = $('#date-to').val();
 
     //   // if date-from or date-to texfield has value
     //   if(date_from || date_to)
-    //   { 
-    //     get_transactions(); 
+    //   {
+    //     get_transactions();
     //   }
-      
+
     // });
 
     // $('#service').on('change', function () {
@@ -170,7 +170,7 @@
     //     format: 'L',
     //     useCurrent: false,
     //     ignoreReadonly: true
-        
+
     // });
 
     // $('#filter-date-to').datetimepicker({
@@ -178,8 +178,8 @@
     //     useCurrent: false,
     //     ignoreReadonly: true
     // });
-    
-    
+
+
 
     get_transactions();
 
@@ -190,27 +190,27 @@
     $('[data-mask]').inputmask();
 
     function get_transactions(services)
-    { 
+    {
 
-      var serviceid = $('#service').find(':selected').data('serviceid'); 
+      var serviceid = $('#service').find(':selected').data('serviceid');
       var date_from = $('#date-from').val();
-      var date_to = $('#date-to').val();  
+      var date_to = $('#date-to').val();
       var grand_total = 0;
       var services = [];
-      
+
       $.each($("input[name='service[]']:checked"), function(){
         services.push($(this).val());
       });
 
       // if date-from or date-to texfield has no value
       if(!date_to)
-      { 
-        date_to = "{{ date('m/d/Y') }}"; 
+      {
+        date_to = "{{ date('m/d/Y') }}";
       }
 
       if(!date_from)
-      { 
-        date_from = "{{ date('m/d/Y') }}"; 
+      {
+        date_from = "{{ date('m/d/Y') }}";
       }
 
       var dt = $('#transactions').DataTable({
@@ -239,7 +239,7 @@
                       { "data": "code"},
                       { "data": "total_amount"},
                       { "data": "status"},
-                      
+
           ],
           order: [],
           rowGroup: {
@@ -250,7 +250,7 @@
                 var group_label = group;
 
                 if(group_index == 0)
-                { 
+                {
                   // group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
                   group_label = rows.data()[0]['name'].toUpperCase() ;
                 }
@@ -265,13 +265,13 @@
                 // return null;
               },
           },
-          columnDefs: [ 
+          columnDefs: [
             {
               targets: [ 0, 1, 2, 3 ],
               visible: false
             },
             {
-              targets: 'no-sort', orderable : false 
+              targets: 'no-sort', orderable : false
             },
             {
               targets: 4,
@@ -284,7 +284,7 @@
               render: function ( data ) {
                   if(data == 'diagnosed' || data == 'receipted')
                   {
-                    return '<span class="badge bg-success">'+data+'</span>';
+                    return '<span class="badge bg-success">done</span>';
                   }
                   else if(data == 'pending')
                   {
@@ -294,14 +294,14 @@
                   {
                     return '<span class="badge bg-danger">'+data+'</span>';
                   }
-                                
+
                 }
             },
           ],
           footerCallback: function ( row, data, start, end, display ) {
 
             var api = this.api(), data;
- 
+
             // Remove the formatting to get integer data for summation
             var intVal = function ( i ) {
                 return typeof i === 'string' ?
@@ -309,8 +309,8 @@
                     typeof i === 'number' ?
                         i : 0;
             };
- 
- 
+
+
             // Total over this page
             pageTotal = api
                 .column( 6 )
@@ -318,7 +318,7 @@
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
- 
+
             // Update footer
             $( api.column( 6 ).footer() ).html(pageTotal.toFixed(2));
         }
@@ -350,16 +350,16 @@
     channel.bind('App\\Events\\EventNotification', function(data) {
 
       console.log(data.action);
-      
+
       //PUSHER - refresh data when table patient_services or patient_service_items has changes
-      if(data.action == 'edit-patient' || data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' 
+      if(data.action == 'edit-patient' || data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services'
          || data.action == 'edit-service-amount' || data.action == 'add-service-item' || data.action == 'remove-service-item')
       {
         get_transactions();
       }
 
     });
-        
+
 	});
 
 </script>
