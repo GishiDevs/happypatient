@@ -118,6 +118,12 @@
                         <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->description }}</p>
                         <p class="text-center my-0" style="font-size: 12px;">License# : {{ Auth::user()->license }}</p>
                     </div>
+                    <div>
+                        Signatories:
+                        @foreach($diagnosis_signatories as $item)
+                            <span>{{ $item->users->name }}</span><br>
+                        @endforeach
+                    </div>
                 </div>
 
             </div>

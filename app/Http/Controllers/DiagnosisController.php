@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Session;
 use App\Events\EventNotification;
 use App\ActivityLog;
+use App\ServiceSignatory;
+use App\DiagnosisSignatory;
 
 class DiagnosisController extends Controller
 {
@@ -133,13 +135,20 @@ class DiagnosisController extends Controller
             }
         }
 
-        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no', 'patient_service_history'));
+        
+        $service_signatories = ServiceSignatory::with('users', 'services')
+                                               ->where('serviceid', $patient_service->service_id)
+                                                ->get();
+
+        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no', 'patient_service_history', 'service_signatories'));
         
     }
 
 
     public function store(Request $request, $ps_item_id)
     {   
+        // return $request;
+
         $year_now = date('Y');
 
         $patient_service = DB::table('patient_service_items')
@@ -180,7 +189,7 @@ class DiagnosisController extends Controller
         $validator = Validator::make($request->all(),[
             // 'physician' => 'required',
             'title' => 'required',
-            'content' => 'required|max:65535'
+            // 'content' => 'required|max:65535'
         ], $rules);
         
         if($validator->fails())
@@ -218,7 +227,22 @@ class DiagnosisController extends Controller
         $diagnosis->save();
        
         //create session for download pdf
-        Session::flash('download_pdf', $ps_item_id);
+        // Session::flash('download_pdf', $ps_item_id);
+
+        $signatories = $request->get('signatories');
+
+        //store diagnosis signatories
+        if($signatories)
+        {
+            for($x=0; $x < count($signatories); $x++)
+            {
+                $service_signatory = new DiagnosisSignatory();
+                $service_signatory->userid = $signatories[$x];
+                $service_signatory->diagnosisid = $diagnosis->id;
+                $service_signatory->save();
+
+            }
+        }
 
         //PUSHER - send data/message if diagnosis is created
         event(new EventNotification('create-diagnosis', 'diagnoses'));
@@ -307,7 +331,11 @@ class DiagnosisController extends Controller
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
 
-        return view('pages.diagnosis.pdf', compact('patient_service'));;
+        $diagnosis_signatories = DiagnosisSignatory::with('users')
+                                                ->where('diagnosisid', $patient_service->diagnoses_id)
+                                                ->get();
+
+        return view('pages.diagnosis.pdf', compact('patient_service', 'diagnosis_signatories'));;
     }
 
 
@@ -354,12 +382,21 @@ class DiagnosisController extends Controller
         $diagnosis_ctr = count($dianosis_list_per_service) + 1;
         $file_no = date('y') . '-' . sprintf('%05d', $diagnosis_ctr);
 
-        return view('pages.diagnosis.edit',compact('patient_service'));
+        $diagnosis_signatories = DiagnosisSignatory::with('users')
+                                                ->where('diagnosisid', $patient_service->diagnoses_id)
+                                                ->pluck('userid', 'userid')
+                                                ->all();
+
+        $service_signatories = ServiceSignatory::with('users', 'services')
+                                               ->where('serviceid', $patient_service->service_id)
+                                               ->get();
+
+        return view('pages.diagnosis.edit',compact('patient_service', 'service_signatories', 'diagnosis_signatories'));
     }
 
 
     public function update(Request $request, $diagnoses_id)
-    {
+    {   
         $rules = [
             // 'physician.required' => 'Please enter physician',
             'title.required' => 'Please enter template title',
@@ -370,7 +407,7 @@ class DiagnosisController extends Controller
         $validator = Validator::make($request->all(),[
             // 'physician' => 'required',
             'title' => 'required',
-            'content' => 'required|max:65535'
+            // 'content' => 'required|max:65535'
         ], $rules);
         
         if($validator->fails())
@@ -384,12 +421,47 @@ class DiagnosisController extends Controller
         {
             return abort(404, 'Not Found');
         }
-
+        
         $diagnosis->physician = $request->get('physician');
         // $diagnosis->bloodpressure = $request->get('bloodpressure');
         $diagnosis->title = $request->get('title');
         $diagnosis->content = $request->get('content');
         $diagnosis->save();
+
+        
+        $signatories = $request->get('signatories');
+        
+        //store diagnosis signatories
+        if($signatories)
+        {   
+            DiagnosisSignatory::where('diagnosisid', $diagnosis->id)
+                            ->whereNotIn('userid', $signatories)
+                            ->delete();
+
+            for($x=0; $x < count($signatories); $x++)
+            {   
+                
+                $signatory_exists = DiagnosisSignatory::where('diagnosisid', $diagnosis->id)
+                                ->where('userid', $signatories[$x])
+                                ->first();
+
+                if(!$signatory_exists)
+                {
+                    $service_signatory = new DiagnosisSignatory();
+                    $service_signatory->userid = $signatories[$x];
+                    $service_signatory->diagnosisid = $diagnosis->id;
+                    $service_signatory->save();
+                }
+                
+            }
+            
+        }
+        else
+        {   
+            DiagnosisSignatory::where('diagnosisid', $diagnosis->id)
+                            ->delete();
+        }
+        
 
         //PUSHER - send data/message if diagnosis is updated
         event(new EventNotification('edit-diagnosis', 'diagnoses'));
