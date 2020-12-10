@@ -1,7 +1,7 @@
 
 @extends('layouts.main')
 @section('title', 'Add Diagnosis')
-@section('main_content')                                
+@section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -13,7 +13,7 @@
             @else
             <h1>Patient Diagnosis</h1>
             @endif
-            
+
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -121,7 +121,7 @@
                       <label for="file#">File #: </label>
                       <div>{{ $file_no }} <input type="text" name="file_no" value="{{ $file_no }}" hidden></div>
                     </div>
-                  </div>    
+                  </div>
                   <hr>
                   <div class="row">
                     <div class="form-group col-md-6">
@@ -130,8 +130,8 @@
                         <div>{{ $patient_service->note }}</div>
                       </div>
                     </div>
-                  </div>               
-                  <hr> 
+                  </div>
+                  <hr>
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="title">Referring Physician</label>
@@ -147,14 +147,14 @@
                         <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" value='{{ $patient_service->procedure }}'>
                       </div>
                     </div>
-                  </div> 
+                  </div>
                   <div class="row">
                     <div class="col-md-12">
                       <label for="content">Content</label>
                       <button class="btn btn-sm btn-primary float-right mb-2" id="btn-view-history" data-toggle="modal" data-target="#modal-patient-history"> View History</button>
                     </div>
                   </div>
-                  <div class="mb-3 div-content"> 
+                  <div class="mb-3 div-content">
                     <textarea name="content" id="content" placeholder="Place some text here"
                                     style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
                       {{ $patient_service->content }}
@@ -205,7 +205,7 @@
                           <th>Status</th>
                           <th id="th-actions">Actions</th>
                         </thead>
-                        <tbody>			
+                        <tbody>
                         @foreach($patient_service_history as $services)
                         <tr id="row-id-{{$services->id}}">
                           <td>{{ $services->docdate }}</td>
@@ -220,13 +220,13 @@
                               @endif
                           </td>
                           <td id="td-actions">
-                            <a href="" data-url="{{ route('diagnosis.print', $services->id) }}" id="btn-view" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
+                            <a href="" data-url="{{ route('diagnosis.print', $services->id) }}" id="btn-view" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a>
                           </td>
                         </tr>
-                        @endforeach									
+                        @endforeach
                         </tbody>
                       </table>
-                    </div>						
+                    </div>
                   </div>
         </div>
       </div>
@@ -235,6 +235,9 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
+
+<script type="text/javascript" src="{{ asset('dist/js/ckeditor_style.js') }}"></script>
+
 <script type="text/javascript">
 
 $(document).ready(function () {
@@ -251,7 +254,7 @@ $(document).ready(function () {
   var age = year_old;
 
   if(year_old == 0)
-  { 
+  {
     age = month_old + ' MOS.'
 
     if(month_old == 0)
@@ -273,7 +276,7 @@ $(document).ready(function () {
     day_old = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'day');
 
     if(year_old == 0)
-    { 
+    {
       age = month_old + ' MOS.'
 
       if(month_old == 0)
@@ -293,12 +296,12 @@ $(document).ready(function () {
     // e.preventDefault();
 
     if(!$('[name="content"]').val())
-    { 
+    {
       $('#content-error').remove();
       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
     }
-  
-    
+
+
     //Patient Form Validation
     $('#diagnosisform').validate({
       rules: {
@@ -340,7 +343,7 @@ $(document).ready(function () {
 
         var data = $('#diagnosisform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
-        
+
         $.ajax({
           url: "{{ route('diagnosis.store', $patient_service->ps_items_id) }}",
           method: "POST",
@@ -351,7 +354,7 @@ $(document).ready(function () {
             if(response.success)
             {
               $('#diagnosisform')[0].reset();
-              
+
               // Sweet Alert
               Swal.fire({
                 position: 'center',
@@ -378,7 +381,7 @@ $(document).ready(function () {
             console.log(response);
           }
         });
-        
+
 
       }
     });
@@ -386,10 +389,10 @@ $(document).ready(function () {
 
   $('#table-services').on('click', 'tbody td #btn-view', function(e){
     e.preventDefault();
-    
+
     var url = $(this).data('url');
 
-    window.open(url, '_blank');  
+    window.open(url, '_blank');
 
   });
 
@@ -399,17 +402,17 @@ $(document).ready(function () {
 
 
    //CKeditor
-   ClassicEditor.create( document.querySelector( '#content' ) )
-               .catch( error => {
-                  console.error( error );
-               });
+//    ClassicEditor.create( document.querySelector( '#content' ) )
+//                .catch( error => {
+//                   console.error( error );
+//                });
 
   // $('.textarea').summernote();
   // $('.textarea').summernote({
   //   callbacks: {
   //   onKeyup: function(e) {
   //     if(!$('[name="content"]').val())
-  //     { 
+  //     {
   //       $('#content-error').remove();
   //       $('.div-content').append('<span id="content-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter some content</span>');
   //     }
