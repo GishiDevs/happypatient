@@ -72,6 +72,7 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script type="text/javascript" src="{{ asset('dist/js/ckeditor_style.js') }}"></script>
 <script type="text/javascript">
 
 $(document).ready(function () {
@@ -79,13 +80,13 @@ $(document).ready(function () {
   let content;
 
   //CKeditor
-  ClassicEditor.create( document.querySelector( '#content' ) )
-               .then( newContent => {
-                content = newContent;
-               })
-               .catch( error => {
-                  console.error( error );
-               });
+  // ClassicEditor.create( document.querySelector( '#content' ) )
+  //              .then( newContent => {
+  //               content = newContent;
+  //              })
+  //              .catch( error => {
+  //                 console.error( error );
+  //              });
 
   $('#template_name').keyup(function(){
     if($(this).val())

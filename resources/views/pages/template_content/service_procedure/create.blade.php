@@ -65,6 +65,7 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script type="text/javascript" src="{{ asset('dist/js/ckeditor_style.js') }}"></script>
 <script type="text/javascript">
 
 $(document).ready(function () {
@@ -119,10 +120,10 @@ $(document).ready(function () {
   
 
   //CKeditor
-  ClassicEditor.create( document.querySelector( '#content' ) )
-               .catch( error => {
-                  console.error( error );
-               });
+  // ClassicEditor.create( document.querySelector( '#content' ) )
+  //              .catch( error => {
+  //                 console.error( error );
+  //              });
   // $('.textarea').summernote();
   // $('.textarea').summernote({
   //   callbacks: {

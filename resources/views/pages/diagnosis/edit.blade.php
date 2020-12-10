@@ -247,9 +247,11 @@ $(document).ready(function () {
       },
       submitHandler: function(e){
 
-
+        var content = CKEDITOR.instances.content.getData();
         var data = $('#diagnosisform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
+        data.push({name: "content", value: content});
+        
         $.ajax({
           url: "{{ route('diagnosis.update', $patient_service->diagnoses_id) }}",
           method: "POST",
