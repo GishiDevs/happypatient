@@ -85,17 +85,17 @@
                     <table id="transactions" class="table table-hover">
                       <thead>
                         <tr>
-                          <th class="no-sort">ID</th>
-                          <th class="no-sort">Document Date</th>
-                          <th class="no-sort">Name</th>
-                          <th class="no-sort">Service</th>
-                          <th class="no-sort">Code Name</th>
-                          <th class="no-sort">Procedure</th>
-                          <th class="no-sort">Price (PHP)</th>
-                          <th class="no-sort">Medicine Amt (PHP)</th>
-                          <th class="no-sort">Discount (%)</th>
-                          <th class="no-sort">Discount (PHP)</th>
-                          <th class="no-sort">Total (PHP)</th>
+                          <!-- <th id="th-id" class="no-sort">ID</th> -->
+                          <th id="th-docdate" class="no-sort">Document Date</th>
+                          <th id="th-name" class="no-sort">Name</th>
+                          <th id="th-service" class="no-sort">Service</th>
+                          <th id="th-code" class="no-sort">Code Name</th>
+                          <th id="th-procedure" class="no-sort">Procedure</th>
+                          <th id="th-price" class="no-sort">Price (PHP)</th>
+                          <th id="th-medicine_amt" class="no-sort">Medicine Amt (PHP)</th>
+                          <th id="th-discount" class="no-sort">Discount (%)</th>
+                          <th id="th-discount_amt" class="no-sort">Discount (PHP)</th>
+                          <th id="th-total_amount" class="no-sort">Total (PHP)</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -128,9 +128,23 @@
 <script>
 
   $(document).ready(function() {
+    var services = [];
+    var columns = [
+                      // { "data": "id"},
+                      { "data": "docdate"},
+                      { "data": "name"},
+                      { "data": "service"},
+                      { "data": "code"},
+                      { "data": "procedure"},
+                      { "data": "price"},
+                      { "data": "medicine_amt"},
+                      { "data": "discount"},
+                      { "data": "discount_amt"},
+                      { "data": "total_amount"},
+                  ];
 
     var dataSrc = [ 'service', 'name'];
-    var columnTarget = [0, 1, 3, 4, 5];
+    var columnTarget = [];
 
     $('.select2').select2();
 
@@ -145,6 +159,8 @@
       {
         get_transactions();
       }
+
+      console.log(columns);
 
     });
 
@@ -166,22 +182,61 @@
 
     $('.custom-checkbox [name="service[]"]').click(function(){
 
-      var services = [];
+      $('#transactions').DataTable().clear();
 
-      // dataSrc = [];
-      // columnTarget = [];
+      
+
+      dataSrc = [];
+
+      columns = [
+                      // { "data": "id"},
+                      { "data": "docdate"},
+                      { "data": "name"},
+                      { "data": "service"},
+                      { "data": "code"},
+                      { "data": "procedure"},
+                      { "data": "price"},
+                      { "data": "medicine_amt"},
+                      { "data": "discount"},
+                      { "data": "discount_amt"},
+                      { "data": "total_amount"},
+                  ];
+      
 
       $.each($("input[name='service[]']:checked"), function(){
         services.push($(this).val());
       });
 
+      $('#th-docdate').removeAttr('hidden');
+      $('#th-service').removeAttr('hidden');
+      $('#th-code').removeAttr('hidden');
+      $('#th-procedure').removeAttr('hidden');
+      $('#th-price').removeAttr('hidden');
+      $('#th-medicine_amt').removeAttr('hidden');
+      $('#th-discount').removeAttr('hidden');
+      $('#th-discount_amt').removeAttr('hidden');
+
       if(services.length)
       {
-        dataSrc = [ 'service', 'name'];
-        columnTarget = [0, 1, 3, 4, 5];
-      }
+        columns = [
+          {"data": "name"},
 
-      console.log(dataSrc);
+          {"data": "total_amount"},
+        ];
+
+        dataSrc = ['service'];
+        
+        // columnTarget = [0, 3, 4, 5, 6, 7, 8];
+        $('#th-docdate').attr('hidden', true);
+        $('#th-service').attr('hidden', true);
+        $('#th-code').attr('hidden', true);
+        $('#th-procedure').attr('hidden', true);
+        $('#th-price').attr('hidden', true);
+        $('#th-medicine_amt').attr('hidden', true);
+        $('#th-discount').attr('hidden', true);
+        $('#th-discount_amt').attr('hidden', true);
+
+      }
 
       get_transactions();
 
@@ -222,7 +277,7 @@
           "destroy": true,
           "serverSide": true,
           "ajax": {
-            url: "{{ route('gettransactions') }}",
+            url: "{{ route('getreports') }}",
             type: "POST",
             data: { _token: "{{ csrf_token() }}", services: services, serviceid: serviceid, date_from: date_from, date_to: date_to  },
             // success: function(response){
@@ -234,20 +289,7 @@
             
           },
           "bDestroy": true,
-          "columns": [
-                      { "data": "id"},
-                      { "data": "docdate"},
-                      { "data": "name"},
-                      { "data": "service"},
-                      { "data": "code"},
-                      { "data": "procedure"},
-                      { "data": "price"},
-                      { "data": "medicine_amt"},
-                      { "data": "discount"},
-                      { "data": "discount_amt"},
-                      { "data": "total_amount"},
-
-          ],
+          "columns": columns,
           order: [],
           rowGroup: {
               dataSrc: dataSrc,
@@ -259,7 +301,7 @@
                 if(group_index == 0)
                 {
                   // group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
-                  group_label = rows.data()[0]['service'].toUpperCase() + ' - ' + rows.data()[0]['docdate'] ;
+                  group_label = rows.data()[0]['service'].toUpperCase();
                 }
                 // $('.dtrg-level-1').remove();
                 return group_label.bold();
@@ -285,31 +327,31 @@
             },
             
           ],
-          footerCallback: function ( row, data, start, end, display ) {
+        //   footerCallback: function ( row, data, start, end, display ) {
 
-            var api = this.api(), data;
+        //     var api = this.api(), data;
 
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
+        //     // Remove the formatting to get integer data for summation
+        //     var intVal = function ( i ) {
+        //         return typeof i === 'string' ?
+        //             i.replace(/[\$,]/g, '')*1 :
+        //             typeof i === 'number' ?
+        //                 i : 0;
+        //     };
 
 
-            // Total over this page
-            pageTotal = api
-                .column( 10 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
+        //     // Total over this page
+        //     pageTotal = api
+        //         .column( 9 )
+        //         .data()
+        //         .reduce( function (a, b) {
+        //             return intVal(a) + intVal(b);
+        //         }, 0 );
 
-            // Update footer
-            $( api.column( 10 ).footer() ).html(pageTotal.toFixed(2));
+        //     // Update footer
+        //     $( api.column( 9 ).footer() ).html(pageTotal.toFixed(2));
 
-        }
+        // }
 
       });
 

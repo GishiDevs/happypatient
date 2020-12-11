@@ -16,7 +16,7 @@ class Transactions
      */
     public function handle($request, Closure $next)
     {
-        if($request->is('transactions') || $request->is('transactions/gettransactions') || $request->is('transactions/reports')){
+        if($request->is('transactions') || $request->is('transactions/gettransactions') || $request->is('transactions/getreports') || $request->is('transactions/reports')){
             if(Auth::user()->can('transactions')){
                 return $next($request); 
             }

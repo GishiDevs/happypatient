@@ -40,6 +40,7 @@ Route::get('/transactions_preview/{param}', 'TransactionController@transactions_
 Route::group(['prefix' => 'transactions', 'middleware' => ['auth', 'transactions']], function(){
     Route::get('/', 'TransactionController@index')->name('transactions.index');
     Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions');
+    Route::post('/getreports', 'TransactionController@getreports')->name('getreports');
     Route::get('/reports', 'TransactionController@reports')->name('reports');
 });
 
