@@ -71,12 +71,12 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-  var content = CKEDITOR.instances.content.getData();
+  
   $('#btn-save').click(function(e){
        
       e.preventDefault();
 
-      
+      var content = CKEDITOR.instances.content.getData();
       var url = $('#procedure-template-form').data('url'); 
 
       $.ajax({
@@ -84,6 +84,8 @@ $(document).ready(function () {
         method: "POSt",
         data: { _token: "{{ csrf_token() }}", content: content },
         success: function(response){
+
+          console.log(response);
 
           if(response.success)
           {
