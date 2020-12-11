@@ -256,7 +256,7 @@ class ServiceProcedureController extends Controller
         // return $request->all();
         
         $template_content = TemplateContent::where('procedureid', '=', $procedure_id)
-                                            ->update(['content' => $request->get('content')]);
+                                           ->update(['content' => $request->get('content')]);
         
         //Activity Log
         $activity_log = new ActivityLog();
@@ -270,7 +270,14 @@ class ServiceProcedureController extends Controller
         // return response()->json(['success' => 'Record has been updated'], 200);
 
         return response()->json(['success' => 'Record has been added'], 200);
-        
+
+    }
+
+
+    public function content_preview($procedure_id)
+    {   
+        $template_content = TemplateContent::where('procedureid', '=', $procedure_id)->first();
+        return view('pages.template_content.service_procedure.preview', compact('template_content'));
     }
 
 }

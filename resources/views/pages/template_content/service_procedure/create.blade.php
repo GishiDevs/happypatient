@@ -46,8 +46,10 @@
                 <!-- /.card-header -->
                 <div class="card-footer">
                   <button type="submit" id="btn-save" class="btn btn-primary">Save</button>
+                  <button type="button" id="btn-preview" data-url="{{ route('content.preview', $template_content->procedureid) }}" class="btn btn-primary">Preview</button>
                   <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
                 </div>
+
               </div>
             </form>
             <!-- /.card -->
@@ -69,12 +71,12 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-
+  var content = CKEDITOR.instances.content.getData();
   $('#btn-save').click(function(e){
        
       e.preventDefault();
 
-      var content = CKEDITOR.instances.content.getData();
+      
       var url = $('#procedure-template-form').data('url'); 
 
       $.ajax({
@@ -93,6 +95,9 @@ $(document).ready(function () {
               showConfirmButton: false,
               timer: 2500
             });
+
+            // window.location = "{{ route('serviceprocedure.index') }}";
+
           }
         },
         error: function(response){
@@ -133,6 +138,14 @@ $(document).ready(function () {
       //     }
       //   });
 
+  });
+
+  $('#btn-preview').click(function(e){
+
+    var url = $(this).data('url');
+
+    window.open(url, '_blank');
+    
   });
   
 

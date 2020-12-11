@@ -54,6 +54,7 @@
                 <!-- /.card-header -->
                 <div class="card-footer">
                   <button type="submit" id="btn-save" class="btn btn-primary">Save</button>
+                  <button type="button" id="btn-preview" data-url="{{ route('certificate.template.preview', $certificate->id) }}" class="btn btn-primary">Preview</button>
                   <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
                 </div>
               </div>
@@ -124,6 +125,15 @@ $(document).ready(function () {
     }
 
   });
+
+  $('#btn-preview').click(function(e){
+
+    var url = $(this).data('url');
+
+    window.open(url, '_blank');
+
+  });
+
 
   
 

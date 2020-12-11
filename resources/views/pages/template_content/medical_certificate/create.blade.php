@@ -13,7 +13,8 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active">Medical Certificate Content</li>
+              <li class="breadcrumb-item"><a href="{{ route('certificate.template.index') }}">Medical Certificates</a></li>
+              <li class="breadcrumb-item active">Create Certificate</li>
             </ol>
           </div>
         </div>
@@ -53,7 +54,6 @@
                 <!-- /.card-header -->
                 <div class="card-footer">
                   <button type="submit" id="btn-save" class="btn btn-primary">Save</button>
-                  <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
                 </div>
               </div>
             </form>
@@ -102,16 +102,33 @@ $(document).ready(function () {
 
     if($('#template_name').val())
     { 
-      // console.log(content.getData());
-      $('#certificate-template-form').submit();
+      var content = CKEDITOR.instances.content.getData();
+      var url = $('#certificate-template-form').data('url'); 
 
-      // Sweet Alert
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Record has successfully added',
-        showConfirmButton: false,
-        timer: 2500
+      $.ajax({
+        url: url,
+        method: "POST",
+        data: { _token: "{{ csrf_token() }}", template_name: $('#template_name').val(), content: content },
+        success: function(response){
+          console.log(response);
+          if(response.success)
+          {
+            // Sweet Alert
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Record has successfully added',
+              showConfirmButton: false,
+              timer: 2500
+            });
+
+            // window.location = "{{ route('certificate.template.preview') }}";
+            
+          }
+        },
+        error: function(response){
+          console.log(response);
+        }
       });
 
     }

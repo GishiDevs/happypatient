@@ -165,7 +165,7 @@
               render: function ( data ) {
                   if(data == 'diagnosed' || data == 'receipted')
                   {
-                    return '<span class="badge bg-success">'+data+'</span>';
+                    return '<span class="badge bg-success">done</span>';
                   }
                   else if(data == 'pending')
                   {

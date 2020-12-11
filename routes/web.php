@@ -167,6 +167,10 @@ Route::group(['prefix' => 'serviceprocedure', 'middleware' => ['auth','service_p
         'uses' => 'ServiceProcedureController@content_update',
         'as' => 'content.update',
     ]);
+    Route::get('/content/preview/{id}', [
+        'uses' => 'ServiceProcedureController@content_preview',
+        'as' => 'content.preview',
+    ]);
 
 });
 
@@ -403,6 +407,11 @@ Route::group(['prefix' => 'certificate/template', 'middleware' => ['auth']], fun
     Route::post('/delete', [
         'uses' => 'MedicalCertificateController@delete',
         'as' => 'certificate.template.delete',
+    ]);
+
+    Route::get('/preview/{id}', [
+        'uses' => 'MedicalCertificateController@preview',
+        'as' => 'certificate.template.preview',
     ]);
 
 });

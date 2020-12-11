@@ -86,14 +86,8 @@ class MedicalCertificateController extends Controller
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
 
-        // return response()->json(['success' => 'Record has been added'], 200);
-        return redirect('/certificate/template/index');
-    }
-
-    
-    public function show(MedicalCertificate $medicalCertificate)
-    {
-        //
+        return response()->json(['success' => 'Record has been added'], 200);
+        // return redirect('/certificate/template/index');
     }
 
     
@@ -154,5 +148,13 @@ class MedicalCertificateController extends Controller
         $certificate->delete();
 
         return response()->json(['success' => 'Record has been deleted'], 200);
+        
+    }
+
+    public function preview($certificate_id)
+    {
+        $certificate = MedicalCertificate::find($certificate_id);
+
+        return view('pages.template_content.medical_certificate.preview', compact('certificate'));
     }
 }

@@ -175,12 +175,13 @@
                   </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-footer">
-                  <button type="submit" id="btn-add" class="btn btn-primary">Add & Preview</button>
-                  <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
-                </div>
               </div>
             </form>
+            <div class="card-footer">
+              <button type="submit" id="btn-add" class="btn btn-primary">Add & Preview</button>
+              <button type="submit" id="btn-preview" class="btn btn-primary">Preview</button>
+              <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
+            </div>
             <!-- /.card -->
           </div>
           <!--/.col (left) -->
