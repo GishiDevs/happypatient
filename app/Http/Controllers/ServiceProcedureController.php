@@ -269,7 +269,8 @@ class ServiceProcedureController extends Controller
 
         // return response()->json(['success' => 'Record has been updated'], 200);
 
-        return redirect('/serviceprocedure/index');
+        return response()->json(['success' => 'Record has been added'], 200);
+        
     }
 
 }

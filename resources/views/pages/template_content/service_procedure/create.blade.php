@@ -27,7 +27,7 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" action="{{ route('content.update', $template_content->procedureid) }}" method="POST" id="procedure-template-form">
+            <form role="form" data-url="{{ route('content.update', $template_content->procedureid) }}" method="POST" id="procedure-template-form">
               @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
@@ -73,17 +73,34 @@ $(document).ready(function () {
   $('#btn-save').click(function(e){
        
       e.preventDefault();
-      
-      $('#procedure-template-form').submit();
 
-      // Sweet Alert
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Record has successfully added',
-        showConfirmButton: false,
-        timer: 2500
+      var content = CKEDITOR.instances.content.getData();
+      var url = $('#procedure-template-form').data('url'); 
+
+      $.ajax({
+        url: url,
+        method: "POSt",
+        data: { _token: "{{ csrf_token() }}", content: content },
+        success: function(response){
+
+          if(response.success)
+          {
+            // Sweet Alert
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Record has successfully added',
+              showConfirmButton: false,
+              timer: 2500
+            });
+          }
+        },
+        error: function(response){
+          
+        }
       });
+
+      
 
       // var data = $('#procedure-template-form').serializeArray();
       // data.push({name: "_token", value: "{{ csrf_token() }}"});

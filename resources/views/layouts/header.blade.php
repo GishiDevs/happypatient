@@ -429,7 +429,7 @@
           @endcan
           @can('reports')
           <li class="nav-item">
-            <a href="{{ route('reports') }}" class="nav-link {{ (request()->is('reports')) ? 'active' : '' }}">
+            <a href="{{ route('reports') }}" class="nav-link {{ (request()->is('transactions/reports')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-file-alt"></i>
               <p>
                 Reports

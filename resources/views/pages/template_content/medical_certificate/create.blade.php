@@ -26,7 +26,7 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" action="{{ route('certificate.template.store') }}" method="POST" id="certificate-template-form">
+            <form role="form" data-url="{{ route('certificate.template.store') }}" method="POST" id="certificate-template-form">
               @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
