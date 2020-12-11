@@ -96,7 +96,7 @@
                 {!! $patient_service->content !!}
             </div>
 
-            <div class="d-flex justify-content-between align-items-sm-center">
+            <div class="mt-3 d-flex justify-content-between align-items-sm-center">
 
                 <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
                     <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/geraldine.png') }}" /></div>
@@ -109,6 +109,22 @@
                     </div>
                 </div>
 
+                @foreach($diagnosis_signatories as $item)
+
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/default.png') }}" /></div>
+                        <div class="text-nowrap">
+                            <h6 class="text-uppercase my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">{{ $item->users->name }}</h6>
+                        </div>
+                        <div class="text-break text-center" style="width: 250px;color: #7030a0;">
+                            <p class="text-center my-0" style="font-size: 12px;">{{ $item->users->description }}</p>
+                            <p class="text-center my-0" style="font-size: 12px;">License# : {{ $item->users->license }}</p>
+                        </div>
+                    </div>
+
+                @endforeach
+
+
                 <div class="d-flex flex-column justify-content-center align-items-center">
                     <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/default.png') }}" /></div>
                     <div class="text-nowrap">
@@ -118,12 +134,6 @@
                         <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->description }}</p>
                         <p class="text-center my-0" style="font-size: 12px;">License# : {{ Auth::user()->license }}</p>
                     </div>
-                    <div>
-                        Signatories:
-                        @foreach($diagnosis_signatories as $item)
-                            <span>{{ $item->users->name }}</span><br>
-                        @endforeach
-                    </div>
                 </div>
 
             </div>
@@ -131,9 +141,6 @@
             </div>
 
         </div>
-
-
-
 
     </div>
 

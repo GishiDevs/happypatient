@@ -305,7 +305,7 @@ $(document).ready(function () {
 
 
   $('#btn-add').click(function(e){
-    
+
     // e.preventDefault();
 
     if(!$('[name="content"]').val())
@@ -355,7 +355,7 @@ $(document).ready(function () {
         $('#btn-add').attr('disabled', true);
 
         var content = CKEDITOR.instances.content.getData();
-        
+
         var data = $('#diagnosisform').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         data.push({name: "content", value: content});
