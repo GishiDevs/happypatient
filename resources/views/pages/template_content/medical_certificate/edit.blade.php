@@ -27,7 +27,7 @@
         <div class="row">
           <!-- left column -->
           <div class="col-md-12">
-            <form role="form" action="{{ route('certificate.template.update', $certificate->id) }}" method="POST" id="certificate-template-form">
+            <form role="form" data-url="{{ route('certificate.template.update', $certificate->id) }}" method="POST" id="certificate-template-form">
               @csrf
               <!-- jquery validation -->
               <div class="card card-primary">
@@ -105,15 +105,31 @@ $(document).ready(function () {
     if($('#template_name').val())
     { 
       // console.log(content.getData());
-      $('#certificate-template-form').submit();
+      var content = CKEDITOR.instances.content.getData();
+      var url = $('#certificate-template-form').data('url'); 
 
-      // Sweet Alert
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Record has successfully added',
-        showConfirmButton: false,
-        timer: 2500
+      $.ajax({
+        url: url,
+        method: "POST",
+        data: { _token: "{{ csrf_token() }}", template_name: $('#template_name').val(), content: content },
+        success: function(response){
+          console.log(response);
+          if(response.success)
+          {
+            // Sweet Alert
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Record has been updated',
+              showConfirmButton: false,
+              timer: 2500
+            });
+            
+          }
+        },
+        error: function(response){
+          console.log(response);
+        }
       });
 
     }

@@ -130,8 +130,8 @@ class MedicalCertificateController extends Controller
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
 
-        // return response()->json(['success' => 'Record has been added'], 200);
-        return redirect('/certificate/template/index');
+        return response()->json(['success' => 'Record has been added'], 200);
+        // return redirect('/certificate/template/index');
     }
 
     
