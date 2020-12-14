@@ -222,18 +222,17 @@ class TransactionController extends Controller
                             ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
-                            ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),
-                                     'patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'service_procedures.code', 
-                                     'patient_service_items.price', 'patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt',
-                                     'patient_service_items.total_amount', 'patient_service_items.status')
+                            ->select(DB::raw("sum(patient_service_items.price) as price"), DB::raw("sum(patient_service_items.medicine_amt) as medicine_amt"), DB::raw("sum(patient_service_items.discount) as discount"), 
+                                     DB::raw("sum(patient_service_items.discount_amt) as discount_amt"), DB::raw("sum(patient_service_items.total_amount) as total_amount"), 'services.service', 'service_procedures.code', 
+                                     'service_procedures.procedure')
                             ->where('patient_services.cancelled', '=', 'N')
                             ->whereIn('services.id', $service_arr)
                             ->whereDate('patient_services.docdate', '>=', $date_from)
                             ->whereDate('patient_services.docdate', '<=', $date_to)
-                            // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
-                            ->orderBy('id', 'asc')
-                            ->orderBy('service', 'asc')
-                            ->orderBy('procedure', 'asc')
+                            ->groupBy('services.service')
+                            ->groupBy('service_procedures.code')
+                            ->groupBy('service_procedures.procedure')
+                            ->orderBy('services.service', 'asc')
                             ->get();
 
         }
@@ -243,28 +242,29 @@ class TransactionController extends Controller
 
             $service = Service::find($service_arr[0]);
             
-            // if($service == 'Check-up')
-            // {
-            //     $transactions =  DB::table('patient_services')
-            //                 // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
-            //                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
-            //                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-            //                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
-            //                 ->select(DB::raw("sum(patient_service_items.price) as price"), DB::raw("sum(patient_service_items.medicine_amt) as medicine_amt"), DB::raw("sum(patient_service_items.discount) as discount"), 
-            //                          DB::raw("sum(patient_service_items.discount_amt) as discount_amt"), DB::raw("sum(patient_service_items.total_amount) as total_amount"), 'services.service', 'service_procedure.code', 
-            //                          'service_procedure.procedure')
-            //                 ->where('patient_services.cancelled', '=', 'N')
-            //                 ->where('services.id', $service->id)
-            //                 ->whereDate('patient_services.docdate', '>=', $date_from)
-            //                 ->whereDate('patient_services.docdate', '<=', $date_to)
-            //                 ->groupBy('services.service')
-            //                 ->groupBy('service_procedures.code')
-            //                 ->groupBy('service_procedures.procedure')
-            //                 ->orderBy('service_procedures.procedure', 'asc')
-            //                 ->get();
-            // }
-            // else
-            // {
+            if($service->service == 'Check-up')
+            {
+                $transactions =  DB::table('patient_services')
+                            // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
+                            ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+                            ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+                            ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                            ->select(DB::raw("sum(patient_service_items.total_amount) - sum(patient_service_items.medicine_amt) as price"), DB::raw("sum(patient_service_items.medicine_amt) as medicine_amt"), DB::raw("sum(patient_service_items.discount) as discount"), 
+                                     DB::raw("sum(patient_service_items.discount_amt) as discount_amt"), DB::raw("sum(patient_service_items.total_amount) as total_amount"), 'services.service', 'service_procedures.code', 
+                                     'service_procedures.procedure')
+                            ->where('services.id', $service->id)
+                            ->whereDate('patient_services.docdate', '>=', $date_from)
+                            ->whereDate('patient_services.docdate', '<=', $date_to)
+                            // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
+                            ->groupBy('services.service')
+                            ->groupBy('service_procedures.code')
+                            ->groupBy('service_procedures.procedure')
+                            ->orderBy('services.service', 'asc')
+                            ->orderBy('service_procedures.procedure', 'asc')
+                            ->get();
+            }
+            else
+            {
                 $transactions =  DB::table('patient_services')
                             // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                             ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
@@ -279,8 +279,9 @@ class TransactionController extends Controller
                             ->groupBy('patient_services.name')
                             ->groupBy('services.service')
                             ->orderBy('services.service', 'asc')
+                            ->orderBy('patient_services.name', 'asc')
                             ->get();
-            // }
+            }
 
             
         }

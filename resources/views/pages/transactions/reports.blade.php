@@ -85,16 +85,14 @@
                     <table id="transactions" class="table table-hover">
                       <thead>
                         <tr>
-                          <!-- <th id="th-id" class="no-sort">ID</th> -->
-                          <th id="th-docdate" class="no-sort">Doc. Date</th>
-                          <th id="th-name" class="no-sort">Name</th>
+                          <th id="th-name" class="no-sort" hidden>Name</th>
                           <th id="th-service" class="no-sort">Service</th>
-                          <th id="th-code" class="no-sort">Code Name</th>
-                          <th id="th-procedure" class="no-sort">Procedure</th>
-                          <th id="th-price" class="no-sort">Price (PHP)</th>
-                          <th id="th-medicine_amt" class="no-sort">Medicine Amt (PHP)</th>
-                          <th id="th-discount" class="no-sort">Discount (%)</th>
-                          <th id="th-discount_amt" class="no-sort">Discount (PHP)</th>
+                          <th id="th-code" class="no-sort" hidden>Code Name</th>
+                          <th id="th-procedure" class="no-sort" hidden>Doctor/Specialist</th>
+                          <th id="th-price" class="no-sort" hidden>Price (PHP)</th>
+                          <th id="th-medicine_amt" class="no-sort" hidden>Medicine Amt (PHP)</th>
+                          <th id="th-discount" class="no-sort" hidden>Discount (%)</th>
+                          <th id="th-discount_amt" class="no-sort" hidden>Discount (PHP)</th>
                           <th id="th-total_amount" class="no-sort">Total (PHP)</th>
                         </tr>
                       </thead>
@@ -102,7 +100,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td class="text-right" colspan="9"><strong>Grand Total:</strong></th>
+                          <td class="text-right"><strong>Grand Total:</strong></th>
                           <td> <span id="grand_total"><strong>0.00</strong></span> </th>
                         </tr>
                       </tfoot>
@@ -129,19 +127,21 @@
 
   $(document).ready(function() {
     
-    var grand_total_column = 9;
+    var grand_total_column = 1;
     var services = [];
+    // var columns = [
+    //                   { "data": "name"},
+    //                   { "data": "service"},
+    //                   { "data": "code"},
+    //                   { "data": "procedure"},
+    //                   { "data": "price"},
+    //                   { "data": "medicine_amt"},
+    //                   { "data": "discount"},
+    //                   { "data": "discount_amt"},
+    //                   { "data": "total_amount"},
+    //               ];
     var columns = [
-                      // { "data": "id"},
-                      { "data": "docdate"},
-                      { "data": "name"},
                       { "data": "service"},
-                      { "data": "code"},
-                      { "data": "procedure"},
-                      { "data": "price"},
-                      { "data": "medicine_amt"},
-                      { "data": "discount"},
-                      { "data": "discount_amt"},
                       { "data": "total_amount"},
                   ];
 
@@ -187,7 +187,7 @@
     $('.custom-checkbox [name="service[]"]').click(function(){
 
       $('#transactions tfoot').empty().append('<tr>'+
-                                                '<td class="text-right" colspan="9"><strong>Grand Total:</strong></th>'+
+                                                '<td class="text-right"><strong>Grand Total:</strong></th>'+
                                                 '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
                                               '</tr>');
       $('#transactions').DataTable().clear();
@@ -196,19 +196,10 @@
 
       dataSrc = [];
 
-      grand_total_column = 9; 
+      grand_total_column = 1; 
 
       columns = [
-                      // { "data": "id"},
-                      { "data": "docdate"},
-                      { "data": "name"},
                       { "data": "service"},
-                      { "data": "code"},
-                      { "data": "procedure"},
-                      { "data": "price"},
-                      { "data": "medicine_amt"},
-                      { "data": "discount"},
-                      { "data": "discount_amt"},
                       { "data": "total_amount"},
                   ];
       
@@ -218,40 +209,64 @@
       });
 
       // console.log(services);
-
-      $('#th-docdate').removeAttr('hidden');
-      $('#th-service').removeAttr('hidden');
-      $('#th-code').removeAttr('hidden');
-      $('#th-procedure').removeAttr('hidden');
-      $('#th-price').removeAttr('hidden');
-      $('#th-medicine_amt').removeAttr('hidden');
-      $('#th-discount').removeAttr('hidden');
-      $('#th-discount_amt').removeAttr('hidden');
+        $('#th-service').removeAttr('hidden');
+        $('#th-name').attr('hidden', true);
+        $('#th-code').attr('hidden', true);
+        $('#th-procedure').attr('hidden', true);
+        $('#th-price').attr('hidden', true);
+        $('#th-medicine_amt').attr('hidden', true);
 
       if(services.length)
-      {
+      { 
+
         columns = [
           {"data": "name"},
           {"data": "total_amount"},
         ];
 
-        $('#transactions tfoot').empty().append('<tr>'+
-                                                  '<td class="text-right"><strong>Grand Total:</strong></th>'+
-                                                  '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
-                                                '</tr>');
-
         grand_total_column = 1;
         dataSrc = ['service'];
 
-        // columnTarget = [0, 3, 4, 5, 6, 7, 8];
-        $('#th-docdate').attr('hidden', true);
-        $('#th-service').attr('hidden', true);
-        $('#th-code').attr('hidden', true);
-        $('#th-procedure').attr('hidden', true);
-        $('#th-price').attr('hidden', true);
-        $('#th-medicine_amt').attr('hidden', true);
-        $('#th-discount').attr('hidden', true);
-        $('#th-discount_amt').attr('hidden', true);
+        if($(this).data('service') == 'Check-up')
+        { 
+
+          $('[name="service[]"').each(function(){
+            if($(this).data('service') != 'Check-up')
+            {
+              $(this).prop('checked', false);
+            }
+          });
+
+          $('#transactions tfoot').empty().append('<tr>'+
+                                                  '<td class="text-right" colspan="3"><strong>Grand Total:</strong></th>'+
+                                                  '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
+                                                '</tr>');
+          columns = [
+                      { "data": "procedure"},
+                      { "data": "price"},
+                      { "data": "medicine_amt"},
+                      { "data": "total_amount"},
+                    ];    
+
+          grand_total_column = 3; 
+
+          dataSrc = ['service', 'procedure'];
+          
+          $('#th-service').attr('hidden', true);
+          $('#th-procedure').removeAttr('hidden');
+          $('#th-price').removeAttr('hidden');
+          $('#th-medicine_amt').removeAttr('hidden');
+
+        }
+        else
+        {
+          $('[name="service[]"').each(function(){
+            if($(this).data('service') == 'Check-up')
+            {
+              $(this).prop('checked', false);
+            }
+          });
+        }
 
       }
 
