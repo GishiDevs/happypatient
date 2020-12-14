@@ -241,7 +241,31 @@ class TransactionController extends Controller
         {
             $service_arr = $services;
 
-            $transactions =  DB::table('patient_services')
+            $service = Service::find($service_arr[0]);
+            
+            // if($service == 'Check-up')
+            // {
+            //     $transactions =  DB::table('patient_services')
+            //                 // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
+            //                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+            //                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+            //                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+            //                 ->select(DB::raw("sum(patient_service_items.price) as price"), DB::raw("sum(patient_service_items.medicine_amt) as medicine_amt"), DB::raw("sum(patient_service_items.discount) as discount"), 
+            //                          DB::raw("sum(patient_service_items.discount_amt) as discount_amt"), DB::raw("sum(patient_service_items.total_amount) as total_amount"), 'services.service', 'service_procedure.code', 
+            //                          'service_procedure.procedure')
+            //                 ->where('patient_services.cancelled', '=', 'N')
+            //                 ->where('services.id', $service->id)
+            //                 ->whereDate('patient_services.docdate', '>=', $date_from)
+            //                 ->whereDate('patient_services.docdate', '<=', $date_to)
+            //                 ->groupBy('services.service')
+            //                 ->groupBy('service_procedures.code')
+            //                 ->groupBy('service_procedures.procedure')
+            //                 ->orderBy('service_procedures.procedure', 'asc')
+            //                 ->get();
+            // }
+            // else
+            // {
+                $transactions =  DB::table('patient_services')
                             // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                             ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
@@ -254,7 +278,11 @@ class TransactionController extends Controller
                             ->groupBy('patient_services.patientid')
                             ->groupBy('patient_services.name')
                             ->groupBy('services.service')
+                            ->orderBy('services.service', 'asc')
                             ->get();
+            // }
+
+            
         }
     
         return DataTables::of($transactions)

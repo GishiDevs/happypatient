@@ -363,6 +363,13 @@ Route::group(['prefix' => 'diagnosis', 'middleware' => ['auth', 'diagnosis']], f
         'as' => 'diagnosis.print',
     ]);
 
+    Route::get('/preview/{param}', [
+        'uses' => 'DiagnosisController@preview_diagnosis',
+        'as' => 'diagnosis.preview',
+    ]);
+
+
+
 });
 
 Route::get('/diagnosis/pdf', function(){

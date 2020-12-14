@@ -179,7 +179,7 @@
             </form>
             <div class="card-footer">
               <button type="submit" id="btn-add" class="btn btn-primary">Add & Preview</button>
-              <button type="submit" id="btn-preview" class="btn btn-primary">Preview</button>
+              <!-- <button type="button" id="btn-preview" class="btn btn-primary">Preview</button> -->
               <!-- <button type="submit" id="btn-download" class="btn btn-primary">Download</button> -->
             </div>
             <!-- /.card -->
@@ -383,8 +383,10 @@ $(document).ready(function () {
 
               // $(location).attr('href', "{{ route('diagnosis.print', $patient_service->ps_items_id)}}");
               window.open("{{ route('diagnosis.print', $patient_service->ps_items_id)}}", '_blank');
-              $(location).attr('href', "{{ route('dashboard.index')}}");
+              $(location).attr('href', "{{ route('diagnosis.edit', $patient_service->ps_items_id)}}");
+              // $(location).attr('href', "{{ route('dashboard.index')}}");
               $('#content-error').remove();
+              
             }
             else if(response.content)
             {
@@ -415,6 +417,12 @@ $(document).ready(function () {
 
   $('#btn-view-history').click(function(e){
     e.preventDefault();
+  });
+
+
+  $('#btn-preview').click(function(){
+    var content = CKEDITOR.instances.content.getData();
+    window.open('/diagnosis/create/50', '_blank');
   });
 
 

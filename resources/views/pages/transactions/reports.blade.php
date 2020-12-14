@@ -46,7 +46,7 @@
                             @foreach($services as $service)
                               <div class="col-md-4">
                                 <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" name="service[]" type="checkbox" id="checkbox-serviceid-{{ $service->id }}" value="{{ $service->id }}">
+                                    <input class="custom-control-input" name="service[]" type="checkbox" id="checkbox-serviceid-{{ $service->id }}" value="{{ $service->id }}" data-service="{{ $service->service }}">
                                   <label for="checkbox-serviceid-{{ $service->id }}" class="custom-control-label">{{ $service->service }}</label>
                                 </div>
                               </div>
@@ -86,7 +86,7 @@
                       <thead>
                         <tr>
                           <!-- <th id="th-id" class="no-sort">ID</th> -->
-                          <th id="th-docdate" class="no-sort">Document Date</th>
+                          <th id="th-docdate" class="no-sort">Doc. Date</th>
                           <th id="th-name" class="no-sort">Name</th>
                           <th id="th-service" class="no-sort">Service</th>
                           <th id="th-code" class="no-sort">Code Name</th>
@@ -101,10 +101,10 @@
                       <tbody>
                       </tbody>
                       <tfoot>
-                        <!-- <tr> -->
-                          <!-- <td class="text-right" colspan="9">Grand Total:</th>
-                          <td> <span id="grand_total">0.00</span> </th>
-                        </tr> -->
+                        <tr>
+                          <td class="text-right" colspan="9"><strong>Grand Total:</strong></th>
+                          <td> <span id="grand_total"><strong>0.00</strong></span> </th>
+                        </tr>
                       </tfoot>
                     </table>
                   </div>
@@ -128,6 +128,8 @@
 <script>
 
   $(document).ready(function() {
+    
+    var grand_total_column = 9;
     var services = [];
     var columns = [
                       // { "data": "id"},
@@ -180,13 +182,21 @@
 
     get_transactions();
 
+    
+
     $('.custom-checkbox [name="service[]"]').click(function(){
 
+      $('#transactions tfoot').empty().append('<tr>'+
+                                                '<td class="text-right" colspan="9"><strong>Grand Total:</strong></th>'+
+                                                '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
+                                              '</tr>');
       $('#transactions').DataTable().clear();
 
-      
+      services = [];
 
       dataSrc = [];
+
+      grand_total_column = 9; 
 
       columns = [
                       // { "data": "id"},
@@ -207,6 +217,8 @@
         services.push($(this).val());
       });
 
+      // console.log(services);
+
       $('#th-docdate').removeAttr('hidden');
       $('#th-service').removeAttr('hidden');
       $('#th-code').removeAttr('hidden');
@@ -220,12 +232,17 @@
       {
         columns = [
           {"data": "name"},
-
           {"data": "total_amount"},
         ];
 
+        $('#transactions tfoot').empty().append('<tr>'+
+                                                  '<td class="text-right"><strong>Grand Total:</strong></th>'+
+                                                  '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
+                                                '</tr>');
+
+        grand_total_column = 1;
         dataSrc = ['service'];
-        
+
         // columnTarget = [0, 3, 4, 5, 6, 7, 8];
         $('#th-docdate').attr('hidden', true);
         $('#th-service').attr('hidden', true);
@@ -303,6 +320,7 @@
                   // group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
                   group_label = rows.data()[0]['service'].toUpperCase();
                 }
+                
                 // $('.dtrg-level-1').remove();
                 return group_label.bold();
 
@@ -310,10 +328,10 @@
 
               endRender: function(rows, group, group_index) {
                 // return null;
-                // if(dataSrc.length == 0)
-                // {
-                //   $('.dtrg-level-0').remove();
-                // }
+                if(services.length == 0)
+                { 
+                  $('.dtrg-level-0').remove();
+                }
                 $('.dtrg-level-1').remove();
               },
           },
@@ -327,31 +345,31 @@
             },
             
           ],
-        //   footerCallback: function ( row, data, start, end, display ) {
+          footerCallback: function ( row, data, start, end, display ) {
 
-        //     var api = this.api(), data;
+            var api = this.api(), data;
 
-        //     // Remove the formatting to get integer data for summation
-        //     var intVal = function ( i ) {
-        //         return typeof i === 'string' ?
-        //             i.replace(/[\$,]/g, '')*1 :
-        //             typeof i === 'number' ?
-        //                 i : 0;
-        //     };
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
 
 
-        //     // Total over this page
-        //     pageTotal = api
-        //         .column( 9 )
-        //         .data()
-        //         .reduce( function (a, b) {
-        //             return intVal(a) + intVal(b);
-        //         }, 0 );
+            // Total over this page
+            pageTotal = api
+                .column( grand_total_column )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
 
-        //     // Update footer
-        //     $( api.column( 9 ).footer() ).html(pageTotal.toFixed(2));
+            // Update footer
+            $( api.column( grand_total_column ).footer() ).html(pageTotal.toFixed(2).bold());
 
-        // }
+          }
 
       });
 

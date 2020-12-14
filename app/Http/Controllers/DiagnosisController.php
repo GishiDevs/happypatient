@@ -258,7 +258,7 @@ class DiagnosisController extends Controller
         $activity_log->userid = auth()->user()->id;
         $activity_log->save();
 
-        return response()->json(['success' => 'Record has successfully added'], 200);
+        return response()->json(['success' => 'Record has successfully added', 'ps_item_id' => $ps_item_id], 200);
 
         // return redirect('/');
     }
@@ -498,6 +498,11 @@ class DiagnosisController extends Controller
                             ->get();
 
         return response()->json(['patientservices' => $patientservices], 200);
+    }
+
+    public function preview_diagnosis($param)
+    {
+
     }
 
     public function destroy(Diagnosis $diagnosis)
