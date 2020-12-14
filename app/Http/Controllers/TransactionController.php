@@ -255,7 +255,6 @@ class TransactionController extends Controller
                             ->where('services.id', $service->id)
                             ->whereDate('patient_services.docdate', '>=', $date_from)
                             ->whereDate('patient_services.docdate', '<=', $date_to)
-                            // ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
                             ->groupBy('services.service')
                             ->groupBy('service_procedures.code')
                             ->groupBy('service_procedures.procedure')

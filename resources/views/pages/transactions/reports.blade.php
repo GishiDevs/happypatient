@@ -249,9 +249,7 @@
                     ];    
 
           grand_total_column = 3; 
-
           dataSrc = ['service', 'procedure'];
-          
           $('#th-service').attr('hidden', true);
           $('#th-procedure').removeAttr('hidden');
           $('#th-price').removeAttr('hidden');
