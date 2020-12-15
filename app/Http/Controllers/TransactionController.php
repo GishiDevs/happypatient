@@ -223,15 +223,14 @@ class TransactionController extends Controller
                             ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                             ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                             ->select(DB::raw("sum(patient_service_items.price) as price"), DB::raw("sum(patient_service_items.medicine_amt) as medicine_amt"), DB::raw("sum(patient_service_items.discount) as discount"), 
-                                     DB::raw("sum(patient_service_items.discount_amt) as discount_amt"), DB::raw("sum(patient_service_items.total_amount) as total_amount"), 'services.service', 'service_procedures.code', 
-                                     'service_procedures.procedure')
+                                     DB::raw("sum(patient_service_items.discount_amt) as discount_amt"), DB::raw("sum(patient_service_items.total_amount) as total_amount"), 'services.service')
                             ->where('patient_services.cancelled', '=', 'N')
                             ->whereIn('services.id', $service_arr)
                             ->whereDate('patient_services.docdate', '>=', $date_from)
                             ->whereDate('patient_services.docdate', '<=', $date_to)
                             ->groupBy('services.service')
-                            ->groupBy('service_procedures.code')
-                            ->groupBy('service_procedures.procedure')
+                            // ->groupBy('service_procedures.code')
+                            // ->groupBy('service_procedures.procedure')
                             ->orderBy('services.service', 'asc')
                             ->get();
 
