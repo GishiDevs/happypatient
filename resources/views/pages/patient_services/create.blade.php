@@ -462,11 +462,12 @@ $(document).ready(function () {
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
       var service_id = $(this).data('serviceid');
-      var price_per_service;
-      var medicine_amt_per_service;
-      var discount_per_service;
-      var discount_amt_per_service;
-
+      var price_per_service = 0.00;
+      var medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+linenum).val()).toFixed(2);
+      var discount_per_service = parseFloat($('#discount-linenum-'+linenum).val()).toFixed(2) / 100;
+      var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
+      
+      
       //if price has value
       if($(this).val())
       {
@@ -483,32 +484,20 @@ $(document).ready(function () {
         // $('#btn-add').attr('disabled', true);
       }
 
-      //if medicine amount has value
-      if($('#medicine_amt-linenum-'+ linenum).val())
-      {
-        medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+ linenum).val()).toFixed(2);
-      }
-      else
+      //if medicine amount has no value
+      if(!$('#medicine_amt-linenum-'+linenum).val())
       {
         medicine_amt_per_service = 0.00;
       }
 
-      //if discount % has value
-      if($('#discount-linenum-'+ linenum).val())
-      {
-        discount_per_service = parseFloat($('#discount-linenum-'+ linenum).val()).toFixed(2) / 100;
-      }
-      else
+      //if discount % has no value
+      if(!$('#discount-linenum-'+ linenum).val())
       {
         discount_per_service = 0.00;
       }
-
-      //if discount amount has value
-      if($('#discount_amt-linenum-'+ linenum).val())
-      {
-        discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+ linenum).val()).toFixed(2);
-      }
-      else
+ 
+      //if discount amount has no value
+      if(!$('#discount_amt-linenum-'+ linenum).val())
       {
         discount_amt_per_service = 0.00;
       }
@@ -516,23 +505,25 @@ $(document).ready(function () {
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
-
       //disable/enable discount textbox
-      if(price_per_service > 0){
-        $('#discount-linenum-'+ linenum).removeAttr('disabled');
-        $('#discount_amt-linenum-'+ linenum).removeAttr('disabled');
-      }
-      else
-      {
-        $('#discount-linenum-'+ linenum).attr('disabled', true);
-        $('#discount_amt-linenum-'+ linenum).attr('disabled', true);
-      }
+      // if(price_per_service > 0){
+      //   $('#discount-linenum-'+ linenum).removeAttr('disabled');
+      //   $('#discount_amt-linenum-'+ linenum).removeAttr('disabled');
+      // }
+      // else
+      // {
+      //   $('#discount-linenum-'+ linenum).attr('disabled', true);
+      //   $('#discount_amt-linenum-'+ linenum).attr('disabled', true);
+      // }
 
       //append total amount
       $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
 
       //call function getGrandTotal
       getGrandTotal();
+
+      //disable add-item button when total_amount is 0 and below 
+      disableAddItemButton(total, linenum);
 
     });
 
@@ -543,35 +534,29 @@ $(document).ready(function () {
       var service_id = $(this).data('serviceid');
       var price_per_service = parseFloat($('#price-linenum-'+linenum).val()).toFixed(2);
       var medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+linenum).val()).toFixed(2);
-      var discount_per_service = parseFloat($('#discount-linenum'+linenum).val()).toFixed(2) / 100;
-      var discount_amt_per_service = parseFloat($('#discount_amt-linenum'+linenum).val()).toFixed(2);
+      var discount_per_service = parseFloat($('#discount-linenum-'+linenum).val()).toFixed(2) / 100;
+      var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
 
-      //if medicine amount has value
-      if($(this).val())
+      //if price has no value
+      if(!$('#price-linenum-'+linenum).val())
       {
-        medicine_amt_per_service = parseFloat($(this).val()).toFixed(2);
+        price_per_service = 0.00;
       }
-      else
+
+      //if medicine amount has no value
+      if(!$('#medicine_amt-linenum-'+linenum).val())
       {
         medicine_amt_per_service = 0.00;
       }
 
-      //if discount % has value
-      if($('#discount-linenum-'+ linenum).val())
-      {
-        discount_per_service = parseFloat($('#discount-linenum-'+ linenum).val()).toFixed(2) / 100;
-      }
-      else
+      //if discount % has no value
+      if(!$('#discount-linenum-'+ linenum).val())
       {
         discount_per_service = 0.00;
       }
-
-      //if discount amount has value
-      if($('#discount_amt-linenum-'+ linenum).val())
-      {
-        discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+ linenum).val()).toFixed(2);
-      }
-      else
+ 
+      //if discount amount has no value
+      if(!$('#discount_amt-linenum-'+ linenum).val())
       {
         discount_amt_per_service = 0.00;
       }
@@ -584,6 +569,10 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
+
+      //disable add-item button when total_amount is 0 and below 
+      disableAddItemButton(total, linenum);;
+
 
     });
 
@@ -598,36 +587,30 @@ $(document).ready(function () {
       var discount_per_service = parseFloat($(this).val()).toFixed(2) / 100;
       var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
 
-      //if medicine amount has value
-      if($('#medicine_amt-linenum-'+ linenum).val())
+
+      //if price has no value
+      if(!$('#price-linenum-'+linenum).val())
       {
-        medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+ linenum).val()).toFixed(2);
+        price_per_service = 0.00;
       }
-      else
+
+      //if medicine amount has no value
+      if(!$('#medicine_amt-linenum-'+linenum).val())
       {
         medicine_amt_per_service = 0.00;
       }
 
-      //if discount % has value
-      if($(this).val())
-      {
-        discount_per_service = parseFloat($(this).val()).toFixed(2) / 100;
-      }
-      else
+      //if discount % has no value
+      if(!$(this).val())
       {
         discount_per_service = 0.00;
       }
 
-      //if discount amount has value
-      if($('#discount_amt-linenum-'+linenum).val())
-      {
-        discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
-      }
-      else
+      //if discount amount has no value
+      if(!$('#discount_amt-linenum-'+linenum).val())
       {
         discount_amt_per_service = 0.00;
       }
-
 
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
@@ -637,6 +620,9 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
+
+      //disable add-item button when total_amount is 0 and below 
+      disableAddItemButton(total, linenum);;
 
     });
 
@@ -647,35 +633,30 @@ $(document).ready(function () {
       var service_id = $(this).data('serviceid');
       var price_per_service = parseFloat($('#price-linenum-'+linenum).val()).toFixed(2);
       var medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+linenum).val()).toFixed(2);
-      var discount_per_service = parseFloat($('#discount-linenum'+linenum).val()).toFixed(2) / 100;
+      var discount_per_service = parseFloat($('#discount-linenum-'+linenum).val()).toFixed(2) / 100;
       var discount_amt_per_service = parseFloat($(this).val()).toFixed(2);
 
-      //if medicine amount has value
-      if($('#medicine_amt-linenum-'+ linenum).val())
+
+      //if price has no value
+      if(!$('#price-linenum-'+linenum).val())
       {
-        medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+ linenum).val()).toFixed(2);
+        price_per_service = 0.00;
       }
-      else
+
+      //if medicine amount has no value
+      if(!$('#medicine_amt-linenum-'+linenum).val())
       {
         medicine_amt_per_service = 0.00;
       }
 
-      //if discount % has value
-      if($('#discount-linenum-'+ linenum).val())
-      {
-        discount_per_service = parseFloat($('#discount-linenum-'+ linenum).val()).toFixed(2) / 100;
-      }
-      else
+      //if discount % has no value
+      if(!$('#discount-linenum-'+ linenum).val())
       {
         discount_per_service = 0.00;
       }
 
-      //if discount amount has value
-      if($(this).val())
-      {
-        discount_amt_per_service = parseFloat($(this).val()).toFixed(2);
-      }
-      else
+      //if discount amount has no value
+      if(!$(this).val())
       {
         discount_amt_per_service = 0.00;
       }
@@ -688,6 +669,9 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
+
+      //disable add-item button when total_amount is 0 and below 
+      disableAddItemButton(total, linenum);;
 
     });
 
@@ -717,6 +701,9 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
+
+      //disable add-item button when total_amount is 0 and below 
+      disableAddItemButton(total, linenum);;
 
     });
 
@@ -877,6 +864,36 @@ $(document).ready(function () {
     //append Grand Total
     $('.service-grand-total').empty().append(parseFloat(sum).toFixed(2));
 
+    //if grand total is 0 and below then add class text-danger
+    if(parseFloat(sum).toFixed(2) > 0)
+    {
+      $('.service-grand-total').removeClass('text-danger');
+    }
+    else
+    {
+      $('.service-grand-total').addClass('text-danger');
+    }
+
+  }
+
+  function disableAddItemButton(total, linenum)
+  {
+    //disable add-item button when total_amount is 0 and below 
+    if(parseFloat(total) > 0 )
+    {
+      $('#add-item').removeClass('disabled');
+      $('#total-linenum-'+linenum).removeClass('text-danger');
+    }
+    else
+    {
+      $('#add-item').addClass('disabled');
+      $('#total-linenum-'+linenum).addClass('text-danger');
+      // Swal.fire({
+      //       title: 'Warning',
+      //       html: "Total Amount is 0 or below",
+      //       icon: 'warning'
+      //     });
+    }
   }
 
   $('#weight').inputmask('decimal', {

@@ -2,13 +2,13 @@
 @extends('layouts.main')
 @section('title', 'Transactions')
 @section('main_content')
-  <div class="content-wrapper">
+  
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <!-- <h1>Transactions</h1> -->
+            <h1>Transactions</h1>
           </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -20,26 +20,30 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Transactions list for {!! htmlspecialchars_decode(date('j<\s\up>S</\s\up> F Y', strtotime(date('Y-m-d')))) !!}</h3>
-              </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <div class="row">
-                  <div class="table-scrollable col-md-12 table-bordered table-responsive">
-                    <table id="transactions" class="table table-hover">
+                  <div class="table-scrollable col-md-12 table-responsive">
+                    <table id="transactions" class="table table-bordered table-hover">
                       <thead>
                         <tr>
-                          <th class="no-sort">Service</th>
-                          <th class="no-sort">Amount (PHP)</th>
+                          <th id="th-name" class="no-sort" hidden>Name</th>
+                          <th id="th-service" class="no-sort">Service</th>
+                          <th id="th-code" class="no-sort" hidden>Code Name</th>
+                          <th id="th-procedure" class="no-sort" hidden>Doctor/Specialist</th>
+                          <th id="th-price" class="no-sort" hidden>Price (PHP)</th>
+                          <th id="th-medicine_amt" class="no-sort" hidden>Medicine Amt (PHP)</th>
+                          <th id="th-discount" class="no-sort" hidden>Discount (%)</th>
+                          <th id="th-discount_amt" class="no-sort" hidden>Discount (PHP)</th>
+                          <th id="th-total_amount" class="no-sort">Total (PHP)</th>
                         </tr>
                       </thead>
                       <tbody>
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th class="text-right">Grand Total:</th>
-                          <th> <span id="grand_total">0.00</span> </th>
+                          <td class="text-right"><strong>Grand Total:</strong></th>
+                          <td> <span id="grand_total"><strong>0.00</strong></span> </th>
                         </tr>
                       </tfoot>
                     </table>
@@ -59,56 +63,242 @@
     <!-- /.content -->
   </div>
     <!-- /.content -->
-</div>
 <!-- /.content-wrapper -->
 <script>
 
   $(document).ready(function() {
+    
+    $('footer').attr('hidden', true);
+    $('nav').attr('hidden', true);
+    $('aside').remove();
+
+    console.log(" {{ session('services') }} ");
+
+    var grand_total_column = 1;
+    var services = [];
+    var columns = [
+                      { "data": "service"},
+                      { "data": "total_amount"},
+                  ];
+
+    var dataSrc = [ 'service', 'name'];
+    var columnTarget = [];
+
+    $('.select2').select2();
 
     // get_transactions();
-    
+
+    $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
+      var date_from = $('#date-from').val();
+      var date_to = $('#date-to').val();
+
+      // if date-from or date-to texfield has value
+      if(date_from || date_to)
+      {
+        get_transactions();
+      }
+
+      console.log(columns);
+
+    });
+
+  
+    $('#filter-date-from').datetimepicker({
+        format: 'L',
+        useCurrent: false,
+        ignoreReadonly: true
+
+    });
+
+    $('#filter-date-to').datetimepicker({
+        format: 'L',
+        useCurrent: false,
+        ignoreReadonly: true
+    });
+
+    get_transactions();
+
+    $('.custom-checkbox [name="service[]"]').click(function(){
+
+      $('#transactions tfoot').empty().append('<tr>'+
+                                                '<td class="text-right"><strong>Grand Total:</strong></th>'+
+                                                '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
+                                              '</tr>');
+      $('#transactions').DataTable().clear();
+
+      services = [];
+
+      dataSrc = [];
+
+      grand_total_column = 1; 
+
+      columns = [
+                      { "data": "service"},
+                      { "data": "total_amount"},
+                  ];
+      
+
+      $.each($("input[name='service[]']:checked"), function(){
+        services.push($(this).val());
+      });
+
+      // console.log(services);
+        $('#th-service').removeAttr('hidden');
+        $('#th-name').attr('hidden', true);
+        $('#th-code').attr('hidden', true);
+        $('#th-procedure').attr('hidden', true);
+        $('#th-price').attr('hidden', true);
+        $('#th-medicine_amt').attr('hidden', true);
+
+      if(services.length)
+      { 
+
+        columns = [
+          {"data": "name"},
+          {"data": "total_amount"},
+        ];
+
+        grand_total_column = 1;
+        dataSrc = ['service'];
+
+        if($(this).data('service') == 'Check-up')
+        { 
+
+          $('[name="service[]"').each(function(){
+            if($(this).data('service') != 'Check-up')
+            {
+              $(this).prop('checked', false);
+            }
+          });
+
+          $('#transactions tfoot').empty().append('<tr>'+
+                                                  '<td class="text-right" colspan="3"><strong>Grand Total:</strong></th>'+
+                                                  '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
+                                                '</tr>');
+          columns = [
+                      { "data": "procedure"},
+                      { "data": "price"},
+                      { "data": "medicine_amt"},
+                      { "data": "total_amount"},
+                    ];    
+
+          grand_total_column = 3; 
+          dataSrc = ['service', 'procedure'];
+          $('#th-service').attr('hidden', true);
+          $('#th-procedure').removeAttr('hidden');
+          $('#th-price').removeAttr('hidden');
+          $('#th-medicine_amt').removeAttr('hidden');
+
+        }
+        else
+        {
+          $('[name="service[]"').each(function(){
+            if($(this).data('service') == 'Check-up')
+            {
+              $(this).prop('checked', false);
+            }
+          });
+        }
+
+      }
+
+      get_transactions();
+
+    });
+
+    $('[data-mask]').inputmask();
+
     function get_transactions()
-    { 
+    {
+
+      var serviceid = $('#service').find(':selected').data('serviceid');
+      var date_from = $('#date-from').val();
+      var date_to = $('#date-to').val();
+      var grand_total = 0;
+      var services = [];
+
+      $.each($("input[name='service[]']:checked"), function(){
+        services.push($(this).val());
+      });
+
+      // if date-from or date-to texfield has no value
+      if(!date_to)
+      {
+        date_to = "{{ date('m/d/Y') }}";
+      }
+
+      if(!date_from)
+      {
+        date_from = "{{ date('m/d/Y') }}";
+      }
 
       var dt = $('#transactions').DataTable({
-          // "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
+          "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
           "searching": false,
           "responsive": true,
           "autoWidth": false,
           "processing": true,
           "destroy": true,
           "serverSide": true,
-          "ajax": "",
+          "info": false,         // Will show "1 to n of n entries" Text at bottom
+          "lengthChange": false, // Will Disabled Record number per page
+          "paging": false,
+          "ajax": {
+            url: "{{ route('getreports') }}",
+            type: "POST",
+            data: { _token: "{{ csrf_token() }}", services: services, serviceid: serviceid, date_from: date_from, date_to: date_to  },
+            // success: function(response){
+            //   console.log(response);
+            // },
+            // error: function(response){
+            //   console.log(response);
+            // },
+            
+          },
           "bDestroy": true,
-          "columns": "",
+          "columns": columns,
           order: [],
           rowGroup: {
-              dataSrc: [ 'id' , 'name', 'service' ],
+              dataSrc: dataSrc,
 
               startRender: function(rows, group, group_index) {
 
                 var group_label = group;
 
                 if(group_index == 0)
-                { 
+                {
                   // group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
-                  group_label = rows.data()[0]['name'].toUpperCase() ;
+                  group_label = rows.data()[0]['service'].toUpperCase();
                 }
-
-                $('.dtrg-level-1').remove();
-
+                
+                // $('.dtrg-level-1').remove();
                 return group_label.bold();
 
               },
 
               endRender: function(rows, group, group_index) {
                 // return null;
+                if(services.length == 0)
+                { 
+                  $('.dtrg-level-0').remove();
+                }
+                $('.dtrg-level-1').remove();
               },
           },
+          columnDefs: [
+            {
+              targets: columnTarget,
+              visible: false
+            },
+            {
+              targets: 'no-sort', orderable : false
+            },
+            
+          ],
           footerCallback: function ( row, data, start, end, display ) {
 
             var api = this.api(), data;
- 
+
             // Remove the formatting to get integer data for summation
             var intVal = function ( i ) {
                 return typeof i === 'string' ?
@@ -116,25 +306,32 @@
                     typeof i === 'number' ?
                         i : 0;
             };
- 
- 
+
+
             // Total over this page
             pageTotal = api
-                .column( 1 )
+                .column( grand_total_column )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
- 
+
             // Update footer
-            $( api.column( 1 ).footer() ).html(pageTotal.toFixed(2));
-        }
+            $( api.column( grand_total_column ).footer() ).html(pageTotal.toFixed(2).bold());
+
+          }
 
       });
 
+
     }
 
-    $('.main-footer').remove();
+    $('#btn-preview').click(function(e){
+      e.preventDefault();
+  
+      window.open("reports/preview", '_blank');
+
+    });
 
     // PUSHER
 
@@ -153,16 +350,16 @@
     channel.bind('App\\Events\\EventNotification', function(data) {
 
       console.log(data.action);
-      
+
       //PUSHER - refresh data when table patient_services or patient_service_items has changes
-      if(data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' 
-         || data.action == 'edit-service-amount' || data.action == 'edit-service-amount')
+      if(data.action == 'edit-patient' || data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services'
+         || data.action == 'edit-service-amount' || data.action == 'add-service-item' || data.action == 'remove-service-item')
       {
         get_transactions();
       }
 
     });
-        
+
 	});
 
 </script>

@@ -28,7 +28,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="form-group col-md-12">
-                    <button type="button" class="btn btn-primary float-right" data-toggle="dropdown">
+                    <button type="button" id="btn-preview" class="btn btn-primary float-right">
                       <i class="fa fa-print"></i> Preview 
                     </button>
                   </div>
@@ -181,8 +181,6 @@
     });
 
     get_transactions();
-
-    
 
     $('.custom-checkbox [name="service[]"]').click(function(){
 
@@ -389,10 +387,29 @@
 
     }
 
-    $('.btn-group a').click(function(e){
+    $('#btn-preview').click(function(e){
       e.preventDefault();
-      var param = $(this).data('param');
-      window.location = '/transactions_preview/'+param;
+      var date_from = $('#date-from').val();
+      var date_to = $('#date-to').val();
+      var services = [];
+
+      $.each($("input[name='service[]']:checked"), function(){
+        services.push($(this).val());
+      });
+
+      // if date-from or date-to texfield has no value
+      if(!date_to)
+      {
+        date_to = "{{ date('m/d/Y') }}";
+      }
+
+      if(!date_from)
+      {
+        date_from = "{{ date('m/d/Y') }}";
+      }
+  
+      window.open("reports/preview?services="+services+"&date_from="+date_from+"&date_to="+date_to, '_blank');
+
     });
 
     // PUSHER

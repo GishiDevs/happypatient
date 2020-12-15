@@ -122,7 +122,7 @@ $(document).ready(function () {
               timer: 2500
             });
 
-            // window.location = "{{ route('certificate.template.preview') }}";
+            window.location = "{{ route('certificate.template.index') }}";
             
           }
         },

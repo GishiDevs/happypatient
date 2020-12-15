@@ -129,56 +129,9 @@ class TransactionController extends Controller
         return response()->json(['patient_service' => $patient_service], 200);
     }
 
-    public function transactions_preview($param)
+    public function transactions_preview(Request $request)
     {   
-        $services = Service::all();
-        $service_arr;
-
-        if($param == 'Check-up')
-        {
-            foreach($services as $service)
-            {   
-                if($service->service == 'Check-up')
-                {
-                    $service_arr[] = $service->id;
-                }
-                
-            }
-        }
-        else
-        {
-            foreach($services as $service)
-            {   
-                if($service->service != 'Check-up')
-                {
-                    $service_arr[] = $service->id;
-                }
-                
-            }
-        }
-            
-        
-
-        return $transactions =  DB::table('patient_services')
-                            // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
-                            ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
-                            ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                            ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
-                            ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),
-                                     'patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.procedure', 'service_procedures.code', 
-                                     'patient_service_items.price', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount',
-                                     'patient_service_items.status')
-                            ->where('patient_services.cancelled', '=', 'N')
-                            ->whereIn('services.id', $service_arr)
-                            // ->whereDate('patient_services.docdate', '>=', $date_from)
-                            // ->whereDate('patient_services.docdate', '<=', $date_to)
-                            ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
-                            ->orderBy('id', 'asc')
-                            ->orderBy('service', 'asc')
-                            ->orderBy('procedure', 'asc')
-                            ->get();    
-
-        return view('pages.transactions.preview', compact('service'));
+        return view('pages.transactions.preview');
     }
 
     public function reports()
@@ -199,6 +152,8 @@ class TransactionController extends Controller
         $date_to = Carbon::now()->format('Y-m-d');
         $service_arr;
         $transactions;
+
+        session(['services' => collect($services), 'date_from' => $date_from, 'date_to' => $date_to]);
 
         if($request->get('date_from'))
         {

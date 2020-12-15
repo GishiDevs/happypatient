@@ -34,14 +34,13 @@ Route::get('/', 'DashboardController@index')->name('dashboard.index')->middlewar
 Route::get('/patient-information', 'DashboardController@getpatientlists')->name('getpatientlists')->middleware('auth');
 
 Route::post('/check_patient_transaction', 'TransactionController@check_patient_transaction')->name('check_patient_transaction')->middleware('auth');
-Route::get('/transactions_preview/{param}', 'TransactionController@transactions_preview')->name('transactions_preview')->middleware('auth');;
-
 
 Route::group(['prefix' => 'transactions', 'middleware' => ['auth', 'transactions']], function(){
     Route::get('/', 'TransactionController@index')->name('transactions.index');
     Route::post('/gettransactions', 'TransactionController@gettransactions')->name('gettransactions');
     Route::post('/getreports', 'TransactionController@getreports')->name('getreports');
     Route::get('/reports', 'TransactionController@reports')->name('reports');
+    Route::get('/reports/preview', 'TransactionController@transactions_preview')->name('transactions_preview');
 });
 
 

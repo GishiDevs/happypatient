@@ -465,8 +465,8 @@ $(document).ready(function () {
                               '<td><span class="service-total-amount" id="span-total_amount-'+response.service_item.id+'">'+response.service_item.total_amount+'</span></td>'+
                               '<td>'+ (response.service_item.to_diagnose == "Y" ? '<span class="badge bg-warning">pending</span>' : '') +'</td>'+
                               '<td id="td-actions">'+
-                                '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style=" margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+ 
-                                '<a href="" class="btn btn-xs btn-primary" id="btn-update-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Update</a>'+
+                                '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style="margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+ 
+                                '<a href="" class="btn btn-xs btn-primary" id="btn-update-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style="margin-right: .170rem;" hidden>Update</a>'+
                                 '<a href="" class="btn btn-xs btn-secondary" id="btn-cancel-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Cancel</a>'+
                                 @can('patientservices-item-remove')
                                   '<a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'"><i class="fa fa-trash"></i> Remove</a> '+
@@ -590,6 +590,7 @@ $(document).ready(function () {
                 timer: 2500
               });
               
+              console.log('asd');
               
               $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
               $('#medicine_amt-id-'+ps_item_id).val(parseFloat(medicine_amt).toFixed(2)).attr('hidden', true);
@@ -857,6 +858,16 @@ $(document).ready(function () {
     //append Grand Total
     $('.service-grand-total').empty().append(parseFloat(sum).toFixed(2));
 
+    //if grand total is 0 and below then add class text-danger
+    if(parseFloat(sum).toFixed(2) > 0)
+    {
+      $('.service-grand-total').removeClass('text-danger');
+    }
+    else
+    {
+      $('.service-grand-total').addClass('text-danger');
+    }
+
   }
 
   // compute the amounts of the edited service procedure 
@@ -918,6 +929,18 @@ $(document).ready(function () {
 
       //append total amount
       $('#span-total_amount-'+ps_item_id).empty().append(parseFloat(total).toFixed(2));
+
+      if(parseFloat(total) > 0 )
+      {
+        $('#btn-update-'+ps_item_id).removeClass('disabled');
+        $('#span-total_amount-'+ps_item_id).removeClass('text-danger');
+      }
+      else
+      {
+        $('#btn-update-'+ps_item_id).addClass('disabled');
+        $('#span-total_amount-'+ps_item_id).addClass('text-danger');
+      }
+      
   }
 
   // compute the amounts of the new service procedure
@@ -979,6 +1002,17 @@ $(document).ready(function () {
 
       //append total amount
       $('#new-total_amount').empty().append(parseFloat(total).toFixed(2));
+
+      if(parseFloat(total) > 0 )
+      {
+        $('#btn-save-modal').removeClass('disabled');
+        $('#new-total_amount').removeClass('text-danger');
+      }
+      else
+      {
+        $('#btn-save-modal').addClass('disabled');
+        $('#new-total_amount').addClass('text-danger');
+      }
   }
 
   // Reset row fields to default
@@ -994,6 +1028,8 @@ $(document).ready(function () {
       $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
       $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
 
+      $('#btn-update-'+ps_item_id).removeClass('disabled');
+      $('#span-total_amount-'+ps_item_id).removeClass('text-danger');
       $("#btn-update-"+ps_item_id).attr('hidden', true);
       $("#btn-cancel-"+ps_item_id).attr('hidden', true);
       $("#btn-edit-"+ps_item_id).removeAttr('hidden');
