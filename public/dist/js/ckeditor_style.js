@@ -41,10 +41,14 @@ $(function () {
         ],
 
         // Enabling extra plugins, available in the full-all preset: https://ckeditor.com/cke4/presets
-        extraPlugins: 'colorbutton,font,justify,print,tableresize,uploadimage,pastefromword,liststyle,pagebreak',
+        extraPlugins: 'copyformatting,colorbutton,font,justify,print,tableresize,uploadimage,pastefromword,liststyle,pagebreak,autogrow',
         // Make the editing area bigger than default.
-        height: 500,
-        width: 980,
+        // height: 500,
+        // width: 980,
+        autoGrow_minHeight: 200,
+        autoGrow_maxHeight: 600,
+        autoGrow_bottomSpace: 50,
+        removePlugins: 'resize',
 
         // An array of stylesheets to style the WYSIWYG area.
         // Note: it is recommended to keep your own styles in a separate file in order to make future updates painless.
