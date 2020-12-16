@@ -29,6 +29,11 @@
             -webkit-print-color-adjust: exact !important;   /* Chrome, Safari */
             color-adjust: exact !important;                 /*Firefox*/
         }
+
+        p {
+            margin-bottom: 0;
+        }
+        
         .bg-darkk {
             background-color: lightgrey;
         }
