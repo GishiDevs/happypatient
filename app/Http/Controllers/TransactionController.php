@@ -131,7 +131,11 @@ class TransactionController extends Controller
 
     public function transactions_preview(Request $request)
     {   
-        return view('pages.transactions.preview');
+        $services = $request->get('services');
+        $date_from = Carbon::make($request->get('date_from'))->format('m/d/Y');
+        $date_to = Carbon::make($request->get('date_to'))->format('m/d/Y');
+        $isCheckup = $request->get('isCheckup');
+        return view('pages.transactions.preview', compact('services', 'date_from', 'date_to', 'isCheckup'));
     }
 
     public function reports()

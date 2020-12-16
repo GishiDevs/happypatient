@@ -7,9 +7,10 @@
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
+          <!-- <div class="col-sm-6">
             <h1>Transactions</h1>
-          </div>
+            <h5>Date: <strong>@if($date_from == $date_to) {{ $date_to }} @else {{ $date_from }} to {{ $date_to }}  @endif</strong></h5>
+          </div> -->
         </div>
       </div><!-- /.container-fluid -->
     </section>
@@ -20,6 +21,9 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
+              <div class="card-header">
+                <h5><strong>Transactions list dated @if($date_from == $date_to) {{ $date_to }} @else {{ $date_from }} to {{ $date_to }}  @endif</strong></h5>
+              </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <div class="row">
@@ -67,13 +71,6 @@
 <script>
 
   $(document).ready(function() {
-    
-    $('footer').attr('hidden', true);
-    $('nav').attr('hidden', true);
-    $('aside').remove();
-
-    console.log(" {{ session('services') }} ");
-
     var grand_total_column = 1;
     var services = [];
     var columns = [
@@ -83,72 +80,22 @@
 
     var dataSrc = [ 'service', 'name'];
     var columnTarget = [];
-
-    $('.select2').select2();
-
-    // get_transactions();
-
-    $("#filter-date-from, #filter-date-to").on("change.datetimepicker", function(e){
-      var date_from = $('#date-from').val();
-      var date_to = $('#date-to').val();
-
-      // if date-from or date-to texfield has value
-      if(date_from || date_to)
-      {
-        get_transactions();
-      }
-
-      console.log(columns);
-
-    });
-
-  
-    $('#filter-date-from').datetimepicker({
-        format: 'L',
-        useCurrent: false,
-        ignoreReadonly: true
-
-    });
-
-    $('#filter-date-to').datetimepicker({
-        format: 'L',
-        useCurrent: false,
-        ignoreReadonly: true
-    });
-
+    var isCheckup = '{{ $isCheckup }}';
+    
+    $('footer').attr('hidden', true);
+    $('nav').attr('hidden', true);
+    $('aside').remove();
+                  
+    
     get_transactions();
 
-    $('.custom-checkbox [name="service[]"]').click(function(){
+    function get_transactions()
+    {
 
-      $('#transactions tfoot').empty().append('<tr>'+
-                                                '<td class="text-right"><strong>Grand Total:</strong></th>'+
-                                                '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
-                                              '</tr>');
-      $('#transactions').DataTable().clear();
-
-      services = [];
-
-      dataSrc = [];
-
-      grand_total_column = 1; 
-
-      columns = [
-                      { "data": "service"},
-                      { "data": "total_amount"},
-                  ];
-      
-
-      $.each($("input[name='service[]']:checked"), function(){
-        services.push($(this).val());
-      });
-
-      // console.log(services);
-        $('#th-service').removeAttr('hidden');
-        $('#th-name').attr('hidden', true);
-        $('#th-code').attr('hidden', true);
-        $('#th-procedure').attr('hidden', true);
-        $('#th-price').attr('hidden', true);
-        $('#th-medicine_amt').attr('hidden', true);
+      var date_from = "{{ $date_from }}";
+      var date_to = "{{ $date_to }}";
+      var str = '{{ $services }}';
+      var services = str.split(',');
 
       if(services.length)
       { 
@@ -161,76 +108,28 @@
         grand_total_column = 1;
         dataSrc = ['service'];
 
-        if($(this).data('service') == 'Check-up')
-        { 
-
-          $('[name="service[]"').each(function(){
-            if($(this).data('service') != 'Check-up')
-            {
-              $(this).prop('checked', false);
-            }
-          });
-
-          $('#transactions tfoot').empty().append('<tr>'+
-                                                  '<td class="text-right" colspan="3"><strong>Grand Total:</strong></th>'+
-                                                  '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
-                                                '</tr>');
-          columns = [
-                      { "data": "procedure"},
-                      { "data": "price"},
-                      { "data": "medicine_amt"},
-                      { "data": "total_amount"},
-                    ];    
-
-          grand_total_column = 3; 
-          dataSrc = ['service', 'procedure'];
-          $('#th-service').attr('hidden', true);
-          $('#th-procedure').removeAttr('hidden');
-          $('#th-price').removeAttr('hidden');
-          $('#th-medicine_amt').removeAttr('hidden');
-
-        }
-        else
+        if(isCheckup == 'true')
         {
-          $('[name="service[]"').each(function(){
-            if($(this).data('service') == 'Check-up')
-            {
-              $(this).prop('checked', false);
-            }
-          });
+          $('#transactions tfoot').empty().append('<tr>'+
+                                                      '<td class="text-right" colspan="3"><strong>Grand Total:</strong></th>'+
+                                                      '<td> <span id="grand_total"><strong>0.00</strong></span> </th>'+
+                                                    '</tr>');
+              columns = [
+                          { "data": "procedure"},
+                          { "data": "price"},
+                          { "data": "medicine_amt"},
+                          { "data": "total_amount"},
+                        ];    
+
+              grand_total_column = 3; 
+              dataSrc = ['service', 'procedure'];
+              $('#th-service').attr('hidden', true);
+              $('#th-procedure').removeAttr('hidden');
+              $('#th-price').removeAttr('hidden');
+              $('#th-medicine_amt').removeAttr('hidden');
         }
 
-      }
-
-      get_transactions();
-
-    });
-
-    $('[data-mask]').inputmask();
-
-    function get_transactions()
-    {
-
-      var serviceid = $('#service').find(':selected').data('serviceid');
-      var date_from = $('#date-from').val();
-      var date_to = $('#date-to').val();
-      var grand_total = 0;
-      var services = [];
-
-      $.each($("input[name='service[]']:checked"), function(){
-        services.push($(this).val());
-      });
-
-      // if date-from or date-to texfield has no value
-      if(!date_to)
-      {
-        date_to = "{{ date('m/d/Y') }}";
-      }
-
-      if(!date_from)
-      {
-        date_from = "{{ date('m/d/Y') }}";
-      }
+      }   
 
       var dt = $('#transactions').DataTable({
           "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
@@ -246,7 +145,7 @@
           "ajax": {
             url: "{{ route('getreports') }}",
             type: "POST",
-            data: { _token: "{{ csrf_token() }}", services: services, serviceid: serviceid, date_from: date_from, date_to: date_to  },
+            data: { _token: "{{ csrf_token() }}", services: services, date_from: date_from, date_to: date_to  },
             // success: function(response){
             //   console.log(response);
             // },
@@ -325,13 +224,6 @@
 
 
     }
-
-    $('#btn-preview').click(function(e){
-      e.preventDefault();
-  
-      window.open("reports/preview", '_blank');
-
-    });
 
     // PUSHER
 

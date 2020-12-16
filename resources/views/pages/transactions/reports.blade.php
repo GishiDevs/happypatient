@@ -128,6 +128,7 @@
   $(document).ready(function() {
     
     var grand_total_column = 1;
+    var isCheckup = false;
     var services = [];
     // var columns = [
     //                   { "data": "name"},
@@ -227,6 +228,9 @@
 
         if($(this).data('service') == 'Check-up')
         { 
+          
+          //set value true when service filter is Check-up
+          isCheckup = true;
 
           $('[name="service[]"').each(function(){
             if($(this).data('service') != 'Check-up')
@@ -262,6 +266,9 @@
               $(this).prop('checked', false);
             }
           });
+
+          isCheckup = false;
+          
         }
 
       }
@@ -408,7 +415,7 @@
         date_from = "{{ date('m/d/Y') }}";
       }
   
-      window.open("reports/preview?services="+services+"&date_from="+date_from+"&date_to="+date_to, '_blank');
+      window.open("reports/preview?services="+services+"&date_from="+date_from+"&date_to="+date_to+"&isCheckup="+isCheckup, '_blank');
 
     });
 
