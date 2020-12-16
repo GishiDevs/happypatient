@@ -21,6 +21,10 @@
             font-weight: normal;
         }
 
+        p {
+            margin-bottom: 0;
+        }
+
         .color-violet {
             color: #7030a0;
         }
