@@ -4,11 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Untitled</title>
+    <title>Print Preview | {{ $patient_service->service }}</title>
     <!-- CSS only -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    {{-- <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css"> --}}
-    {{-- <link rel="stylesheet" href="assets/css/styles.css"> --}}
+
     <!-- Moment Plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
 
@@ -20,6 +19,21 @@
                     url('{{ asset('dist/fonts/Candara.woff') }}') format('woff');
             font-style: normal;
             font-weight: normal;
+        }
+
+        .color-violet {
+            color: #7030a0;
+        }
+
+        .user_name {
+            font-size: 15px;
+
+        }
+
+        .user_subtitle {
+            width: 250px;
+            font-size: 12px;
+
         }
 
         .font-candara {
@@ -47,7 +61,6 @@
 
 <body>
     <div class="container-fluid">
-        {{-- <img class="img-fluid" src="{{ asset('dist/img/docsHeader/docsHeader.png') }}"> --}}
 
         <div class="d-flex flex-row justify-content-center justify-content-xl-center align-items-xl-start">
             <div><img src="{{ asset('dist/img/docsHeader/hpdc_logo.png') }}" style="height: 160px;" /></div>
@@ -96,29 +109,31 @@
                 {!! $patient_service->content !!}
             </div>
 
-            <div class="mt-3 d-flex justify-content-around align-items-sm-center">
+            <div class="color-violet mt-3 d-flex justify-content-around align-items-sm-center">
 
                 <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
-                    <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/geraldine.png') }}" /></div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <img class="img-fluid" src="{{ asset('dist/img/docsHeader/geraldine.png') }}" /></div>
                     <div class="text-nowrap">
-                        <h6 class="text-uppercase my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">GERALDINE M. AGPES, MD, FPSP</h6>
+                        <h6 class="text-uppercase font-weight-bold user_name my-0">GERALDINE M. AGPES, MD, FPSP</h6>
                     </div>
-                    <div class="text-break text-center" style="width: 250px;color: #7030a0;">
-                        <p class="text-center my-0" style="font-size: 12px;">Pathologist</p>
-                        <p class="text-center my-0" style="font-size: 12px;">License# : 0093398</p>
+                    <div class="user_subtitle text-break text-center">
+                        <p class="text-center my-0">Pathologist</p>
+                        <p class="text-center my-0">License# : 0093398</p>
                     </div>
                 </div>
 
                 @foreach($diagnosis_signatories as $item)
 
                     <div class="d-flex flex-column justify-content-center align-items-center">
-                        <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/default.png') }}" /></div>
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <img class="img-fluid" src="{{ asset('dist/img/docsHeader/default.png') }}" /></div>
                         <div class="text-nowrap">
-                            <h6 class="text-uppercase my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">{{ $item->users->name }}</h6>
+                            <h6 class="text-uppercase font-weight-bold user_name my-0">{{ $item->users->name }}</h6>
                         </div>
-                        <div class="text-break text-center" style="width: 250px;color: #7030a0;">
-                            <p class="text-center my-0" style="font-size: 12px;">{{ $item->users->description }}</p>
-                            <p class="text-center my-0" style="font-size: 12px;">License# : {{ $item->users->license }}</p>
+                        <div class="user_subtitle text-break text-center">
+                            <p class="text-center my-0">{{ $item->users->description }}</p>
+                            <p class="text-center my-0">License# : {{ $item->users->license }}</p>
                         </div>
                     </div>
 
@@ -126,13 +141,14 @@
 
 
                 <div class="d-flex flex-column justify-content-center align-items-center">
-                    <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/default.png') }}" /></div>
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <img class="img-fluid" src="{{ asset('dist/img/docsHeader/default.png') }}" /></div>
                     <div class="text-nowrap">
-                        <h6 class="text-uppercase my-0" style="color: #7030a0;font-size: 15px;font-style: normal;font-weight: bold;">{{ Auth::user()->name }}</h6>
+                        <h6 class="text-uppercase font-weight-bold user_name my-0"> {{ Auth::user()->name }}</h6>
                     </div>
-                    <div class="text-break text-center" style="width: 250px;color: #7030a0;">
-                        <p class="text-center my-0" style="font-size: 12px;">{{ Auth::user()->description }}</p>
-                        <p class="text-center my-0" style="font-size: 12px;">License# : {{ Auth::user()->license }}</p>
+                    <div class="user_subtitle text-break text-center">
+                        <p class="text-center my-0">{{ Auth::user()->description }}</p>
+                        <p class="text-center my-0">License# : {{ Auth::user()->license }}</p>
                     </div>
                 </div>
 
@@ -157,16 +173,6 @@
     </script>
     <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
     <script>
-        // var dob = '{{ $patient_service->birthdate }}';
-        // var birthdate = dob.split('/');
-        // var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
-        // var getdocdate = '{{ $patient_service->docdate }}'.split('/');
-        // var documentdate = getdocdate[2] + '-' + getdocdate[0] + '-' + getdocdate[1];
-        // var docdate = moment(documentdate, 'YYYY-MM-DD');
-        // var age = docdate.diff(moment(bdate, 'YYYY-MM-DD'), 'year');
-
-        // $('#age').append(age);
-
         var dob = '{{ $patient_service->birthdate }}';
         var birthdate = dob.split('/');
         var bdate = birthdate[2] + '-' + birthdate[0] + '-' + birthdate[1];
