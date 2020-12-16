@@ -129,6 +129,14 @@ class TransactionController extends Controller
         return response()->json(['patient_service' => $patient_service], 200);
     }
 
+    public function reports()
+    {   
+
+        $services = Service::whereNotIn('service', ['Physical Therapy', 'Package', 'Profile'])->get();
+
+        return view('pages.transactions.reports', compact('services'));
+    }
+
     public function transactions_preview(Request $request)
     {   
         $services = $request->get('services');
@@ -136,14 +144,6 @@ class TransactionController extends Controller
         $date_to = Carbon::make($request->get('date_to'))->format('m/d/Y');
         $isCheckup = $request->get('isCheckup');
         return view('pages.transactions.preview', compact('services', 'date_from', 'date_to', 'isCheckup'));
-    }
-
-    public function reports()
-    {   
-
-        $services = Service::whereNotIn('service', ['Physical Therapy', 'Package', 'Profile'])->get();
-
-        return view('pages.transactions.reports', compact('services'));
     }
 
     public function getreports(Request $request)
