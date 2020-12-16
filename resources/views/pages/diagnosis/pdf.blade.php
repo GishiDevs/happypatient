@@ -90,13 +90,13 @@
                 <h4 class="text-break text-uppercase text-info my-0">{{ $patient_service->title }}</h4>
             </div>
 
-            <div class="{{ "off" === "on" ? "d-flex justify-content-around" : "d-flex flex-column align-items-center" }}">
+            <div class="{{ "off" === "on" ? "d-flex justify-content-around" : "d-flex flex-column" }}">
 
             <div class="font-candara" style="font-size: 18px;">
                 {!! $patient_service->content !!}
             </div>
 
-            <div class="mt-3 d-flex justify-content-between align-items-sm-center">
+            <div class="mt-3 d-flex justify-content-around align-items-sm-center">
 
                 <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
                     <div class="d-flex flex-column justify-content-center align-items-center"><img class="img-fluid" src="{{ asset('dist/img/docsHeader/geraldine.png') }}" /></div>
