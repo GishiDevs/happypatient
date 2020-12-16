@@ -168,7 +168,7 @@ class TransactionController extends Controller
         {
             $date_to = Carbon::make($request->get('date_to'))->format('Y-m-d');
         }
-
+        
         if(empty($services))
         {   
             foreach($service as $item)
@@ -199,9 +199,10 @@ class TransactionController extends Controller
             $service_arr = $services;
 
             $service = Service::find($service_arr[0]);
-            
+
             if($service->service == 'Check-up')
-            {
+            {   
+                
                 $transactions =  DB::table('patient_services')
                             // ->join('patients', 'patient_services.patientid', '=', 'patients.id')
                             ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')

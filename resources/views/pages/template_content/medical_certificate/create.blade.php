@@ -122,7 +122,7 @@ $(document).ready(function () {
               timer: 2500
             });
 
-            window.location = "{{ route('certificate.template.index') }}";
+            window.location = "/certificate/template/edit/"+response.certificate_id;
             
           }
         },

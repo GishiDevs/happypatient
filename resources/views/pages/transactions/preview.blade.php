@@ -95,7 +95,14 @@
       var date_from = "{{ $date_from }}";
       var date_to = "{{ $date_to }}";
       var str = '{{ $services }}';
-      var services = str.split(',');
+      // var services = str.split(',');
+      if(str)
+      {
+        services = str.split(',');
+      }
+
+      console.log(str);
+      console.log(services);
 
       if(services.length)
       { 
