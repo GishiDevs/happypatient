@@ -45,6 +45,7 @@
                       <th>Procedure</th>
                       <th>Price</th>
                       <th>To Diagnose</th>
+                      <th>Template Last Updated</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
                       <th width="200px" class="no-sort">Actions</th>
                       @endcan
@@ -59,6 +60,7 @@
                       <th>Procedure</th>
                       <th>Price</th>
                       <th>To Diagnose</th>
+                      <th>Template Last Updated</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
                       <th>Actions</th>
                       @endcanany
@@ -155,7 +157,8 @@
                    { "data": "code"},
                    { "data": "procedure"},
                    { "data": "price"},
-                   { "data": "to_diagnose"}];
+                   { "data": "to_diagnose"},
+                   { "data": "template_last_update"}];
 
     @canany(['serviceprocedure-edit', 'serviceprocedure-delete'])
       columns.push({data: "action"});

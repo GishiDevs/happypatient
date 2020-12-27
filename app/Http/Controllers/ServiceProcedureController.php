@@ -26,7 +26,8 @@ class ServiceProcedureController extends Controller
     {
         $serviceprocedures = DB::table('services')
                                ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
-                               ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose')
+                               ->leftJoin('template_contents', 'service_procedures.id', '=', 'template_contents.procedureid')
+                               ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose', DB::raw("DATE_FORMAT(template_contents.updated_at, '%m/%d/%Y') as template_last_update"))
                                ->get();
         return DataTables::of($serviceprocedures)
             ->addColumn('action',function($serviceprocedures){
