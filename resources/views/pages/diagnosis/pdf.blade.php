@@ -109,7 +109,7 @@
 
             <div class="{{ "off" === "on" ? "d-flex justify-content-around" : "d-flex flex-column" }}">
 
-            <div class="font-candara" style="font-size: 18px;">
+            <div class="px-5 font-candara">
                 {!! $patient_service->content !!}
             </div>
 

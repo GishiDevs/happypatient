@@ -41,7 +41,7 @@ $(function () {
         ],
 
         // Enabling extra plugins, available in the full-all preset: https://ckeditor.com/cke4/presets
-        extraPlugins: 'copyformatting,colorbutton,font,justify,print,tableresize,uploadimage,pastefromword,liststyle,pagebreak,autogrow',
+        extraPlugins: 'colordialog,copyformatting,colorbutton,font,justify,print,tableresize,uploadimage,pastefromword,liststyle,pagebreak,autogrow',
         // Make the editing area bigger than default.
 
         autoGrow_minHeight: 500,

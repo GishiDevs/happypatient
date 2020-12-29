@@ -64,7 +64,7 @@
   <script src="{{ asset('plugins/datatables-rowgroup/js/rowGroup.bootstrap4.min.js') }}"></script>
 
   <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-  <script src="https://cdn.ckeditor.com/4.15.1/full-all/ckeditor.js"></script>
+  <script src="https://cdn.ckeditor.com/4.15.1/standard-all/ckeditor.js"></script>
 
   <!-- Datatables Paginate button -->
   <style>
