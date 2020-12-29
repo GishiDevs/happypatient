@@ -113,7 +113,7 @@
                 {!! $patient_service->content !!}
             </div>
 
-            <div class="color-violet mt-3 d-flex justify-content-around align-items-sm-center">
+            <div class="color-violet mt-3 d-flex justify-content-around align-items-sm-center fixed-bottom">
 
                 <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
                     <div class="d-flex flex-column justify-content-center align-items-center">
