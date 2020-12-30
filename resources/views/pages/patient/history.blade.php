@@ -119,6 +119,7 @@
                           <th>Services</th>
                           <th>Procedures</th>
                           <th>Price (PHP)</th>
+                          <th>Medicine (PHP)</th>
                           <th>Discount (%)</th>
                           <th>Discount (PHP)</th>
                           <th>Total (PHP)</th>
@@ -133,6 +134,7 @@
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->procedure }}</td>
                           <td>{{ $services->price }}</td>
+                          <td>{{ $services->medicine_amt }}</td>
                           <td>{{ $services->discount }}</td>
                           <td>{{ $services->discount_amt }}</td>
                           <td>{{ $services->total_amount }}</td>
@@ -150,7 +152,7 @@
                                 <a href="{{ route('diagnosis.edit',$services->id) }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
                               @elseif($services->status == 'pending')
                                 @can('diagnosis-create')
-                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> Diagnose</a>
+                                <a href="{{ route('diagnosis.create',$services->id) }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i> @if($services->service == 'Check-up') Receipt @else Diagnose @endif</a>
                                 @endcan
                               @endif 
                           </td>
