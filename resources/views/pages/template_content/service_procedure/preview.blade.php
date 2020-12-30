@@ -33,18 +33,24 @@
         p {
             margin-bottom: 0;
         }
-        
+
         .bg-darkk {
             background-color: lightgrey;
         }
 
-        figure table {
+        /* figure table {
         border-collapse: collapse !important;
         }
 
         figure table td{
         border: 1px solid black !important;
-        }
+        } */
+
+        /* table[align="center"] {
+            margin-left: 0;
+            margin-right: 0;
+        } */
+
     </style>
 
 </head>
@@ -94,7 +100,7 @@
                 <h4 class="text-break text-uppercase text-info my-0">sample title</h4>
             </div>
 
-            <div class="font-candara">
+            <div class="px-5 font-candara">
                 {!! $template_content->content !!}
             </div>
 

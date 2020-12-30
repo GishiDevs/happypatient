@@ -16,7 +16,14 @@ class ServiceProcedure extends Model
 
     public function patient_service_items()
     {
-        return $this->belongsTo('App\PatientServiceItem', 'proceudreid','id');
+        return $this->belongsTo('App\PatientServiceItem', 'procedureid','id');
         //                 ( <Model>, <id_of_this_model>, <id_of_specified_Model> )
     }
+
+    public function template_contents()
+    {
+        return $this->hasOne('App\TemplateContent', 'procedureid', 'id');
+        //                 ( <Model>, <id_of_specified_Model>, <id_of_this_model> )
+    }
+
 }
