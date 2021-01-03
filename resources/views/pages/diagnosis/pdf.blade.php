@@ -30,13 +30,13 @@
         }
 
         .user_name {
-            font-size: 15px;
+            font-size: 18px;
 
         }
 
         .user_subtitle {
-            width: 250px;
-            font-size: 12px;
+            width: 280px;
+            font-size: 15px;
 
         }
 
@@ -113,7 +113,7 @@
                 {!! $patient_service->content !!}
             </div>
 
-            <div class="color-violet mt-3 d-flex justify-content-around align-items-sm-center fixed-bottom">
+            <div class="{{ $patient_service->service === "Laboratory" ? "position-relative" : "fixed-bottom" }} color-violet mt-3 mb-5 d-flex justify-content-around align-items-sm-center ">
 
                 <div class="{{ $patient_service->service === "Laboratory" ? "d-sm-block" : "d-sm-none" }} d-flex flex-column justify-content-center align-items-center">
                     <div class="d-flex flex-column justify-content-center align-items-center">
