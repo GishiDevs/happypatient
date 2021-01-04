@@ -376,7 +376,7 @@
       console.log(data.action);
       
       //PUSHER - refresh data when table service_procedures has changes
-      if(data.action == 'create-procedure' || data.action == 'edit-procedure' || data.action == 'delete-procedure')
+      if(data.action == 'create-procedure' || data.action == 'edit-procedure' || data.action == 'delete-procedure' || data.action == 'edit-role')
       {
         $('#procedure-table').DataTable().ajax.reload()
       }

@@ -23,11 +23,44 @@ class ServiceProcedureController extends Controller
     }
 
     public function getprocedurerecord()
-    {
+    {   
+        $services = [];
+
+        if(Auth::user()->can('patientservices-list-ultrasound'))
+        {
+            $services[] = 'Ultrasound';
+        }
+
+        if(Auth::user()->can('patientservices-list-ecg'))
+        {
+            $services[] = 'E.C.G';
+        }
+
+        if(Auth::user()->can('patientservices-list-checkup'))
+        {
+            $services[] = 'Check-up';
+        }
+
+        if(Auth::user()->can('patientservices-list-laboratory'))
+        {
+            $services[] = 'Laboratory';
+        }
+
+        if(Auth::user()->can('patientservices-list-physicaltherapy'))
+        {
+            $services[] = 'Physical Therapy';
+        }
+
+        if(Auth::user()->can('patientservices-list-xray'))
+        {
+            $services[] = 'X-Ray';
+        }    
+
         $serviceprocedures = DB::table('services')
                                ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
                                ->leftJoin('template_contents', 'service_procedures.id', '=', 'template_contents.procedureid')
                                ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose', DB::raw("DATE_FORMAT(template_contents.updated_at, '%m/%d/%Y') as template_last_update"))
+                               ->whereIn('services.service', $services) 
                                ->get();
         return DataTables::of($serviceprocedures)
             ->addColumn('action',function($serviceprocedures){
