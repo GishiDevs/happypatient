@@ -241,7 +241,7 @@ class PatientServiceController extends Controller
         {
             $patientservice->organization = $request->get('organization');
         }
-        $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
+        $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('Y-m-d');
         $patientservice->bloodpressure = $request->get('bloodpressure');
         $patientservice->temperature = $request->get('temperature');
         $patientservice->weight = $request->get('weight');
@@ -251,7 +251,7 @@ class PatientServiceController extends Controller
         $patientservice->o2_sat = $request->get('o2_sat');
         if($request->get('lmp'))
         {
-            $patientservice->lmp = Carbon::parse($request->get('lmp'))->format('y-m-d');
+            $patientservice->lmp = Carbon::parse($request->get('lmp'))->format('Y-m-d');
         }
         $patientservice->note = $request->get('note');
         $patientservice->grand_total = $request->get('grand_total');
@@ -410,7 +410,7 @@ class PatientServiceController extends Controller
             return abort(404, 'Not Found');
         }
         
-        $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
+        $patientservice->docdate = Carbon::parse($request->get('docdate'))->format('Y-m-d');
         if($patientservice->type == 'group')
         {
             $patientservice->name = $request->get('organization');
@@ -424,7 +424,7 @@ class PatientServiceController extends Controller
         $patientservice->o2_sat = $request->get('o2_sat');
         if($request->get('lmp'))
         {
-            $patientservice->lmp = Carbon::parse($request->get('lmp'))->format('y-m-d');
+            $patientservice->lmp = Carbon::parse($request->get('lmp'))->format('Y-m-d');
         }
         $patientservice->note = $request->get('note');
         $patientservice->save();

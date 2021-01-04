@@ -181,7 +181,7 @@ class PatientController extends Controller
         $patient->lastname = $request->get('lastname');
         $patient->firstname = $request->get('firstname');
         $patient->middlename = $request->get('middlename');
-        $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('y-m-d');
+        $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('Y-m-d');
         // $patient->weight = $request->get('weight');
         $patient->gender = $request->get('gender');
         $patient->age = $request->get('age');
@@ -227,6 +227,7 @@ class PatientController extends Controller
 
     public function update(Request $request, $patientid)
     {
+        
         $rules = [
             'lastname.required' => 'Please enter lastname',
             'firstname.required' => 'Please enter firstname',
@@ -284,7 +285,7 @@ class PatientController extends Controller
         $patient->lastname = $request->get('lastname');
         $patient->firstname = $request->get('firstname');
         $patient->middlename = $request->get('middlename');
-        $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('y-m-d');
+        $patient->birthdate = Carbon::parse($request->get('birthdate'))->format('Y-m-d');
         // $patient->weight = $request->get('weight');
         $patient->gender = $request->get('gender');
         $patient->age = $request->get('age');

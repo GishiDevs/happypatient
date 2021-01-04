@@ -110,6 +110,20 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-md-3">
+                      <label for="bloodpressure">O2 Sat:</label>
+                      <div>{{ $patient_service->o2_sat }}</div>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="temperature">Pulse Rate:</label>
+                      <div>{{ $patient_service->pulserate }}</div>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="weight">LMP:</label>
+                      <div>{{ $patient_service->lmp }}</div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-3">
                       <label for="service">Service: </label>
                       <div>{{ $patient_service->service }}</div>
                     </div>

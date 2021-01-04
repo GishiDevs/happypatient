@@ -43,7 +43,8 @@ class DiagnosisController extends Controller
                                            'patient_services.bloodpressure', 'patient_services.name', 'services.service', DB::raw('services.id as service_id'), 'patients.civilstatus',
                                            'patients.age', 'patients.gender', 'patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.temperature', 'patient_services.weight', 'service_procedures.procedure',
-                                           'template_contents.content', 'patient_services.note', 'patient_services.physician', 'patient_services.patientid')
+                                           'template_contents.content', 'patient_services.note', 'patient_services.physician', 'patient_services.patientid', DB::raw("DATE_FORMAT(patient_services.lmp, '%m/%d/%Y') as lmp"),
+                                           'patient_services.o2_sat', 'patient_services.pulserate')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
@@ -220,7 +221,7 @@ class DiagnosisController extends Controller
         $diagnosis = new Diagnosis();
         $diagnosis->ps_items_id = $ps_item_id;
         $diagnosis->file_no = $file_no;
-        $diagnosis->docdate = Carbon::parse($request->get('docdate'))->format('y-m-d');
+        $diagnosis->docdate = Carbon::parse($request->get('docdate'))->format('Y-m-d');
         $diagnosis->physician = $request->get('physician');
         // $diagnosis->bloodpressure = $request->get('bloodpressure');
         $diagnosis->title = $request->get('title');
@@ -357,7 +358,8 @@ class DiagnosisController extends Controller
                                             DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', 'services.service', DB::raw('services.id as service_id'),
                                             'patients.civilstatus', 'patients.age', 'patients.gender','patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                             'diagnoses.physician', 'diagnoses.bloodpressure', 'patient_services.temperature', 'patient_services.weight', 'diagnoses.title', 'diagnoses.content', 'diagnoses.file_no', 'service_procedures.procedure',
-                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.note')
+                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.note', DB::raw("DATE_FORMAT(patient_services.lmp, '%m/%d/%Y') as lmp"),
+                                            'patient_services.o2_sat', 'patient_services.pulserate')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')

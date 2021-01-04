@@ -202,7 +202,7 @@
 
       var dt = $('#transactions').DataTable({
           "lengthMenu": [[20, 30, 50, -1], [20, 30, 50, "All"]],
-          "searching": false,
+          "searching": true,
           "responsive": true,
           "autoWidth": false,
           "processing": true,
@@ -267,6 +267,20 @@
               }
             },
             {
+              targets: 6,
+              render: function( data ) {
+                var check_if_decimal = (data - Math.floor( data ));
+                var total_amount = new Intl.NumberFormat().format( data );
+
+                if(!check_if_decimal)
+                {
+                  total_amount = total_amount + '.00';
+                }
+                
+                return total_amount;
+              }
+            },
+            {
               targets: 7,
               render: function ( data ) {
                   if(data == 'diagnosed' || data == 'receipted')
@@ -306,8 +320,17 @@
                     return intVal(a) + intVal(b);
                 }, 0 );
 
+
+            var page_total = new Intl.NumberFormat().format( pageTotal );
+            var check_if_decimal = (pageTotal - Math.floor( pageTotal ));
+
+            if(!check_if_decimal)
+            {
+              page_total = page_total + '.00';
+            }      
+
             // Update footer
-            $( api.column( 6 ).footer() ).html(pageTotal.toFixed(2));
+            $( api.column( 6 ).footer() ).html(page_total);
         }
 
       });

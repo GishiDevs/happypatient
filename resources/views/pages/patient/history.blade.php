@@ -133,11 +133,11 @@
                           <td>{{ $services->docdate }}</td>
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->procedure }}</td>
-                          <td>{{ $services->price }}</td>
+                          <td>{{ number_format($services->price, 2, '.', ',') }}</td>
                           <td>{{ $services->medicine_amt }}</td>
                           <td>{{ $services->discount }}</td>
                           <td>{{ $services->discount_amt }}</td>
-                          <td>{{ $services->total_amount }}</td>
+                          <td>{{ number_format($services->total_amount, 2, '.', ',') }}</td>
                           <td>
                               @if($services->status == 'diagnosed' || $services->status == 'receipted')
                               <span class="badge bg-success">done</span>
@@ -182,6 +182,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
+  
   // $('#table-services').DataTable({
   //       "responsive": true,
   //       "autoWidth": false,

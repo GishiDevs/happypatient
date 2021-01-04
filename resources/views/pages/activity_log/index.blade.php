@@ -76,7 +76,7 @@
           {'data': 'description'},
           {'data': 'username'},
         ],
-        "order": [ 1, "desc" ],
+        "order": [],
         "columnDefs": [{
                           "targets": "no-sort",
                           "orderable": false
