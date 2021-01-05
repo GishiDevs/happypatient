@@ -365,8 +365,8 @@
             </ul>
           </li> -->
           @canany(['service-list','service-create','serviceprocedure-list','serviceprocedure-create','certificate-list','certificate-create','permission-list','permission-create','role-list','role-create'])
-          <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('serviceprocedure/content/create/*') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('serviceprocedure/content/create/*') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
+          <li class="nav-item has-treeview {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('serviceprocedure/content/create/*') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('file_no_setting/index') || request()->is('permission/index') || request()->is('role/index')) ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ (request()->is('service/index') || request()->is('serviceprocedure/index') || request()->is('serviceprocedure/create') || request()->is('serviceprocedure/content/create/*') || request()->is('certificate/template/index') || request()->is('certificate/template/create') || request()->is('file_no_setting/index') || request()->is('permission/index') || request()->is('role/index')) ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Settings
@@ -395,6 +395,14 @@
                 <a href="{{ route('certificate.template.index') }}" class="nav-link {{ (request()->is('certificate/template/index') || request()->is('certificate/template/create')) ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Medical Certificate</p>
+                </a>
+              </li>
+              @endcanany
+              @canany(['service-list','service-create'])
+              <li class="nav-item">
+                <a href="{{ route('file_no_setting.index') }}" class="nav-link {{ (request()->is('file_no_setting/index')) ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>File No Setting</p>
                 </a>
               </li>
               @endcanany

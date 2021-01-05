@@ -423,6 +423,39 @@ Route::group(['prefix' => 'certificate/template', 'middleware' => ['auth']], fun
 
 });
 
+//Services Route
+Route::group(['prefix' => 'file_no_setting', 'middleware' => ['auth']], function(){
+    Route::get('/index', [
+        'uses' => 'FileNumberSettingController@index',
+        'as' => 'file_no_setting.index',
+    ]);
+    Route::get('/create', [
+        'uses' => 'FileNumberSettingController@create',
+        'as' => 'file_no_setting.create',
+    ]);
+    Route::post('/store', [
+        'uses' => 'FileNumberSettingController@store',
+        'as' => 'file_no_setting.store',
+    ]);
+    Route::get('/settings', [
+        'uses' => 'FileNumberSettingController@getsettings',
+        'as' => 'getsettings',
+    ]);
+    Route::post('/edit', [
+        'uses' => 'FileNumberSettingController@edit',
+        'as' => 'file_no_setting.edit',
+    ]);
+    Route::post('/update', [
+        'uses' => 'FileNumberSettingController@update',
+        'as' => 'file_no_setting.update',
+    ]);
+    Route::post('/delete', [
+        'uses' => 'FileNumberSettingController@delete',
+        'as' => 'file_no_setting.delete',
+    ]);
+
+});
+
 Route::group(['prefix' => 'logs', 'middleware' => ['auth', 'activity_log']], function(){
     Route::get('/', 'ActivityLogController@index')->name('logs');
     Route::get('/getlogs', 'ActivityLogController@getlogs')->name('getlogs');

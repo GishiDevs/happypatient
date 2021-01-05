@@ -1,6 +1,6 @@
 
 @extends('layouts.main')
-@section('title', 'Services')
+@section('title', 'File No Setting')
 @section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Service</h1>
+            <h1>File No Setting</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active">Service Record</li>
+              <li class="breadcrumb-item active">File No Setting</li>
             </ol>
           </div>
         </div>
@@ -27,20 +27,20 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Service Record</h3>
-                @can('service-create')
-                <a href="" id="btn-add-service" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-service">Add New</a>
-                @endcan
+                <h3 class="card-title">File No Setting</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
                 @can('service-list')
-                <table id="service-table" class="table table-striped table-hover">
+                <table id="file-setting-no-table" class="table table-striped table-hover">
                   <thead>
                     <tr>
                       <th width="30px" class="no-sort">#</th>
                       <!-- <th>ID</th> -->
                       <th>Service</th>
+                      <th>Year</th>
+                      <th>File No Start</th>
+                      <!-- <th>File End Start</th> -->
                       <th>Status</th>
                       @canany(['service-edit','service-delete'])
                       <th width="110px" class="no-sort">Actions</th>
@@ -52,6 +52,9 @@
                       <th>#</th>
                       <!-- <th>ID</th> -->
                       <th>Service</th>
+                      <th>Year</th>
+                      <th>File No Start</th>
+                      <!-- <th>File End Start</th> -->
                       <th>Status</th>
                       @canany(['service-edit','service-delete'])
                       <th>Actions</th>
@@ -76,23 +79,33 @@
     <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-<div class="modal fade" id="modal-service">
+<div class="modal fade" id="modal-file-no-setting">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title"></h4>
+        <h4 class="modal-title">Set File Number</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      <form role="form" id="serviceform">
+      <form role="form" id="file-setting-no-form">
         <div class="card-body">
           <div class="row">
             <div class="form-group col-md-12">
-              <label for="service">Service</label> <span class="text-danger">*</span>
-              <input type="text" name="service" class="form-control" id="service" placeholder="Enter service" autofocus>
+              <label for="service" class="mr-2">Service: </label>
+              <span id="service"></span>
             </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <label for="service" class="mr-2">File No Start: </label>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <input type="text" name="start" class="form-control" id="start" placeholder="00000" maxlength="5" autofocus>
+            </div>              
           </div>
           <div class="row">
             <div class="form-group col-md-4">
@@ -122,11 +135,17 @@
 <script>
 
   $(document).ready(function() {
+
+    $("#start").inputmask('integer',{min:1, max:99999});
+
     var action_type;
     var serviceid;
     var columns = [{ "data": "DT_RowIndex"},
                   //  { "data": "id"},
                    { "data": "service"},
+                   { "data": "year"},
+                   { "data": "start"},
+                  //  { "data": "end"},
                    { "data": "status"}];
 
     @canany(['service-edit', 'service-delete'])
@@ -134,12 +153,12 @@
     @endcanany
     
 			// $('#tax-table').DataTable();
-	  $('#service-table').DataTable({
+	  $('#file-setting-no-table').DataTable({
         "responsive": true,
         "autoWidth": false,
 		    "processing": true,
 		    "serverSide": true,
-		    "ajax": "{{ route('getservicerecord') }}",
+		    "ajax": "{{ route('getsettings') }}",
 		    "bDestroy": true,
 		    "columns": columns,
         "order": [ 1, "asc" ],
@@ -149,30 +168,21 @@
                         }] 
     });
     
-    //Click Edit
-    $('#btn-add-service').click(function(e){
-      $('#status-active').attr('checked', true);
-      $('#status-inactive').attr('checked', false);
-      $('#btn-save').attr('disabled', false);
-      $('#serviceform')[0].reset();
-      $('.modal-title').empty().append('Add Service');
-      action_type = 'add'
-    });
 
     //Click Edit
-    $('#service-table').on('click', 'tbody td #btn-edit-service', function(e){
+    $('#file-setting-no-table').on('click', 'tbody td #btn-edit-setting', function(e){
       $('#btn-save').attr('disabled', true);
-      $('.modal-title').empty().append('Update Service');
-      action_type = 'update';
+
       serviceid = $(this).data('serviceid');
 
       $.ajax({
-        url: "{{ route('service.edit') }}",
+        url: "{{ route('file_no_setting.edit') }}",
         method: "POST",
         data: {_token: "{{ csrf_token() }}", serviceid: $(this).data('serviceid')},
         success: function(response){
           console.log(response);
-          $('#service').val(response.service);
+          $('#service').empty().append('<strong>'+response.service+'</strong>');
+          $('#start').val(response.start)
           if(response.status == 'active')
           { 
             $('#status-inactive').removeAttr('checked');
@@ -191,50 +201,8 @@
 
     });
 
-    //Delete Patient
-    $('#service-table').on('click', 'tbody td #btn-delete-service', function(e){
-
-      e.preventDefault();
-
-      var serviceid = $(this).data('serviceid');
-
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Delete record!'
-      }).then((result) => {
-        if (result.value) {
-          $.ajax({
-            url: "{{ route('service.delete') }}",
-            method: "POST",
-            data: {_token: "{{ csrf_token() }}", serviceid: serviceid},
-            success: function(response){
-              console.log(response);
-              if(response.success)
-              {
-                Swal.fire(
-                  'Deleted!',
-                  'Record has been deleted.',
-                  'success'
-                );
-                $('#service-table').DataTable().ajax.reload();
-              }
-            },
-            error: function(response){
-              console.log(response);
-            }
-          });
-
-        }
-      });
-    });
-
     //Service Form Validation
-  $('#serviceform').validate({
+  $('#file-setting-no-form').validate({
     rules: {
       service: {
         required: true,
@@ -262,73 +230,18 @@
 
       $('#btn-save').attr('disabled', true);
 
-      if(action_type == 'add')
-      {
-        addservice();
-      }
-      else
-      {
-        updateservice();
-      }
-
-    }
-  });
-    
-  function addservice(){
-    
-    var data = $('#serviceform').serializeArray();
-    data.push({name: "_token", value: "{{ csrf_token() }}"});
-
-    $.ajax({
-        url: "{{ route('service.store') }}",
-        method: "POST",
-        data: data,
-        success: function(response){
-          console.log(response);
-
-          if(response.success)
-          {
-            $('#serviceform')[0].reset();
-            // Sweet Alert
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-            });
-            $('#service-table').DataTable().ajax.reload();
-            $('#modal-service').modal('toggle');
-            
-          }
-          else
-          {
-            $('#service').addClass('is-invalid');
-            $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
-          }
-
-          $('#btn-save').removeAttr('disabled');
-
-        },
-        error: function(response){
-          console.log(response);
-        }
-      });
-  } 
-
-  function updateservice(){
-    var data = $('#serviceform').serializeArray();
+      var data = $('#file-setting-no-form').serializeArray();
         data.push({name: "_token", value: "{{ csrf_token() }}"});
         data.push({name: "serviceid", value: serviceid});
         $.ajax({
-            url: "{{ route('service.update') }}",
+            url: "{{ route('file_no_setting.update') }}",
             method: "POST",
             data: data,
             success: function(response){
                 if(response.success)
                 {   
-                    $('#serviceform')[0].reset();
-                    $('#service-table').DataTable().ajax.reload();
+                    $('#file-setting-no-form')[0].reset();
+                    $('#file-setting-no-table').DataTable().ajax.reload();
                     Swal.fire({
                                 position: 'center',
                                 icon: 'success',
@@ -336,12 +249,11 @@
                                 showConfirmButton: false,
                                 timer: 2500
                               });  
-                    $('#modal-service').modal('toggle');
+                    $('#modal-file-no-setting').modal('toggle');
                 }   
                 else
                 {
-                    $('#service').addClass('is-invalid');
-                    $('#service').after('<span id="service-error" class="error invalid-feedback">'+ response.service +'</span>');
+
                 }
                 console.log(response);
             },
@@ -349,15 +261,18 @@
                 console.log(response);
             }
         });
-  } 
-    $('#serviceform').on('change input',function(e){
+
+    }
+  });
+    
+    $('#file-setting-no-form').on('change input',function(e){
       
       $('#btn-save').attr('disabled', false);
     
     });
 
     $('#btn-cancel').click(function(e){
-        $('#serviceform')[0].reset();
+        $('#file-setting-no-form')[0].reset();
     });
 
     
@@ -382,7 +297,7 @@
       //PUSHER - refresh data when table services has changes
       if(data.action == 'create-service' || data.action == 'edit-service' || data.action == 'delete-service')
       {
-        $('#service-table').DataTable().ajax.reload();
+        $('#file-setting-no-table').DataTable().ajax.reload()
       }
 
     });
