@@ -134,6 +134,8 @@
 
   $(document).ready(function() {
 
+    var counter = 1;
+
     $('.select2').select2();
 
     // get_transactions();
@@ -238,8 +240,8 @@
 
                 if(group_index == 0)
                 {
-                  // group_label = rows.data()[0]['docdate']  + ' - ' + rows.data()[0]['name'].toUpperCase() ;
-                  group_label = rows.data()[0]['name'].toUpperCase() ;
+                  group_label = counter + '. ' + rows.data()[0]['name'].toUpperCase() ;
+                  counter++;
                 }
 
                 $('.dtrg-level-1').remove();
@@ -251,6 +253,9 @@
               endRender: function(rows, group, group_index) {
                 // return null;
               },
+          },
+          initComplete: function() {
+            counter = 1;
           },
           columnDefs: [
             {
@@ -333,7 +338,9 @@
             $( api.column( 6 ).footer() ).html(page_total);
         }
 
-      });
+      }).on('draw', function() {
+        counter = 1;
+      });;
 
     }
 

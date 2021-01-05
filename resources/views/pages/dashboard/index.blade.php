@@ -41,6 +41,7 @@
                       <th width="150px" class="no-sort">Document Date</th>
                       <th width="150px" class="no-sort">Diagnose Date</th>
                       <th width="100px" class="no-sort">Actions</th>
+                      <th>Queue</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -58,6 +59,7 @@
                       <th>Document Date</th>
                       <th>Diagnose Date</th>
                       <th>Actions</th>
+                      <th>Queue</th>
                     </tr>
                   </tfoot>
                 </table>
@@ -79,7 +81,6 @@
   <script>
   
   $(document).ready(function() {   
-    
     
 
     var patient_line_number = 0;
@@ -121,7 +122,9 @@
                       { "data": "status"},
                       { "data": "docdate"},
                       { "data": "diagnose_date"},
-                      { "data": null}
+                      { "data": null},
+                      { "data": 'queue_no'},
+
           ],
           order: [],
           rowGroup: {
@@ -133,7 +136,7 @@
 
                 if(group_index == 0)
                 { 
-                  group_label = rows.data()[0]['name'].toUpperCase() ;
+                  group_label = rows.data()[0]['queue_no'] + '. ' + rows.data()[0]['name'].toUpperCase() ;
                 }
 
                 $('.dtrg-level-1').remove();
@@ -148,7 +151,7 @@
           },
           columnDefs: [ 
             {
-              targets: [ 0, 1, 2 ],
+              targets: [ 0, 1, 2 , 9],
               visible: false
             },
             {

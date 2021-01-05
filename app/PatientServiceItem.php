@@ -15,7 +15,7 @@ class PatientServiceItem extends Model
                            'total_amount', 
                            'status'];
 
-    public function patient_service()
+    public function patient_services()
     {   
         return $this->belongsTo('App\PatientService', 'psid','id');
         //                 ( <Model>, <id_of_this_model>, <id_of_specified_Model> )

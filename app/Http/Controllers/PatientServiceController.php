@@ -15,13 +15,13 @@ use DB;
 use DataTables;
 use App\Events\EventNotification;
 use App\ActivityLog;
+use App\Queue;
 
 class PatientServiceController extends Controller
 {   
 
-
     public function index()
-    {   
+    {  
         return view('pages.patient_services.index');
     }
 
@@ -102,9 +102,10 @@ class PatientServiceController extends Controller
                 ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
+                ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                 // ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                         DB::raw(" '' as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status')
+                         DB::raw(" '' as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
                 ->distinct()
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
@@ -121,8 +122,9 @@ class PatientServiceController extends Controller
                 ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                 ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                 ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
+                ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status')
+                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
                 ->where('patient_services.type', '=', 'individual')
@@ -134,14 +136,16 @@ class PatientServiceController extends Controller
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                  ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+                 ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status')
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
                  ->where('service_procedures.to_diagnose', '=', 'N')
                  ->where('services.service', '=', 'Check-up')
-                 ->whereIn('services.service', $services);    
+                 ->whereIn('services.service', $services)
+                 ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'));    
 
         //pending patients
         $transaction_today =  DB::table('patient_services')
@@ -149,14 +153,15 @@ class PatientServiceController extends Controller
                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                  ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                  ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+                 ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status')
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
                  ->where('service_procedures.to_diagnose', '=', 'Y')
                  ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
-                 ->union($to_diagnose)
+                //  ->union($to_diagnose)
                  ->union($check_up)
                 //  ->union($diagnosed_today)
                  ->orderBy('id', 'asc')
@@ -258,6 +263,17 @@ class PatientServiceController extends Controller
         $patientservice->status = 'O'; //status Open
         $patientservice->cancelled = 'N'; //cancelled (No)
         $patientservice->save();
+
+        $queues = DB::table('queues')
+                    ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as created_at"))->get();
+
+        //count all queues for the day
+        $queue_no = $queues->where('created_at', '=', Carbon::now()->format('Y-m-d'))->count() + 1;
+        
+        $queue = new Queue();
+        $queue->psid = $patientservice->id;
+        $queue->queue_no = $queue_no;
+        $queue->save();
 
         $ctr = count($request->get('services'));
         $service_id = $request->get('services');

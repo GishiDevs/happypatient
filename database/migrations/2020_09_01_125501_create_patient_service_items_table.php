@@ -24,6 +24,7 @@ class CreatePatientServiceItemsTable extends Migration
             $table->decimal('discount_amt', 8, 2);
             $table->decimal('total_amount', 8, 2);
             $table->string('status')->nullable();
+            $table->string('file_no')->nullable();  
             $table->timestamps();
         });
     }
