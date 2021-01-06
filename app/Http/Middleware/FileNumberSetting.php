@@ -16,7 +16,7 @@ class FileNumberSetting
      */
     public function handle($request, Closure $next)
     {
-        if($request->is('file_no_setting/index') || $request->is('file_no_setting/settings') || $request->is('file_no_setting/edit') || $request->is('file_no_setting/settings'))
+        if($request->is('file_no_setting/index') || $request->is('file_no_setting/settings') || $request->is('file_no_setting/edit') || $request->is('file_no_setting/update'))
         {
             if(Auth::user()->can('file-no-setting'))
             {
