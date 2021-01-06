@@ -88,6 +88,7 @@
                           <th class="no-sort">Patient/Organization</th>
                           <th class="no-sort">Service</th>
                           <th class="no-sort">Name</th>
+                          <th class="no-sort">File #</th>
                           <th class="no-sort">Procedure</th>
                           <th class="no-sort">Amount (PHP)</th>
                           <th class="no-sort">Status</th>
@@ -107,7 +108,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th class="text-right" colspan="6">Grand Total:</th>
+                          <th class="text-right" colspan="7">Grand Total:</th>
                           <th colspan="2"> <span id="grand_total">0.00</span> </th>
                         </tr>
                       </tfoot>
@@ -225,6 +226,7 @@
                       { "data": "name"},
                       { "data": "service"},
                       { "data": "code"},
+                      { "data": "file_no"},
                       { "data": "code"},
                       { "data": "total_amount"},
                       { "data": "status"},
@@ -272,7 +274,7 @@
               }
             },
             {
-              targets: 6,
+              targets: 7,
               render: function( data ) {
                 var check_if_decimal = (data - Math.floor( data ));
                 var total_amount = new Intl.NumberFormat().format( data );
@@ -286,7 +288,7 @@
               }
             },
             {
-              targets: 7,
+              targets: 8,
               render: function ( data ) {
                   if(data == 'diagnosed' || data == 'receipted')
                   {
@@ -319,7 +321,7 @@
 
             // Total over this page
             pageTotal = api
-                .column( 6 )
+                .column( 7 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -335,7 +337,7 @@
             }      
 
             // Update footer
-            $( api.column( 6 ).footer() ).html(page_total);
+            $( api.column( 7 ).footer() ).html(page_total);
         }
 
       }).on('draw', function() {

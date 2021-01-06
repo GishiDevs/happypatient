@@ -173,7 +173,7 @@
         method: "POST",
         data: {_token: "{{ csrf_token() }}", serviceid: $(this).data('serviceid')},
         success: function(response){
-          console.log(response);
+          // console.log(response);
           $('#service').empty().append('<strong>'+response.service+'</strong>');
           $('#start').val(response.start)
           if(response.status == 'active')
@@ -248,7 +248,7 @@
                 {
 
                 }
-                console.log(response);
+                // console.log(response);
             },
             error: function(response){
                 console.log(response);
