@@ -457,7 +457,7 @@ $(document).ready(function () {
     });
 
     //service price text change
-    $('#table-services').on('keyup', 'tbody td input[name="price[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="price[]"]', function(e){
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
@@ -466,8 +466,8 @@ $(document).ready(function () {
       var medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+linenum).val()).toFixed(2);
       var discount_per_service = parseFloat($('#discount-linenum-'+linenum).val()).toFixed(2) / 100;
       var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
-      
-      
+
+
       //if price has value
       if($(this).val())
       {
@@ -495,7 +495,7 @@ $(document).ready(function () {
       {
         discount_per_service = 0.00;
       }
- 
+
       //if discount amount has no value
       if(!$('#discount_amt-linenum-'+ linenum).val())
       {
@@ -522,13 +522,13 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);
 
     });
 
     //service medicine amount text change
-    $('#table-services').on('keyup', 'tbody td input[name="medicine_amt[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="medicine_amt[]"]', function(e){
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
       var service_id = $(this).data('serviceid');
@@ -554,7 +554,7 @@ $(document).ready(function () {
       {
         discount_per_service = 0.00;
       }
- 
+
       //if discount amount has no value
       if(!$('#discount_amt-linenum-'+ linenum).val())
       {
@@ -570,7 +570,7 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);;
 
 
@@ -578,7 +578,7 @@ $(document).ready(function () {
 
 
     //service discount text change
-    $('#table-services').on('keyup', 'tbody td input[name="discount[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="discount[]"]', function(e){
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
       var service_id = $(this).data('serviceid');
@@ -621,13 +621,13 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);;
 
     });
 
     //service discount amount text change
-    $('#table-services').on('keyup', 'tbody td input[name="discount_amt[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="discount_amt[]"]', function(e){
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
       var service_id = $(this).data('serviceid');
@@ -670,7 +670,7 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);;
 
     });
@@ -875,7 +875,7 @@ $(document).ready(function () {
 
   function disableAddItemButton(total, linenum)
   {
-    //disable add-item button when total_amount is 0 and below 
+    //disable add-item button when total_amount is 0 and below
     if(parseFloat(total) > 0 )
     {
       $('#add-item').removeClass('disabled');

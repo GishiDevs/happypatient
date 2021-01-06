@@ -43,12 +43,12 @@
                     </div>
                   </div>
                   @endif
-                  <div class="row"> 
+                  <div class="row">
                     <div class="form-group col-md-4 div-patient">
-                      <label for="patient">@if($patientservice->type == 'individual') Patient @else Organization @endif</label>  
-                      @if($patientservice->type == 'individual') 
+                      <label for="patient">@if($patientservice->type == 'individual') Patient @else Organization @endif</label>
+                      @if($patientservice->type == 'individual')
                       <div>{{ strtoupper($patientservice->name) }}</div>
-                      @else  
+                      @else
                       <div class="input-group">
                         <input type="text" class="form-control" name="organization" id="organization" value="{{ $patientservice->name }}">
                       </div>
@@ -65,7 +65,7 @@
                       <div class="input-group">
                         <input type="text" class="form-control" name="bloodpressure" id="bloodpressure" value="{{ $patientservice->bloodpressure }}">
                       </div>
-                    </div> 
+                    </div>
                     <div class="form-group col-md-4 div-docdate">
                       <label for="selectPatient">Document Date </label>
                       <div class="input-group">
@@ -74,7 +74,7 @@
                         </div>
                         <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m/d/Y', strtotime($patientservice->docdate)) }}">
                       </div>
-                    </div>    
+                    </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
@@ -86,7 +86,7 @@
                     <div class="form-group col-md-4">
                       <label for="weight">Weight</label>
                       <div class="input-group">
-                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00" value="{{ $patientservice->weight }}"> 
+                        <input class="form-control" type="text" name="weight" id="weight" placeholder="0.00" value="{{ $patientservice->weight }}">
                         <div class="input-group-append">
                           <span class="input-group-text">Kg</span>
                         </div>
@@ -109,7 +109,7 @@
                         <input type="text" class="form-control" name="physician" id="physician" placeholder="Enter physician" value="{{ $patientservice->physician }}">
                       </div>
                     </div>
-                    
+
                     <div class="form-group col-md-4">
                       <label for="o2_sat">O2 Sat</label>
                       <div class="input-group">
@@ -148,7 +148,7 @@
                           <th id="th-actions">Actions</th>
                           @endif
                         </thead>
-                        <tbody>			
+                        <tbody>
                         @foreach($patientserviceitems as $services)
                         <tr id="row-id-{{$services->id}}">
                           <td>{{ $services->service }}</td>
@@ -173,16 +173,16 @@
                           <td id="td-actions">
                               @if($services->docdate == date('Y-m-d'))
                                 @can('amount-edit')
-                                <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-edit"></i> Edit</a> 
-                                <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a> 
-                                <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Cancel</a> 
+                                <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-edit"></i> Edit</a>
+                                <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a>
+                                <a href="" class="btn btn-xs btn-secondary" id="btn-cancel-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Cancel</a>
                                 @endcan
                                 @can('patientservices-item-remove')
-                                <a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-trash"></i> Remove</a> 
+                                <a href="" class="btn btn-xs btn-danger btn-remove-item" id="btn-remove-item-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-trash"></i> Remove</a>
                                 @endcan
                               @endif
                               @if(($services->status == 'diagnosed' || $services->status == 'receipted') && $services->type == 'individual')
-                                <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a> 
+                                <a href="{{ route('diagnosis.edit',$services->id) }}" id="btn-view-{{ $services->id }}" class="btn btn-xs btn-info" id="btn-view"><i class="fa fa-eye"></i> View</a>
                               @elseif($services->status == 'pending' && $services->type == 'individual' && $services->service)
                                 @can('diagnosis-create')
                                   @if($services->service == 'Check-up')
@@ -191,11 +191,11 @@
                                   <a href="{{ route('diagnosis.create',$services->id) }}" id="btn-diagnose-{{ $services->id }}" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>
                                   @endif
                                 @endif
-                              @endif 
+                              @endif
                           </td>
                           @endif
                         </tr>
-                        @endforeach									
+                        @endforeach
                         </tbody>
                         <tfoot>
                           <tr>
@@ -216,7 +216,7 @@
                           </tr>
                         </tfoot>
                       </table>
-                    </div>						
+                    </div>
                   </div>
                   <hr>
                   <div class="row">
@@ -241,7 +241,7 @@
                 <!-- /.card-body -->
               </form>
             </div>
-            
+
             <!-- /.card -->
           </div>
         </div>
@@ -311,14 +311,14 @@
           </div>
           <div class="row">
             <div class="form-group col-md-12">
-              <label for="discount_amt">Total Amount: <span id="new-total_amount"> 0.00</span></label> 
+              <label for="discount_amt">Total Amount: <span id="new-total_amount"> 0.00</span></label>
             </div>
           </div>
         </div>
         <!-- /.card-body -->
         <div class="modal-footer">
           <button type="reset" id="btn-cancel-modal" class="btn btn-default" data-dismiss="modal">Cancel</button>
-          <button type="submit" id="btn-save-modal" class="btn btn-primary">Save</button> 
+          <button type="submit" id="btn-save-modal" class="btn btn-primary">Save</button>
         </div>
       </form>
       </div>
@@ -331,8 +331,8 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-  
-    $('#btn-update').click(function(e){ 
+
+    $('#btn-update').click(function(e){
 
       e.preventDefault();
 
@@ -347,7 +347,7 @@ $(document).ready(function () {
           });
 
       setTimeout($('#patientserviceform').submit(), 2000);
-      
+
     });
 
     $('#btn-cancel').click(function(e){
@@ -371,7 +371,7 @@ $(document).ready(function () {
                   'Record has been cancelled.',
                   'success'
                 );
-          
+
           setTimeout($('#patientserviceform').submit(), 2000);
         }
       });
@@ -379,9 +379,9 @@ $(document).ready(function () {
     });
 
     $('#patientserviceform').on('change input',function(e){
-    
+
       $('#btn-update').attr('disabled', false);
-    
+
     });
 
     $('#new-service-form').validate({
@@ -406,16 +406,16 @@ $(document).ready(function () {
         },
         "new-price": {
           required: "Please enter a price",
-        },      
-        
+        },
+
       },
       errorElement: 'span',
       errorPlacement: function (error, element) {
         error.addClass('invalid-feedback');
         element.closest('.form-group').append(error);
         if ($(element).hasClass('select2'))
-        { 
-          $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+        {
+          $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
         }
       },
       highlight: function (element, errorClass, validClass) {
@@ -431,7 +431,7 @@ $(document).ready(function () {
         var data = $('#new-service-form').serializeArray();
         data.push({ name: '_token', value: '{{ csrf_token() }}'});
         data.push({ name: 'total_amount', value: $('#new-total_amount').text() });
-        
+
         $.ajax({
           url: "{{ route('patientservice.add_item', $patientservice->id) }}",
           method: "POST",
@@ -440,8 +440,8 @@ $(document).ready(function () {
             console.log(response);
 
             if(response.success)
-            { 
-              
+            {
+
               reset_modal();
 
               $('#modal-service').modal('toggle');
@@ -465,7 +465,7 @@ $(document).ready(function () {
                               '<td><span class="service-total-amount" id="span-total_amount-'+response.service_item.id+'">'+response.service_item.total_amount+'</span></td>'+
                               '<td>'+ (response.service_item.to_diagnose == "Y" ? '<span class="badge bg-warning">pending</span>' : '') +'</td>'+
                               '<td id="td-actions">'+
-                                '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style="margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+ 
+                                '<a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style="margin-right: .170rem;"><i class="fa fa-edit"></i> Edit</a>'+
                                 '<a href="" class="btn btn-xs btn-primary" id="btn-update-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" style="margin-right: .170rem;" hidden>Update</a>'+
                                 '<a href="" class="btn btn-xs btn-secondary" id="btn-cancel-'+response.service_item.id+'" data-id="'+response.service_item.id+'" data-service="'+response.service_item.service+'" hidden>Cancel</a>'+
                                 @can('patientservices-item-remove')
@@ -476,9 +476,9 @@ $(document).ready(function () {
                                   (response.service_item.service != 'Check-up' && response.service_item.to_diagnose == 'Y' ? '<a href="/diagnosis/create/'+response.service_item.id+'" id="btn-diagnose-'+response.service_item.id+'" class="btn btn-xs btn-success" id="btn-create-diagnosis"><i class="fa fa-edit"></i>  Diagnose</a>': '') +
                                 @endcan
                               '</td>'+
-                            '</tr>');  
+                            '</tr>');
               // location.reload();
-              table_actions();  
+              table_actions();
               getGrandTotal();
 
             }
@@ -492,11 +492,11 @@ $(document).ready(function () {
 
         });
       }
-      
-    });  
+
+    });
 
 
-  table_actions();  
+  table_actions();
 
   function table_actions()
   {
@@ -506,7 +506,7 @@ $(document).ready(function () {
 
       var ps_item_id = $(this).data('id');
       var service = $(this).data('service');
-      
+
       $("#btn-update-"+ps_item_id).removeAttr('hidden');
       $("#btn-cancel-"+ps_item_id).removeAttr('hidden');
       $("#btn-edit-"+ps_item_id).attr('hidden', true);
@@ -523,18 +523,18 @@ $(document).ready(function () {
         $('#medicine_amt-id-'+ps_item_id).removeAttr('hidden');
         $('#span-medicine_amt-'+ps_item_id).attr('hidden', true);
       }
-      
+
 
       $('#span-price-'+ps_item_id).attr('hidden', true);
       $('#span-discount-'+ps_item_id).attr('hidden', true);
       $('#span-discount_amt-'+ps_item_id).attr('hidden', true);
 
-      
+
 
       $("#btn-update-"+ps_item_id).click(function(e){
 
         e.preventDefault();
-        
+
         var ps_item_id = $(this).data('id');
         var price = $('#price-id-'+ps_item_id).val();
         var medicine_amt = $('#medicine_amt-id-'+ps_item_id).val();
@@ -568,17 +568,17 @@ $(document).ready(function () {
           url: "{{ route('patientservice.update_price') }}",
           method: "POST",
           data: {
-                  _token: "{{ csrf_token() }}", 
-                  ps_item_id: ps_item_id, 
-                  price: price, 
+                  _token: "{{ csrf_token() }}",
+                  ps_item_id: ps_item_id,
+                  price: price,
                   medicine_amt: medicine_amt,
-                  discount: discount, 
+                  discount: discount,
                   discount_amt: discount_amt,
                   total_amount: total_amount
                 },
           success: function(response){
             console.log(response);
-            
+
             if(response.success)
             {
 
@@ -589,14 +589,14 @@ $(document).ready(function () {
                 showConfirmButton: false,
                 timer: 2500
               });
-              
+
               console.log('asd');
-              
+
               $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
               $('#medicine_amt-id-'+ps_item_id).val(parseFloat(medicine_amt).toFixed(2)).attr('hidden', true);
               $('#discount-id-'+ps_item_id).val(parseFloat(discount).toFixed(2)).attr('hidden', true);
               $('#discount_amt-id-'+ps_item_id).val(parseFloat(discount_amt).toFixed(2)).attr('hidden', true);
-              
+
               $('#span-price-'+ps_item_id).empty().append(parseFloat(price).toFixed(2));
               $('#span-medicine_amt-'+ps_item_id).empty().append(parseFloat(medicine_amt).toFixed(2));
               $('#span-discount-'+ps_item_id).empty().append(parseFloat(discount).toFixed(2));
@@ -625,7 +625,7 @@ $(document).ready(function () {
         });
 
       });
-      
+
       $("#btn-cancel-"+ps_item_id).click(function(e){
 
         e.preventDefault();
@@ -654,7 +654,7 @@ $(document).ready(function () {
           confirmButtonText: 'Remove!'
         }).then((result) => {
           if (result.value) {
-            
+
             $.ajax({
               url: "{{ route('patientservice.remove_item') }}",
               method: "POST",
@@ -663,7 +663,7 @@ $(document).ready(function () {
                 console.log(response);
 
                 if(response.success)
-                { 
+                {
                   Swal.fire(
                     'Removed!',
                     'Item has been removed.',
@@ -682,40 +682,40 @@ $(document).ready(function () {
           }
         });
 
-        
+
       });
-    
+
     //price text change
-    $('#table-services').on('keyup', 'tbody td input[name="price"]', function(e){
-      
+    $('#table-services').on('keyup input', 'tbody td input[name="price"]', function(e){
+
         // alert($(this).closest('td').parent()[0].sectionRowIndex);
         var ps_item_id = $(this).data('id');
 
         //call function compute_amounts
-        compute_amounts(ps_item_id);  
+        compute_amounts(ps_item_id);
 
         //call function getGrandTotal
         getGrandTotal();
-            
+
     });
 
     //medicine amount text change
-    $('#table-services').on('keyup', 'tbody td input[name="medicine_amt"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="medicine_amt"]', function(e){
 
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var ps_item_id = $(this).data('id');
 
       //call function compute_amounts
-      compute_amounts(ps_item_id);  
+      compute_amounts(ps_item_id);
 
       //call function getGrandTotal
       getGrandTotal();
-          
+
     });
 
     //discount text change
-    $('#table-services').on('keyup', 'tbody td input[name="discount"]', function(e){
-      
+    $('#table-services').on('keyup input', 'tbody td input[name="discount"]', function(e){
+
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var ps_item_id = $(this).data('id');
 
@@ -724,12 +724,12 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
-          
+
     });
 
     //discount amount text change
-    $('#table-services').on('keyup', 'tbody td input[name="discount_amt"]', function(e){
-      
+    $('#table-services').on('keyup input', 'tbody td input[name="discount_amt"]', function(e){
+
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var ps_item_id = $(this).data('id');
 
@@ -738,7 +738,7 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
-          
+
     });
 
     //table elements input masks
@@ -757,32 +757,32 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
     $('[name="discount_amt"]').inputmask('decimal', {
       rightAlign: true,
       digits:2,
       allowMinus:false
     });
-  
+
   }
 
-  $('#new-service').on('change', function(e){ 
+  $('#new-service').on('change', function(e){
 
     $('#new-procedure').removeAttr('disabled');
-    
+
     $('#new-procedure').empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
 
     @foreach($procedures_all as $procedure)
 
         if($(this).val() == "{{ $procedure->serviceid }}")
-        { 
+        {
           $('#new-procedure').append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}">{{ $procedure->code }}</option>');
         }
 
     @endforeach
 
-    
+
   });
 
   $('#new-procedure').on('change', function(e){
@@ -804,8 +804,8 @@ $(document).ready(function () {
   });
 
   //new price text change
-  $('#new-price').on('keyup', function(e){
-    
+  $('#new-price').on('keyup input', function(e){
+
     if($(this).val())
     {
       $('#new-discount').removeAttr('disabled');
@@ -817,40 +817,40 @@ $(document).ready(function () {
       $('#new-discount_amt').attr('disabled', true);
     }
 
-    compute_new_service(); 
-        
+    compute_new_service();
+
   });
 
   //new medicine amount text change
-  $('#new-medicine_amt').on('keyup', function(e){
+  $('#new-medicine_amt').on('keyup input', function(e){
 
     compute_new_service();
-        
+
   });
 
   //new discount text change
-  $('#new-discount').on('keyup', function(e){
-    
+  $('#new-discount').on('keyup input', function(e){
+
     compute_new_service();
-        
+
   });
 
   //new discount amount text change
-  $('#new-discount_amt').on('keyup', function(e){
-    
+  $('#new-discount_amt').on('keyup input', function(e){
+
     compute_new_service();
-        
+
   });
 
   function getGrandTotal()
   {
     var sum = 0.00;
     var price = 0.00;
-    
+
     //loop then sum each service total amount
     $('.service-total-amount').each(function(){
-        price = parseFloat($(this).text()).toFixed(2);  
-        sum = parseFloat(sum)  + parseFloat(price);   
+        price = parseFloat($(this).text()).toFixed(2);
+        sum = parseFloat(sum)  + parseFloat(price);
     });
 
     // alert(parseFloat(sum).toFixed(2));
@@ -870,7 +870,7 @@ $(document).ready(function () {
 
   }
 
-  // compute the amounts of the edited service procedure 
+  // compute the amounts of the edited service procedure
   function compute_amounts(ps_item_id)
   {
       var price = $('#price-id-'+ps_item_id).val();
@@ -923,7 +923,7 @@ $(document).ready(function () {
         discount_amt_per_service = 0.00;
       }
 
-          
+
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
@@ -940,7 +940,7 @@ $(document).ready(function () {
         $('#btn-update-'+ps_item_id).addClass('disabled');
         $('#span-total_amount-'+ps_item_id).addClass('text-danger');
       }
-      
+
   }
 
   // compute the amounts of the new service procedure
@@ -996,7 +996,7 @@ $(document).ready(function () {
         discount_amt_per_service = 0.00;
       }
 
-          
+
       var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
       var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
 
@@ -1017,7 +1017,7 @@ $(document).ready(function () {
 
   // Reset row fields to default
   function reset(ps_item_id)
-  {   
+  {
       var price = $('#span-price-'+ps_item_id).text();
       var medicine_amt = $('#span-medicine_amt-'+ps_item_id).text();
       var discount = $('#span-discount-'+ps_item_id).text();
@@ -1047,7 +1047,7 @@ $(document).ready(function () {
       $('#span-discount-'+ps_item_id).removeAttr('hidden');
       $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
 
-      
+
       var discount_amount = parseFloat(price) * (parseFloat(discount).toFixed(2) / 100);
       var total = parseFloat(price) + parseFloat(medicine_amt) - parseFloat(discount_amount) - parseFloat(discount_amt);
 
@@ -1101,7 +1101,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
 
   $('#temperature').inputmask('decimal', {
@@ -1109,7 +1109,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:1,
       allowMinus:false
-        
+
     });
 
   $('#o2_sat').inputmask('decimal', {
@@ -1117,17 +1117,17 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
 
   $('#pulserate').inputmask('integer', {
       rightAlign: true,
       integerDigits:3,
       allowMinus:false
-        
-    }); 
 
-    
+    });
+
+
     $('[name="new-price"]').inputmask('decimal', {
       rightAlign: true,
       digits:2,
@@ -1143,7 +1143,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
     $('[name="new-discount_amt"]').inputmask('decimal', {
       rightAlign: true,

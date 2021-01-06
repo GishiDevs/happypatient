@@ -1,7 +1,7 @@
 
 @extends('layouts.main')
 @section('title', 'Add Patient')
-@section('main_content')                                
+@section('main_content')
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -106,7 +106,7 @@
                         <input type="text" class="form-control" name="birthdate" id="birthdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy">
                       </div>
                     </div>
-                    
+
                     <!-- <div class="form-group col-md-3">
                       <label for="age">Age</label>
                       <input type="text" class="form-control" name="age" id="age" placeholder="0">
@@ -165,7 +165,7 @@
                       <select class="form-control select2" name="province" id="province" style="width: 100%;">
                       </select>
                     </div>
-                    <div class="form-group col-md-4"> 
+                    <div class="form-group col-md-4">
                       <label for="city">City/Town</label> <span class="text-danger">*</span>
                       <select class="form-control select2" name="city" id="city" style="width: 100%;" disabled>
                       </select>
@@ -186,7 +186,7 @@
               <!-- service form start -->
               <form role="form" id="patientserviceform" hidden>
                 <div class="card-body">
-                  <div class="row"> 
+                  <div class="row">
                     <div class="form-group col-md-3">
                       <label for="bloodpressure">Blood Pressure</label>
                       <div class="input-group">
@@ -225,7 +225,7 @@
                         </div>
                         <input type="text" class="form-control" name="docdate" id="docdate" data-inputmask-alias="datetime" data-inputmask-inputformat="mm/dd/yyyy" data-mask placeholder="mm/dd/yyyy" value="{{ date('m-d-Y') }}">
                       </div>
-                    </div>          
+                    </div>
                   </div>
                   <div class="row">
                     <div class="form-group col-md-3">
@@ -273,7 +273,7 @@
                           <th width="170px">Total Amount (PHP)</th>
                           <th width="100px">Action</th>
                         </thead>
-                        <tbody>												
+                        <tbody>
                         </tbody>
                         <tfoot>
                           <tr>
@@ -285,7 +285,7 @@
                           </tr>
                         </tfoot>
                       </table>
-                    </div>						
+                    </div>
                   </div>
                   <hr>
                   <div class="row">
@@ -298,7 +298,7 @@
                   </div>
                 </div>
                 <div class="card-footer">
-                <button type="button" id="btn-previous" class="btn btn-primary">Previous</button> 
+                <button type="button" id="btn-previous" class="btn btn-primary">Previous</button>
                 <button type="submit" id="btn-add" class="btn btn-primary">Add</button>
                 </div>
                 <!-- /.card-body -->
@@ -339,14 +339,14 @@ $(document).ready(function () {
 
   $('#city').empty().attr('disabled',true);
   $('#barangay').empty().attr('disabled',true);
-  
+
   //Date range picker
   $('#datetimepicker-birthdate').datetimepicker({
         format: 'L',
         useCurrent: false,
         ignoreReadonly: true,
         maxDate: new Date
-        
+
     });
 
   // $("#datetimepicker-birthdate").on("change.datetimepicker", function(e){
@@ -359,11 +359,11 @@ $(document).ready(function () {
   //     if(age == 0)
   //     {
   //       $('#age').val(age + '');
-  //     }  
+  //     }
   // });
 
   $('.select2').select2();
-  
+
   getprovinces();
 
   function getprovinces()
@@ -376,7 +376,7 @@ $(document).ready(function () {
         console.log(response);
 
         $('#province').empty().append('<option value="" selected disabled>Select a Province</option>');
-        
+
         $.each(response, function(index, value){
           $('#province').append('<option value="'+ value.province_id +'">'+ value.name +'</option>');
         });
@@ -386,7 +386,7 @@ $(document).ready(function () {
       }
     });
   }
-  
+
 
   $('#province').on('change', function(e){
 
@@ -497,15 +497,15 @@ $(document).ready(function () {
       mobile: {
         required: "Please enter a mobile number"
       }
-      
+
     },
     errorElement: 'span',
     errorPlacement: function (error, element) {
       error.addClass('invalid-feedback');
       element.closest('.form-group').append(error);
       if ($(element).hasClass('select2'))
-      { 
-        $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+      {
+        $(element).closest(".form-group").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
       }
     },
     highlight: function (element, errorClass, validClass) {
@@ -517,14 +517,14 @@ $(document).ready(function () {
     submitHandler: function(e){
       // e.preventDefault();
 
-      //if option is equal to 'option1' then insert Personal Information without Patient Services 
+      //if option is equal to 'option1' then insert Personal Information without Patient Services
       if(option == 'option1')
-      { 
+      {
 
         var data_patient = $('#patientform').serializeArray();
         data_patient.push({name: "_token", value: "{{ csrf_token() }}"});
 
-        //store patient information  
+        //store patient information
         $.ajax({
             url: "{{ route('patient.store') }}",
             method: "POST",
@@ -533,8 +533,8 @@ $(document).ready(function () {
               console.log(response);
 
               if(response.success)
-              { 
-        
+              {
+
                 Swal.fire({
                   position: 'center',
                   icon: 'success',
@@ -554,7 +554,7 @@ $(document).ready(function () {
 
                 //set default text
                 $('#btn-next').empty().append('Add');
-                
+
               }
             },
             error: function(response){
@@ -567,7 +567,7 @@ $(document).ready(function () {
         $('#patientserviceform').removeAttr('hidden');
         $('#patientform').attr('hidden', true);
       }
-    
+
     }
   });
 
@@ -580,7 +580,7 @@ $(document).ready(function () {
       rightAlign: true,
       integerDigits:3,
       allowMinus:false
-        
+
     });
 
   $('#weight').inputmask('decimal', {
@@ -588,7 +588,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
 
   $('#temperature').inputmask('decimal', {
@@ -596,7 +596,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:1,
       allowMinus:false
-        
+
     });
 
   $('#o2_sat').inputmask('decimal', {
@@ -604,15 +604,15 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
 
   $('#pulserate').inputmask('integer', {
       rightAlign: true,
       integerDigits:3,
       allowMinus:false
-        
-    });  
+
+    });
 
 
   //patient services
@@ -622,18 +622,18 @@ $(document).ready(function () {
     var docdate = new Date($(this).val());
     //Valide Document Date
     if(docdate == 'Invalid Date')
-    { 
+    {
       $('#docdate-error').remove();
       $('#docdate').addClass('is-invalid');
       $('#docdate').after('<span id="docdate-error" class="error invalid-feedback"> Please enter a valid date</span>');
-      
+
     }
     else
     {
       // $('#docdate-error').remove();
       $(this).removeClass('is-invalid');
     }
-    
+
   });
 
   var linenum = 1;
@@ -642,7 +642,7 @@ $(document).ready(function () {
     e.preventDefault();
 
     var x = linenum - 1
-  
+
       $('#table-services tbody').append('<tr id="row-'+linenum+'">'+
                                         '<td>'+
                                           '<div class="form-group div-service">'+
@@ -674,7 +674,7 @@ $(document).ready(function () {
                                             '<input class="form-control input-small affect-total" type="text" name="discount[]" id="discount-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="" data-serviceid="" data-linenum="'+linenum+'" disabled>'+
                                             '<div class="input-group-prepend"><span class="input-group-text">%</span></div>'+
                                         '</div>'+
-                                        '</td>'+   
+                                        '</td>'+
                                         '<td>'+
                                           '<div class="input-group">'+
                                             '<input class="form-control input-small affect-total" type="text" name="discount_amt[]" id="discount_amt-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask disabled data-service="" data-serviceid="" data-linenum="'+linenum+'">'+
@@ -684,7 +684,7 @@ $(document).ready(function () {
                                         '<td><a href="" class="btn btn-xs btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Remove</a></td>'+
                                       '</tr>');
     linenum++;
-        
+
     $('.select2').select2();
 
     //count service select option
@@ -701,12 +701,12 @@ $(document).ready(function () {
 
     $('#service-table-error').remove();
 
-    $('#table-services').on('change', 'tbody td [name="service"]', function(e){ 
+    $('#table-services').on('change', 'tbody td [name="service"]', function(e){
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var service = $(this).find(':selected').data('service');
       var service_id = $(this).val();
-      
+
       $('#services-linenum-'+linenum).val(service_id);
 
       $('.div-service').after('<span class="span-service" id="span-service-linenum-'+linenum+'" data-service="'+service+'" data-service_id="'+service_id+'">'+service+'</span>')
@@ -725,11 +725,11 @@ $(document).ready(function () {
       //   success: function(response){
 
       //     console.log(response);
-          
+
       //     $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
       //     $.each(response.procedures, function( index, value ) {
       //       $('#procedure-linenum-'+ linenum).append('<option value="'+value.id+'" data-procedure="'+value.procedure+'" data-price="'+value.price+'" data-linenum="'+linenum+'">'+value.procedure+'</option>');
-      //     }); 
+      //     });
 
       //   },
       //   error: function(response){
@@ -742,7 +742,7 @@ $(document).ready(function () {
       @foreach($procedures as $procedure)
 
         if(service_id == "{{ $procedure->serviceid }}")
-        { 
+        {
           $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
@@ -751,7 +751,7 @@ $(document).ready(function () {
     });
 
 
-    $('#table-services').on('change', 'tbody td [name="procedure"]', function(e){ 
+    $('#table-services').on('change', 'tbody td [name="procedure"]', function(e){
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var service = $('#span-service-linenum-'+linenum).text();
@@ -763,7 +763,7 @@ $(document).ready(function () {
       if(service == 'Check-up')
       {
         $('#medicine_amt-linenum-'+linenum).removeAttr('readonly');
-        
+
       }
 
       $('#procedures-linenum-'+linenum).val(procedure_id);
@@ -780,11 +780,11 @@ $(document).ready(function () {
         $('#discount_amt-linenum-'+ linenum).removeAttr('disabled');
       }
 
-      //Remove class disabled on Add Item Button 
-      $('#add-item').removeClass('disabled'); 
+      //Remove class disabled on Add Item Button
+      $('#add-item').removeClass('disabled');
 
       //Remove attribute disabled on button Add
-      $('#btn-add').removeAttr('disabled'); 
+      $('#btn-add').removeAttr('disabled');
 
       $('#total-linenum-'+linenum).empty().append(parseFloat(price).toFixed(2));
 
@@ -792,9 +792,9 @@ $(document).ready(function () {
       getGrandTotal();
 
     });
-    
+
     //service price text change
-    $('#table-services').on('keyup', 'tbody td input[name="price[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="price[]"]', function(e){
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
@@ -803,8 +803,8 @@ $(document).ready(function () {
       var medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+linenum).val()).toFixed(2);
       var discount_per_service = parseFloat($('#discount-linenum-'+linenum).val()).toFixed(2) / 100;
       var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
-      
-      
+
+
       //if price has value
       if($(this).val())
       {
@@ -832,7 +832,7 @@ $(document).ready(function () {
       {
         discount_per_service = 0.00;
       }
- 
+
       //if discount amount has no value
       if(!$('#discount_amt-linenum-'+ linenum).val())
       {
@@ -859,13 +859,13 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);;
-          
+
     });
 
     //service medicine amount text change
-    $('#table-services').on('keyup', 'tbody td input[name="medicine_amt[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="medicine_amt[]"]', function(e){
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
       var service_id = $(this).data('serviceid');
@@ -891,7 +891,7 @@ $(document).ready(function () {
       {
         discount_per_service = 0.00;
       }
- 
+
       //if discount amount has no value
       if(!$('#discount_amt-linenum-'+ linenum).val())
       {
@@ -907,14 +907,14 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);;
 
     });
 
 
     //service discount text change
-    $('#table-services').on('keyup', 'tbody td input[name="discount[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="discount[]"]', function(e){
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
       var service_id = $(this).data('serviceid');
@@ -957,13 +957,13 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);;
 
     });
 
     //service discount amount text change
-    $('#table-services').on('keyup', 'tbody td input[name="discount_amt[]"]', function(e){
+    $('#table-services').on('keyup input', 'tbody td input[name="discount_amt[]"]', function(e){
       var linenum = $(this).data('linenum');
       var service = $(this).data('service');
       var service_id = $(this).data('serviceid');
@@ -1006,7 +1006,7 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
+      //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);;
 
     });
@@ -1021,7 +1021,7 @@ $(document).ready(function () {
       var tr_length = $('#table-services tbody tr').length;
 
       //delete row
-      $('#row-'+linenum).remove();   
+      $('#row-'+linenum).remove();
 
       //scan if there is a dropdown on a table
       $('#table-services tbody tr td').find('select').each(function(){
@@ -1034,7 +1034,7 @@ $(document).ready(function () {
         $('#add-item').removeClass('disabled');
         $('#btn-add').removeAttr('disabled');
       }
-      
+
       //call function getGrandTotal
       getGrandTotal();
 
@@ -1058,7 +1058,7 @@ $(document).ready(function () {
       integerDigits:3,
       digits:2,
       allowMinus:false
-        
+
     });
     $('[name="discount_amt[]"]').inputmask('decimal', {
       rightAlign: true,
@@ -1067,11 +1067,11 @@ $(document).ready(function () {
     });
     $('#discount').inputmask('decimal', {
       rightAlign: true
-        
+
     });
 
   });
-  
+
 
   // Add Services with Stepper
   $('#btn-add').click(function(e){
@@ -1083,15 +1083,15 @@ $(document).ready(function () {
     e.preventDefault();
 
     if(!$('select [name="service"]').val())
-    { 
+    {
       $('#service-error').remove();
       $('.div-service').append('<span id="service-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please select service</span>');
-      $(".div-service").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+      $(".div-service").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
     }
 
     //Document Date validation error
     if(docdate == 'Invalid Date')
-    { 
+    {
       $('#docdate-error').remove();
       $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
     }
@@ -1108,8 +1108,8 @@ $(document).ready(function () {
     {
       var data_patient = $('#patientform').serializeArray();
       data_patient.push({name: "_token", value: "{{ csrf_token() }}"});
-        
-      //store patient information  
+
+      //store patient information
       $.ajax({
           url: "{{ route('patient.store') }}",
           method: "POST",
@@ -1124,14 +1124,14 @@ $(document).ready(function () {
               // $('#province option:eq(0)').prop('selected', true);
               $('#city').empty().attr('disabled',true);
               $('#barangay').empty().attr('disabled',true);
-              
+
               var patient = response.patientid;
               var data_services = $('#patientserviceform').serializeArray();
               data_services.push({name: "_token", value: "{{ csrf_token() }}"});
               data_services.push({name: "grand_total", value: $('.service-grand-total').text()});
               data_services.push({name: "type", value: "individual"});
               data_services.push({name: "patient", value: patient});
-              
+
               //store patient services
               $.ajax({
                   url: "{{ route('patientservice.store') }}",
@@ -1140,7 +1140,7 @@ $(document).ready(function () {
                   success: function(response){
                       console.log(response);
                       if(response.success)
-                      {   
+                      {
                         $('#select2-patient-container').empty().append('Select Patient');
                         $('#patientserviceform')[0].reset();
                         Swal.fire({
@@ -1149,9 +1149,9 @@ $(document).ready(function () {
                           title: 'Record has successfully added',
                           showConfirmButton: false,
                           timer: 2500
-                        });  
+                        });
 
-                        $('.service-total-amount').each(function () { 
+                        $('.service-total-amount').each(function () {
                           $(this).empty().append("0.00");
                         });
 
@@ -1168,9 +1168,9 @@ $(document).ready(function () {
                         //set default text
                         $('#btn-next').empty().append('Add');
 
-                      }   
+                      }
 
-                      $('#btn-add').removeAttr('disabled');            
+                      $('#btn-add').removeAttr('disabled');
                   },
                   error: function(response){
                     console.log(response);
@@ -1184,18 +1184,18 @@ $(document).ready(function () {
           }
       });
     }
-        
+
   });
 
   function getGrandTotal()
   {
     var sum = 0.00;
     var price = 0.00;
-    
+
     //loop then sum each service total amount
     $('.service-total-amount').each(function(){
-        price = parseFloat($(this).text()).toFixed(2);  
-        sum = parseFloat(sum)  + parseFloat(price);   
+        price = parseFloat($(this).text()).toFixed(2);
+        sum = parseFloat(sum)  + parseFloat(price);
     });
 
     //append Grand Total
@@ -1211,11 +1211,11 @@ $(document).ready(function () {
       $('.service-grand-total').addClass('text-danger');
     }
 
-  } 
+  }
 
   function disableAddItemButton(total, linenum)
   {
-    //disable add-item button when total_amount is 0 and below 
+    //disable add-item button when total_amount is 0 and below
     if(parseFloat(total) > 0 )
     {
       $('#add-item').removeClass('disabled');
