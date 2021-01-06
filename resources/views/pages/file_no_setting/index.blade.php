@@ -31,7 +31,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                @can('service-list')
+                @can('file-no-setting')
                 <table id="file-setting-no-table" class="table table-striped table-hover">
                   <thead>
                     <tr>
@@ -42,9 +42,7 @@
                       <th>File No Start</th>
                       <!-- <th>File End Start</th> -->
                       <th>Status</th>
-                      @canany(['service-edit','service-delete'])
                       <th width="110px" class="no-sort">Actions</th>
-                      @endcan
                     </tr>
                   </thead>
                   <tfoot>
@@ -53,12 +51,10 @@
                       <!-- <th>ID</th> -->
                       <th>Service</th>
                       <th>Year</th>
-                      <th>File No Start</th>
+                      <th>File No. Start</th>
                       <!-- <th>File End Start</th> -->
                       <th>Status</th>
-                      @canany(['service-edit','service-delete'])
                       <th>Actions</th>
-                      @endcanany
                     </tr>
                   </tfoot>
                 </table>
@@ -99,7 +95,7 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <label for="service" class="mr-2">File No Start: </label>
+              <label for="service" class="mr-2">File No. Start: </label>
             </div>
           </div>
           <div class="row mb-3">
@@ -146,11 +142,8 @@
                    { "data": "year"},
                    { "data": "start"},
                   //  { "data": "end"},
-                   { "data": "status"}];
-
-    @canany(['service-edit', 'service-delete'])
-      columns.push({data: "action"});
-    @endcanany
+                   { "data": "status"},
+                   { "data": "action"}];
     
 			// $('#tax-table').DataTable();
 	  $('#file-setting-no-table').DataTable({

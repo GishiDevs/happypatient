@@ -702,9 +702,6 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
-      //disable add-item button when total_amount is 0 and below 
-      disableAddItemButton(total, linenum);;
-
     });
 
 

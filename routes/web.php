@@ -424,18 +424,10 @@ Route::group(['prefix' => 'certificate/template', 'middleware' => ['auth']], fun
 });
 
 //Services Route
-Route::group(['prefix' => 'file_no_setting', 'middleware' => ['auth']], function(){
+Route::group(['prefix' => 'file_no_setting', 'middleware' => ['auth', 'file_no_setting']], function(){
     Route::get('/index', [
         'uses' => 'FileNumberSettingController@index',
         'as' => 'file_no_setting.index',
-    ]);
-    Route::get('/create', [
-        'uses' => 'FileNumberSettingController@create',
-        'as' => 'file_no_setting.create',
-    ]);
-    Route::post('/store', [
-        'uses' => 'FileNumberSettingController@store',
-        'as' => 'file_no_setting.store',
     ]);
     Route::get('/settings', [
         'uses' => 'FileNumberSettingController@getsettings',
@@ -448,10 +440,6 @@ Route::group(['prefix' => 'file_no_setting', 'middleware' => ['auth']], function
     Route::post('/update', [
         'uses' => 'FileNumberSettingController@update',
         'as' => 'file_no_setting.update',
-    ]);
-    Route::post('/delete', [
-        'uses' => 'FileNumberSettingController@delete',
-        'as' => 'file_no_setting.delete',
     ]);
 
 });

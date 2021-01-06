@@ -80,6 +80,9 @@ class FileNumberSettingController extends Controller
            
         }
 
+        //PUSHER - send data/message if patient services is created
+        event(new EventNotification('update-file-no-setting', 'file_number_settings'));
+
         return response()->json(['success' => 'Record has been updated'], 200);
 
     }

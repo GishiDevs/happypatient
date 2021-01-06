@@ -16,6 +16,7 @@ use DataTables;
 use App\Events\EventNotification;
 use App\ActivityLog;
 use App\Queue;
+use App\FileNumberSetting;
 
 class PatientServiceController extends Controller
 {   
@@ -105,7 +106,7 @@ class PatientServiceController extends Controller
                 ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                 // ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                         DB::raw(" '' as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
+                         DB::raw(" '' as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
                 ->distinct()
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
@@ -124,7 +125,7 @@ class PatientServiceController extends Controller
                 ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
                 ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
+                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
                 ->where('patient_services.type', '=', 'individual')
@@ -138,7 +139,7 @@ class PatientServiceController extends Controller
                  ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
                  ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
@@ -155,7 +156,7 @@ class PatientServiceController extends Controller
                  ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
                  ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no')
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
@@ -189,6 +190,7 @@ class PatientServiceController extends Controller
     public function store(Request $request)
     {   
         // return $request;
+
         $rules = [
             'patient.required' => 'Please select patient',
             'organization.required' => 'Please enter organization name',
@@ -286,6 +288,38 @@ class PatientServiceController extends Controller
         // return $discount[];
         for($x=0; $x < $ctr; $x++)
         {   
+            // get the last file_no of the specific Service
+            $latest_file_no = PatientServiceItem::where('serviceid', '=', $service_id[$x])
+                                                ->orderBy('id', 'Desc')
+                                                ->first()
+                                                ->file_no;
+            $file_no_setting = FileNumberSetting::where('serviceid', '=', $service_id[$x])->first();
+            $file_no = "";
+
+            if($latest_file_no)
+            {   
+                $file_no_explode = explode('-', $latest_file_no);
+                $get_last_no = (int) $file_no_explode[1];
+                $next_no = $get_last_no + 1;
+                $file_no = date('Y') . '-' . sprintf('%05d', $next_no);   
+            }
+            else
+            {
+                // if latest file_no is null - set default starting file number
+                $file_no = date('Y') . '-00001';
+            }
+                
+            //if file number setting for this Service is active then set the starting file number
+            if($file_no_setting->status == 'active')
+            {
+                $file_no = date('Y') . '-' . $file_no_setting->start;
+
+                // update file number setting status into inactive
+                FileNumberSetting::where('serviceid', '=', $service_id[$x])
+                                 ->update(['status' => 'inactive']);
+
+            }
+
             $service_price = 0.00;
             $service_medicine_amt = 0.00;
             $service_discount = 0.00;
@@ -325,7 +359,7 @@ class PatientServiceController extends Controller
             $serviceitem->discount = $service_discount;
             $serviceitem->discount_amt = $service_discount_amt;
             $serviceitem->total_amount = $total_amount;
-
+            $serviceitem->file_no = $file_no;
             $serviceitem->save();
         }
 
@@ -583,6 +617,37 @@ class PatientServiceController extends Controller
             return response()->json($validator->errors(), 200);
         }
 
+        // get the last file_no of the specific Service
+        $latest_file_no = PatientServiceItem::where('serviceid', '=', $request->get('new-service'))
+                                            ->orderBy('id', 'Desc')
+                                            ->first()
+                                            ->file_no;
+        $file_no_setting = FileNumberSetting::where('serviceid', '=', $request->get('new-service'))->first();
+        $file_no = "";
+
+        if($latest_file_no)
+        {   
+            $file_no_explode = explode('-', $latest_file_no);
+            $get_last_no = (int) $file_no_explode[1];
+            $next_no = $get_last_no + 1;
+            $file_no = date('Y') . '-' . sprintf('%05d', $next_no);   
+        }
+        else
+        {
+            // if latest file_no is null - set default starting file number
+            $file_no = date('Y') . '-00001';
+        }
+            
+        //if file number setting for this Service is active then set the starting file number
+        if($file_no_setting->status == 'active')
+        {
+            $file_no = date('Y') . '-' . $file_no_setting->start;
+
+            // update file number setting status into inactive
+            FileNumberSetting::where('serviceid', '=', $request->get('new-service'))
+                             ->update(['status' => 'inactive']);
+
+        }
         
         $price = 0.00;
         $medicine_amt = 0.00;
@@ -619,6 +684,7 @@ class PatientServiceController extends Controller
         $patientserviceitem->discount_amt = $discount_amt;
         $patientserviceitem->total_amount = $request->get('total_amount');
         $patientserviceitem->status = 'pending';
+        $patientserviceitem->file_no = $file_no;
         $patientserviceitem->save();
 
         $service_amounts = PatientServiceItem::where('psid', $psid)->get();

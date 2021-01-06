@@ -61,6 +61,7 @@ class PermissionSeeder extends Seeder
             'activity-log',
             'reports',
             'transactions',
+            'file-no-setting',
          ];
  
  

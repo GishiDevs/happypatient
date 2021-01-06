@@ -118,7 +118,7 @@ class DashboardController extends Controller
 
         if(Auth::user()->can('patientservices-list-ultrasound') || Auth::user()->can('patientservices-list-ecg') || Auth::user()->can('patientservices-list-checkup') || Auth::user()->can('patientservices-list-laboratory') || Auth::user()->can('patientservices-list-physicaltherapy') || Auth::user()->can('patientservices-list-xray'))
         {
-            return view('pages.dashboard.index', compact('patient_services'));
+            return view('pages.dashboard.dashboard', compact('patient_services'));
         }
         else
         {

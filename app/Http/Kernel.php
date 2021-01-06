@@ -74,6 +74,7 @@ class Kernel extends HttpKernel
         'diagnosis' => \App\Http\Middleware\Diagnosis::class,
         'activity_log' => \App\Http\Middleware\ActivityLog::class,
         'transactions' => \App\Http\Middleware\Transactions::class,
+        'file_no_setting' => \App\Http\Middleware\FileNumberSetting::class,
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         

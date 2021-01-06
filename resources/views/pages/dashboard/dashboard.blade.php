@@ -36,6 +36,7 @@
                       <th class="no-sort">Patient Name</th>
                       <th class="no-sort">Service</th>
                       <th class="no-sort">Name</th>
+                      <th class="no-sort">File #</th>
                       <th class="no-sort">Procedure</th>
                       <th width="50px" class="no-sort">Status</th>
                       <th width="150px" class="no-sort">Document Date</th>
@@ -54,6 +55,7 @@
                       <th>Patient Name</th>
                       <th>Service</th>
                       <th>Name</th>
+                      <th>File#</th>
                       <th>Procedure</th>
                       <th>Status</th>
                       <th>Document Date</th>
@@ -118,6 +120,7 @@
                       { "data": "name"},
                       { "data": "service"},
                       { "data": "procedure"},
+                      { "data": "file_no"},
                       { "data": "code"},
                       { "data": "status"},
                       { "data": "docdate"},
@@ -151,7 +154,7 @@
           },
           columnDefs: [ 
             {
-              targets: [ 0, 1, 2 , 9],
+              targets: [ 0, 1, 2 , 10],
               visible: false
             },
             {
@@ -164,7 +167,7 @@
               }
             },
             {
-              targets: 5,
+              targets: 6,
               render: function ( data ) {
                   if(data == 'diagnosed' || data == 'receipted')
                   {
@@ -182,7 +185,7 @@
                 }
             },
             {
-              targets: 8,
+              targets: 9,
               render: function ( data , type, object ) {
                 // console.log(object);
                 if(object.status == 'pending')

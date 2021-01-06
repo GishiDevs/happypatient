@@ -426,7 +426,7 @@ $(document).ready(function () {
       },
       submitHandler: function(e){
 
-        $(this).attr('disabled', true);
+        $('#btn-save-modal').attr('disabled', true);
 
         var data = $('#new-service-form').serializeArray();
         data.push({ name: '_token', value: '{{ csrf_token() }}'});
@@ -441,7 +441,7 @@ $(document).ready(function () {
 
             if(response.success)
             { 
-              console.log(response);  
+              
               reset_modal();
 
               $('#modal-service').modal('toggle');

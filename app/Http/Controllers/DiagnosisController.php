@@ -44,7 +44,7 @@ class DiagnosisController extends Controller
                                            'patients.age', 'patients.gender', 'patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.temperature', 'patient_services.weight', 'service_procedures.procedure',
                                            'template_contents.content', 'patient_services.note', 'patient_services.physician', 'patient_services.patientid', DB::raw("DATE_FORMAT(patient_services.lmp, '%m/%d/%Y') as lmp"),
-                                           'patient_services.o2_sat', 'patient_services.pulserate')
+                                           'patient_services.o2_sat', 'patient_services.pulserate', 'patient_service_items.file_no')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
@@ -73,19 +73,19 @@ class DiagnosisController extends Controller
         }
 
         //list of diagnosis per service (used to count the rows for creating file_no)
-        $dianosis_list_per_service = DB::table('patients')
-                                  ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
-                                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
-                                  ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
-                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select('diagnoses.id')
-                                  ->where('services.id', '=', $patient_service->service_id)
-                                  ->where(DB::raw('year(patient_services.docdate)'), '=', $year_now)
-                                  ->get();
+        // $dianosis_list_per_service = DB::table('patients')
+        //                           ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
+        //                           ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+        //                           ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+        //                           ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+        //                           ->select('diagnoses.id')
+        //                           ->where('services.id', '=', $patient_service->service_id)
+        //                           ->where(DB::raw('year(patient_services.docdate)'), '=', $year_now)
+        //                           ->get();
 
         //number of patient of current for the selected service. (for create file #)
-        $diagnosis_ctr = count($dianosis_list_per_service) + 1;
-        $file_no = date('y') . '-' . sprintf('%05d', $diagnosis_ctr);
+        // $diagnosis_ctr = count($dianosis_list_per_service) + 1;
+        // $file_no = date('y') . '-' . sprintf('%05d', $diagnosis_ctr);
 
 
         if($patient_service->service == 'Ultrasound')
@@ -142,7 +142,7 @@ class DiagnosisController extends Controller
                                                ->where('userid', '!=', auth()->user()->id)
                                                 ->get();
 
-        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'file_no', 'patient_service_history', 'service_signatories'));
+        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'patient_service_history', 'service_signatories'));
 
     }
 
@@ -155,7 +155,7 @@ class DiagnosisController extends Controller
 
         $patient_service = DB::table('patient_service_items')
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select(DB::raw('services.id as service_id'), 'services.service')
+                                  ->select(DB::raw('services.id as service_id'), 'services.service', 'patient_service_items.file_no')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->first();
 
@@ -166,19 +166,19 @@ class DiagnosisController extends Controller
         }
 
         //list of diagnosis per service (used to count the rows for creating file_no)
-        $dianosis_list_per_service = DB::table('patients')
-                                  ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
-                                  ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
-                                  ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
-                                  ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
-                                  ->select('diagnoses.id')
-                                  ->where('services.id', '=', $patient_service->service_id)
-                                  ->where(DB::raw('year(patient_services.docdate)'), '=', $year_now)
-                                  ->get();
+        // $dianosis_list_per_service = DB::table('patients')
+        //                           ->join('patient_services', 'patients.id', '=', 'patient_services.patientid')
+        //                           ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
+        //                           ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
+        //                           ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
+        //                           ->select('diagnoses.id')
+        //                           ->where('services.id', '=', $patient_service->service_id)
+        //                           ->where(DB::raw('year(patient_services.docdate)'), '=', $year_now)
+        //                           ->get();
 
         //number of patient of current for the selected service. (for create file #)
-        $diagnosis_ctr = count($dianosis_list_per_service) + 1;
-        $file_no = date('y') . '-' . sprintf('%05d', $diagnosis_ctr);
+        // $diagnosis_ctr = count($dianosis_list_per_service) + 1;
+        // $file_no = date('y') . '-' . sprintf('%05d', $diagnosis_ctr);
 
         // return $request;
         $rules = [
@@ -220,7 +220,7 @@ class DiagnosisController extends Controller
 
         $diagnosis = new Diagnosis();
         $diagnosis->ps_items_id = $ps_item_id;
-        $diagnosis->file_no = $file_no;
+        $diagnosis->file_no = $ps_item->file_no;
         $diagnosis->docdate = Carbon::parse($request->get('docdate'))->format('Y-m-d');
         $diagnosis->physician = $request->get('physician');
         // $diagnosis->bloodpressure = $request->get('bloodpressure');

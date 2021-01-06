@@ -133,7 +133,7 @@
                     </div>
                     <div class="form-group col-md-3">
                       <label for="file#">File #: </label>
-                      <div>{{ $file_no }} <input type="text" name="file_no" value="{{ $file_no }}" hidden></div>
+                      <div>{{ $patient_service->file_no }} <input type="text" name="file_no" value="{{ $patient_service->file_no }}" hidden></div>
                     </div>
                   </div>
                   <hr>
