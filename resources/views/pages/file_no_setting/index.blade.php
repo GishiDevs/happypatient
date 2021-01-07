@@ -100,7 +100,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-md-12">
-              <input type="text" name="start" class="form-control" id="start" placeholder="00000" maxlength="5" autofocus>
+              <input type="text" name="start" class="form-control" id="start" placeholder="0000" maxlength="4" autofocus>
             </div>              
           </div>
           <div class="row">
@@ -132,7 +132,7 @@
 
   $(document).ready(function() {
 
-    $("#start").inputmask('integer',{min:1, max:99999});
+    $("#start").inputmask('integer',{min:1, max:9999});
 
     var action_type;
     var serviceid;

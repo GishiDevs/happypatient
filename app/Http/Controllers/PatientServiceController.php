@@ -301,18 +301,18 @@ class PatientServiceController extends Controller
                 $file_no_explode = explode('-', $latest_file_no);
                 $get_last_no = (int) $file_no_explode[1];
                 $next_no = $get_last_no + 1;
-                $file_no = date('Y') . '-' . sprintf('%05d', $next_no);   
+                $file_no = date('y') . '-' . sprintf('%04d', $next_no);   
             }
             else
             {
                 // if latest file_no is null - set default starting file number
-                $file_no = date('Y') . '-00001';
+                $file_no = date('y') . '-0001';
             }
                 
             //if file number setting for this Service is active then set the starting file number
             if($file_no_setting->status == 'active')
             {
-                $file_no = date('Y') . '-' . $file_no_setting->start;
+                $file_no = date('y') . '-' . $file_no_setting->start;
 
                 // update file number setting status into inactive
                 FileNumberSetting::where('serviceid', '=', $service_id[$x])
@@ -630,18 +630,18 @@ class PatientServiceController extends Controller
             $file_no_explode = explode('-', $latest_file_no);
             $get_last_no = (int) $file_no_explode[1];
             $next_no = $get_last_no + 1;
-            $file_no = date('Y') . '-' . sprintf('%05d', $next_no);   
+            $file_no = date('y') . '-' . sprintf('%04d', $next_no);   
         }
         else
         {
             // if latest file_no is null - set default starting file number
-            $file_no = date('Y') . '-00001';
+            $file_no = date('y') . '-00001';
         }
             
         //if file number setting for this Service is active then set the starting file number
         if($file_no_setting->status == 'active')
         {
-            $file_no = date('Y') . '-' . $file_no_setting->start;
+            $file_no = date('y') . '-' . $file_no_setting->start;
 
             // update file number setting status into inactive
             FileNumberSetting::where('serviceid', '=', $request->get('new-service'))

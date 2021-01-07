@@ -68,15 +68,15 @@ class FileNumberSettingController extends Controller
             $setting = new FileNumberSetting();
             $setting->serviceid = $request->get('serviceid');
             $setting->year = date('Y');
-            $setting->start = sprintf('%05d', $request->get('start'));
-            $setting->end = sprintf('%05d', $request->get('start'));
+            $setting->start = sprintf('%04d', $request->get('start'));
+            $setting->end = sprintf('%04d', $request->get('start'));
             $setting->status = $request->get('status');
             $setting->save();
         }
         else
         {
             FileNumberSetting::where('serviceid', '=', $serviceid)
-                             ->update(['start' => sprintf('%05d', $request->get('start')), 'status' => $request->get('status')]);
+                             ->update(['start' => sprintf('%04d', $request->get('start')), 'status' => $request->get('status')]);
            
         }
 
