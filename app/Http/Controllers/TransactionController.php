@@ -121,11 +121,12 @@ class TransactionController extends Controller
     }
 
     public function check_patient_transaction(Request $request)
-    {
+    {   
         
+        $docdate = Carbon::parse($request->get('docdate'))->format('Y-m-d');
         $patient_service = PatientService::where('patientid', '=', $request->get('patient_id'))
                                          ->where('cancelled', '=', 'N')
-                                         ->where('docdate' ,'=', Carbon::now()->format('Y-m-d'))->get();   
+                                         ->where('docdate' ,'=', $docdate)->get();   
 
         return response()->json(['patient_service' => $patient_service], 200);
     }

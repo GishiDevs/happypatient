@@ -229,13 +229,14 @@ $(document).ready(function () {
     $('#patient-error').remove();
 
     var patient_id = $(this).val();
+    var docdate = $('#docdate').val();
 
     $.ajax({
       url: "{{ route('check_patient_transaction') }}",
       method: "POST",
-      data: { _token: "{{ csrf_token() }}", patient_id: patient_id },
+      data: { _token: "{{ csrf_token() }}", patient_id: patient_id, docdate: docdate },
       success: function(response){
-        // console.log(response);
+        console.log(response);
 
         if(response.patient_service.length > 0)
         {
@@ -244,11 +245,16 @@ $(document).ready(function () {
           Swal.fire({
             title: 'Information',
             html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",
-            icon: 'info'
-          }).then(function() {
+            icon: 'info',
+            showCancelButton: true,
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Proceed'
+          }).then((result) => {
+            if (result.value) {
               window.location = "/patientservice/edit/"+id;
-
+            }
           });
+
         }
 
       },
@@ -791,7 +797,57 @@ $(document).ready(function () {
     }
     else
     {
-      var data = $('#patientserviceform').serializeArray();
+
+      var patient_id = $('#patient').val();
+      var docdate = $('#docdate').val();
+
+      $.ajax({
+        url: "{{ route('check_patient_transaction') }}",
+        method: "POST",
+        data: { _token: "{{ csrf_token() }}", patient_id: patient_id, docdate: docdate },
+        success: function(response){
+          console.log(response);
+
+          if(response.patient_service.length > 0)
+          {
+            var id = response.patient_service[0].id;
+
+            Swal.fire({
+              title: 'Information',
+              html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",
+              icon: 'info',
+              showCancelButton: true,
+              cancelButtonColor: '#6c757d',
+              confirmButtonText: 'Proceed'
+            }).then((result) => {
+              if (result.value) {
+                window.location = "/patientservice/edit/"+id;
+              }
+              else
+              {
+                $('#btn-add').removeAttr('disabled');
+              }
+            });
+
+          }
+          else
+          {
+            storePatientService();
+          }
+
+        },
+        error: function(response){
+          console.log(response);
+        }
+      });
+      
+    }
+
+  });
+
+  function storePatientService()
+  {
+    var data = $('#patientserviceform').serializeArray();
       data.push({name: "_token", value: "{{ csrf_token() }}"});
       data.push({name: "grand_total", value: $('.service-grand-total').text()});
 
@@ -800,7 +856,7 @@ $(document).ready(function () {
           method: "POST",
           data: data,
           success: function(response){
-              console.log(response);
+              // console.log(response);
               if(response.success)
               {
 
@@ -840,12 +896,7 @@ $(document).ready(function () {
             console.log(response);
           }
       });
-    }
-
-  });
-
-  $('[data-mask]').inputmask();
-  $('.select2').select2();
+  }
 
   function getGrandTotal()
   {
@@ -923,6 +974,9 @@ $(document).ready(function () {
       allowMinus:false
 
     });
+
+  $('[data-mask]').inputmask();
+  $('.select2').select2();
 
 });
 </script>

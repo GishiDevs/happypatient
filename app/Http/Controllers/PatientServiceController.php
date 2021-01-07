@@ -270,7 +270,7 @@ class PatientServiceController extends Controller
                     ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as created_at"))->get();
 
         //count all queues for the day
-        $queue_no = $queues->where('created_at', '=', Carbon::now()->format('Y-m-d'))->count() + 1;
+        $queue_no = $queues->where('created_at', '=', Carbon::parse($request->get('docdate'))->format('Y-m-d'))->count() + 1;
         
         $queue = new Queue();
         $queue->psid = $patientservice->id;
