@@ -291,17 +291,24 @@ class PatientServiceController extends Controller
             // get the last file_no of the specific Service
             $latest_file_no = PatientServiceItem::where('serviceid', '=', $service_id[$x])
                                                 ->orderBy('id', 'Desc')
-                                                ->first()
-                                                ->file_no;
+                                                ->first();
             $file_no_setting = FileNumberSetting::where('serviceid', '=', $service_id[$x])->first();
             $file_no = "";
 
             if($latest_file_no)
             {   
-                $file_no_explode = explode('-', $latest_file_no);
-                $get_last_no = (int) $file_no_explode[1];
-                $next_no = $get_last_no + 1;
-                $file_no = date('y') . '-' . sprintf('%04d', $next_no);   
+                if($latest_file_no->file_no)
+                {
+                    $file_no_explode = explode('-', $latest_file_no->file_no);
+                    $get_last_no = (int) $file_no_explode[1];
+                    $next_no = $get_last_no + 1;
+                    $file_no = date('y') . '-' . sprintf('%04d', $next_no); 
+                }
+                else
+                {
+                    $file_no = date('y') . '-0001';
+                }
+                
             }
             else
             {
@@ -620,22 +627,29 @@ class PatientServiceController extends Controller
         // get the last file_no of the specific Service
         $latest_file_no = PatientServiceItem::where('serviceid', '=', $request->get('new-service'))
                                             ->orderBy('id', 'Desc')
-                                            ->first()
-                                            ->file_no;
+                                            ->first();
         $file_no_setting = FileNumberSetting::where('serviceid', '=', $request->get('new-service'))->first();
         $file_no = "";
 
         if($latest_file_no)
         {   
-            $file_no_explode = explode('-', $latest_file_no);
-            $get_last_no = (int) $file_no_explode[1];
-            $next_no = $get_last_no + 1;
-            $file_no = date('y') . '-' . sprintf('%04d', $next_no);   
+            if($latest_file_no->file_no)
+            {
+                $file_no_explode = explode('-', $latest_file_no->file_no);
+                $get_last_no = (int) $file_no_explode[1];
+                $next_no = $get_last_no + 1;
+                $file_no = date('y') . '-' . sprintf('%04d', $next_no); 
+            }
+            else
+            {
+                $file_no = date('y') . '-0001';
+            }
+                
         }
         else
         {
             // if latest file_no is null - set default starting file number
-            $file_no = date('y') . '-00001';
+            $file_no = date('y') . '-0001';
         }
             
         //if file number setting for this Service is active then set the starting file number
