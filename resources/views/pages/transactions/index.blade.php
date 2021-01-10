@@ -234,7 +234,8 @@
           ],
           order: [],
           rowGroup: {
-              dataSrc: [ 'id' , 'name', 'service' ],
+              // dataSrc: [ 'id' , 'name', 'service' ],
+              dataSrc: ['name', 'service' ],
 
               startRender: function(rows, group, group_index) {
 
@@ -246,7 +247,7 @@
                   counter++;
                 }
 
-                $('.dtrg-level-1').remove();
+                // $('.dtrg-level-1').remove();
 
                 return group_label.bold();
 
@@ -342,7 +343,7 @@
 
       }).on('draw', function() {
         counter = 1;
-      });;
+      });
 
     }
 

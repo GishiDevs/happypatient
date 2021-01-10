@@ -83,7 +83,7 @@
   <script>
   
   $(document).ready(function() {   
-    
+    var counter = 1;
 
     var patient_line_number = 0;
     var pending_ctr = 0;
@@ -139,7 +139,9 @@
 
                 if(group_index == 0)
                 { 
-                  group_label = rows.data()[0]['queue_no'] + '. ' + rows.data()[0]['name'].toUpperCase() ;
+                  // group_label = rows.data()[0]['queue_no'] + '. ' + rows.data()[0]['name'].toUpperCase() ;
+                  group_label = counter + '. ' + rows.data()[0]['name'].toUpperCase() ;
+                  counter++;
                 }
 
                 $('.dtrg-level-1').remove();
@@ -151,6 +153,9 @@
               endRender: function(rows, group, group_index) {
                 // return null;
               },
+          },
+          initComplete: function() {
+            counter = 1;
           },
           columnDefs: [ 
             {
@@ -216,6 +221,8 @@
           }
           ]
           // "bSort" : false 
+      }).on('draw', function() {
+        counter = 1;
       });
     }
     

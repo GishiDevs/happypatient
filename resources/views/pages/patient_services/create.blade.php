@@ -242,18 +242,18 @@ $(document).ready(function () {
         {
           var id = response.patient_service[0].id;
 
-          Swal.fire({
-            title: 'Information',
-            html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",
-            icon: 'info',
-            showCancelButton: true,
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Proceed'
-          }).then((result) => {
-            if (result.value) {
-              window.location = "/patientservice/edit/"+id;
-            }
-          });
+          // Swal.fire({
+          //   title: 'Information',
+          //   html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",
+          //   icon: 'info',
+          //   showCancelButton: true,
+          //   cancelButtonColor: '#6c757d',
+          //   confirmButtonText: 'Proceed'
+          // }).then((result) => {
+          //   if (result.value) {
+          //     window.location = "/patientservice/edit/"+id;
+          //   }
+          // });
 
         }
 
@@ -808,32 +808,34 @@ $(document).ready(function () {
         success: function(response){
           console.log(response);
 
-          if(response.patient_service.length > 0)
-          {
-            var id = response.patient_service[0].id;
+          // if(response.patient_service.length > 0)
+          // {
+          //   var id = response.patient_service[0].id;
 
-            Swal.fire({
-              title: 'Information',
-              html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",
-              icon: 'info',
-              showCancelButton: true,
-              cancelButtonColor: '#6c757d',
-              confirmButtonText: 'Proceed'
-            }).then((result) => {
-              if (result.value) {
-                window.location = "/patientservice/edit/"+id;
-              }
-              else
-              {
-                $('#btn-add').removeAttr('disabled');
-              }
-            });
+          //   Swal.fire({
+          //     title: 'Information',
+          //     html: "<h4>This patient has existing service(s)</h4>. <br> <h5>You will be redirected to edit service page.</h5>",
+          //     icon: 'info',
+          //     showCancelButton: true,
+          //     cancelButtonColor: '#6c757d',
+          //     confirmButtonText: 'Proceed'
+          //   }).then((result) => {
+          //     if (result.value) {
+          //       window.location = "/patientservice/edit/"+id;
+          //     }
+          //     else
+          //     {
+          //       $('#btn-add').removeAttr('disabled');
+          //     }
+          //   });
 
-          }
-          else
-          {
-            storePatientService();
-          }
+          // }
+          // else
+          // {
+          //   storePatientService();
+          // }
+
+          storePatientService();
 
         },
         error: function(response){
