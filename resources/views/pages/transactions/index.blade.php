@@ -372,8 +372,10 @@
       console.log(data.action);
 
       //PUSHER - refresh data when table patient_services or patient_service_items has changes
-      if(data.action == 'edit-patient' || data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services'
-         || data.action == 'edit-service-amount' || data.action == 'add-service-item' || data.action == 'remove-service-item')
+      if(data.action == 'create-patient' || data.action == 'edit-patient' || data.action == 'delete-patient' || data.action == 'create-diagnosis' ||
+         data.action == 'create-patient-services' || data.action == 'edit-patient-services' || data.action == 'cancel-patient-services' || 
+         data.action == 'edit-service-amount' || data.action == 'edit-procedure' || data.action == 'create-role' || data.action == 'edit-role' ||
+         data.action == 'add-service-item' || data.action == 'remove-service-item' || data.action == 'edit-patient')
       {
         get_transactions();
       }
