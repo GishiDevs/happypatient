@@ -143,6 +143,7 @@
                         <thead>
                           <th>Services</th>
                           <th>Procedure</th>
+                          <th>Description</th>
                           <th width="150px">Price (PHP)</th>
                           <th width="150px">Medicine (PHP)</th>
                           <th width="150px">Discount (%)</th>
@@ -154,7 +155,7 @@
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td class="text-right to-span" colspan="6">
+                            <td class="text-right to-span" colspan="7">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">0.00</span></strong></td>
@@ -316,6 +317,13 @@ $(document).ready(function () {
                                             '</select>'+
                                           '</div>'+
                                           '<input type="text" id="procedures-linenum-'+linenum+'" name="procedures[]" value="" hidden>'+
+                                        '</td>'+
+                                        '<td>'+
+                                          '<div class="form-group div-description">'+
+                                            '<select class="select2" multiple="multiple" name="description" id="description-linenum-'+linenum+'" style="width: 100%;" disabled>'+
+                                              '<option value="" disabled>Select Procedure</option>'+
+                                            '</select>'+
+                                          '</div>'+
                                         '</td>'+
                                         '<td>'+
                                           '<input class="form-control input-small affect-total" type="text" name="price[]" id="price-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="" data-serviceid="" data-linenum="'+linenum+'" disabled>'+
