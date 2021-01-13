@@ -92,6 +92,8 @@
                           <th class="no-sort">Procedure</th>
                           <th class="no-sort">Amount (PHP)</th>
                           <th class="no-sort">Status</th>
+                          <th class="no-sort">Multiple</th>
+                          <th class="no-sort">Description</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -108,7 +110,7 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <th class="text-right" colspan="7">Grand Total:</th>
+                          <th class="text-right" colspan="9">Grand Total:</th>
                           <th colspan="2"> <span id="grand_total">0.00</span> </th>
                         </tr>
                       </tfoot>
@@ -230,6 +232,8 @@
                       { "data": "code"},
                       { "data": "total_amount"},
                       { "data": "status"},
+                      { "data": 'is_multiple'},
+                      { "data": 'description'},
 
           ],
           order: [],
@@ -262,7 +266,7 @@
           },
           columnDefs: [
             {
-              targets: [ 0, 1, 2, 3 ],
+              targets: [ 0, 1, 2, 3 , 9, 10],
               visible: false
             },
             {
@@ -273,6 +277,20 @@
               render: function( data ) {
                 return '';
               }
+            },
+            {
+              targets: 6,
+              render: function ( data , type, object  ) {
+                  if(object.is_multiple == 'Y')
+                  {
+                    return object.description;
+                  }
+                  else
+                  {
+                    return object.code;
+                  }
+                                
+                }
             },
             {
               targets: 7,

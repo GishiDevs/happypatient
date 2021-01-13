@@ -106,7 +106,8 @@ class PatientServiceController extends Controller
                 ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                 // ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                         DB::raw(" '' as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
+                         DB::raw(" '' as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no', 'service_procedures.is_multiple', 
+                         'patient_service_items.description')
                 ->distinct()
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
@@ -125,7 +126,8 @@ class PatientServiceController extends Controller
                 ->join('diagnoses', 'diagnoses.ps_items_id', '=', 'patient_service_items.id')
                 ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                 ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
+                         DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no', 
+                         'service_procedures.is_multiple', 'patient_service_items.description')
                 ->whereIn('services.service', $services)
                 ->where('patient_services.cancelled', '=', 'N')
                 ->where('patient_services.type', '=', 'individual')
@@ -139,7 +141,8 @@ class PatientServiceController extends Controller
                  ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
                  ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no', 
+                          'service_procedures.is_multiple', 'patient_service_items.description')
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
                  ->where('patient_service_items.status', '=', 'pending')
@@ -156,7 +159,8 @@ class PatientServiceController extends Controller
                  ->leftJoin('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
                  ->leftJoin('queues', 'patient_services.id' ,'=' ,'queues.psid')
                  ->select('patient_services.id', DB::raw('patient_service_items.id as ps_items_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.name', DB::raw('services.id as service_id'), 'services.service',
-                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no')
+                          DB::raw("DATE_FORMAT(diagnoses.docdate, '%m/%d/%Y') as diagnose_date"), 'service_procedures.code', 'service_procedures.procedure', 'patient_service_items.status', 'queues.queue_no', 'patient_service_items.file_no', 
+                          'service_procedures.is_multiple', 'patient_service_items.description')
                  ->whereIn('services.service', $services)
                  ->where('patient_services.cancelled', '=', 'N')
                  ->where('patient_services.type', '=', 'individual')
@@ -447,7 +451,7 @@ class PatientServiceController extends Controller
                  ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
                           'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type',
-                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt')
+                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt', 'service_procedures.is_multiple', 'patient_service_items.description')
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
@@ -701,6 +705,7 @@ class PatientServiceController extends Controller
         $patientserviceitem->total_amount = $request->get('total_amount');
         $patientserviceitem->status = 'pending';
         $patientserviceitem->file_no = $file_no;
+        $patientserviceitem->description = $request->get('new-description');
         $patientserviceitem->save();
 
         $service_amounts = PatientServiceItem::where('psid', $psid)->get();
@@ -740,7 +745,8 @@ class PatientServiceController extends Controller
                         ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                         ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                         ->select('patient_service_items.id', 'patient_services.type','patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.code','service_procedures.procedure',    
-                                'patient_service_items.price','patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'service_procedures.to_diagnose')
+                                'patient_service_items.price','patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 
+                                'service_procedures.to_diagnose', 'service_procedures.is_multiple', 'patient_service_items.description')
                         ->where('patient_service_items.id', '=', $patientserviceitem->id)
                         ->first();
 

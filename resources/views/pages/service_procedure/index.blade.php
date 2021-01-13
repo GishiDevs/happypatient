@@ -221,11 +221,11 @@
 
           if(response.procedure.is_multiple == 'Y')
           {
-            $('#check-is-mutiple').prop('checked', true);
+            $('#check-is-multiple').prop('checked', true);
           }
           else
           {
-            $('#check-is-mutiple').prop('checked', false);
+            $('#check-is-multiple').prop('checked', false);
           }
           
           // $('#service').find('option').each(function(){

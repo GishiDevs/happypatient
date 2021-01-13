@@ -16,6 +16,7 @@ use App\Events\EventNotification;
 use App\ActivityLog;
 use App\ServiceSignatory;
 use App\DiagnosisSignatory;
+use App\ServiceProcedure;
 
 class DiagnosisController extends Controller
 {
@@ -44,7 +45,7 @@ class DiagnosisController extends Controller
                                            'patients.age', 'patients.gender', 'patients.mobile', 'patients.address', DB::raw("CONCAT(barangays.name, ', ', cities.name,', ', provinces.name) as location"),
                                            DB::raw("DATE_FORMAT(patients.birthdate, '%m/%d/%Y') as birthdate"), 'patient_services.temperature', 'patient_services.weight', 'service_procedures.procedure',
                                            'template_contents.content', 'patient_services.note', 'patient_services.physician', 'patient_services.patientid', DB::raw("DATE_FORMAT(patient_services.lmp, '%m/%d/%Y') as lmp"),
-                                           'patient_services.o2_sat', 'patient_services.pulserate', 'patient_service_items.file_no')
+                                           'patient_services.o2_sat', 'patient_services.pulserate', 'patient_service_items.file_no', 'service_procedures.is_multiple', 'patient_service_items.description')
                                   ->where('patient_service_items.id', '=', $ps_item_id)
                                   ->orderBy('patient_services.docdate', 'Asc')
                                   ->orderBy('services.service', 'Asc')
@@ -57,7 +58,8 @@ class DiagnosisController extends Controller
                                   ->join('diagnoses', 'patient_service_items.id', '=', 'diagnoses.ps_items_id')
                                   ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
                                           'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type',
-                                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt', DB::raw('diagnoses.id as diagnoses_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"))
+                                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt', DB::raw('diagnoses.id as diagnoses_id'), DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"),
+                                          'service_procedures.is_multiple', 'patient_service_items.description')
                                 //   ->whereIn('services.service', $services)
                                   ->where('patient_services.patientid', '=', $patient_service->patientid)
                                   ->orderBy('patient_services.docdate', 'Asc')
@@ -141,8 +143,23 @@ class DiagnosisController extends Controller
                                                ->where('serviceid', $patient_service->service_id)
                                                ->where('userid', '!=', auth()->user()->id)
                                                 ->get();
+        $procedure_codes = explode(',',$patient_service->description);
 
-        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'patient_service_history', 'service_signatories'));
+        $contents = "";
+
+        // if Service Procedure is set for Multiple procedures, then concat all the template contents
+        if($patient_service->is_multiple == 'Y')
+        {
+            for($x=0 ; $x < count($procedure_codes); $x++)
+            {   
+                $contents = $contents . ServiceProcedure::with('template_contents')
+                                            ->where('code', '=', $procedure_codes[$x])->first()
+                                            ->template_contents
+                                            ->content;
+            }
+        }
+
+        return view('pages.diagnosis.create', compact('patient_service', 'ps_item_id', 'patient_service_history', 'service_signatories', 'contents'));
 
     }
 

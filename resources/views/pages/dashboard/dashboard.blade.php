@@ -43,6 +43,8 @@
                       <th width="150px" class="no-sort">Diagnose Date</th>
                       <th width="100px" class="no-sort">Actions</th>
                       <th>Queue</th>
+                      <th>Multiple</th>
+                      <th>Description</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -62,6 +64,8 @@
                       <th>Diagnose Date</th>
                       <th>Actions</th>
                       <th>Queue</th>
+                      <th>Multiple</th>
+                      <th>Description</th>
                     </tr>
                   </tfoot>
                 </table>
@@ -127,6 +131,8 @@
                       { "data": "diagnose_date"},
                       { "data": null},
                       { "data": 'queue_no'},
+                      { "data": 'is_multiple'},
+                      { "data": 'description'},
 
           ],
           order: [],
@@ -159,7 +165,7 @@
           },
           columnDefs: [ 
             {
-              targets: [ 0, 1, 2 , 10],
+              targets: [ 0, 1, 2 , 10, 11, 12],
               visible: false
             },
             {
@@ -170,6 +176,20 @@
               render: function( data ) {
                 return '';
               }
+            },
+            {
+              targets: 5,
+              render: function ( data , type, object  ) {
+                  if(object.is_multiple == 'Y')
+                  {
+                    return object.description;
+                  }
+                  else
+                  {
+                    return object.code;
+                  }
+                                
+                }
             },
             {
               targets: 6,

@@ -165,6 +165,7 @@ class ServiceProcedureController extends Controller
             $service->procedure = $procedure[$x];
             $service->price = $price[$x];
             $service->to_diagnose = $to_diagnose[$x];
+            $service->is_multiple = $is_multiple[$x];
             $service->save();
 
 

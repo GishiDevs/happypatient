@@ -266,18 +266,19 @@
                         <thead>
                           <th>Services</th>
                           <th>Procedure</th>
+                          <th>Description</th>
                           <th width="150px">Price (PHP)</th>
                           <th width="150px">Medicine (PHP)</th>
                           <th width="150px">Discount (%)</th>
                           <th width="150px">Discount (PHP)</th>
-                          <th width="170px">Total Amount (PHP)</th>
+                          <th width="110px">Total(PHP)</th>
                           <th width="100px">Action</th>
                         </thead>
                         <tbody>
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td class="text-right" colspan="6">
+                            <td class="text-right" colspan="7">
                               <strong><span class="pull-right">Grand Total :</span></strong>
                             </td>
                             <td><strong><span class="service-grand-total">0.00</span></strong></td>
@@ -373,8 +374,6 @@ $(document).ready(function () {
       method: "GET",
       success: function(response){
 
-        console.log(response);
-
         $('#province').empty().append('<option value="" selected disabled>Select a Province</option>');
 
         $.each(response, function(index, value){
@@ -398,7 +397,6 @@ $(document).ready(function () {
       method: "POST",
       data: { _token: '{{ csrf_token() }}', province_id: $(this).val() },
       success:function(response){
-        console.log(response);
 
         $('#city').empty().attr('disabled',false);
         $('#barangay').empty().attr('disabled',false);
@@ -427,8 +425,6 @@ $(document).ready(function () {
       method: "POST",
       data: { _token: "{{ csrf_token() }}", city_id: $(this).val() },
       success: function(response){
-
-        console.log(response);
 
         $('#barangay').empty().attr('disabled',false);
 
@@ -530,6 +526,7 @@ $(document).ready(function () {
             method: "POST",
             data: data_patient,
             success: function(response){
+              
               console.log(response);
 
               if(response.success)
@@ -664,6 +661,14 @@ $(document).ready(function () {
                                           '<input type="text" id="procedures-linenum-'+linenum+'" name="procedures[]" value="" hidden>'+
                                         '</td>'+
                                         '<td>'+
+                                          '<div class="form-group div-description">'+
+                                            '<select class="select2" multiple="multiple" name="description" id="description-linenum-'+linenum+'" data-linenum="'+linenum+'" style="width: 100%;" disabled>'+
+                                              '<option value="" disabled>Select Procedure</option>'+
+                                            '</select>'+
+                                            '<input type="text" id="descriptions-linenum-'+linenum+'" name="descriptions[]" value="" hidden>'+
+                                          '</div>'+
+                                        '</td>'+
+                                        '<td>'+
                                           '<input class="form-control input-small affect-total" type="text" name="price[]" id="price-linenum-'+linenum+'" placeholder="0.00" data-inputmask-inputformat="0.00" data-mask data-service="" data-serviceid="" data-linenum="'+linenum+'" disabled>'+
                                         '</td>'+
                                         '<td>'+
@@ -743,7 +748,7 @@ $(document).ready(function () {
 
         if(service_id == "{{ $procedure->serviceid }}")
         {
-          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
+          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}"  data-is_multiple="{{ $procedure->is_multiple }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
       @endforeach
@@ -755,11 +760,13 @@ $(document).ready(function () {
       var linenum = $(this).find(':selected').data('linenum');
       // alert($(this).closest('td').parent()[0].sectionRowIndex);
       var service = $('#span-service-linenum-'+linenum).text();
+      var service_id = $(this).find(':selected').data('service_id');
       var code = $(this).find(':selected').data('code');
       var procedure = $(this).find(':selected').data('procedure');
       var price = $(this).find(':selected').data('price');
+      var is_multiple = $(this).find(':selected').data('is_multiple');
       var procedure_id = $(this).val();
-
+      alert(is_multiple);
       if(service == 'Check-up')
       {
         $('#medicine_amt-linenum-'+linenum).removeAttr('readonly');
@@ -780,6 +787,11 @@ $(document).ready(function () {
         $('#discount_amt-linenum-'+ linenum).removeAttr('disabled');
       }
 
+      if(is_multiple == 'Y')
+      {
+        $('#description-linenum-'+ linenum).removeAttr('disabled');
+      }
+
       //Remove class disabled on Add Item Button
       $('#add-item').removeClass('disabled');
 
@@ -790,6 +802,81 @@ $(document).ready(function () {
 
       //call function getGrandTotal
       getGrandTotal();
+
+      $('#description-linenum-'+ linenum).empty();
+
+      @foreach($procedures as $procedure)
+
+        if(service_id == "{{ $procedure->serviceid }}" && procedure_id != "{{ $procedure->id }}")
+        {
+          $('#description-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
+        }
+
+      @endforeach
+
+    });
+
+    $('#table-services').on('change', 'tbody td [name="description"]', function(e){
+
+      var linenum = this.dataset.linenum;
+      var medicine_amt_per_service = parseFloat($('#medicine_amt-linenum-'+linenum).val()).toFixed(2);
+      var discount_per_service = parseFloat($('#discount-linenum-'+linenum).val()).toFixed(2) / 100;
+      var discount_amt_per_service = parseFloat($('#discount_amt-linenum-'+linenum).val()).toFixed(2);
+      var price_per_service = 0.00;
+      var description = [];
+
+      $.each($(this).find(':selected'), function(index, data){
+        price_per_service = parseFloat(price_per_service) + parseFloat(this.dataset.price);
+        description[index] = this.dataset.code;
+      });
+
+      // if description multiple select has value
+      if($(this).find(':selected').length)
+      {
+        $('#descriptions-linenum-'+linenum).val(description.join());
+        $('#price-linenum-'+linenum).val(price_per_service);
+      }
+      else
+      {
+        $('#descriptions-linenum-'+linenum).val('');
+        $('#price-linenum-'+linenum).val(0);
+      }
+
+      //if price has no value
+      if(!$('#price-linenum-'+linenum).val())
+      {
+        price_per_service = 0.00;
+      }
+
+      //if medicine amount has no value
+      if(!$('#medicine_amt-linenum-'+linenum).val())
+      {
+        medicine_amt_per_service = 0.00;
+      }
+
+      //if discount % has no value
+      if(!$('#discount-linenum-'+ linenum).val())
+      {
+        discount_per_service = 0.00;
+      }
+
+      //if discount amount has no value
+      if(!$('#discount_amt-linenum-'+ linenum).val())
+      {
+        discount_amt_per_service = 0.00;
+      }
+
+      var discount_amount = parseFloat(price_per_service) * parseFloat(discount_per_service);
+      var total = parseFloat(price_per_service) + parseFloat(medicine_amt_per_service) - parseFloat(discount_amount) - parseFloat(discount_amt_per_service);
+
+      //append total amount
+      $('#total-linenum-'+linenum).empty().append(parseFloat(total).toFixed(2));
+
+      //call function getGrandTotal
+      getGrandTotal();
+
+      //disable add-item button when total_amount is 0 and below
+      disableAddItemButton(total, linenum);
 
     });
 

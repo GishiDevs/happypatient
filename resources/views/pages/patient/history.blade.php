@@ -132,7 +132,13 @@
                           <!-- <td>{{ $services->or_number }}</td> -->
                           <td>{{ $services->docdate }}</td>
                           <td>{{ $services->service }}</td>
-                          <td>{{ $services->procedure }}</td>
+                          <td>
+                            @if($services->is_multiple == 'Y')
+                              {{ $services->description }}
+                            @else
+                              {{ $services->code }}
+                            @endif
+                          </td>
                           <td>{{ number_format($services->price, 2, '.', ',') }}</td>
                           <td>{{ $services->medicine_amt }}</td>
                           <td>{{ $services->discount }}</td>

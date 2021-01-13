@@ -152,7 +152,13 @@
                         @foreach($patientserviceitems as $services)
                         <tr id="row-id-{{$services->id}}">
                           <td>{{ $services->service }}</td>
-                          <td>{{ $services->code }}</td>
+                          <td>
+                            @if($services->is_multiple == 'Y')
+                              {{ $services->description }}
+                            @else
+                              {{ $services->code }}
+                            @endif
+                          </td>
                           <td><span id="span-price-{{ $services->id }}">{{ $services->price }}</span><input type="text" class="form-control" name="price" id="price-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->price }}" hidden> </td>
                           <td><span id="span-medicine_amt-{{ $services->id }}">{{ $services->medicine_amt }}</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->medicine_amt }}" hidden> </td>
                           <td><span id="span-discount-{{ $services->id }}">{{ $services->discount }}</span><input type="text" class="form-control" name="discount" id="discount-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->discount }}" hidden> </td>
@@ -280,6 +286,14 @@
               <select class="form-control select2" name="new-procedure" id="new-procedure" style="width: 100%;" disabled>
                 <option selected="selected" value="" disabled>Select Procedure</option>
               </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <label for="select2-description">Description</label>
+              <select class="form-control select2" multiple="multiple" name="select2-description" id="select2-description" style="width: 100%;" disabled>
+              </select>
+              <input type="text" name="new-description" class="form-control" id="new-description" hidden>
             </div>
           </div>
           <div class="row">
@@ -457,7 +471,7 @@ $(document).ready(function () {
               $('#table-services tbody').append(
                             '<tr id="row-id-'+response.service_item.id+'">'+
                               '<td>'+response.service_item.service+'</td>'+
-                              '<td>'+response.service_item.code+'</td>'+
+                              '<td>'+(response.service_item.is_multiple == 'Y' ? response.service_item.description : response.service_item.code)+'</td>'+
                               '<td><span id="span-price-'+response.service_item.id+'">'+response.service_item.price+'</span><input type="text" class="form-control" name="price" id="price-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.price+'" hidden> </td>'+
                               '<td><span id="span-medicine_amt-'+response.service_item.id+'">'+response.service_item.medicine_amt+'</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.medicine_amt+'" hidden> </td>'+
                               '<td><span id="span-discount-'+response.service_item.id+'">'+response.service_item.discount+'</span><input type="text" class="form-control" name="discount" id="discount-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.discount+'" hidden> </td>'+
@@ -777,7 +791,7 @@ $(document).ready(function () {
 
         if($(this).val() == "{{ $procedure->serviceid }}")
         {
-          $('#new-procedure').append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}">{{ $procedure->code }}</option>');
+          $('#new-procedure').append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}"  data-is_multiple="{{ $procedure->is_multiple }}">{{ $procedure->code }}</option>');
         }
 
     @endforeach
@@ -790,6 +804,9 @@ $(document).ready(function () {
     var price = $(this).find(':selected').data('price');
     var discount = $(this).find(':selected').data('discount');
     var discount_amt = $(this).find(':selected').data('discount_amt');
+    var is_multiple = $(this).find(':selected').data('is_multiple');
+    var procedure_id = $(this).val();
+    var service_id = $('#new-service').val();
 
     $('#new-price').val(price);
     $('#new-discount').val(discount);
@@ -800,6 +817,54 @@ $(document).ready(function () {
     $('#new-discount_amt').removeAttr('disabled');
 
     $('#new-total_amount').empty().append(price);
+
+    if(is_multiple == 'Y')
+    {
+      $('#select2-description').removeAttr('disabled');
+    }
+
+    $('#select2-description').empty();
+
+    @foreach($procedures_all as $procedure)
+
+      if(service_id == "{{ $procedure->serviceid }}" && procedure_id != "{{ $procedure->id }}")
+      {
+        $('#select2-description').append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}">{{ $procedure->code }}</option>');
+      }
+
+    @endforeach
+
+  });
+
+  $('#select2-description').on('change', function(e){
+
+    var price = $(this).find(':selected').data('price');
+    var discount = $(this).find(':selected').data('discount');
+    var discount_amt = $(this).find(':selected').data('discount_amt');
+    var is_multiple = $(this).find(':selected').data('is_multiple');
+    var procedure_id = $(this).val();
+    var service_id = $('#new-service').val();
+    var price_per_service = 0.00;
+    var description = [];
+
+    $.each($(this).find(':selected'), function(index, data){
+      price_per_service = parseFloat(price_per_service) + parseFloat(this.dataset.price);
+      description[index] = this.dataset.code;
+    });
+
+    // if description multiple select has value
+    if($(this).find(':selected').length)
+    {
+      $('#new-description').val(description.join());
+      $('#new-price').val(price_per_service);
+    }
+    else
+    {
+      $('#new-description').val('');
+      $('#new-price').val(0);
+    }
+
+    compute_new_service();
 
   });
 
@@ -1005,12 +1070,12 @@ $(document).ready(function () {
 
       if(parseFloat(total) > 0 )
       {
-        $('#btn-save-modal').removeClass('disabled');
+        $('#btn-save-modal').removeAttr('disabled');
         $('#new-total_amount').removeClass('text-danger');
       }
       else
       {
-        $('#btn-save-modal').addClass('disabled');
+        $('#btn-save-modal').attr('disabled', true);
         $('#new-total_amount').addClass('text-danger');
       }
   }

@@ -39,7 +39,7 @@ class PatientController extends Controller
     {
         $patient = DB::table('patients')
                      ->select('id','lastname', 'firstname', 'middlename', DB::raw("DATE_FORMAT(birthdate, '%m/%d/%Y') as birthdate") , 'gender', 'civilstatus', 'weight', 'mobile')
-                     ->orderBy('id', 'Asc')
+                     ->orderBy('id', 'Desc')
                      ->get();
 
         return DataTables::of($patient)
@@ -370,8 +370,9 @@ class PatientController extends Controller
                                   ->join('patient_service_items', 'patient_services.id', '=', 'patient_service_items.psid')
                                   ->join('services', 'patient_service_items.serviceid', '=', 'services.id')
                                   ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
-                                  ->select('patient_service_items.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number','services.service', 'service_procedures.procedure',
-                                           'patient_service_items.price', 'patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status')
+                                  ->select('patient_service_items.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number','services.service', 'service_procedures.procedure', 
+                                           'service_procedures.code', 'patient_service_items.price', 'patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt', 
+                                           'patient_service_items.total_amount', 'patient_service_items.status', 'service_procedures.is_multiple', 'patient_service_items.description')
                                   ->where('patient_services.cancelled', '=', 'N')
                                   ->where('patients.id', '=', $patientid)
                                   ->orderBy('patient_services.docdate', 'Asc')

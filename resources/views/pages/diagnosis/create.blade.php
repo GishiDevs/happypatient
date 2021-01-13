@@ -129,7 +129,13 @@
                     </div>
                     <div class="form-group col-md-3">
                       <label for="procedure">Procedure: </label>
-                      <div>{{ $patient_service->procedure }}</div>
+                      <div>
+                        @if($patient_service->is_multiple == 'Y')
+                          {{ $patient_service->description }}
+                        @else
+                          {{ $patient_service->procedure }}
+                        @endif
+                      </div>
                     </div>
                     <div class="form-group col-md-3">
                       <label for="file#">File #: </label>
@@ -158,7 +164,11 @@
                     <div class="form-group col-md-4">
                       <label for="title">Title</label>
                       <div class="input-group">
-                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" value='{{ $patient_service->procedure }}'>
+                        @if($patient_service->is_multiple == 'Y')
+                          <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" value='{{ $patient_service->procedure }} ( {{ $patient_service->description }} )'>
+                        @else
+                          <input type="text" class="form-control" name="title" id="title" placeholder="Enter title" value='{{ $patient_service->procedure }}'>
+                        @endif
                       </div>
                     </div>
                   </div>
@@ -170,7 +180,12 @@
                   </div>
                   <div class="mb-3 div-content">
                     <textarea name="content" id="content" placeholder="Place some text here">
-                      {{ $patient_service->content }}
+                      
+                      @if($patient_service->is_multiple == 'Y')
+                        {{ $contents }}
+                      @else
+                        {{ $patient_service->content }}
+                      @endif
                     </textarea>
 
                   <hr>
@@ -239,7 +254,13 @@
                           <td>{{ $services->docdate }}</td>
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->code }}</td>
-                          <td>{{ $services->procedure }}</td>
+                          <td>
+                              @if($services->is_multiple == 'Y')
+                                {{ $services->description }}
+                              @else
+                                {{ $services->procedure }}
+                              @endif
+                          </td>
                           <td>
                               @if($services->status == 'diagnosed' || $services->status == 'receipted')
                                 <span class="badge bg-success">done</span>
