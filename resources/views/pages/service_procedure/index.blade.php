@@ -45,6 +45,7 @@
                       <th>Procedure</th>
                       <th>Price</th>
                       <th>To Diagnose</th>
+                      <th>Multiple</th>
                       <th>Template Last Updated</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
                       <th width="200px" class="no-sort">Actions</th>
@@ -60,6 +61,7 @@
                       <th>Procedure</th>
                       <th>Price</th>
                       <th>To Diagnose</th>
+                      <th>Multiple</th>
                       <th>Template Last Updated</th>
                       @canany(['serviceprocedure-edit','serviceprocedure-delete'])
                       <th>Actions</th>
@@ -134,6 +136,14 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="form-group col-md-12">
+              <div class="custom-control custom-checkbox">
+                <input class="custom-control-input" name="is_multiple" type="checkbox" id="check-is-multiple" value="Y">
+                <label for="check-is-multiple" class="custom-control-label">Multiple</label>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /.card-body -->
         <div class="modal-footer">
@@ -158,6 +168,7 @@
                    { "data": "procedure"},
                    { "data": "price"},
                    { "data": "to_diagnose"},
+                   { "data": "is_multiple"},
                    { "data": "template_last_update"}];
 
     @canany(['serviceprocedure-edit', 'serviceprocedure-delete'])
@@ -206,6 +217,15 @@
           else
           {
             $('#check-to-diagnose').prop('checked', false);
+          }
+
+          if(response.procedure.is_multiple == 'Y')
+          {
+            $('#check-is-mutiple').prop('checked', true);
+          }
+          else
+          {
+            $('#check-is-mutiple').prop('checked', false);
           }
           
           // $('#service').find('option').each(function(){

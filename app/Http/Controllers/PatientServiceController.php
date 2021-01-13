@@ -280,6 +280,7 @@ class PatientServiceController extends Controller
         $ctr = count($request->get('services'));
         $service_id = $request->get('services');
         $procedure_id = $request->get('procedures');
+        $description = $request->get('descriptions');
         $price = $request->get('price');
         $medicine_amt = $request->get('medicine_amt');
         $discount = $request->get('discount');
@@ -360,6 +361,7 @@ class PatientServiceController extends Controller
             $serviceitem->psid = $patientservice->id;
             $serviceitem->serviceid = $service_id[$x];
             $serviceitem->procedureid = $procedure_id[$x];
+            $serviceitem->description = $description[$x];
             $serviceitem->status = "pending";
             $serviceitem->price = $service_price;
             $serviceitem->medicine_amt = $service_medicine_amt;

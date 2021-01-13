@@ -8,6 +8,7 @@ class PatientServiceItem extends Model
 {
     protected $fillable = ['psid', 
                            'serviceid', 
+                           'description',
                            'price', 
                            'medicine_amt', 
                            'discount', 

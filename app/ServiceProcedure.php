@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ServiceProcedure extends Model
 {
-    protected $fillable = ['serviceid', 'code', 'procedure', 'price', 'to_diagnose'];
+    protected $fillable = ['serviceid', 'code', 'procedure', 'price', 'to_diagnose', 'is_multiple'];
 
     public function services()
     {

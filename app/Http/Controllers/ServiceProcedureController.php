@@ -59,7 +59,8 @@ class ServiceProcedureController extends Controller
         $serviceprocedures = DB::table('services')
                                ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
                                ->leftJoin('template_contents', 'service_procedures.id', '=', 'template_contents.procedureid')
-                               ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose', DB::raw("DATE_FORMAT(template_contents.updated_at, '%m/%d/%Y') as template_last_update"))
+                               ->select('service_procedures.id', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose',
+                                        'service_procedures.is_multiple', DB::raw("DATE_FORMAT(template_contents.updated_at, '%m/%d/%Y') as template_last_update"))
                                ->whereIn('services.service', $services) 
                                ->get();
         return DataTables::of($serviceprocedures)
@@ -124,6 +125,7 @@ class ServiceProcedureController extends Controller
         $procedure = $request->get('procedure');
         $price = $request->get('price');
         $to_diagnose = $request->get('to_diagnose');
+        $is_multiple = $request->get('is_multiple');
         $codeIsNull = false;
         $procedureIsNull = false;
         $priceIsNull = false;
@@ -195,7 +197,8 @@ class ServiceProcedureController extends Controller
 
         $procedure = DB::table('services')
                        ->join('service_procedures', 'services.id', '=', 'service_procedures.serviceid')
-                       ->select('service_procedures.id', 'service_procedures.serviceid', 'services.service', 'service_procedures.code', 'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose')
+                       ->select('service_procedures.id', 'service_procedures.serviceid', 'services.service', 'service_procedures.code', 
+                       'service_procedures.procedure', 'service_procedures.price', 'service_procedures.to_diagnose', 'service_procedures.is_multiple')
                        ->where('service_procedures.id', '=', $procedure_id)
                        ->first();
 
@@ -210,6 +213,23 @@ class ServiceProcedureController extends Controller
 
     public function update(Request $request)
     {   
+        $rules = [
+            'service.required' => 'Please enter service',   
+            'code.required' => 'Please enter code',
+            'procedure.required' => 'Please add at least 1 service procedure on the table'
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'service' => 'required',
+            'code' => 'required',
+            'procedure' => 'required'
+        ], $rules);
+
+        if($validator->fails())
+        {
+            return response()->json($validator->errors(), 200);
+        }
+
         $procedure_id = $request->get('procedure_id');
 
         $procedure = ServiceProcedure::find($procedure_id);
@@ -224,6 +244,14 @@ class ServiceProcedureController extends Controller
         else
         {
             $procedure->to_diagnose = 'N';
+        }
+        if($request->get('is_multiple'))
+        {
+            $procedure->is_multiple = $request->get('is_multiple');
+        }
+        else
+        {
+            $procedure->is_multiple = 'N';
         }
         $procedure->save();
 

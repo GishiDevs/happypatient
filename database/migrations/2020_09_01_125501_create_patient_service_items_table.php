@@ -18,6 +18,7 @@ class CreatePatientServiceItemsTable extends Migration
             $table->integer('psid');
             $table->integer('serviceid');
             $table->integer('procedureid');
+            $table->string('description')->nullable();
             $table->decimal('price', 8, 2);
             $table->decimal('medicine_amt', 8, 2);
             $table->decimal('discount', 8, 2);

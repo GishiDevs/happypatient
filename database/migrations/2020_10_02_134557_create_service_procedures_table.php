@@ -20,6 +20,7 @@ class CreateServiceProceduresTable extends Migration
             $table->string('procedure');
             $table->decimal('price', 8, 2);
             $table->string('to_diagnose');
+            $table->string('is_multiple')->nullable();
             $table->timestamps();
         });
     }

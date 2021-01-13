@@ -64,14 +64,15 @@
                           <th>Procedure</th>
                           <th width="150px">Price (PHP)</th>
                           <th width="150px">To Diagnose</th>
+                          <th width="150px">Multiple</th>
                           <th width="130px">Action</th>
                         </thead>
                         <tbody>												
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="4" style="border: none;"></td>
-                            <td style="border: none;"><a href="" class="btn btn-sm btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
+                            <td colspan="5" style="border: none;"></td>
+                            <td style="border: none;"><a href="" class="btn btn-xs btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
                           </tr>
                         </tfoot>
                       </table>
@@ -219,7 +220,14 @@ $(document).ready(function () {
                                           '</div>'+
                                           '<input type="text" id="to-diagnose-linenum-'+linenum+'" name="to_diagnose[]" value="N" hidden>'+
                                         '</td>'+
-                                        '<td><a href="" class="btn btn-sm btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Delete</a></td>'+
+                                        '<td style="text-align:center;">'+
+                                          '<div class="custom-control custom-checkbox">'+
+                                            '<input class="custom-control-input" name="is-multiple" type="checkbox" id="check-is-multiple-'+linenum+'" value="Y" data-linenum="'+linenum+'">'+
+                                            '<label for="check-is-multiple-'+linenum+'" class="custom-control-label"></label>'+
+                                          '</div>'+
+                                          '<input type="text" id="is-multiple-linenum-'+linenum+'" name="is_multiple[]" value="N" hidden>'+
+                                        '</td>'+
+                                        '<td><a href="" class="btn btn-xs btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Delete</a></td>'+
                                       '</tr>');
     linenum++;
         
@@ -291,6 +299,15 @@ $(document).ready(function () {
         
       if($(this).is(":checked")) {
         $('#to-diagnose-linenum-'+linenum).val('Y');
+      }  
+
+    });
+
+    $('#table-services').on('click', 'tbody td [name="is-multiple"]', function(e){ 
+      var linenum = $(this).data('linenum');
+        
+      if($(this).is(":checked")) {
+        $('#is-multiple-linenum-'+linenum).val('Y');
       }  
 
     });
