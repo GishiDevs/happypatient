@@ -200,12 +200,22 @@ class PatientServiceController extends Controller
             'organization.required' => 'Please enter organization name',
             'docdate.required' => 'Please enter document date',
             'docdate.date' => 'Please enter a valid date',
-            'services.required' => 'Please select at least 1 service'
+            'services.required' => 'Service is required',
+            'services.*.required' => 'Service is required',
+            'procedures.required' => 'Procedure is required',
+            'procedures.*.required' => 'Procedure is required',
+            'price.required' => 'Price is required',
+            // 'price.*.required' => 'Price is required'
         ];
 
         $valid_fields = [
             'docdate' => 'required|date',
-            'services' => 'required'
+            'services' => 'required',
+            'services.*' => 'required',
+            'procedures' => 'required',
+            'procedures.*' => 'required',
+            'price' => 'required',
+            // 'price.*' => 'required'
         ];
 
         //if service type is individual or group

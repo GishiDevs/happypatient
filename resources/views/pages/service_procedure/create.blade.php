@@ -60,18 +60,21 @@
                     <div class="table-scrollable col-md-10 table-responsive">
                       <table class="table table-striped table-bordered table-hover no-footer-border" id="table-services">
                         <thead>
-                          <th width="300px">Code Name</th>
+                          <th>Code Name</th>
                           <th>Procedure</th>
                           <th width="150px">Price (PHP)</th>
-                          <th width="150px">To Diagnose</th>
-                          <th width="150px">Multiple</th>
-                          <th width="130px">Action</th>
+                          <th width="110px">To Diagnose</th>
+                          <th width="110px">Multiple</th>
+                          <th width="100px">Action</th>
                         </thead>
                         <tbody>												
                         </tbody>
                         <tfoot>
                           <tr>
-                            <td colspan="5" style="border: none;"></td>
+                            <td style="border: none;"> <span id="span-code-footer"></span> </td>
+                            <td style="border: none;"> <span id="span-procedure-footer"></span> </td>
+                            <td style="border: none;"> <span id="span-price-footer"></span> </td>
+                            <td colspan="2" style="border: none;"></td>
                             <td style="border: none;"><a href="" class="btn btn-xs btn-primary add-item" id="add-item"><i class="fa fa-plus"></i> Add Item</a></td>
                           </tr>
                         </tfoot>
@@ -230,7 +233,7 @@ $(document).ready(function () {
                                         '<td><a href="" class="btn btn-xs btn-danger delete-item" id="delete-item" data-linenum="'+linenum+'"><i class="fa fa-trash"></i> Delete</a></td>'+
                                       '</tr>');
     linenum++;
-        
+
     //disable add-item button by default
     $('#add-item').addClass('disabled');
 
@@ -240,6 +243,7 @@ $(document).ready(function () {
     $('#service-table-error').remove();
 
     $('#table-services').on('keyup', 'tbody td [name="code[]"]', function(e){ 
+
       var linenum = $(this).data('linenum');
 
       if($(this).val() && $('#procedure-linenum-'+ linenum).val() && $('#price-linenum-'+ linenum).val())
@@ -253,6 +257,18 @@ $(document).ready(function () {
         $('#add-item').addClass('disabled');
 
         // $('#btn-add').attr('disabled', true);
+      }
+
+      if($(this).val())
+      {
+        $(this).removeClass('is-invalid');
+        $('#error-code-'+linenum).remove();
+      }
+      else
+      { 
+        $('#error-code-'+linenum).remove();
+        $(this).addClass('is-invalid');
+        $(this).after('<span id="error-code-'+linenum+'" class="text-danger fieldHasError">Code Name is required</span>');
       }
 
     });
@@ -273,6 +289,18 @@ $(document).ready(function () {
         // $('#btn-add').attr('disabled', true);
       }
 
+      if($(this).val())
+      {
+        $(this).removeClass('is-invalid');
+        $('#error-procedure-'+linenum).remove();
+      }
+      else
+      { 
+        $('#error-procedure-'+linenum).remove();
+        $(this).addClass('is-invalid');
+        $(this).after('<span id="error-procedure-'+linenum+'" class="text-danger fieldHasError">Procedure is required</span>');
+      }
+
     });
 
     $('#table-services').on('keyup', 'tbody td [name="price[]"]', function(e){ 
@@ -289,6 +317,18 @@ $(document).ready(function () {
         $('#add-item').addClass('disabled');
 
         // $('#btn-add').attr('disabled', true);
+      }
+
+      if($(this).val())
+      {
+        $(this).removeClass('is-invalid');
+        $('#error-price-'+linenum).remove();
+      }
+      else
+      { 
+        $('#error-price-'+linenum).remove();
+        $(this).addClass('is-invalid');
+        $(this).after('<span id="error-price-'+linenum+'" class="text-danger fieldHasError">Price is required</span>');
       }
 
     });
@@ -343,7 +383,7 @@ $(document).ready(function () {
   // Add Services with Stepper
   $('#btn-add').click(function(e){
 
-    $('#btn-add').attr('disabled', true);
+    var formHasErrors = false;
 
     e.preventDefault();
     
@@ -351,8 +391,9 @@ $(document).ready(function () {
     if(!$('#service').val())
     { 
       $('#service-error').remove();
-      $('.div-service').append('<span id="service-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please select service</span>');
+      $('.div-service').append('<span id="service-error" class="text-danger fieldHasError">Please select service</span>');
       $(".div-service").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger'); 
+      formHasErrors = true;
     }
 
     //count table tbody rows
@@ -362,48 +403,113 @@ $(document).ready(function () {
     {
       $('#service-table-error').remove();
       $('.table-scrollable').append('<span id="service-table-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please add at least 1 service procedure on the table</span>');
+      formHasErrors = true;
     }
         
     var data = $('#serviceprocedureform').serializeArray();
     data.push({name: "_token", value: "{{ csrf_token() }}"});
 
-    $.ajax({
-        url: "{{ route('serviceprocedure.store') }}",
-        method: "POST",
-        data: data,
-        success: function(response){
+
+
+      $('#btn-add').attr('disabled', true);
+
+      $.ajax({
+          url: "{{ route('serviceprocedure.store') }}",
+          method: "POST",
+          data: data,
+          success: function(response){
+              // console.log(response);
+              if(response.success)
+              {   
+
+                $('#serviceprocedureform')[0].reset();
+                Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Record has successfully added',
+                  showConfirmButton: false,
+                  timer: 2500
+                });  
+                $('#select2-service-container').empty().append('Select Service');
+                // $('#service option[value=""]').prop('selected', 'selected').change();
+                $('#table-services tbody').empty();
+                $('#service-table-error').remove();
+                // $('#btn-add').attr('disabled' ,true);
+                $('#span-code-footer').empty().removeClass('text-danger fieldHasError');
+                $('#span-procedure-footer').empty().removeClass('text-danger fieldHasError');
+                $('#span-price-footer').empty().removeClass('text-danger fieldHasError');
+              }
+              else
+              {
+                // $('#service-table-error').remove();
+                
+                $.each(response, function(index, value){
+
+                  var field_name = index.split('.')[0];
+                  var field_index = index.split('.')[1];
+
+                  if(field_name == 'code')
+                  {
+                    $('#table-services tbody tr td').find('[name="code[]"]').each(function(i){
+
+                      var linenum = this.dataset.linenum;
+
+                      if(field_index == i)
+                      { 
+                        $('#error-code-'+linenum).remove();
+                        $(this).addClass('is-invalid');
+                        $(this).after('<span id="error-code-'+linenum+'" class="text-danger fieldHasError">'+ value +'</span>');
+                      }
+
+                    }); 
+                  }
+
+                  if(field_name == 'procedure')
+                  {
+                    $('#table-services tbody tr td').find('[name="procedure[]"]').each(function(i){
+
+                      var linenum = this.dataset.linenum;
+
+                      if(field_index == i)
+                      { 
+                        $('#error-procedure-'+linenum).remove();
+                        $(this).addClass('is-invalid');
+                        $(this).after('<span id="error-procedure-'+linenum+'" class="text-danger fieldHasError">'+ value +'</span>');
+                      }
+
+                    }); 
+                  }
+
+                  if(field_name == 'price')
+                  {
+                    $('#table-services tbody tr td').find('[name="price[]"]').each(function(i){
+
+                      var linenum = this.dataset.linenum;
+
+                      if(field_index == i)
+                      { 
+                        $('#error-price-'+linenum).remove();
+                        $(this).addClass('is-invalid');
+                        $(this).after('<span id="error-price-'+linenum+'" class="text-danger fieldHasError">'+ value +'</span>');
+                      }
+
+                    }); 
+                  }
+
+                });
+
+              }
+
+              $('#btn-add').removeAttr('disabled');
+                          
+          },
+          error: function(response){
             console.log(response);
-            if(response.success)
-            {   
-
-              $('#serviceprocedureform')[0].reset();
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Record has successfully added',
-                showConfirmButton: false,
-                timer: 2500
-              });  
-              $('#select2-service-container').empty().append('Select Service');
-              // $('#service option[value=""]').prop('selected', 'selected').change();
-              $('#table-services tbody').empty();
-              $('#service-table-error').remove();
-              // $('#btn-add').attr('disabled' ,true);
-            }
-
-            if(response.procedures)
-            {
-              $('#service-table-error').remove();
-              $('.table-scrollable').append('<span id="service-table-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">'+ response.procedures +'</span>');
-            }
-
             $('#btn-add').removeAttr('disabled');
-                        
-        },
-        error: function(response){
-          console.log(response);
-        }
-    });
+          }
+      });
+    
+    
   
   });
 

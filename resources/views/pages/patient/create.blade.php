@@ -766,7 +766,7 @@ $(document).ready(function () {
       var price = $(this).find(':selected').data('price');
       var is_multiple = $(this).find(':selected').data('is_multiple');
       var procedure_id = $(this).val();
-      alert(is_multiple);
+
       if(service == 'Check-up')
       {
         $('#medicine_amt-linenum-'+linenum).removeAttr('readonly');
@@ -1111,7 +1111,7 @@ $(document).ready(function () {
       $('#row-'+linenum).remove();
 
       //scan if there is a dropdown on a table
-      $('#table-services tbody tr td').find('select').each(function(){
+      $('#table-services tbody tr td').find('[name="service"], [name="procedure"]').each(function(){
          //$(this)   //select box of same row
          hasDropDown = true
       });

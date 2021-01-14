@@ -106,13 +106,25 @@ class ServiceProcedureController extends Controller
         // return $request->all();
 
         $rules = [
-            'service.required' => 'Please enter service',   
-            'procedure.required' => 'Please add at least 1 service procedure on the table'
+            'service.required' => 'Please enter service',  
+            'code.required' => 'Code Name is required',
+            'code.*.required' => 'Code Name is required',
+            'code.*.unique' => 'Code Name already exists',
+            'procedure.required' => 'Procedure is required',
+            'procedure.*.required' => 'Procedure is required',
+            'price.required' => 'Price is required',
+            'price.*.required' => 'Price is required'
         ];
 
         $validator = Validator::make($request->all(),[
             'service' => 'required',
-            'procedure' => 'required'
+            'code' => 'required|unique:service_procedures,code',
+            'code.*' => 'required|unique:service_procedures,code',
+            'procedure' => 'required',
+            'procedure.*' => 'required',
+            'price' => 'required',
+            'price.*' => 'required'
+            
         ], $rules);
 
         if($validator->fails())

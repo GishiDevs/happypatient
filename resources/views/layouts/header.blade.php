@@ -138,6 +138,12 @@
         padding-left: 4em;
     }
 
+    .fieldHasError {
+      width: 100%; 
+      margin-top: .25rem; 
+      font-size: 80%;
+    }
+
   </style>
 
 </head>

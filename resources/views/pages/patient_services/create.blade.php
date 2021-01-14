@@ -422,7 +422,7 @@ $(document).ready(function () {
           $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-is_multiple="{{ $procedure->is_multiple }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
-      @endforeach
+      @endforeach  
 
     });
 
@@ -505,7 +505,7 @@ $(document).ready(function () {
       if($(this).find(':selected').length)
       {
         $('#descriptions-linenum-'+linenum).val(description.join());
-        $('#price-linenum-'+linenum).val(price_per_service);
+        $('#price-linenum-'+linenum).val(price_per_service.toFixed(2));
       }
       else
       {
@@ -783,7 +783,7 @@ $(document).ready(function () {
       $('#row-'+linenum).remove();
 
       //scan if there is a dropdown on a table
-      $('#table-services tbody tr td').find('select').each(function(){
+      $('#table-services tbody tr td').find('[name="service"], [name="procedure"]').each(function(){
          //$(this)   //select box of same row
          hasDropDown = true;
       });
