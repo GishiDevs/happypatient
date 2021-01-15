@@ -838,7 +838,7 @@ $(document).ready(function () {
 
         var id = parseInt("{{ $procedure->id }}");
 
-        if(service_id == "{{ $procedure->serviceid }}" && procedure_id != "{{ $procedure->id }}" && !procedures_id.includes(id))
+        if(service_id == "{{ $procedure->serviceid }}" && !procedures_id.includes(id))
         {
           $('#description-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }

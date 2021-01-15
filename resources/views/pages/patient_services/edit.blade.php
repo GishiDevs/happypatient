@@ -793,7 +793,13 @@ $(document).ready(function () {
       $.each($('.span-procedure'), function(index, data){ 
         procedures_id[index] = parseInt(data.dataset.id);
       }); 
-      console.log(procedures_id);
+      
+      $.each($('[name="description"]').find(':selected'), function(index, data){
+        if($(this).val())
+        {
+          procedures_id[parseInt($(this).val())] = parseInt($(this).val());
+        }
+      });
 
       @foreach($procedures_all as $procedure)
 
