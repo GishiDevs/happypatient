@@ -692,13 +692,6 @@ $(document).ready(function () {
 
     $('.select2').select2();
 
-    //count service select option
-    var ctr = 0;
-    $('[name="service"]').find('option').each(function(){
-        ctr++;
-    });
-
-
     //disable add-item button by default
     $('#add-item').addClass('disabled');
     //disable btn-add button by default
@@ -742,16 +735,35 @@ $(document).ready(function () {
       //   }
       // });
 
+      var procedures_id = [];  
+
+      // insert all procedure id from the table into variable used for filtering select option  
+      $.each($('[name="procedures[]"]'), function(index, data){
+        if(data.value)
+        {
+          procedures_id[parseInt(data.value)] = parseInt(data.value);
+        }
+      });  
+
+      $.each($('[name="description"]').find(':selected'), function(index, data){
+        if($(this).val())
+        {
+          procedures_id[parseInt($(this).val())] = parseInt($(this).val());
+        }
+      });  
+
       $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
 
       @foreach($procedures as $procedure)
 
-        if(service_id == "{{ $procedure->serviceid }}")
+        var id = parseInt("{{ $procedure->id }}");
+
+        if(service_id == "{{ $procedure->serviceid }}" && !procedures_id.includes(id))
         {
-          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}"  data-is_multiple="{{ $procedure->is_multiple }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
+          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-is_multiple="{{ $procedure->is_multiple }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
-      @endforeach
+      @endforeach  
 
     });
 
@@ -803,11 +815,30 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
+      var procedures_id = [];  
+
+      // insert all procedure id into variable used for filtering select option  
+      $.each($('[name="procedures[]"]'), function(index, data){
+        if(data.value)
+        {
+          procedures_id[parseInt(data.value)] = parseInt(data.value);
+        }
+      });  
+      
+      $.each($('[name="description"]').find(':selected'), function(index, data){
+        if($(this).val())
+        {
+          procedures_id[parseInt($(this).val())] = parseInt($(this).val());
+        }
+      });
+
       $('#description-linenum-'+ linenum).empty();
 
       @foreach($procedures as $procedure)
 
-        if(service_id == "{{ $procedure->serviceid }}" && procedure_id != "{{ $procedure->id }}")
+        var id = parseInt("{{ $procedure->id }}");
+
+        if(service_id == "{{ $procedure->serviceid }}" && procedure_id != "{{ $procedure->id }}" && !procedures_id.includes(id))
         {
           $('#description-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
@@ -834,7 +865,7 @@ $(document).ready(function () {
       if($(this).find(':selected').length)
       {
         $('#descriptions-linenum-'+linenum).val(description.join());
-        $('#price-linenum-'+linenum).val(price_per_service);
+        $('#price-linenum-'+linenum).val(parseFloat(price_per_service).toFixed(2));
       }
       else
       {

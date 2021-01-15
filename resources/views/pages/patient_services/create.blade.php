@@ -412,17 +412,36 @@ $(document).ready(function () {
       //   }
       // });
 
+      var procedures_id = [];  
+
+      // insert all procedure id from the table into variable used for filtering select option  
+      $.each($('[name="procedures[]"]'), function(index, data){
+        if(data.value)
+        {
+          procedures_id[parseInt(data.value)] = parseInt(data.value);
+        }
+      });  
+
+      $.each($('[name="description"]').find(':selected'), function(index, data){
+        if($(this).val())
+        {
+          procedures_id[parseInt($(this).val())] = parseInt($(this).val());
+        }
+      });
 
       $('#procedure-linenum-'+ linenum).empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
 
       @foreach($procedures as $procedure)
 
-        if(service_id == "{{ $procedure->serviceid }}")
+        var id = parseInt("{{ $procedure->id }}");
+
+        if(service_id == "{{ $procedure->serviceid }}" && !procedures_id.includes(id))
         {
           $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-is_multiple="{{ $procedure->is_multiple }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }
 
       @endforeach  
+      
 
     });
 
@@ -474,11 +493,30 @@ $(document).ready(function () {
       //call function getGrandTotal
       getGrandTotal();
 
+      var procedures_id = [];  
+
+      // insert all procedure id into variable used for filtering select option  
+      $.each($('[name="procedures[]"]'), function(index, data){
+        if(data.value)
+        {
+          procedures_id[parseInt(data.value)] = parseInt(data.value);
+        }
+      });  
+      
+      $.each($('[name="description"]').find(':selected'), function(index, data){
+        if($(this).val())
+        {
+          procedures_id[parseInt($(this).val())] = parseInt($(this).val());
+        }
+      });
+
       $('#description-linenum-'+ linenum).empty();
 
       @foreach($procedures as $procedure)
 
-        if(service_id == "{{ $procedure->serviceid }}" && procedure_id != "{{ $procedure->id }}")
+        var id = parseInt("{{ $procedure->id }}");
+
+        if(service_id == "{{ $procedure->serviceid }}" && procedure_id != "{{ $procedure->id }}" && !procedures_id.includes(id))
         {
           $('#description-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
         }

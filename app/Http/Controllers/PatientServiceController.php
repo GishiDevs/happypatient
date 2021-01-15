@@ -461,7 +461,8 @@ class PatientServiceController extends Controller
                  ->join('patient_services', 'patient_service_items.psid', '=', 'patient_services.id')
                  ->select('patient_service_items.id', 'services.service', 'patient_service_items.price', 'patient_service_items.discount', 'service_procedures.code', 'service_procedures.procedure',
                           'patient_service_items.discount_amt', 'patient_service_items.total_amount', 'patient_service_items.status', 'patient_services.docdate', 'patient_services.type',
-                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt', 'service_procedures.is_multiple', 'patient_service_items.description')
+                          'service_procedures.to_diagnose', 'patient_service_items.medicine_amt', 'service_procedures.is_multiple', 'patient_service_items.description',
+                          DB::raw('service_procedures.id as procedure_id'))
                  ->whereIn('services.service', $services)
                  ->where('patient_service_items.psid', '=', $psid)
                  ->orderBy('patient_service_items.id', 'Asc')
@@ -756,7 +757,7 @@ class PatientServiceController extends Controller
                         ->join('service_procedures', 'patient_service_items.procedureid', '=', 'service_procedures.id')
                         ->select('patient_service_items.id', 'patient_services.type','patient_services.name', 'services.service', DB::raw('services.id as serviceid'), 'service_procedures.code','service_procedures.procedure',    
                                 'patient_service_items.price','patient_service_items.medicine_amt', 'patient_service_items.discount', 'patient_service_items.discount_amt', 'patient_service_items.total_amount', 
-                                'service_procedures.to_diagnose', 'service_procedures.is_multiple', 'patient_service_items.description')
+                                'service_procedures.to_diagnose', 'service_procedures.is_multiple', 'patient_service_items.description', DB::raw('service_procedures.id as procedure_id'))
                         ->where('patient_service_items.id', '=', $patientserviceitem->id)
                         ->first();
 

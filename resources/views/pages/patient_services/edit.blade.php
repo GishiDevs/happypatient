@@ -153,11 +153,13 @@
                         <tr id="row-id-{{$services->id}}">
                           <td>{{ $services->service }}</td>
                           <td>
-                            @if($services->is_multiple == 'Y')
-                              {{ $services->description }}
-                            @else
-                              {{ $services->code }}
-                            @endif
+                            <span class="span-procedure" data-id="{{ $services->procedure_id }}">
+                              @if($services->is_multiple == 'Y')
+                                {{ $services->description }}
+                              @else
+                                {{ $services->code }}
+                              @endif
+                            </span>
                           </td>
                           <td><span id="span-price-{{ $services->id }}">{{ $services->price }}</span><input type="text" class="form-control" name="price" id="price-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->price }}" hidden> </td>
                           <td><span id="span-medicine_amt-{{ $services->id }}">{{ $services->medicine_amt }}</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-{{ $services->id }}" data-id="{{ $services->id }}" placeholder="0.00" value="{{ $services->medicine_amt }}" hidden> </td>
@@ -471,7 +473,7 @@ $(document).ready(function () {
               $('#table-services tbody').append(
                             '<tr id="row-id-'+response.service_item.id+'">'+
                               '<td>'+response.service_item.service+'</td>'+
-                              '<td>'+(response.service_item.is_multiple == 'Y' ? response.service_item.description : response.service_item.code)+'</td>'+
+                              '<td><span class="span-procedure" data-id="'+response.service_item.procedure_id+'">'+(response.service_item.is_multiple == 'Y' ? response.service_item.description : response.service_item.code)+'</span></td>'+
                               '<td><span id="span-price-'+response.service_item.id+'">'+response.service_item.price+'</span><input type="text" class="form-control" name="price" id="price-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.price+'" hidden> </td>'+
                               '<td><span id="span-medicine_amt-'+response.service_item.id+'">'+response.service_item.medicine_amt+'</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.medicine_amt+'" hidden> </td>'+
                               '<td><span id="span-discount-'+response.service_item.id+'">'+response.service_item.discount+'</span><input type="text" class="form-control" name="discount" id="discount-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.discount+'" hidden> </td>'+
@@ -779,25 +781,34 @@ $(document).ready(function () {
       allowMinus:false
     });
 
-  }
+    $('#new-service').on('change', function(e){
 
-  $('#new-service').on('change', function(e){
+      $('#new-procedure').removeAttr('disabled');
 
-    $('#new-procedure').removeAttr('disabled');
+      $('#new-procedure').empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
 
-    $('#new-procedure').empty().append('<option selected="selected" value="" disabled>Select Procedure</option>');
+      var procedures_id = [];  
 
-    @foreach($procedures_all as $procedure)
+      // insert all procedure id into variable used for filtering select option  
+      $.each($('.span-procedure'), function(index, data){ 
+        procedures_id[index] = parseInt(data.dataset.id);
+      }); 
+      console.log(procedures_id);
 
-        if($(this).val() == "{{ $procedure->serviceid }}")
+      @foreach($procedures_all as $procedure)
+
+        var id = parseInt("{{ $procedure->id }}");
+
+        if($(this).val() == "{{ $procedure->serviceid }}" && !procedures_id.includes(id))
         {
           $('#new-procedure').append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}"  data-is_multiple="{{ $procedure->is_multiple }}">{{ $procedure->code }}</option>');
         }
 
-    @endforeach
+      @endforeach  
 
+    });
 
-  });
+  }
 
   $('#new-procedure').on('change', function(e){
 
