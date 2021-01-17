@@ -423,7 +423,7 @@ Route::group(['prefix' => 'certificate/template', 'middleware' => ['auth']], fun
 
 });
 
-//Services Route
+//File No. Settings Route
 Route::group(['prefix' => 'file_no_setting', 'middleware' => ['auth', 'file_no_setting']], function(){
     Route::get('/index', [
         'uses' => 'FileNumberSettingController@index',

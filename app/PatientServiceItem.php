@@ -14,7 +14,8 @@ class PatientServiceItem extends Model
                            'discount', 
                            'discount_amt', 
                            'total_amount', 
-                           'status'];
+                           'status',
+                           'file_no'];
 
     public function patient_services()
     {   
