@@ -80,7 +80,7 @@
                   <div class="row">
                     <div class="form-group col-md-4">
                       <label for="role">Role</label>
-                      <select multiple class="custom-select" name="roles[]" id="roles">
+                      <select class="select2" multiple="multiple" name="roles[]" id="roles" style="width: 100%;">
                         @foreach($roles as $role)
                         <option value="{{ $role->name }}">{{ $role->name }}</option>
                         @endforeach
@@ -89,8 +89,8 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-md-4">
-                      <label for="role">Signatory of:</label>
-                      <select multiple class="custom-select" name="services[]" id="services">
+                      <label for="signatory">Signatory of:</label>
+                      <select class="select2" multiple="multiple" name="services[]" id="services" style="width: 100%;">
                         @foreach($services as $service)
                         <option value="{{ $service->id }}">{{ $service->service }}</option>
                         @endforeach
@@ -122,7 +122,7 @@
 <script type="text/javascript">
 
 $(document).ready(function () {
-
+  $('.select2').select2();
   //User Form Validation
   $('#userform').validate({
     rules: {
