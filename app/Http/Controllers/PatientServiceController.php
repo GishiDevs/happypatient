@@ -167,6 +167,7 @@ class PatientServiceController extends Controller
                  ->where('patient_services.type', '=', 'individual')
                  ->where('service_procedures.to_diagnose', '=', 'Y')
                  ->where('patient_services.docdate', '=', Carbon::now()->format('Y-m-d'))
+                 ->where('services.service', '!=', 'Check-up')
                 //  ->union($to_diagnose)
                  ->union($check_up)
                 //  ->union($diagnosed_today)
