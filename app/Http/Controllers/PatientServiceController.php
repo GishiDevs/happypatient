@@ -39,7 +39,7 @@ class PatientServiceController extends Controller
 
         if(!$request->get('date_to'))
         {
-            $to = Carbon::now();
+            $to = '1/1/3000';
         }
 
         $date_from = Carbon::make($from)->format('Y-m-d');
@@ -49,7 +49,7 @@ class PatientServiceController extends Controller
                  ->select('patient_services.id', DB::raw("DATE_FORMAT(patient_services.docdate, '%m/%d/%Y') as docdate"), 'patient_services.or_number', 'patient_services.name', 'patient_services.cancelled')
                  ->whereDate('patient_services.docdate', '>=', $date_from)
                  ->whereDate('patient_services.docdate', '<=', $date_to)
-                 ->orderBy('patient_services.id', 'Asc')
+                 ->orderBy('patient_services.id', 'desc')
                  ->get();
 
         return DataTables::of($patientservices)
@@ -476,7 +476,7 @@ class PatientServiceController extends Controller
     }   
 
     public function update(Request $request, $psid)
-    {
+    {   
         $patientservice = PatientService::find($psid);
 
         //if record is empty then display error page

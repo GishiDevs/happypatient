@@ -179,7 +179,7 @@
                           @endif
                           @if($patientservice->cancelled == 'N')
                           <td id="td-actions">
-                              @if($services->docdate == date('Y-m-d'))
+                              @if($services->docdate >= date('Y-m-d'))
                                 @can('amount-edit')
                                 <a href="" class="btn btn-xs btn-info btn-edit-amount" id="btn-edit-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}"><i class="fa fa-edit"></i> Edit</a>
                                 <a href="" class="btn btn-xs btn-primary" id="btn-update-{{ $services->id }}" data-id="{{ $services->id }}" data-service="{{ $services->service }}" hidden>Update</a>
@@ -216,7 +216,7 @@
                             @endif
                             @if($patientservice->cancelled == 'N')
                             <td>
-                              @if($patientservice->docdate == date('Y-m-d'))
+                              @if($patientservice->docdate >= date('Y-m-d'))
                               <a href="" class="btn btn-xs btn-primary add-item" id="add-item" data-toggle="modal" data-target="#modal-service"><i class="fa fa-plus"></i> Add Item</a>
                               @endif
                             </td>

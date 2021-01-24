@@ -157,7 +157,7 @@
                       { "data": "cancelled"},
                       { "data": "action"}
           ],
-          "order": [ 1, "desc" ],
+          "order": [],
           "columnDefs": [{
                             "targets": "no-sort",
                             "orderable": false
