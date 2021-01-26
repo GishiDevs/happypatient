@@ -113,7 +113,9 @@ class ServiceProcedureController extends Controller
             'procedure.required' => 'Procedure is required',
             'procedure.*.required' => 'Procedure is required',
             'price.required' => 'Price is required',
-            'price.*.required' => 'Price is required'
+            'price.*.required' => 'Price is required',
+            'price.*.numeric' => 'Enter a valid value',
+            'price.*.between' => 'Enter a valid value',
         ];
 
         $validator = Validator::make($request->all(),[
@@ -123,7 +125,7 @@ class ServiceProcedureController extends Controller
             'procedure' => 'required',
             'procedure.*' => 'required',
             'price' => 'required',
-            'price.*' => 'required'
+            'price.*' => 'required|numeric|between:1, 999999.99',
             
         ], $rules);
 

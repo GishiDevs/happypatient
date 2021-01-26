@@ -853,6 +853,8 @@ $(document).ready(function () {
 
     @endforeach
 
+    compute_new_service();
+
   });
 
   $('#select2-description').on('change', function(e){
@@ -892,11 +894,17 @@ $(document).ready(function () {
 
     if($(this).val())
     {
+      $(this).removeClass('is-invalid');
+      $('#error-new-price').remove();
       $('#new-discount').removeAttr('disabled');
       $('#new-discount_amt').removeAttr('disabled');
+      
     }
     else
-    {
+    { 
+      $('#error-new-price').remove();
+      $(this).addClass('is-invalid');
+      $(this).after('<span id="error-new-price" class="text-danger fieldHasError">Price is required</span>');
       $('#new-discount').attr('disabled', true);
       $('#new-discount_amt').attr('disabled', true);
     }
@@ -1177,6 +1185,9 @@ $(document).ready(function () {
 
     $("[aria-labelledby='select2-new-procedure-container']").removeAttr('style');
     $('#new-procedure-error').remove();
+    $('#new-total_amount').removeClass('text-danger');
+    $('#new-price').removeClass('is-invalid');
+    $('#error-new-price').remove();
 
   }
 

@@ -466,7 +466,7 @@ $(document).ready(function () {
       $('#procedures-linenum-'+linenum).val(procedure_id);
       $('#price-linenum-'+linenum).val(price);
 
-      $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+code+'</span>')
+      $('.div-procedure').after('<span class="span-service" id="span-procedure-linenum-'+linenum+'" data-procedure="'+procedure+'" data-service_id="'+procedure_id+'">'+( service == 'Check-up' ? procedure : code)+'</span>')
       $('.div-procedure').remove();
 
       if($(this).val())
@@ -657,6 +657,19 @@ $(document).ready(function () {
 
       //disable add-item button when total_amount is 0 and below
       disableAddItemButton(total, linenum);
+      
+      // add/remove error message on price
+      if($(this).val())
+      {
+        $(this).removeClass('is-invalid');
+        $('#error-price-'+linenum).remove();
+      }
+      else
+      { 
+        $('#error-price-'+linenum).remove();
+        $(this).addClass('is-invalid');
+        $(this).after('<span id="error-price-'+linenum+'" class="text-danger fieldHasError">Price is required</span>');
+      }
 
     });
 
@@ -878,7 +891,7 @@ $(document).ready(function () {
   // Add Services with Stepper
   $('#btn-add').click(function(e){
 
-    $(this).attr('disabled', true);
+    var formHasErrors = false;
 
     var docdate = new Date($('#docdate').val());
 
@@ -898,13 +911,7 @@ $(document).ready(function () {
       $('#patient-error').remove();
       $('.div-patient').append('<span id="patient-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please select patient</span>');
       $(".div-patient").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
-    }
-
-    if(!$('select [name="service"]').val())
-    {
-      $('#service-error').remove();
-      $('.div-service').append('<span id="service-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please select service</span>');
-      $(".div-service").find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
+      formHasErrors = true;
     }
 
     //Document Date validation error
@@ -912,6 +919,7 @@ $(document).ready(function () {
     {
       $('#docdate-error').remove();
       $('.div-docdate').append('<span id="docdate-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please enter a valid date</span>');
+      formHasErrors = true;
     }
 
     //count table tbody rows
@@ -921,10 +929,17 @@ $(document).ready(function () {
     {
       $('#service-table-error').remove();
       $('.table-scrollable').append('<span id="service-table-error" class="text-danger" style="width: 100%; margin-top: .25rem; font-size: 80%;">Please add at least 1 service on the table</span>');
+      formHasErrors = true;
     }
-    else
-    {
 
+    // if table patient services has errors
+    $('#table-services tbody tr td').find('.is-invalid').each(function(i){
+      formHasErrors = true;
+    });
+    
+    if(!formHasErrors)
+    {
+      $(this).attr('disabled', true);
       var patient_id = $('#patient').val();
       var docdate = $('#docdate').val();
 
@@ -933,7 +948,7 @@ $(document).ready(function () {
         method: "POST",
         data: { _token: "{{ csrf_token() }}", patient_id: patient_id, docdate: docdate },
         success: function(response){
-          console.log(response);
+          // console.log(response);
 
           // if(response.patient_service.length > 0)
           // {
@@ -1016,6 +1031,33 @@ $(document).ready(function () {
                 $("[aria-labelledby='select2-patient-container']").removeAttr('style');
 
                 $('#patient-error').remove();
+
+              }
+              else
+              { 
+                
+                $.each(response, function(index, value){
+
+                  var field_name = index.split('.')[0];
+                  var field_index = index.split('.')[1];
+
+                  if(field_name == 'price')
+                  {
+                    $('#table-services tbody tr td').find('[name="price[]"]').each(function(i){
+
+                      var linenum = this.dataset.linenum;
+
+                      if(field_index == i)
+                      { 
+                        $('#error-price-'+linenum).remove();
+                        $(this).addClass('is-invalid');
+                        $(this).after('<span id="error-price-'+linenum+'" class="text-danger fieldHasError">'+ value +'</span>');
+                      }
+
+                    }); 
+                  }
+
+                });
 
               }
 

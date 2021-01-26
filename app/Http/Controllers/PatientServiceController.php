@@ -22,7 +22,7 @@ class PatientServiceController extends Controller
 {   
 
     public function index()
-    {  
+    {   
         return view('pages.patient_services.index');
     }
 
@@ -194,7 +194,6 @@ class PatientServiceController extends Controller
 
     public function store(Request $request)
     {   
-        // return $request;
 
         $rules = [
             'patient.required' => 'Please select patient',
@@ -205,8 +204,11 @@ class PatientServiceController extends Controller
             'services.*.required' => 'Service is required',
             'procedures.required' => 'Procedure is required',
             'procedures.*.required' => 'Procedure is required',
-            'price.required' => 'Price is required',
-            // 'price.*.required' => 'Price is required'
+            'descriptions.*.required' => 'Description is required',
+            'price.*.required' => 'Price is required',
+            'price.*.numeric' => 'Enter a valid value',
+            'price.*.between' => 'Enter a valid value',
+
         ];
 
         $valid_fields = [
@@ -215,7 +217,7 @@ class PatientServiceController extends Controller
             'services.*' => 'required',
             'procedures' => 'required',
             'procedures.*' => 'required',
-            'price' => 'required',
+            'price.*' => 'required|numeric|between:1, 999999.99',
             // 'price.*' => 'required'
         ];
 
@@ -227,6 +229,23 @@ class PatientServiceController extends Controller
         else
         {
             $valid_fields['organization'] = 'required';
+        }
+
+        //if procedure is multiple then require description field
+        $procedure_id = $request->get('procedures');
+        $procedures = ServiceProcedure::where('is_multiple', '=', 'Y')->pluck('id');
+        $ctr = count($procedure_id);
+        $hasMultipleProcedure = "";
+
+        for($x=0; $x < $ctr; $x++)
+        {   
+            $hasMultipleProcedure = in_array($procedure_id[$x], $procedures->toArray());
+        }
+
+        //if procedure is multiple then require description field
+        if($hasMultipleProcedure)
+        {
+            $valid_fields['descriptions.*'] = 'required';
         }
 
         $validator = Validator::make($request->all(), $valid_fields, $rules);
@@ -534,10 +553,12 @@ class PatientServiceController extends Controller
 
         $rules = [
             'price.required' => 'Price is required',
+            'price.numeric' => 'Enter a valid value',
+            'price.between' => 'Enter a valid value',
         ];
 
         $validator = Validator::make($request->all(), [
-            'price' => 'required',
+            'price' => 'required|numeric|between:1, 999999.99',
         ], $rules);
 
         if($validator->fails())
@@ -627,15 +648,27 @@ class PatientServiceController extends Controller
         $rules = [
             'new-service.required' => 'Please select service',   
             'new-procedure.required' => 'Please select procedure',
+            'new-description.required' => 'Description is required',
             'new-price.required' => 'Please enter price',
             'new-price.numeric' => 'Enter a valid value',
         ];
 
-        $validator = Validator::make($request->all(),[
+        $valid_fields = [
             'new-service' => 'required',
             'new-procedure' => 'required',
-            'new-price' => 'required|numeric|between:0, 999999999999.999999999999',
-        ], $rules);
+            'new-price' => 'required|numeric||between:1, 999999.99',
+        ];
+
+        //if procedure is multiple then require description field
+        $procedures = ServiceProcedure::where('is_multiple', '=', 'Y')->pluck('id');
+        $hasMultipleProcedure = in_array($request->get('new-procedure'), $procedures->toArray());
+
+        if($hasMultipleProcedure)
+        {
+            $valid_fields['new-description'] = 'required';
+        }
+
+        $validator = Validator::make($request->all(), $valid_fields, $rules);
 
         if($validator->fails())
         {
