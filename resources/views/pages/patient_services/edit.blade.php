@@ -156,7 +156,9 @@
                             <span class="span-procedure" data-id="{{ $services->procedure_id }}">
                               @if($services->is_multiple == 'Y')
                                 {{ $services->description }}
-                              @else
+                              @elseif($services->service == 'Check-up')
+                                {{ $services->procedure }}
+                              @else 
                                 {{ $services->code }}
                               @endif
                             </span>
@@ -473,7 +475,7 @@ $(document).ready(function () {
               $('#table-services tbody').append(
                             '<tr id="row-id-'+response.service_item.id+'">'+
                               '<td>'+response.service_item.service+'</td>'+
-                              '<td><span class="span-procedure" data-id="'+response.service_item.procedure_id+'">'+(response.service_item.is_multiple == 'Y' ? response.service_item.description : response.service_item.code)+'</span></td>'+
+                              '<td><span class="span-procedure" data-id="'+response.service_item.procedure_id+'">'+(response.service_item.service == 'Check-up' ? response.service_item.procedure : response.service_item.is_multiple == 'Y' ? response.service_item.description : response.service_item.code)+'</span></td>'+
                               '<td><span id="span-price-'+response.service_item.id+'">'+response.service_item.price+'</span><input type="text" class="form-control" name="price" id="price-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.price+'" hidden> </td>'+
                               '<td><span id="span-medicine_amt-'+response.service_item.id+'">'+response.service_item.medicine_amt+'</span><input type="text" class="form-control" name="medicine_amt" id="medicine_amt-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.medicine_amt+'" hidden> </td>'+
                               '<td><span id="span-discount-'+response.service_item.id+'">'+response.service_item.discount+'</span><input type="text" class="form-control" name="discount" id="discount-id-'+response.service_item.id+'" data-id="'+response.service_item.id+'" placeholder="0.00" value="'+response.service_item.discount+'" hidden> </td>'+

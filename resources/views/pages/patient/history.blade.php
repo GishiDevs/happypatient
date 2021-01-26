@@ -133,7 +133,9 @@
                           <td>{{ $services->docdate }}</td>
                           <td>{{ $services->service }}</td>
                           <td>
-                            @if($services->is_multiple == 'Y')
+                            @if($services->service == 'Check-up')
+                              {{ $services->procedure }}
+                            @elseif($services->is_multiple == 'Y')
                               {{ $services->description }}
                             @else
                               {{ $services->code }}

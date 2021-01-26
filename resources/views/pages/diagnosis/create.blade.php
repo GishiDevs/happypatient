@@ -255,7 +255,7 @@
                           <td>{{ $services->service }}</td>
                           <td>{{ $services->code }}</td>
                           <td>
-                              @if($services->is_multiple == 'Y')
+                              @if($services->is_multiple == 'Y' && $services->service != 'Check-up')
                                 {{ $services->description }}
                               @else
                                 {{ $services->procedure }}
