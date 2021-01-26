@@ -437,7 +437,7 @@ $(document).ready(function () {
 
         if(service_id == "{{ $procedure->serviceid }}" && !procedures_id.includes(id))
         {
-          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-is_multiple="{{ $procedure->is_multiple }}" data-linenum="'+linenum+'">{{ $procedure->code }}</option>');
+          $('#procedure-linenum-'+ linenum).append('<option value="{{ $procedure->id }}" data-service_id="{{ $procedure->serviceid }}" data-code="{{ $procedure->code }}" data-procedure="{{ $procedure->procedure }}" data-price="{{ $procedure->price }}" data-is_multiple="{{ $procedure->is_multiple }}" data-linenum="'+linenum+'">'+( service == "Check-up" ? "{{ $procedure->procedure }}" : "{{ $procedure->code }}" )+'</option>');
         }
 
       @endforeach  

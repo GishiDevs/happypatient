@@ -180,15 +180,18 @@
             {
               targets: 5,
               render: function ( data , type, object  ) {
-                  if(object.is_multiple == 'Y')
+                  if(object.service == 'Check-up')
+                  {
+                    return object.procedure;
+                  }
+                  else if(object.is_multiple == 'Y')
                   {
                     return object.description;
                   }
                   else
                   {
                     return object.code;
-                  }
-                                
+                  }             
                 }
             },
             {

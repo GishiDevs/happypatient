@@ -200,6 +200,7 @@ $(document).ready(function () {
   });
 
   var linenum = 1;
+  var codeIsDuplicated = false;
   //add new line item on services table
   $('#add-item').click(function(e){
     e.preventDefault();
@@ -245,6 +246,8 @@ $(document).ready(function () {
     $('#table-services').on('keyup', 'tbody td [name="code[]"]', function(e){ 
 
       var linenum = $(this).data('linenum');
+      var code_names = [];
+      codeIsDuplicated = false;
 
       if($(this).val() && $('#procedure-linenum-'+ linenum).val() && $('#price-linenum-'+ linenum).val())
       {
@@ -259,16 +262,45 @@ $(document).ready(function () {
         // $('#btn-add').attr('disabled', true);
       }
 
+      
+      
       if($(this).val())
-      {
+      { 
+        
+        $('#table-services tbody tr td').find('.text-duplicate-code-name').each(function(i){
+          $(this).removeClass('is-invalid text-duplicate-code-name');
+        });
+
         $(this).removeClass('is-invalid');
+
         $('#error-code-'+linenum).remove();
+
+        $('#table-services tbody tr td').find('[name="code[]"]').each(function(i){
+          var code_linenum = $(this).data('linenum');
+          if(linenum != code_linenum)
+          {
+            code_names[i] = $(this).val().toUpperCase();
+          }
+        });
+
+        if(code_names.includes($(this).val().toUpperCase()))
+        {
+          $('#error-code-'+linenum).remove();
+          $(this).addClass('is-invalid text-duplicate-code-name');
+          $(this).after('<span id="error-code-'+linenum+'" class="text-danger fieldHasError duplicate-code-name">Code Name is already taken</span>');
+          codeIsDuplicated = true;
+        }
+        else
+        {
+          $('.duplicate-code-name').remove();
+        }
+
       }
       else
       { 
         $('#error-code-'+linenum).remove();
         $(this).addClass('is-invalid');
-        $(this).after('<span id="error-code-'+linenum+'" class="text-danger fieldHasError">Code Name is required</span>');
+        $(this).after('<span id="error-code-'+linenum+'" class="text-danger fieldHasError error-code-name">Code Name is required</span>');
       }
 
     });
@@ -279,14 +311,11 @@ $(document).ready(function () {
       if($(this).val() && $('#code-linenum-'+ linenum).val() && $('#price-linenum-'+ linenum).val())
       {
         $('#add-item').removeClass('disabled');
-
         $('#btn-add').removeAttr('disabled');
       }
       else
       {
         $('#add-item').addClass('disabled');
-
-        // $('#btn-add').attr('disabled', true);
       }
 
       if($(this).val())
@@ -309,13 +338,11 @@ $(document).ready(function () {
       if($(this).val() && $('#code-linenum-'+ linenum).val() && $('#procedure-linenum-'+ linenum).val())
       {
         $('#add-item').removeClass('disabled');
-        
         $('#btn-add').removeAttr('disabled');
       }
       else
       {
         $('#add-item').addClass('disabled');
-
         // $('#btn-add').attr('disabled', true);
       }
 
@@ -342,6 +369,7 @@ $(document).ready(function () {
       }  
 
     });
+
 
     $('#table-services').on('click', 'tbody td [name="is-multiple"]', function(e){ 
       var linenum = $(this).data('linenum');
@@ -383,6 +411,7 @@ $(document).ready(function () {
   // Add Services with Stepper
   $('#btn-add').click(function(e){
 
+
     var formHasErrors = false;
 
     e.preventDefault();
@@ -410,6 +439,8 @@ $(document).ready(function () {
     data.push({name: "_token", value: "{{ csrf_token() }}"});
 
 
+    if(!codeIsDuplicated)
+    {
 
       $('#btn-add').attr('disabled', true);
 
@@ -508,7 +539,7 @@ $(document).ready(function () {
             $('#btn-add').removeAttr('disabled');
           }
       });
-    
+    }
     
   
   });
