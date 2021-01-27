@@ -308,7 +308,7 @@ $(document).ready(function () {
                                               @endforeach
                                             '</select>'+
                                           '</div>'+
-                                          '<input type="text" id="services-linenum-'+linenum+'" name="services[]" value="" hidden>'+
+                                          '<input type="text" id="services-linenum-'+linenum+'" name="services[]" value="" data-linenum="'+linenum+'" hidden>'+
                                         '</td>'+
                                         '<td>'+
                                           '<div class="form-group div-procedure">'+
@@ -316,14 +316,14 @@ $(document).ready(function () {
                                               '<option selected="selected" value="" disabled>Select Procedure</option>'+
                                             '</select>'+
                                           '</div>'+
-                                          '<input type="text" id="procedures-linenum-'+linenum+'" name="procedures[]" value="" hidden>'+
+                                          '<input type="text" id="procedures-linenum-'+linenum+'" name="procedures[]" value="" data-linenum="'+linenum+'" hidden>'+
                                         '</td>'+
                                         '<td>'+
-                                          '<div class="form-group div-description">'+
+                                          '<div class="form-group div-description" id="div-description-linenum-'+linenum+'">'+
                                             '<select class="select2" multiple="multiple" name="description" id="description-linenum-'+linenum+'" data-linenum="'+linenum+'" style="width: 100%;" disabled>'+
                                               '<option value="" disabled>Select Procedure</option>'+
                                             '</select>'+
-                                            '<input type="text" id="descriptions-linenum-'+linenum+'" name="descriptions[]" value="" hidden>'+
+                                            '<input type="text" id="descriptions-linenum-'+linenum+'" name="descriptions[]" value="" data-linenum="'+linenum+'" hidden>'+
                                           '</div>'+
                                         '</td>'+
                                         '<td>'+
@@ -539,16 +539,27 @@ $(document).ready(function () {
         description[index] = this.dataset.code;
       });
 
-      // if description multiple select has value
+      // if description multiple select has value then add or remove error class for description and price
       if($(this).find(':selected').length)
       {
         $('#descriptions-linenum-'+linenum).val(description.join());
         $('#price-linenum-'+linenum).val(price_per_service.toFixed(2));
+        $('#error-descriptions-'+linenum).remove();
+        $('#descriptions-linenum-'+linenum).removeClass('is-invalid');
+        $('#div-description-linenum-'+linenum).find('.select2-selection').removeAttr('style');
+        $('#price-linenum-'+linenum).removeClass('is-invalid');
+        $('#error-price-'+linenum).remove();
       }
       else
       {
         $('#descriptions-linenum-'+linenum).val('');
         $('#price-linenum-'+linenum).val(0);
+        $('#error-descriptions-'+linenum).remove();
+        $('#descriptions-linenum-'+linenum).after('<span id="error-descriptions-'+linenum+'" class="text-danger fieldHasError">Description is required</span>')
+        $('#descriptions-linenum-'+linenum).addClass('is-invalid');
+        $('#div-description-linenum-'+linenum).find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
+        $('#price-linenum-'+linenum).addClass('is-invalid');
+        $('#price-linenum-'+linenum).after('<span id="error-price-'+linenum+'" class="text-danger fieldHasError">Enter a valid value</span>');
       }
 
       //if price has no value
@@ -607,6 +618,8 @@ $(document).ready(function () {
         price_per_service = parseFloat($(this).val()).toFixed(2);
 
         $('#add-item').removeClass('disabled');
+        $(this).removeClass('is-invalid');
+        $('#error-price-'+linenum).remove();
         // $('#btn-add').removeAttr('disabled');
       }
       else
@@ -614,6 +627,9 @@ $(document).ready(function () {
         price_per_service = 0;
 
         $('#add-item').addClass('disabled');
+        $('#error-price-'+linenum).remove();
+        $(this).addClass('is-invalid');
+        $(this).after('<span id="error-price-'+linenum+'" class="text-danger fieldHasError">Price is required</span>');
         // $('#btn-add').attr('disabled', true);
       }
 
@@ -1036,6 +1052,29 @@ $(document).ready(function () {
               else
               { 
                 
+                $.each(response, function(index, value){
+
+                  var field_name = index.split('.')[0];
+                  var field_index = index.split('.')[1];
+
+                  if(field_name == 'descriptions')
+                  {
+                    $('#table-services tbody tr td').find('[name="descriptions[]"]').each(function(i){
+
+                      var linenum = this.dataset.linenum;
+
+                      if(field_index == i)
+                      { 
+                        $('#error-descriptions-'+linenum).remove();
+                        $(this).after('<span id="error-descriptions-'+linenum+'" class="text-danger fieldHasError">'+ value +'</span>');
+                        $('#div-description-linenum-'+linenum).find('.select2-selection').css('border-color','#dc3545').addClass('text-danger');
+                      }
+
+                    }); 
+                  }
+
+                });
+
                 $.each(response, function(index, value){
 
                   var field_name = index.split('.')[0];

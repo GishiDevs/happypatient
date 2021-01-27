@@ -608,7 +608,6 @@ $(document).ready(function () {
                 timer: 2500
               });
 
-              console.log('asd');
 
               $('#price-id-'+ps_item_id).val(parseFloat(price).toFixed(2)).attr('hidden', true);
               $('#medicine_amt-id-'+ps_item_id).val(parseFloat(medicine_amt).toFixed(2)).attr('hidden', true);
@@ -631,6 +630,9 @@ $(document).ready(function () {
               $("#btn-remove-item-"+ps_item_id).removeAttr('hidden');
               $("#btn-view-"+ps_item_id).removeAttr('hidden');
               $("#btn-diagnose-"+ps_item_id).removeAttr('hidden');
+
+              $('#price-id-'+ps_item_id).removeClass('is-invalid');
+              $('#error-price-'+ps_item_id).remove();  
 
               getGrandTotal();
 
@@ -708,6 +710,26 @@ $(document).ready(function () {
 
         // alert($(this).closest('td').parent()[0].sectionRowIndex);
         var ps_item_id = $(this).data('id');
+
+        //if price has value
+        if($(this).val())
+        {
+          $(this).removeClass('is-invalid');
+          $('#error-price-'+ps_item_id).remove();
+
+          if(parseFloat($(this).val()) <= 0)
+          {
+            $(this).addClass('is-invalid');
+            $(this).after('<span id="error-price-'+ps_item_id+'" class="text-danger fieldHasError">Enter a valid value</span>');
+          }
+
+        }
+        else
+        {
+          $('#error-price-'+ps_item_id).remove();
+          $(this).addClass('is-invalid');
+          $(this).after('<span id="error-price-'+ps_item_id+'" class="text-danger fieldHasError">Price is required</span>');
+        }
 
         //call function compute_amounts
         compute_amounts(ps_item_id);
@@ -1139,6 +1161,8 @@ $(document).ready(function () {
       $('#span-discount-'+ps_item_id).removeAttr('hidden');
       $('#span-discount_amt-'+ps_item_id).removeAttr('hidden');
 
+      $('#price-id-'+ps_item_id).removeClass('is-invalid');
+      $('#error-price-'+ps_item_id).remove();  
 
       var discount_amount = parseFloat(price) * (parseFloat(discount).toFixed(2) / 100);
       var total = parseFloat(price) + parseFloat(medicine_amt) - parseFloat(discount_amount) - parseFloat(discount_amt);
