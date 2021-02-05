@@ -28,13 +28,13 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Service Procedure Record</h3>
-                @can('service-create')
+                @can('serviceprocedure-create')
                   <a href="{{ route('serviceprocedure.create') }}" id="btn-add-procedure" class="btn btn-primary float-right">Add New</a>
                 @endcan
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                @can('service-list')
+                @can('serviceprocedure-list')
                 <table id="procedure-table" class="table table-striped table-hover">
                   <thead>
                     <tr>

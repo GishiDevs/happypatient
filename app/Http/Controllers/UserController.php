@@ -56,10 +56,12 @@ class UserController extends Controller
                 $edit = '';
                 $delete = '';
 
-                if(Auth::user()->hasPermissionTo('user-edit'))
-                {
-                    $edit = '<a href="'.route("user.edit",$user->id).'" class="btn btn-xs btn-info" data-userid="'.$user->id.'" data-action="edit" id="btn-edit-user"><i class="fa fa-edit"></i> Edit</a>';
-                }
+                // if(Auth::user()->hasPermissionTo('user-edit'))
+                // {
+                //     $edit = '<a href="'.route("user.edit",$user->id).'" class="btn btn-xs btn-info" data-userid="'.$user->id.'" data-action="edit" id="btn-edit-user"><i class="fa fa-edit"></i> Edit</a>';
+                // }
+
+                $edit = '<a href="'.route("user.edit",$user->id).'" class="btn btn-xs btn-info" data-userid="'.$user->id.'" data-action="edit" id="btn-edit-user"><i class="fa fa-edit"></i> Edit</a>';
 
                 if(Auth::user()->hasPermissionTo('user-delete'))
                 {   

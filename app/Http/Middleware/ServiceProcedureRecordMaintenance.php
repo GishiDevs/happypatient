@@ -18,15 +18,16 @@ class ServiceProcedureRecordMaintenance
     {
         if($request->is('serviceprocedure/index') || $request->is('serviceprocedure/procedures') || $request->is('serviceprocedure/serviceprocedures'))
         {
-            if(Auth::user()->can('serviceprocedure-list'))
-            {
-                return $next($request);
-            }
-            else
-            {
-                // return response()->json("You don't have permission!", 200);
-                return abort(401, 'Unauthorized');
-            }
+            // if(Auth::user()->can('serviceprocedure-list'))
+            // {
+            //     return $next($request);
+            // }
+            // else
+            // {
+            //     // return response()->json("You don't have permission!", 200);
+            //     return abort(401, 'Unauthorized');
+            // }
+            return $next($request);
         }
 
         if($request->is('serviceprocedure/create') || $request->is('serviceprocedure/store') || $request->is('serviceprocedure/content/create/*') 

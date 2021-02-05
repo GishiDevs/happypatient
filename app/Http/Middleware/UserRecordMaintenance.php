@@ -43,14 +43,15 @@ class UserRecordMaintenance
 
         //User Edit
         if($request->is('user/edit/*') || $request->is('user/update/*')){
-            if(Auth::user()->can('user-edit')){
-                return $next($request);
-            }
-            else
-            {
-                // return response()->json("You don't have permission!", 200);
-                return abort(401, 'Unauthorized');
-            }
+            // if(Auth::user()->can('user-edit')){
+            //     return $next($request);
+            // }
+            // else
+            // {
+            //     // return response()->json("You don't have permission!", 200);
+            //     return abort(401, 'Unauthorized');
+            // }
+            return $next($request);
         }
 
         //User Delete

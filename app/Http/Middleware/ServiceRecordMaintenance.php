@@ -18,15 +18,16 @@ class ServiceRecordMaintenance
     {
         if($request->is('service/index') || $request->is('service/services'))
         {
-            if(Auth::user()->can('service-list'))
-            {
-                return $next($request);
-            }
-            else
-            {
-                // return response()->json("You don't have permission!", 200);
-                return abort(401, 'Unauthorized');
-            }
+            // if(Auth::user()->can('service-list'))
+            // {
+            //     return $next($request);
+            // }
+            // else
+            // {
+            //     // return response()->json("You don't have permission!", 200);
+            //     return abort(401, 'Unauthorized');
+            // }
+            return $next($request);
         }
 
         if($request->is('service/create') || $request->is('service/store'))

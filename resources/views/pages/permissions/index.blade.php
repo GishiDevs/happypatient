@@ -34,6 +34,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+                @can('permission-list')
                 <table id="permission-table" class="table table-striped table-hover">
                   <thead>
                     <tr> 
@@ -56,7 +57,7 @@
                     </tr>
                   </tfoot>
                 </table>
-    
+                @endcan
               </div>
               <!-- /.card-body -->
             </div>
