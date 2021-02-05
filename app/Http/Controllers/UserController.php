@@ -62,8 +62,11 @@ class UserController extends Controller
                 }
 
                 if(Auth::user()->hasPermissionTo('user-delete'))
-                {
-                    $delete = '<a href="" class="btn btn-xs btn-danger" data-userid="'.$user->id.'" data-action="delete" id="btn-delete-user"><i class="fa fa-trash"></i> Delete</a>';
+                {   
+                    if($user->username != 'admin')
+                    {
+                        $delete = '<a href="" class="btn btn-xs btn-danger" data-userid="'.$user->id.'" data-action="delete" id="btn-delete-user"><i class="fa fa-trash"></i> Delete</a>';
+                    }           
                 }
 
                 return $edit . ' ' . $delete;
@@ -271,6 +274,11 @@ class UserController extends Controller
         if(empty($user->id))
         {
             return abort(404, 'Not Found');
+        }
+
+        if($user->username == 'admin')
+        {
+            return abort(403, 'Forbidden');
         }
 
         $user->delete();
