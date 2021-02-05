@@ -29,7 +29,7 @@ class PatientService
             }
         }
 
-        if($request->is('patientservice/create') || $request->is('patientservice/store') || $request->is('patientservice/add_item/*'))
+        if($request->is('patientservice/create') || $request->is('patientservice/store'))
         {
             if(Auth::user()->can('patientservices-create'))
             {
@@ -42,17 +42,18 @@ class PatientService
             }
         }
 
-        if($request->is('patientservice/edit/*') || $request->is('patientservice/update/*') || $request->is('patientservice/update_price'))
+        if($request->is('patientservice/edit/*') || $request->is('patientservice/update/*') || $request->is('patientservice/update_price') || $request->is('patientservice/add_item/*'))
         {   
-            if(Auth::user()->can('patientservices-edit'))
-            {
-                return $next($request);
-            }
-            else
-            {
-                // return response()->json("You don't have permission!", 200);
-                return abort(401, 'Unauthorized');
-            }
+            // if(Auth::user()->can('patientservices-edit'))
+            // {
+            //     return $next($request);
+            // }
+            // else
+            // {
+            //     // return response()->json("You don't have permission!", 200);
+            //     return abort(401, 'Unauthorized');
+            // }
+            return $next($request);
 
         }
 

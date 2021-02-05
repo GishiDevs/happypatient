@@ -49,10 +49,12 @@ class PatientController extends Controller
                 $delete = '';
                 $view = '';
 
-                if(Auth::user()->can('patient-edit'))
-                {
-                    $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-xs btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>';
-                }
+                // if(Auth::user()->can('patient-edit'))
+                // {
+                //     $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-xs btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>';
+                // }
+                
+                $edit = '<a href="'.route("patient.edit",$patient->id).'" class="btn btn-xs btn-info" data-patientid="'.$patient->id.'" data-action="edit" id="btn-edit-patient"><i class="fa fa-edit"></i></a>';
 
                 if(Auth::user()->can('patient-delete'))
                 {

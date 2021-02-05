@@ -42,14 +42,15 @@ class PatientRecordMaintenance
 
         //Patient Edit
         if($request->is('patient/edit/*') || $request->is('patient/update/*')){
-            if(Auth::user()->can('patient-edit')){
-                return $next($request);
-            }
-            else
-            {
-                // return response()->json("You don't have permission!", 200);
-                return abort(401, 'Unauthorized');
-            }
+            // if(Auth::user()->can('patient-edit')){
+            //     return $next($request);
+            // }
+            // else
+            // {
+            //     // return response()->json("You don't have permission!", 200);
+            //     return abort(401, 'Unauthorized');
+            // }
+            return $next($request);
         }
 
         //Patient Delete

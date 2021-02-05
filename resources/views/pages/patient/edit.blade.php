@@ -171,9 +171,11 @@
                   </div>
                 </div>
                 <!-- /.card-body -->
+                @can('patient-edit')
                 <div class="card-footer">
                   <button type="submit" id="btn-submit" class="btn btn-primary" disabled>Update</button>
                 </div>
+                @endcan
               </form>
             </div>
             <!-- /.card -->
