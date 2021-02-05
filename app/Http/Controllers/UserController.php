@@ -45,7 +45,7 @@ class UserController extends Controller
                 {
                     foreach($user->getRoleNames() as $role)
                     {
-                        $roles = $roles . '<span class="badge bg-secondary">'.$role.'</span>';
+                        $roles = $roles . ' <span class="badge bg-secondary">'.$role.'</span>';
                     }
                 }
                 
